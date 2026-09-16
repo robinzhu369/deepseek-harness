@@ -1,0 +1,4 @@
+
+> @deepseek-ai/dsh-data-agent@0.1.0 typecheck
+> tsc -b ../../vendor/cordis && tsc -p tsconfig.json
+

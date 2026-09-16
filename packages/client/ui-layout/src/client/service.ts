@@ -45,8 +45,9 @@ export interface ILayout {
    *   including beneath a fullscreen overlay.
    * @param fullscreen - whether the panel covers the frame and hides its outer
    *   resize handle; independent of the underlying grid track.
+   * @param columns - Optional saved user widths; the layout owner applies its usual clamps.
    */
-  openRightbar(track: boolean, fullscreen: boolean): void
+  openRightbar(track: boolean, fullscreen: boolean, columns?: { sidebar: number; rightbar: number }): void
   /** Report the right panel as hidden: no track, no handle. */
   closeRightbar(): void
 }
@@ -90,8 +91,17 @@ export class LayoutController implements ILayout {
     this.panels.toggleSidebar()
   }
 
-  /** Report the right panel's track and fullscreen presentation. */
-  openRightbar(track: boolean, fullscreen: boolean): void {
+  /** Report the right panel's track and fullscreen presentation.
+   * @param track - Whether to reserve the right column.
+   * @param fullscreen - Whether the occupant covers the frame.
+   * @param columns - Optional finite saved widths, clamped by the layout owner.
+   */
+  openRightbar(track: boolean, fullscreen: boolean, columns?: { sidebar: number; rightbar: number }): void {
+    if (columns) {
+      if (!Number.isFinite(columns.sidebar) || !Number.isFinite(columns.rightbar)) throw new Error('INVALID_COLUMN_WIDTH')
+      this.panels.setSidebar(columns.sidebar)
+      this.panels.setRightbar(columns.rightbar)
+    }
     this.panels.openRightbar(track, fullscreen)
   }
 

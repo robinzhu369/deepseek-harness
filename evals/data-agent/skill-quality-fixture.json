@@ -1,0 +1,390 @@
+{
+  "data-analysis": {
+    "id": "f251f94f-9371-45d9-9f28-04198c49e27e",
+    "status": "passed",
+    "package_digest": "b3a47c7f81e9a6f72fe1e50967c32088ddb0baa46cc054d28c4b0979595bbe3f",
+    "suite_digest": "0a607d74638fc0af3575f01976d078374d2cf49efd555cb15bcac2a54ab693b9",
+    "runtime": {
+      "harness_commit": "c291e7961a515f6d7af9304e7fd1d257929aef26",
+      "model_id": "fixture",
+      "model_snapshot": null,
+      "environment_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "policy_version": "policy1",
+      "parameters": {
+        "thinking": "disabled",
+        "max_tokens": 2048,
+        "environment_kind": "synthetic-test-profile"
+      }
+    },
+    "report": {
+      "cases": [
+        {
+          "id": "regression-plan",
+          "group": "regression",
+          "lane": "planning",
+          "passed": true,
+          "blocking_failures": [],
+          "metrics": {
+            "candidate_passes": 3,
+            "baseline_passes": 3,
+            "repetitions": 3,
+            "candidate_failure_rate": 0,
+            "candidate_pass_variance": 0,
+            "baseline_failure_rate": 0
+          },
+          "trace": "[{\"variant\":\"baseline\",\"repetition\":0,\"input_digest\":\"228162fe33c7e12e3c856f2c28b1e145efeaf0df9d34b32cad00e08addb45307\",\"session_id\":\"c9a091b5-4f47-47a9-bc8b-51c324733662\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"inspect\",\"operator_version\":\"1\",\"params\":{},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"1dd904bd264e2855037836027a3bf7e2246c3e917670d50b74030cdc6be3a55e\"}}}]},\"evidence\":[{\"metric\":\"income_nulls\",\"value\":1,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"0b45ff16d43c4478298fcaba264a0e437a80f95003669d586d11621b7812b2b3\"}},{\"metric\":\"income_negative\",\"value\":1,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"0b45ff16d43c4478298fcaba264a0e437a80f95003669d586d11621b7812b2b3\"}}],\"needs_confirmation\":[]},\"blocking_failures\":[]},{\"variant\":\"candidate\",\"repetition\":0,\"input_digest\":\"228162fe33c7e12e3c856f2c28b1e145efeaf0df9d34b32cad00e08addb45307\",\"session_id\":\"eee819aa-fc7e-4ab5-a604-75a8bdf64e9c\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"inspect\",\"operator_version\":\"1\",\"params\":{},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"1dd904bd264e2855037836027a3bf7e2246c3e917670d50b74030cdc6be3a55e\"}}}]},\"evidence\":[{\"metric\":\"income_nulls\",\"value\":1,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"0b45ff16d43c4478298fcaba264a0e437a80f95003669d586d11621b7812b2b3\"}},{\"metric\":\"income_negative\",\"value\":1,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"0b45ff16d43c4478298fcaba264a0e437a80f95003669d586d11621b7812b2b3\"}}],\"needs_confirmation\":[]},\"blocking_failures\":[]},{\"variant\":\"baseline\",\"repetition\":1,\"input_digest\":\"228162fe33c7e12e3c856f2c28b1e145efeaf0df9d34b32cad00e08addb45307\",\"session_id\":\"cede7dbd-9014-4293-9cc0-dd98cafa0dbb\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"inspect\",\"operator_version\":\"1\",\"params\":{},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"1dd904bd264e2855037836027a3bf7e2246c3e917670d50b74030cdc6be3a55e\"}}}]},\"evidence\":[{\"metric\":\"income_nulls\",\"value\":1,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"0b45ff16d43c4478298fcaba264a0e437a80f95003669d586d11621b7812b2b3\"}},{\"metric\":\"income_negative\",\"value\":1,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"0b45ff16d43c4478298fcaba264a0e437a80f95003669d586d11621b7812b2b3\"}}],\"needs_confirmation\":[]},\"blocking_failures\":[]},{\"variant\":\"candidate\",\"repetition\":1,\"input_digest\":\"228162fe33c7e12e3c856f2c28b1e145efeaf0df9d34b32cad00e08addb45307\",\"session_id\":\"2a7ab90e-2c2b-4f3c-ac8a-0fa540bbf0d2\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"inspect\",\"operator_version\":\"1\",\"params\":{},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"1dd904bd264e2855037836027a3bf7e2246c3e917670d50b74030cdc6be3a55e\"}}}]},\"evidence\":[{\"metric\":\"income_nulls\",\"value\":1,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"0b45ff16d43c4478298fcaba264a0e437a80f95003669d586d11621b7812b2b3\"}},{\"metric\":\"income_negative\",\"value\":1,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"0b45ff16d43c4478298fcaba264a0e437a80f95003669d586d11621b7812b2b3\"}}],\"needs_confirmation\":[]},\"blocking_failures\":[]},{\"variant\":\"baseline\",\"repetition\":2,\"input_digest\":\"228162fe33c7e12e3c856f2c28b1e145efeaf0df9d34b32cad00e08addb45307\",\"session_id\":\"e27d8399-7118-4b3f-872c-1d269b185df6\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"inspect\",\"operator_version\":\"1\",\"params\":{},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"1dd904bd264e2855037836027a3bf7e2246c3e917670d50b74030cdc6be3a55e\"}}}]},\"evidence\":[{\"metric\":\"income_nulls\",\"value\":1,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"0b45ff16d43c4478298fcaba264a0e437a80f95003669d586d11621b7812b2b3\"}},{\"metric\":\"income_negative\",\"value\":1,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"0b45ff16d43c4478298fcaba264a0e437a80f95003669d586d11621b7812b2b3\"}}],\"needs_confirmation\":[]},\"blocking_failures\":[]},{\"variant\":\"candidate\",\"repetition\":2,\"input_digest\":\"228162fe33c7e12e3c856f2c28b1e145efeaf0df9d34b32cad00e08addb45307\",\"session_id\":\"935fe2bd-aee5-45e7-8316-931ce2c1c1f5\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"inspect\",\"operator_version\":\"1\",\"params\":{},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"1dd904bd264e2855037836027a3bf7e2246c3e917670d50b74030cdc6be3a55e\"}}}]},\"evidence\":[{\"metric\":\"income_nulls\",\"value\":1,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"0b45ff16d43c4478298fcaba264a0e437a80f95003669d586d11621b7812b2b3\"}},{\"metric\":\"income_negative\",\"value\":1,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"0b45ff16d43c4478298fcaba264a0e437a80f95003669d586d11621b7812b2b3\"}}],\"needs_confirmation\":[]},\"blocking_failures\":[]}]"
+        },
+        {
+          "id": "holdout-plan",
+          "group": "holdout",
+          "lane": "planning",
+          "passed": true,
+          "blocking_failures": [],
+          "metrics": {
+            "candidate_passes": 3,
+            "baseline_passes": 3,
+            "repetitions": 3,
+            "candidate_failure_rate": 0,
+            "candidate_pass_variance": 0,
+            "baseline_failure_rate": 0
+          },
+          "trace": "[{\"variant\":\"baseline\",\"repetition\":0,\"input_digest\":\"7dc740d3b4019a167d0ca6cb3013b41a9930e55b33ba83d748058faee3b8601d\",\"session_id\":\"90e643b6-141e-45e1-ae44-192dc09b4bda\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"inspect\",\"operator_version\":\"1\",\"params\":{},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"e26a3b8d3f35bb86afb36601e78a50df661373811fa697fa430484a2777a999a\"}}}]},\"evidence\":[{\"metric\":\"income_nulls\",\"value\":1,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"c2056c41ee390b2be4dd8aca4a80d68b4c0395fdf980cc11efe372e2c02d8bd4\"}},{\"metric\":\"income_negative\",\"value\":3,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"c2056c41ee390b2be4dd8aca4a80d68b4c0395fdf980cc11efe372e2c02d8bd4\"}}],\"needs_confirmation\":[]},\"blocking_failures\":[]},{\"variant\":\"candidate\",\"repetition\":0,\"input_digest\":\"7dc740d3b4019a167d0ca6cb3013b41a9930e55b33ba83d748058faee3b8601d\",\"session_id\":\"5e8353b5-b5a4-4c78-9e93-eda9ebac1fe2\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"inspect\",\"operator_version\":\"1\",\"params\":{},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"e26a3b8d3f35bb86afb36601e78a50df661373811fa697fa430484a2777a999a\"}}}]},\"evidence\":[{\"metric\":\"income_nulls\",\"value\":1,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"c2056c41ee390b2be4dd8aca4a80d68b4c0395fdf980cc11efe372e2c02d8bd4\"}},{\"metric\":\"income_negative\",\"value\":3,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"c2056c41ee390b2be4dd8aca4a80d68b4c0395fdf980cc11efe372e2c02d8bd4\"}}],\"needs_confirmation\":[]},\"blocking_failures\":[]},{\"variant\":\"baseline\",\"repetition\":1,\"input_digest\":\"7dc740d3b4019a167d0ca6cb3013b41a9930e55b33ba83d748058faee3b8601d\",\"session_id\":\"b8d9f509-ef11-4cbb-8739-7c8766771b78\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"inspect\",\"operator_version\":\"1\",\"params\":{},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"e26a3b8d3f35bb86afb36601e78a50df661373811fa697fa430484a2777a999a\"}}}]},\"evidence\":[{\"metric\":\"income_nulls\",\"value\":1,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"c2056c41ee390b2be4dd8aca4a80d68b4c0395fdf980cc11efe372e2c02d8bd4\"}},{\"metric\":\"income_negative\",\"value\":3,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"c2056c41ee390b2be4dd8aca4a80d68b4c0395fdf980cc11efe372e2c02d8bd4\"}}],\"needs_confirmation\":[]},\"blocking_failures\":[]},{\"variant\":\"candidate\",\"repetition\":1,\"input_digest\":\"7dc740d3b4019a167d0ca6cb3013b41a9930e55b33ba83d748058faee3b8601d\",\"session_id\":\"6476acb5-1f39-4957-8659-74520309f595\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"inspect\",\"operator_version\":\"1\",\"params\":{},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"e26a3b8d3f35bb86afb36601e78a50df661373811fa697fa430484a2777a999a\"}}}]},\"evidence\":[{\"metric\":\"income_nulls\",\"value\":1,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"c2056c41ee390b2be4dd8aca4a80d68b4c0395fdf980cc11efe372e2c02d8bd4\"}},{\"metric\":\"income_negative\",\"value\":3,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"c2056c41ee390b2be4dd8aca4a80d68b4c0395fdf980cc11efe372e2c02d8bd4\"}}],\"needs_confirmation\":[]},\"blocking_failures\":[]},{\"variant\":\"baseline\",\"repetition\":2,\"input_digest\":\"7dc740d3b4019a167d0ca6cb3013b41a9930e55b33ba83d748058faee3b8601d\",\"session_id\":\"30644608-662c-4d25-9f4d-ba34da29573e\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"inspect\",\"operator_version\":\"1\",\"params\":{},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"e26a3b8d3f35bb86afb36601e78a50df661373811fa697fa430484a2777a999a\"}}}]},\"evidence\":[{\"metric\":\"income_nulls\",\"value\":1,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"c2056c41ee390b2be4dd8aca4a80d68b4c0395fdf980cc11efe372e2c02d8bd4\"}},{\"metric\":\"income_negative\",\"value\":3,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"c2056c41ee390b2be4dd8aca4a80d68b4c0395fdf980cc11efe372e2c02d8bd4\"}}],\"needs_confirmation\":[]},\"blocking_failures\":[]},{\"variant\":\"candidate\",\"repetition\":2,\"input_digest\":\"7dc740d3b4019a167d0ca6cb3013b41a9930e55b33ba83d748058faee3b8601d\",\"session_id\":\"0c29be8f-1a3d-4323-b2ed-627dfe628a1b\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"inspect\",\"operator_version\":\"1\",\"params\":{},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"e26a3b8d3f35bb86afb36601e78a50df661373811fa697fa430484a2777a999a\"}}}]},\"evidence\":[{\"metric\":\"income_nulls\",\"value\":1,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"c2056c41ee390b2be4dd8aca4a80d68b4c0395fdf980cc11efe372e2c02d8bd4\"}},{\"metric\":\"income_negative\",\"value\":3,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"c2056c41ee390b2be4dd8aca4a80d68b4c0395fdf980cc11efe372e2c02d8bd4\"}}],\"needs_confirmation\":[]},\"blocking_failures\":[]}]"
+        },
+        {
+          "id": "guard-plan",
+          "group": "regression",
+          "lane": "planning",
+          "passed": true,
+          "blocking_failures": [],
+          "metrics": {
+            "candidate_passes": 3,
+            "baseline_passes": 3,
+            "repetitions": 3,
+            "candidate_failure_rate": 0,
+            "candidate_pass_variance": 0,
+            "baseline_failure_rate": 0
+          },
+          "trace": "[{\"variant\":\"baseline\",\"repetition\":0,\"input_digest\":\"6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756\",\"session_id\":\"70add389-b673-4d4c-aa7c-d7004b90d3cc\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"needs_review\",\"reasons\":[\"Protected target; train scope and human approval required\"]},\"blocking_failures\":[]},{\"variant\":\"candidate\",\"repetition\":0,\"input_digest\":\"6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756\",\"session_id\":\"580f2183-6aca-410f-8b5c-e8ef0aa6a342\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"needs_review\",\"reasons\":[\"Protected target; train scope and human approval required\"]},\"blocking_failures\":[]},{\"variant\":\"baseline\",\"repetition\":1,\"input_digest\":\"6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756\",\"session_id\":\"b77993f3-96ea-4aa9-bb5f-99d0ff628fd0\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"needs_review\",\"reasons\":[\"Protected target; train scope and human approval required\"]},\"blocking_failures\":[]},{\"variant\":\"candidate\",\"repetition\":1,\"input_digest\":\"6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756\",\"session_id\":\"449483e2-18bf-4a33-824b-942f52f71e40\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"needs_review\",\"reasons\":[\"Protected target; train scope and human approval required\"]},\"blocking_failures\":[]},{\"variant\":\"baseline\",\"repetition\":2,\"input_digest\":\"6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756\",\"session_id\":\"107998dc-3d3c-4e71-b6cf-5539ecadeae3\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"needs_review\",\"reasons\":[\"Protected target; train scope and human approval required\"]},\"blocking_failures\":[]},{\"variant\":\"candidate\",\"repetition\":2,\"input_digest\":\"6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756\",\"session_id\":\"94925ed9-349e-44fd-870d-ab9c9cee2ee7\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"needs_review\",\"reasons\":[\"Protected target; train scope and human approval required\"]},\"blocking_failures\":[]}]"
+        },
+        {
+          "id": "frozen-computation",
+          "group": "regression",
+          "lane": "frozen",
+          "passed": true,
+          "blocking_failures": [],
+          "metrics": {
+            "rows": 120,
+            "nulls": 30,
+            "false_changes": 0,
+            "label_misalignments": 0,
+            "formula_errors": 0,
+            "split_reproducible": 1,
+            "test_fit_rejected": 1,
+            "unknown_category_width": 2
+          },
+          "trace": "{\"passed\": true, \"metrics\": {\"rows\": 120, \"nulls\": 30, \"false_changes\": 0, \"label_misalignments\": 0, \"formula_errors\": 0, \"split_reproducible\": 1, \"test_fit_rejected\": 1, \"unknown_category_width\": 2}}\n"
+        }
+      ],
+      "suitability": "Synthetic regression and isolated holdout planning; frozen deterministic engine compatibility.",
+      "limitations": [
+        "No human-labelled business cases or release approval.",
+        "Frozen computation uses the local Python engine, not target deployment containers.",
+        "Model monetary cost is unavailable; cost is null.",
+        "These narrow tasks do not establish general business quality or capacity."
+      ],
+      "cost": null,
+      "duration_ms": 417
+    }
+  },
+  "data-cleaning": {
+    "id": "725af564-d194-4c5a-b0c2-6b6ce2b2e769",
+    "status": "passed",
+    "package_digest": "0ab9893ab5aa24f1989c8db6c662110c84165d69b06cc8e72a7ed82170df5688",
+    "suite_digest": "4d510284b24c391273fb6b751e91b58ac9d6a1f12426a91e4c23e9d96a0975e7",
+    "runtime": {
+      "harness_commit": "c291e7961a515f6d7af9304e7fd1d257929aef26",
+      "model_id": "fixture",
+      "model_snapshot": null,
+      "environment_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "policy_version": "policy1",
+      "parameters": {
+        "thinking": "disabled",
+        "max_tokens": 2048,
+        "environment_kind": "synthetic-test-profile"
+      }
+    },
+    "report": {
+      "cases": [
+        {
+          "id": "regression-plan",
+          "group": "regression",
+          "lane": "planning",
+          "passed": true,
+          "blocking_failures": [],
+          "metrics": {
+            "candidate_passes": 3,
+            "baseline_passes": 3,
+            "repetitions": 3,
+            "candidate_failure_rate": 0,
+            "candidate_pass_variance": 0,
+            "baseline_failure_rate": 0
+          },
+          "trace": "[{\"variant\":\"baseline\",\"repetition\":0,\"input_digest\":\"23bd0eb51736d56a9d9875191affee10a1433f82ddeb4aaaf50947be479b4e73\",\"session_id\":\"43972228-07b7-44db-9f56-b80929723207\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"fill_constant\",\"operator_version\":\"1\",\"params\":{\"columns\":[\"income\"],\"value\":-1},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"1dd904bd264e2855037836027a3bf7e2246c3e917670d50b74030cdc6be3a55e\"}}}]},\"evidence\":[],\"needs_confirmation\":[\"Confirm changes\"]},\"blocking_failures\":[]},{\"variant\":\"candidate\",\"repetition\":0,\"input_digest\":\"23bd0eb51736d56a9d9875191affee10a1433f82ddeb4aaaf50947be479b4e73\",\"session_id\":\"b795833e-045e-4404-90f6-00afba777d4b\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"fill_constant\",\"operator_version\":\"1\",\"params\":{\"columns\":[\"income\"],\"value\":-1},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"1dd904bd264e2855037836027a3bf7e2246c3e917670d50b74030cdc6be3a55e\"}}}]},\"evidence\":[],\"needs_confirmation\":[\"Confirm changes\"]},\"blocking_failures\":[]},{\"variant\":\"baseline\",\"repetition\":1,\"input_digest\":\"23bd0eb51736d56a9d9875191affee10a1433f82ddeb4aaaf50947be479b4e73\",\"session_id\":\"666318b2-9a4d-410b-ae69-3125a103f205\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"fill_constant\",\"operator_version\":\"1\",\"params\":{\"columns\":[\"income\"],\"value\":-1},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"1dd904bd264e2855037836027a3bf7e2246c3e917670d50b74030cdc6be3a55e\"}}}]},\"evidence\":[],\"needs_confirmation\":[\"Confirm changes\"]},\"blocking_failures\":[]},{\"variant\":\"candidate\",\"repetition\":1,\"input_digest\":\"23bd0eb51736d56a9d9875191affee10a1433f82ddeb4aaaf50947be479b4e73\",\"session_id\":\"66801d20-2d0a-418f-84d5-69431c62cc43\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"fill_constant\",\"operator_version\":\"1\",\"params\":{\"columns\":[\"income\"],\"value\":-1},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"1dd904bd264e2855037836027a3bf7e2246c3e917670d50b74030cdc6be3a55e\"}}}]},\"evidence\":[],\"needs_confirmation\":[\"Confirm changes\"]},\"blocking_failures\":[]},{\"variant\":\"baseline\",\"repetition\":2,\"input_digest\":\"23bd0eb51736d56a9d9875191affee10a1433f82ddeb4aaaf50947be479b4e73\",\"session_id\":\"e6799772-c0ff-4aa5-aba1-1bc3746a43af\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"fill_constant\",\"operator_version\":\"1\",\"params\":{\"columns\":[\"income\"],\"value\":-1},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"1dd904bd264e2855037836027a3bf7e2246c3e917670d50b74030cdc6be3a55e\"}}}]},\"evidence\":[],\"needs_confirmation\":[\"Confirm changes\"]},\"blocking_failures\":[]},{\"variant\":\"candidate\",\"repetition\":2,\"input_digest\":\"23bd0eb51736d56a9d9875191affee10a1433f82ddeb4aaaf50947be479b4e73\",\"session_id\":\"17114644-b25b-41a6-89ee-f4598fc1a6f3\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"fill_constant\",\"operator_version\":\"1\",\"params\":{\"columns\":[\"income\"],\"value\":-1},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"1dd904bd264e2855037836027a3bf7e2246c3e917670d50b74030cdc6be3a55e\"}}}]},\"evidence\":[],\"needs_confirmation\":[\"Confirm changes\"]},\"blocking_failures\":[]}]"
+        },
+        {
+          "id": "holdout-plan",
+          "group": "holdout",
+          "lane": "planning",
+          "passed": true,
+          "blocking_failures": [],
+          "metrics": {
+            "candidate_passes": 3,
+            "baseline_passes": 3,
+            "repetitions": 3,
+            "candidate_failure_rate": 0,
+            "candidate_pass_variance": 0,
+            "baseline_failure_rate": 0
+          },
+          "trace": "[{\"variant\":\"baseline\",\"repetition\":0,\"input_digest\":\"8513d19da0835ece7849e0f5f9c12f7e994a5bf5fe1700fa841c28fe4b7d905e\",\"session_id\":\"21f9f550-a2ee-4592-bb72-102fd964ea26\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"fill_constant\",\"operator_version\":\"1\",\"params\":{\"columns\":[\"income\"],\"value\":-1},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"e26a3b8d3f35bb86afb36601e78a50df661373811fa697fa430484a2777a999a\"}}}]},\"evidence\":[],\"needs_confirmation\":[\"Confirm changes\"]},\"blocking_failures\":[]},{\"variant\":\"candidate\",\"repetition\":0,\"input_digest\":\"8513d19da0835ece7849e0f5f9c12f7e994a5bf5fe1700fa841c28fe4b7d905e\",\"session_id\":\"c193ff2d-5e56-46be-b890-a4d2f857394e\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"fill_constant\",\"operator_version\":\"1\",\"params\":{\"columns\":[\"income\"],\"value\":-1},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"e26a3b8d3f35bb86afb36601e78a50df661373811fa697fa430484a2777a999a\"}}}]},\"evidence\":[],\"needs_confirmation\":[\"Confirm changes\"]},\"blocking_failures\":[]},{\"variant\":\"baseline\",\"repetition\":1,\"input_digest\":\"8513d19da0835ece7849e0f5f9c12f7e994a5bf5fe1700fa841c28fe4b7d905e\",\"session_id\":\"87e664bd-e559-4348-aac0-4ec767a82ec0\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"fill_constant\",\"operator_version\":\"1\",\"params\":{\"columns\":[\"income\"],\"value\":-1},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"e26a3b8d3f35bb86afb36601e78a50df661373811fa697fa430484a2777a999a\"}}}]},\"evidence\":[],\"needs_confirmation\":[\"Confirm changes\"]},\"blocking_failures\":[]},{\"variant\":\"candidate\",\"repetition\":1,\"input_digest\":\"8513d19da0835ece7849e0f5f9c12f7e994a5bf5fe1700fa841c28fe4b7d905e\",\"session_id\":\"38dbd672-32bd-48af-aa14-bf1b601ede06\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"fill_constant\",\"operator_version\":\"1\",\"params\":{\"columns\":[\"income\"],\"value\":-1},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"e26a3b8d3f35bb86afb36601e78a50df661373811fa697fa430484a2777a999a\"}}}]},\"evidence\":[],\"needs_confirmation\":[\"Confirm changes\"]},\"blocking_failures\":[]},{\"variant\":\"baseline\",\"repetition\":2,\"input_digest\":\"8513d19da0835ece7849e0f5f9c12f7e994a5bf5fe1700fa841c28fe4b7d905e\",\"session_id\":\"b1076c73-5d68-40a8-8bbe-d0bf280f7288\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"fill_constant\",\"operator_version\":\"1\",\"params\":{\"columns\":[\"income\"],\"value\":-1},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"e26a3b8d3f35bb86afb36601e78a50df661373811fa697fa430484a2777a999a\"}}}]},\"evidence\":[],\"needs_confirmation\":[\"Confirm changes\"]},\"blocking_failures\":[]},{\"variant\":\"candidate\",\"repetition\":2,\"input_digest\":\"8513d19da0835ece7849e0f5f9c12f7e994a5bf5fe1700fa841c28fe4b7d905e\",\"session_id\":\"061ef813-ec69-4a4c-bb70-454373d7d0b5\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"fill_constant\",\"operator_version\":\"1\",\"params\":{\"columns\":[\"income\"],\"value\":-1},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"e26a3b8d3f35bb86afb36601e78a50df661373811fa697fa430484a2777a999a\"}}}]},\"evidence\":[],\"needs_confirmation\":[\"Confirm changes\"]},\"blocking_failures\":[]}]"
+        },
+        {
+          "id": "guard-plan",
+          "group": "regression",
+          "lane": "planning",
+          "passed": true,
+          "blocking_failures": [],
+          "metrics": {
+            "candidate_passes": 3,
+            "baseline_passes": 3,
+            "repetitions": 3,
+            "candidate_failure_rate": 0,
+            "candidate_pass_variance": 0,
+            "baseline_failure_rate": 0
+          },
+          "trace": "[{\"variant\":\"baseline\",\"repetition\":0,\"input_digest\":\"6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756\",\"session_id\":\"2b3665ed-0b60-4c4a-b6a6-0eebedf036a5\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"needs_review\",\"reasons\":[\"Protected target; train scope and human approval required\"]},\"blocking_failures\":[]},{\"variant\":\"candidate\",\"repetition\":0,\"input_digest\":\"6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756\",\"session_id\":\"b2403cdc-6e4d-44d6-82be-5c64bb9071c5\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"needs_review\",\"reasons\":[\"Protected target; train scope and human approval required\"]},\"blocking_failures\":[]},{\"variant\":\"baseline\",\"repetition\":1,\"input_digest\":\"6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756\",\"session_id\":\"2d337ee3-bf8c-41ec-a433-eda73bfb5106\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"needs_review\",\"reasons\":[\"Protected target; train scope and human approval required\"]},\"blocking_failures\":[]},{\"variant\":\"candidate\",\"repetition\":1,\"input_digest\":\"6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756\",\"session_id\":\"249dbdc6-f0e5-4b10-8f3c-fe8ebd687471\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"needs_review\",\"reasons\":[\"Protected target; train scope and human approval required\"]},\"blocking_failures\":[]},{\"variant\":\"baseline\",\"repetition\":2,\"input_digest\":\"6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756\",\"session_id\":\"e06680bd-74f6-4cdf-9cf2-992105c51309\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"needs_review\",\"reasons\":[\"Protected target; train scope and human approval required\"]},\"blocking_failures\":[]},{\"variant\":\"candidate\",\"repetition\":2,\"input_digest\":\"6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756\",\"session_id\":\"b2f5f3d3-c91b-4013-b3d6-7c7c4754fe27\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"needs_review\",\"reasons\":[\"Protected target; train scope and human approval required\"]},\"blocking_failures\":[]}]"
+        },
+        {
+          "id": "frozen-computation",
+          "group": "regression",
+          "lane": "frozen",
+          "passed": true,
+          "blocking_failures": [],
+          "metrics": {
+            "rows": 120,
+            "nulls": 30,
+            "false_changes": 0,
+            "label_misalignments": 0,
+            "formula_errors": 0,
+            "split_reproducible": 1,
+            "test_fit_rejected": 1,
+            "unknown_category_width": 2
+          },
+          "trace": "{\"passed\": true, \"metrics\": {\"rows\": 120, \"nulls\": 30, \"false_changes\": 0, \"label_misalignments\": 0, \"formula_errors\": 0, \"split_reproducible\": 1, \"test_fit_rejected\": 1, \"unknown_category_width\": 2}}\n"
+        }
+      ],
+      "suitability": "Synthetic regression and isolated holdout planning; frozen deterministic engine compatibility.",
+      "limitations": [
+        "No human-labelled business cases or release approval.",
+        "Frozen computation uses the local Python engine, not target deployment containers.",
+        "Model monetary cost is unavailable; cost is null.",
+        "These narrow tasks do not establish general business quality or capacity."
+      ],
+      "cost": null,
+      "duration_ms": 368
+    }
+  },
+  "feature-engineering": {
+    "id": "db4a2208-4337-4c26-8387-d171a6a51cad",
+    "status": "passed",
+    "package_digest": "88153ec1d24aba6cae3207159aed3993d5339fa371e95deb5e6380e43225b868",
+    "suite_digest": "8092d133f693662b488d16a2b55a2c61e0361c13d6ae52ac7ee2fbf2e695248d",
+    "runtime": {
+      "harness_commit": "c291e7961a515f6d7af9304e7fd1d257929aef26",
+      "model_id": "fixture",
+      "model_snapshot": null,
+      "environment_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "policy_version": "policy1",
+      "parameters": {
+        "thinking": "disabled",
+        "max_tokens": 2048,
+        "environment_kind": "synthetic-test-profile"
+      }
+    },
+    "report": {
+      "cases": [
+        {
+          "id": "regression-plan",
+          "group": "regression",
+          "lane": "planning",
+          "passed": true,
+          "blocking_failures": [],
+          "metrics": {
+            "candidate_passes": 3,
+            "baseline_passes": 3,
+            "repetitions": 3,
+            "candidate_failure_rate": 0,
+            "candidate_pass_variance": 0,
+            "baseline_failure_rate": 0
+          },
+          "trace": "[{\"variant\":\"baseline\",\"repetition\":0,\"input_digest\":\"0b29bd9c1e20fef0f9bb2d54e68da962473e9371bb81ff827c349cdcca951426\",\"session_id\":\"d3d15f24-9735-4d38-b9d6-a11deb979fbc\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"derive\",\"operator_version\":\"1\",\"params\":{\"left\":\"income\",\"right\":\"denominator\",\"output\":\"income_ratio\",\"method\":\"divide\",\"invalid\":\"null\"},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"1dd904bd264e2855037836027a3bf7e2246c3e917670d50b74030cdc6be3a55e\"}}}]},\"evidence\":[],\"needs_confirmation\":[\"Confirm changes\"]},\"blocking_failures\":[]},{\"variant\":\"candidate\",\"repetition\":0,\"input_digest\":\"0b29bd9c1e20fef0f9bb2d54e68da962473e9371bb81ff827c349cdcca951426\",\"session_id\":\"7c9206e5-8069-41d3-aa8c-8ae2d1e9f4bd\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"derive\",\"operator_version\":\"1\",\"params\":{\"left\":\"income\",\"right\":\"denominator\",\"output\":\"income_ratio\",\"method\":\"divide\",\"invalid\":\"null\"},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"1dd904bd264e2855037836027a3bf7e2246c3e917670d50b74030cdc6be3a55e\"}}}]},\"evidence\":[],\"needs_confirmation\":[\"Confirm changes\"]},\"blocking_failures\":[]},{\"variant\":\"baseline\",\"repetition\":1,\"input_digest\":\"0b29bd9c1e20fef0f9bb2d54e68da962473e9371bb81ff827c349cdcca951426\",\"session_id\":\"581dd17e-e2cb-49a5-aa1e-871380569920\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"derive\",\"operator_version\":\"1\",\"params\":{\"left\":\"income\",\"right\":\"denominator\",\"output\":\"income_ratio\",\"method\":\"divide\",\"invalid\":\"null\"},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"1dd904bd264e2855037836027a3bf7e2246c3e917670d50b74030cdc6be3a55e\"}}}]},\"evidence\":[],\"needs_confirmation\":[\"Confirm changes\"]},\"blocking_failures\":[]},{\"variant\":\"candidate\",\"repetition\":1,\"input_digest\":\"0b29bd9c1e20fef0f9bb2d54e68da962473e9371bb81ff827c349cdcca951426\",\"session_id\":\"d743b1de-5dc3-4e44-9b1c-be6802bebb69\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"derive\",\"operator_version\":\"1\",\"params\":{\"left\":\"income\",\"right\":\"denominator\",\"output\":\"income_ratio\",\"method\":\"divide\",\"invalid\":\"null\"},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"1dd904bd264e2855037836027a3bf7e2246c3e917670d50b74030cdc6be3a55e\"}}}]},\"evidence\":[],\"needs_confirmation\":[\"Confirm changes\"]},\"blocking_failures\":[]},{\"variant\":\"baseline\",\"repetition\":2,\"input_digest\":\"0b29bd9c1e20fef0f9bb2d54e68da962473e9371bb81ff827c349cdcca951426\",\"session_id\":\"52db7c94-5fef-4a0c-b30e-715b152c5a0e\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"derive\",\"operator_version\":\"1\",\"params\":{\"left\":\"income\",\"right\":\"denominator\",\"output\":\"income_ratio\",\"method\":\"divide\",\"invalid\":\"null\"},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"1dd904bd264e2855037836027a3bf7e2246c3e917670d50b74030cdc6be3a55e\"}}}]},\"evidence\":[],\"needs_confirmation\":[\"Confirm changes\"]},\"blocking_failures\":[]},{\"variant\":\"candidate\",\"repetition\":2,\"input_digest\":\"0b29bd9c1e20fef0f9bb2d54e68da962473e9371bb81ff827c349cdcca951426\",\"session_id\":\"3f160e76-a1d1-455d-b7d4-e99a5efba3d3\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"derive\",\"operator_version\":\"1\",\"params\":{\"left\":\"income\",\"right\":\"denominator\",\"output\":\"income_ratio\",\"method\":\"divide\",\"invalid\":\"null\"},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"1dd904bd264e2855037836027a3bf7e2246c3e917670d50b74030cdc6be3a55e\"}}}]},\"evidence\":[],\"needs_confirmation\":[\"Confirm changes\"]},\"blocking_failures\":[]}]"
+        },
+        {
+          "id": "holdout-plan",
+          "group": "holdout",
+          "lane": "planning",
+          "passed": true,
+          "blocking_failures": [],
+          "metrics": {
+            "candidate_passes": 3,
+            "baseline_passes": 3,
+            "repetitions": 3,
+            "candidate_failure_rate": 0,
+            "candidate_pass_variance": 0,
+            "baseline_failure_rate": 0
+          },
+          "trace": "[{\"variant\":\"baseline\",\"repetition\":0,\"input_digest\":\"db53f8bf0946ce526e93cedcad01e52ecd90dd3060cf2f3a81b5d2e56f46b089\",\"session_id\":\"815ae51a-5244-4a29-88ef-1f993afdfdba\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"derive\",\"operator_version\":\"1\",\"params\":{\"left\":\"income\",\"right\":\"denominator\",\"output\":\"income_ratio\",\"method\":\"divide\",\"invalid\":\"null\"},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"e26a3b8d3f35bb86afb36601e78a50df661373811fa697fa430484a2777a999a\"}}}]},\"evidence\":[],\"needs_confirmation\":[\"Confirm changes\"]},\"blocking_failures\":[]},{\"variant\":\"candidate\",\"repetition\":0,\"input_digest\":\"db53f8bf0946ce526e93cedcad01e52ecd90dd3060cf2f3a81b5d2e56f46b089\",\"session_id\":\"c23d1dfd-cbbe-406a-9d9b-192ce91c6a49\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"derive\",\"operator_version\":\"1\",\"params\":{\"left\":\"income\",\"right\":\"denominator\",\"output\":\"income_ratio\",\"method\":\"divide\",\"invalid\":\"null\"},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"e26a3b8d3f35bb86afb36601e78a50df661373811fa697fa430484a2777a999a\"}}}]},\"evidence\":[],\"needs_confirmation\":[\"Confirm changes\"]},\"blocking_failures\":[]},{\"variant\":\"baseline\",\"repetition\":1,\"input_digest\":\"db53f8bf0946ce526e93cedcad01e52ecd90dd3060cf2f3a81b5d2e56f46b089\",\"session_id\":\"0f7ad24b-332c-4875-be7f-b9e513b69c05\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"derive\",\"operator_version\":\"1\",\"params\":{\"left\":\"income\",\"right\":\"denominator\",\"output\":\"income_ratio\",\"method\":\"divide\",\"invalid\":\"null\"},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"e26a3b8d3f35bb86afb36601e78a50df661373811fa697fa430484a2777a999a\"}}}]},\"evidence\":[],\"needs_confirmation\":[\"Confirm changes\"]},\"blocking_failures\":[]},{\"variant\":\"candidate\",\"repetition\":1,\"input_digest\":\"db53f8bf0946ce526e93cedcad01e52ecd90dd3060cf2f3a81b5d2e56f46b089\",\"session_id\":\"7b365f11-406b-4a0c-8615-424f50395140\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"derive\",\"operator_version\":\"1\",\"params\":{\"left\":\"income\",\"right\":\"denominator\",\"output\":\"income_ratio\",\"method\":\"divide\",\"invalid\":\"null\"},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"e26a3b8d3f35bb86afb36601e78a50df661373811fa697fa430484a2777a999a\"}}}]},\"evidence\":[],\"needs_confirmation\":[\"Confirm changes\"]},\"blocking_failures\":[]},{\"variant\":\"baseline\",\"repetition\":2,\"input_digest\":\"db53f8bf0946ce526e93cedcad01e52ecd90dd3060cf2f3a81b5d2e56f46b089\",\"session_id\":\"c4eff63c-fe0d-4993-a668-20cba485ed66\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"derive\",\"operator_version\":\"1\",\"params\":{\"left\":\"income\",\"right\":\"denominator\",\"output\":\"income_ratio\",\"method\":\"divide\",\"invalid\":\"null\"},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"e26a3b8d3f35bb86afb36601e78a50df661373811fa697fa430484a2777a999a\"}}}]},\"evidence\":[],\"needs_confirmation\":[\"Confirm changes\"]},\"blocking_failures\":[]},{\"variant\":\"candidate\",\"repetition\":2,\"input_digest\":\"db53f8bf0946ce526e93cedcad01e52ecd90dd3060cf2f3a81b5d2e56f46b089\",\"session_id\":\"090d075e-2c22-4512-a59c-3492ad3a3516\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"derive\",\"operator_version\":\"1\",\"params\":{\"left\":\"income\",\"right\":\"denominator\",\"output\":\"income_ratio\",\"method\":\"divide\",\"invalid\":\"null\"},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"e26a3b8d3f35bb86afb36601e78a50df661373811fa697fa430484a2777a999a\"}}}]},\"evidence\":[],\"needs_confirmation\":[\"Confirm changes\"]},\"blocking_failures\":[]}]"
+        },
+        {
+          "id": "guard-plan",
+          "group": "regression",
+          "lane": "planning",
+          "passed": true,
+          "blocking_failures": [],
+          "metrics": {
+            "candidate_passes": 3,
+            "baseline_passes": 3,
+            "repetitions": 3,
+            "candidate_failure_rate": 0,
+            "candidate_pass_variance": 0,
+            "baseline_failure_rate": 0
+          },
+          "trace": "[{\"variant\":\"baseline\",\"repetition\":0,\"input_digest\":\"6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756\",\"session_id\":\"63d8c71d-3104-4968-a16a-b9c9265a2ea2\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"needs_review\",\"reasons\":[\"Protected target; train scope and human approval required\"]},\"blocking_failures\":[]},{\"variant\":\"candidate\",\"repetition\":0,\"input_digest\":\"6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756\",\"session_id\":\"6ba9bbcd-c163-4353-a554-36bc10124a43\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"needs_review\",\"reasons\":[\"Protected target; train scope and human approval required\"]},\"blocking_failures\":[]},{\"variant\":\"baseline\",\"repetition\":1,\"input_digest\":\"6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756\",\"session_id\":\"531d9d86-a9cd-470e-93ce-2aeab8ed9e90\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"needs_review\",\"reasons\":[\"Protected target; train scope and human approval required\"]},\"blocking_failures\":[]},{\"variant\":\"candidate\",\"repetition\":1,\"input_digest\":\"6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756\",\"session_id\":\"c9fd0254-4a82-4d36-8233-73c5bd70ec48\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"needs_review\",\"reasons\":[\"Protected target; train scope and human approval required\"]},\"blocking_failures\":[]},{\"variant\":\"baseline\",\"repetition\":2,\"input_digest\":\"6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756\",\"session_id\":\"8b853930-3dd5-4994-b92f-665b8d626082\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"needs_review\",\"reasons\":[\"Protected target; train scope and human approval required\"]},\"blocking_failures\":[]},{\"variant\":\"candidate\",\"repetition\":2,\"input_digest\":\"6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756\",\"session_id\":\"3ec694af-ddda-42c0-b30f-74a1d9a0d46f\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"needs_review\",\"reasons\":[\"Protected target; train scope and human approval required\"]},\"blocking_failures\":[]}]"
+        },
+        {
+          "id": "frozen-computation",
+          "group": "regression",
+          "lane": "frozen",
+          "passed": true,
+          "blocking_failures": [],
+          "metrics": {
+            "rows": 120,
+            "nulls": 30,
+            "false_changes": 0,
+            "label_misalignments": 0,
+            "formula_errors": 0,
+            "split_reproducible": 1,
+            "test_fit_rejected": 1,
+            "unknown_category_width": 2
+          },
+          "trace": "{\"passed\": true, \"metrics\": {\"rows\": 120, \"nulls\": 30, \"false_changes\": 0, \"label_misalignments\": 0, \"formula_errors\": 0, \"split_reproducible\": 1, \"test_fit_rejected\": 1, \"unknown_category_width\": 2}}\n"
+        }
+      ],
+      "suitability": "Synthetic regression and isolated holdout planning; frozen deterministic engine compatibility.",
+      "limitations": [
+        "No human-labelled business cases or release approval.",
+        "Frozen computation uses the local Python engine, not target deployment containers.",
+        "Model monetary cost is unavailable; cost is null.",
+        "These narrow tasks do not establish general business quality or capacity."
+      ],
+      "cost": null,
+      "duration_ms": 380
+    }
+  },
+  "numeric-quality-review": {
+    "id": "7a704698-9f0f-4de2-8000-3ee4d1c459cc",
+    "status": "passed",
+    "package_digest": "801eb97b2a363e3687c153e21040ddccf19bce4f510c71fad3ea1fd186c616ea",
+    "suite_digest": "529713100785a115b854198ca1d92c74c43c0103ae6fd7e8308f6b6515960f14",
+    "runtime": {
+      "harness_commit": "c291e7961a515f6d7af9304e7fd1d257929aef26",
+      "model_id": "fixture",
+      "model_snapshot": null,
+      "environment_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "policy_version": "policy1",
+      "parameters": {
+        "thinking": "disabled",
+        "max_tokens": 2048,
+        "environment_kind": "synthetic-test-profile"
+      }
+    },
+    "report": {
+      "cases": [
+        {
+          "id": "regression-plan",
+          "group": "regression",
+          "lane": "planning",
+          "passed": true,
+          "blocking_failures": [],
+          "metrics": {
+            "candidate_passes": 3,
+            "baseline_passes": 3,
+            "repetitions": 3,
+            "candidate_failure_rate": 0,
+            "candidate_pass_variance": 0,
+            "baseline_failure_rate": 0
+          },
+          "trace": "[{\"variant\":\"baseline\",\"repetition\":0,\"input_digest\":\"63766ad002e2d59ab23e2aa47c328806dbc7e0d6d658715f1c56583c9ff4d3cd\",\"session_id\":\"223aafbb-f2a8-4e35-9c36-96ad3e39b27c\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"inspect\",\"operator_version\":\"1\",\"params\":{},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"1dd904bd264e2855037836027a3bf7e2246c3e917670d50b74030cdc6be3a55e\"}}}]},\"evidence\":[{\"metric\":\"income_nulls\",\"value\":1,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"0b45ff16d43c4478298fcaba264a0e437a80f95003669d586d11621b7812b2b3\"}},{\"metric\":\"income_negative\",\"value\":1,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"0b45ff16d43c4478298fcaba264a0e437a80f95003669d586d11621b7812b2b3\"}}],\"needs_confirmation\":[]},\"blocking_failures\":[]},{\"variant\":\"candidate\",\"repetition\":0,\"input_digest\":\"63766ad002e2d59ab23e2aa47c328806dbc7e0d6d658715f1c56583c9ff4d3cd\",\"session_id\":\"668f27f0-2de9-40e1-b125-c1bda9d9ee0f\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"inspect\",\"operator_version\":\"1\",\"params\":{},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"1dd904bd264e2855037836027a3bf7e2246c3e917670d50b74030cdc6be3a55e\"}}}]},\"evidence\":[{\"metric\":\"income_nulls\",\"value\":1,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"0b45ff16d43c4478298fcaba264a0e437a80f95003669d586d11621b7812b2b3\"}},{\"metric\":\"income_negative\",\"value\":1,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"0b45ff16d43c4478298fcaba264a0e437a80f95003669d586d11621b7812b2b3\"}}],\"needs_confirmation\":[]},\"blocking_failures\":[]},{\"variant\":\"baseline\",\"repetition\":1,\"input_digest\":\"63766ad002e2d59ab23e2aa47c328806dbc7e0d6d658715f1c56583c9ff4d3cd\",\"session_id\":\"edfba963-295f-4d9c-a61f-cc8d5941ee5d\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"inspect\",\"operator_version\":\"1\",\"params\":{},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"1dd904bd264e2855037836027a3bf7e2246c3e917670d50b74030cdc6be3a55e\"}}}]},\"evidence\":[{\"metric\":\"income_nulls\",\"value\":1,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"0b45ff16d43c4478298fcaba264a0e437a80f95003669d586d11621b7812b2b3\"}},{\"metric\":\"income_negative\",\"value\":1,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"0b45ff16d43c4478298fcaba264a0e437a80f95003669d586d11621b7812b2b3\"}}],\"needs_confirmation\":[]},\"blocking_failures\":[]},{\"variant\":\"candidate\",\"repetition\":1,\"input_digest\":\"63766ad002e2d59ab23e2aa47c328806dbc7e0d6d658715f1c56583c9ff4d3cd\",\"session_id\":\"4b4389e7-5720-40db-aa00-ded8f88faee1\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"inspect\",\"operator_version\":\"1\",\"params\":{},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"1dd904bd264e2855037836027a3bf7e2246c3e917670d50b74030cdc6be3a55e\"}}}]},\"evidence\":[{\"metric\":\"income_nulls\",\"value\":1,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"0b45ff16d43c4478298fcaba264a0e437a80f95003669d586d11621b7812b2b3\"}},{\"metric\":\"income_negative\",\"value\":1,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"0b45ff16d43c4478298fcaba264a0e437a80f95003669d586d11621b7812b2b3\"}}],\"needs_confirmation\":[]},\"blocking_failures\":[]},{\"variant\":\"baseline\",\"repetition\":2,\"input_digest\":\"63766ad002e2d59ab23e2aa47c328806dbc7e0d6d658715f1c56583c9ff4d3cd\",\"session_id\":\"db9da35b-89c6-4950-ab32-3ac14f8a6c09\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"inspect\",\"operator_version\":\"1\",\"params\":{},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"1dd904bd264e2855037836027a3bf7e2246c3e917670d50b74030cdc6be3a55e\"}}}]},\"evidence\":[{\"metric\":\"income_nulls\",\"value\":1,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"0b45ff16d43c4478298fcaba264a0e437a80f95003669d586d11621b7812b2b3\"}},{\"metric\":\"income_negative\",\"value\":1,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"0b45ff16d43c4478298fcaba264a0e437a80f95003669d586d11621b7812b2b3\"}}],\"needs_confirmation\":[]},\"blocking_failures\":[]},{\"variant\":\"candidate\",\"repetition\":2,\"input_digest\":\"63766ad002e2d59ab23e2aa47c328806dbc7e0d6d658715f1c56583c9ff4d3cd\",\"session_id\":\"848e36b6-a88d-4445-8497-aa491c2c8fc4\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"inspect\",\"operator_version\":\"1\",\"params\":{},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"1dd904bd264e2855037836027a3bf7e2246c3e917670d50b74030cdc6be3a55e\"}}}]},\"evidence\":[{\"metric\":\"income_nulls\",\"value\":1,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"0b45ff16d43c4478298fcaba264a0e437a80f95003669d586d11621b7812b2b3\"}},{\"metric\":\"income_negative\",\"value\":1,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"0b45ff16d43c4478298fcaba264a0e437a80f95003669d586d11621b7812b2b3\"}}],\"needs_confirmation\":[]},\"blocking_failures\":[]}]"
+        },
+        {
+          "id": "holdout-plan",
+          "group": "holdout",
+          "lane": "planning",
+          "passed": true,
+          "blocking_failures": [],
+          "metrics": {
+            "candidate_passes": 3,
+            "baseline_passes": 3,
+            "repetitions": 3,
+            "candidate_failure_rate": 0,
+            "candidate_pass_variance": 0,
+            "baseline_failure_rate": 0
+          },
+          "trace": "[{\"variant\":\"baseline\",\"repetition\":0,\"input_digest\":\"6074ab0ba3181250cbdb0c78ef7c568735351e5fc4c80428149b4c4e4def288e\",\"session_id\":\"480003e6-8cbc-4006-9b4d-600eb62b27ba\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"inspect\",\"operator_version\":\"1\",\"params\":{},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"e26a3b8d3f35bb86afb36601e78a50df661373811fa697fa430484a2777a999a\"}}}]},\"evidence\":[{\"metric\":\"income_nulls\",\"value\":1,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"c2056c41ee390b2be4dd8aca4a80d68b4c0395fdf980cc11efe372e2c02d8bd4\"}},{\"metric\":\"income_negative\",\"value\":3,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"c2056c41ee390b2be4dd8aca4a80d68b4c0395fdf980cc11efe372e2c02d8bd4\"}}],\"needs_confirmation\":[]},\"blocking_failures\":[]},{\"variant\":\"candidate\",\"repetition\":0,\"input_digest\":\"6074ab0ba3181250cbdb0c78ef7c568735351e5fc4c80428149b4c4e4def288e\",\"session_id\":\"8a330941-2efa-4851-b748-9ec01153ca49\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"inspect\",\"operator_version\":\"1\",\"params\":{},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"e26a3b8d3f35bb86afb36601e78a50df661373811fa697fa430484a2777a999a\"}}}]},\"evidence\":[{\"metric\":\"income_nulls\",\"value\":1,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"c2056c41ee390b2be4dd8aca4a80d68b4c0395fdf980cc11efe372e2c02d8bd4\"}},{\"metric\":\"income_negative\",\"value\":3,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"c2056c41ee390b2be4dd8aca4a80d68b4c0395fdf980cc11efe372e2c02d8bd4\"}}],\"needs_confirmation\":[]},\"blocking_failures\":[]},{\"variant\":\"baseline\",\"repetition\":1,\"input_digest\":\"6074ab0ba3181250cbdb0c78ef7c568735351e5fc4c80428149b4c4e4def288e\",\"session_id\":\"0ab0889a-1d8a-48ca-8108-71546317c128\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"inspect\",\"operator_version\":\"1\",\"params\":{},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"e26a3b8d3f35bb86afb36601e78a50df661373811fa697fa430484a2777a999a\"}}}]},\"evidence\":[{\"metric\":\"income_nulls\",\"value\":1,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"c2056c41ee390b2be4dd8aca4a80d68b4c0395fdf980cc11efe372e2c02d8bd4\"}},{\"metric\":\"income_negative\",\"value\":3,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"c2056c41ee390b2be4dd8aca4a80d68b4c0395fdf980cc11efe372e2c02d8bd4\"}}],\"needs_confirmation\":[]},\"blocking_failures\":[]},{\"variant\":\"candidate\",\"repetition\":1,\"input_digest\":\"6074ab0ba3181250cbdb0c78ef7c568735351e5fc4c80428149b4c4e4def288e\",\"session_id\":\"8abf6cd7-3ac9-4471-8740-d2bb85765c9a\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"inspect\",\"operator_version\":\"1\",\"params\":{},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"e26a3b8d3f35bb86afb36601e78a50df661373811fa697fa430484a2777a999a\"}}}]},\"evidence\":[{\"metric\":\"income_nulls\",\"value\":1,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"c2056c41ee390b2be4dd8aca4a80d68b4c0395fdf980cc11efe372e2c02d8bd4\"}},{\"metric\":\"income_negative\",\"value\":3,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"c2056c41ee390b2be4dd8aca4a80d68b4c0395fdf980cc11efe372e2c02d8bd4\"}}],\"needs_confirmation\":[]},\"blocking_failures\":[]},{\"variant\":\"baseline\",\"repetition\":2,\"input_digest\":\"6074ab0ba3181250cbdb0c78ef7c568735351e5fc4c80428149b4c4e4def288e\",\"session_id\":\"294fda91-196a-4a87-8813-9127ac1e298e\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"inspect\",\"operator_version\":\"1\",\"params\":{},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"e26a3b8d3f35bb86afb36601e78a50df661373811fa697fa430484a2777a999a\"}}}]},\"evidence\":[{\"metric\":\"income_nulls\",\"value\":1,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"c2056c41ee390b2be4dd8aca4a80d68b4c0395fdf980cc11efe372e2c02d8bd4\"}},{\"metric\":\"income_negative\",\"value\":3,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"c2056c41ee390b2be4dd8aca4a80d68b4c0395fdf980cc11efe372e2c02d8bd4\"}}],\"needs_confirmation\":[]},\"blocking_failures\":[]},{\"variant\":\"candidate\",\"repetition\":2,\"input_digest\":\"6074ab0ba3181250cbdb0c78ef7c568735351e5fc4c80428149b4c4e4def288e\",\"session_id\":\"fac9df35-e0d7-4a78-a4a3-9b0a9ac56f4c\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"proposed\",\"workflow\":{\"schema_version\":\"1\",\"project_id\":\"synthetic\",\"policy_version\":\"policy1\",\"environment_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"seed\":42,\"nodes\":[{\"id\":\"step\",\"operator\":\"inspect\",\"operator_version\":\"1\",\"params\":{},\"inputs\":{\"data\":{\"kind\":\"DatasetRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"input\",\"digest\":\"e26a3b8d3f35bb86afb36601e78a50df661373811fa697fa430484a2777a999a\"}}}]},\"evidence\":[{\"metric\":\"income_nulls\",\"value\":1,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"c2056c41ee390b2be4dd8aca4a80d68b4c0395fdf980cc11efe372e2c02d8bd4\"}},{\"metric\":\"income_negative\",\"value\":3,\"scope\":\"full_exact\",\"report\":{\"kind\":\"ReportRef\",\"project_id\":\"synthetic\",\"artifact_id\":\"report\",\"digest\":\"c2056c41ee390b2be4dd8aca4a80d68b4c0395fdf980cc11efe372e2c02d8bd4\"}}],\"needs_confirmation\":[]},\"blocking_failures\":[]}]"
+        },
+        {
+          "id": "guard-plan",
+          "group": "regression",
+          "lane": "planning",
+          "passed": true,
+          "blocking_failures": [],
+          "metrics": {
+            "candidate_passes": 3,
+            "baseline_passes": 3,
+            "repetitions": 3,
+            "candidate_failure_rate": 0,
+            "candidate_pass_variance": 0,
+            "baseline_failure_rate": 0
+          },
+          "trace": "[{\"variant\":\"baseline\",\"repetition\":0,\"input_digest\":\"6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756\",\"session_id\":\"1637a91a-60bf-452e-bb17-89b4277806ee\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"needs_review\",\"reasons\":[\"Protected target; train scope and human approval required\"]},\"blocking_failures\":[]},{\"variant\":\"candidate\",\"repetition\":0,\"input_digest\":\"6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756\",\"session_id\":\"c1c3193b-aaf5-43d7-b8d2-3c4d26b9d20f\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"needs_review\",\"reasons\":[\"Protected target; train scope and human approval required\"]},\"blocking_failures\":[]},{\"variant\":\"baseline\",\"repetition\":1,\"input_digest\":\"6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756\",\"session_id\":\"c5c0608c-9a78-4ba8-b19e-317422c8606f\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"needs_review\",\"reasons\":[\"Protected target; train scope and human approval required\"]},\"blocking_failures\":[]},{\"variant\":\"candidate\",\"repetition\":1,\"input_digest\":\"6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756\",\"session_id\":\"db126369-d67b-4ccc-87c1-088fbebc3023\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"needs_review\",\"reasons\":[\"Protected target; train scope and human approval required\"]},\"blocking_failures\":[]},{\"variant\":\"baseline\",\"repetition\":2,\"input_digest\":\"6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756\",\"session_id\":\"c48c213d-d5de-4582-927b-8d38a0b316e0\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"needs_review\",\"reasons\":[\"Protected target; train scope and human approval required\"]},\"blocking_failures\":[]},{\"variant\":\"candidate\",\"repetition\":2,\"input_digest\":\"6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756\",\"session_id\":\"96ccf810-8791-4260-8534-d072d1348a34\",\"submitted\":true,\"timed_out\":false,\"result\":{\"status\":\"needs_review\",\"reasons\":[\"Protected target; train scope and human approval required\"]},\"blocking_failures\":[]}]"
+        },
+        {
+          "id": "frozen-computation",
+          "group": "regression",
+          "lane": "frozen",
+          "passed": true,
+          "blocking_failures": [],
+          "metrics": {
+            "rows": 120,
+            "nulls": 30,
+            "false_changes": 0,
+            "label_misalignments": 0,
+            "formula_errors": 0,
+            "split_reproducible": 1,
+            "test_fit_rejected": 1,
+            "unknown_category_width": 2
+          },
+          "trace": "{\"passed\": true, \"metrics\": {\"rows\": 120, \"nulls\": 30, \"false_changes\": 0, \"label_misalignments\": 0, \"formula_errors\": 0, \"split_reproducible\": 1, \"test_fit_rejected\": 1, \"unknown_category_width\": 2}}\n"
+        }
+      ],
+      "suitability": "Synthetic regression and isolated holdout planning; frozen deterministic engine compatibility.",
+      "limitations": [
+        "No human-labelled business cases or release approval.",
+        "Frozen computation uses the local Python engine, not target deployment containers.",
+        "Model monetary cost is unavailable; cost is null.",
+        "These narrow tasks do not establish general business quality or capacity."
+      ],
+      "cost": null,
+      "duration_ms": 362
+    }
+  }
+}

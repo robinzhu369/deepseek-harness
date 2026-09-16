@@ -1,0 +1,39 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 144B done
+#1 WARN: InvalidDefaultArgInFrom: Default value for ARG ${WORKER_IMAGE} results in empty or invalid base image name (line 2)
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/data-agent-worker:dev
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [internal] load build context
+#4 transferring context: 906B done
+#4 DONE 0.0s
+
+#5 [1/2] FROM docker.io/library/data-agent-worker:dev@sha256:7c98ff6951190a5962a8aa1be959c3d4fe6e63fd127a1fc2f9c3913d487d6d3c
+#5 resolve docker.io/library/data-agent-worker:dev@sha256:7c98ff6951190a5962a8aa1be959c3d4fe6e63fd127a1fc2f9c3913d487d6d3c done
+#5 CACHED
+
+#6 [2/2] COPY isolation_probe.py /probe.py
+#6 DONE 0.0s
+
+#7 exporting to image
+#7 exporting layers 0.0s done
+#7 exporting manifest sha256:059da87ee553b77152d728545d8a6801b7b61122b952a47349cb33c4ea0ccc10 done
+#7 exporting config sha256:df9a8c78bdbb8dc4e04ee39a0cee85410993a2b14115f8eb172f64ee333abc30 done
+#7 exporting attestation manifest sha256:ee941d54fc3737dfe99c8543d3b3ce576be43e531f30b5dc56e211fcf058fc66 done
+#7 exporting manifest list sha256:89bf84615de806e6e5fb518bd501c74679cc32f0a0bd31e8c7780c88218771d1 done
+#7 naming to docker.io/library/data-agent-worker:isolation-test done
+#7 unpacking to docker.io/library/data-agent-worker:isolation-test done
+#7 DONE 0.1s
+
+ [33m1 warning found (use docker --debug to expand):
+[0m - InvalidDefaultArgInFrom: Default value for ARG ${WORKER_IMAGE} results in empty or invalid base image name (line 2)
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/o2mzoaz2hpsnc2e3xqpadjoij

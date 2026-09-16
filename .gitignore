@@ -44,3 +44,9 @@ worktrees/
 .agents/worktrees/
 .typert-*/
 native/system/test/bin/
+
+# Local analysis and test runtime state.
+.code-review-graph/
+__pycache__/
+.pytest_cache/
+evals/**/session.lock

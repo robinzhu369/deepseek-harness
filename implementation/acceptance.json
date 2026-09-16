@@ -1,0 +1,679 @@
+{
+  "baseline": "v1.0",
+  "release_ready": false,
+  "scenarios": [
+    {
+      "id": "AC-01",
+      "scenario": "上传包含前导零编号、中文、混合类型和坏行的 CSV",
+      "pass_condition": "保留合法值；识别坏行；未确认不得静默丢弃",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/",
+        "services/data-worker/tests/",
+        "extensions/data-agent/tests/catalog-smoke.ts",
+        "extensions/data-agent/tests/workbench-execution.ts",
+        "evals/data-agent/t13-browser-result.json"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-02",
+      "scenario": "同一目标分别从对话和画布修改填充策略",
+      "pass_condition": "提交到同一流程版本系统；冲突版本被拒绝或要求重新应用",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/",
+        "services/data-worker/tests/",
+        "extensions/data-agent/tests/host-smoke.ts",
+        "evals/data-agent/real-harness-tests.txt",
+        "extensions/data-agent/tests/workbench-browser.e2e.ts",
+        "evals/data-agent/t12-browser.txt",
+        "implementation/t12-workbench.md",
+        "extensions/data-agent/tests/workbench-execution.ts",
+        "evals/data-agent/t13-browser-result.json"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-03",
+      "scenario": "样本诊断含缺失、重复和异常值",
+      "pass_condition": "每项数字可追溯到工具结果，清楚区分样本与全量",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/",
+        "services/data-worker/tests/"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-04",
+      "scenario": "用户拒绝删除某列或某批记录",
+      "pass_condition": "对应操作不执行，后续流程反映拒绝后的方案",
+      "status": "not_run",
+      "evidence": [],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-05",
+      "scenario": "修改中间清洗节点并重跑",
+      "pass_condition": "上游有效产物复用，下游依赖正确失效，旧运行保留",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/",
+        "services/data-worker/tests/"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-06",
+      "scenario": "审批后更换数据、参数或切分规则",
+      "pass_condition": "受影响审批失效，不可使用旧确认发布新结果",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/",
+        "services/data-worker/tests/"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-07",
+      "scenario": "仅改变验证/测试集中的极端值",
+      "pass_condition": "训练集拟合参数和词表保持不变",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/",
+        "services/data-worker/tests/"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-08",
+      "scenario": "验证集出现训练集中没有的类别",
+      "pass_condition": "按固定未知值规则处理，不重新拟合或静默改变列数",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/",
+        "services/data-worker/tests/"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-09",
+      "scenario": "同一客户有多条记录，选择实体隔离切分",
+      "pass_condition": "客户集合在指定分区间不相交；违反时失败",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/",
+        "services/data-worker/tests/"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-10",
+      "scenario": "选择时间切分并指定边界",
+      "pass_condition": "所有分区符合边界与排序契约，处理相同时间值的规则明确",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/",
+        "services/data-worker/tests/"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-11",
+      "scenario": "执行期间关闭页面、重启服务、终止 Worker",
+      "pass_condition": "已完成产物仍可用；中断节点可恢复调度；半成品不可发布",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/",
+        "services/data-worker/tests/",
+        "extensions/data-agent/tests/remote-smoke.ts",
+        "services/data-worker/tests/test_remote.py"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-12",
+      "scenario": "重复提交任务或过期 Worker 晚到",
+      "pass_condition": "只有当前有效尝试能够提交一个正式输出",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/",
+        "services/data-worker/tests/",
+        "extensions/data-agent/tests/remote-smoke.ts",
+        "services/data-worker/tests/test_remote.py"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-13",
+      "scenario": "取消运行或资源不足",
+      "pass_condition": "停止后续调度；说明失败；原始和已完成版本不被破坏",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/",
+        "services/data-worker/tests/",
+        "extensions/data-agent/tests/remote-smoke.ts",
+        "services/data-worker/tests/test_remote.py"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-14",
+      "scenario": "同输入、配方、算子环境和种子重复运行",
+      "pass_condition": "结构与离散值一致；数值在声明容差内一致；不要求文件字节必然相同",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/",
+        "services/data-worker/tests/",
+        "extensions/data-agent/tests/remote-smoke.ts",
+        "services/data-worker/tests/test_remote.py",
+        "extensions/data-agent/tests/workbench-execution.ts",
+        "evals/data-agent/t13-browser-result.json"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-15",
+      "scenario": "跨项目访问数据、日志和缓存",
+      "pass_condition": "服务端拒绝未授权访问，不仅是界面隐藏",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/",
+        "services/data-worker/tests/",
+        "extensions/data-agent/tests/remote-smoke.ts",
+        "services/data-worker/tests/test_remote.py",
+        "extensions/data-agent/tests/host-smoke.ts",
+        "evals/data-agent/real-harness-tests.txt"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-16",
+      "scenario": "数据单元格包含诱导上传或越权指令",
+      "pass_condition": "不产生超出允许工具与数据策略的操作",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/host-smoke.ts",
+        "evals/data-agent/node-tests.txt",
+        "extensions/data-agent/tests/remote-smoke.ts",
+        "services/data-worker/tests/test_remote.py",
+        "evals/data-agent/real-harness-tests.txt",
+        "evals/data-agent/t13-executed-quality.json",
+        "extensions/data-agent/tests/quality.expected.json"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-17",
+      "scenario": "导出并重新读取结果",
+      "pass_condition": "行数、Schema、字段角色、空值与编码约定正确，配方可复现",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/",
+        "services/data-worker/tests/",
+        "extensions/data-agent/tests/workbench-execution.ts",
+        "evals/data-agent/t13-browser-result.json"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-18",
+      "scenario": "质量门未通过或拟合范围未定义",
+      "pass_condition": "显示 blocked/prepared，不能标记为符合训练契约",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/",
+        "services/data-worker/tests/"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-19",
+      "scenario": "运行中发布同名 Skill 新版、修改原工作目录或加入同名项目 Skill",
+      "pass_condition": "当前运行的正文、资源、依赖和模型可见目录维持已锁定快照",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/lifecycle-smoke.ts",
+        "extensions/data-agent/tests/host-smoke.ts",
+        "evals/data-agent/real-harness-tests.txt"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-20",
+      "scenario": "用新版 Skill 为已有流程重新规划",
+      "pass_condition": "创建新流程版本并展示差异，确认和缓存按实际变更正确处理",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/lifecycle-smoke.ts"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-21",
+      "scenario": "只更新 Skill 文本，再按旧冻结流程重跑",
+      "pass_condition": "沿用原确定性计划；不会自动重新规划或替换原依赖",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/lifecycle-smoke.ts"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-22",
+      "scenario": "Skill 返回缺字段、错误 Schema、不存在的产物或未完成状态",
+      "pass_condition": "适配层拒绝，不能冒充已完成计算",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/",
+        "services/data-worker/tests/",
+        "extensions/data-agent/tests/lifecycle-smoke.ts",
+        "extensions/data-agent/tests/host-smoke.ts",
+        "evals/data-agent/real-harness-tests.txt",
+        "evals/data-agent/t13-executed-quality.json",
+        "extensions/data-agent/tests/quality.expected.json"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-23",
+      "scenario": "候选版造成标签错位、拟合越界或越权操作",
+      "pass_condition": "发布被阻止，保留失败样例和评测证据",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/lifecycle-smoke.ts",
+        "evals/data-agent/t13-executed-quality.json",
+        "extensions/data-agent/tests/quality.expected.json"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-24",
+      "scenario": "回滚默认版本或停用有缺陷的版本",
+      "pass_condition": "新规划采用指定可用版本；历史运行保持原记录，停用不触发静默替换",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/lifecycle-smoke.ts"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-25",
+      "scenario": "用户改参数或拒绝建议，并作为线上反馈提交",
+      "pass_condition": "反馈关联版本，不直接修改发布包；后续候选经过评测",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/lifecycle-smoke.ts"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-26",
+      "scenario": "完成三个 Skill 的基线与候选版本对比",
+      "pass_condition": "固定条件、报告重复规划波动；同时通过算子与组合流程回归",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/lifecycle-smoke.ts",
+        "evals/data-agent/t13-executed-quality.json",
+        "extensions/data-agent/tests/quality.expected.json"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-27",
+      "scenario": "未预热依赖缓存的目标环境阻断公网，导入完整离线包后首次安装",
+      "pass_condition": "不访问公网包源、镜像库或授权服务即可启动；缺少材料时报出明确清单",
+      "status": "not_run",
+      "evidence": [],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-28",
+      "scenario": "在禁公网环境使用全新浏览器会话执行完整业务流程",
+      "pass_condition": "上传、对话、三项 Skill、人工确认、画布修改、重跑和导出全部可用",
+      "status": "not_run",
+      "evidence": [],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-29",
+      "scenario": "检查浏览器、应用、Worker 及调度任务的网络记录",
+      "pass_condition": "无未声明的公网请求或尝试；前端资源、更新检查、遥测与插件获取符合内网配置",
+      "status": "not_run",
+      "evidence": [],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-30",
+      "scenario": "接入所选内网模型，验证工具调用、结构化结果、流式和超时行为",
+      "pass_condition": "能完成实际三项 Skill 场景；模型不可用时明确暂停/失败，不回退公网",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/host-smoke.ts",
+        "evals/data-agent/real-harness-tests.txt"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-31",
+      "scenario": "内网编辑、评测、发布和回滚一个 Skill 版本",
+      "pass_condition": "所需资料与依赖内网可得，历史任务仍加载原快照，评测结果不外发",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/lifecycle-smoke.ts",
+        "extensions/data-agent/tests/host-smoke.ts",
+        "evals/data-agent/real-harness-tests.txt"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-32",
+      "scenario": "导入离线升级包，完成升级与故障回退演练",
+      "pass_condition": "镜像、插件、Skill、数据库和产物格式按兼容清单工作，回退后能读取历史记录",
+      "status": "not_run",
+      "evidence": [],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-33",
+      "scenario": "在恢复环境还原备份并核验一条历史流程",
+      "pass_condition": "数据库引用与数据/Skill/转换器匹配，待恢复任务不重复发布产物；记录恢复耗时与数据损失范围",
+      "status": "not_run",
+      "evidence": [],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-34",
+      "scenario": "内网证书、模型凭据或已声明基础服务配置错误",
+      "pass_condition": "明确报错且不关闭证书校验、不泄露凭据、不转向公网替代服务",
+      "status": "not_run",
+      "evidence": [],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-35",
+      "scenario": "导入一个名称不同于三个预置项的新 Skill，完成评测、发布、调用和回滚",
+      "pass_condition": "内网可发现与选择，能接入流程，报告/产物关联 Skill 版本，历史运行不被新版覆盖",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/lifecycle-smoke.ts",
+        "extensions/data-agent/tests/host-smoke.ts",
+        "evals/data-agent/real-harness-tests.txt",
+        "extensions/data-agent/tests/workbench-browser.e2e.ts",
+        "evals/data-agent/t12-browser.txt",
+        "implementation/t12-workbench.md",
+        "evals/data-agent/t13-executed-quality.json",
+        "extensions/data-agent/tests/quality.expected.json"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-36",
+      "scenario": "从空白或模板创建自定义流程，加入自定义 Skill 并导入/导出定义",
+      "pass_condition": "节点依赖、参数和版本保持一致，非法环路/输入被拒绝，可以调试与重跑",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/",
+        "services/data-worker/tests/",
+        "extensions/data-agent/tests/workbench-browser.e2e.ts",
+        "evals/data-agent/t12-browser.txt",
+        "implementation/t12-workbench.md"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-37",
+      "scenario": "桌面打开工作台、调整列宽并进入流程编辑",
+      "pass_condition": "左会话、中对话、右任务状态三个区域明确；编排在右列完成并能恢复状态视图",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/workbench-browser.e2e.ts",
+        "evals/data-agent/t12-browser.txt",
+        "implementation/t12-workbench.md",
+        "extensions/data-agent/tests/workbench-execution.ts",
+        "evals/data-agent/t13-browser-result.json"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-38",
+      "scenario": "两个会话各有多个 Run，切换会话并查看历史运行",
+      "pass_condition": "中右列绑定正确，迟到事件不串会话，后台运行不因切换停止",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/workbench-browser.e2e.ts",
+        "evals/data-agent/t12-browser.txt",
+        "implementation/t12-workbench.md",
+        "extensions/data-agent/tests/workbench-execution.ts",
+        "evals/data-agent/t13-browser-result.json"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-39",
+      "scenario": "数据计算期间断网再重连或刷新页面",
+      "pass_condition": "从服务端快照与游标恢复真实状态，无重复消息或状态倒退",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/",
+        "services/data-worker/tests/",
+        "extensions/data-agent/tests/workbench-browser.e2e.ts",
+        "evals/data-agent/t12-browser.txt",
+        "implementation/t12-workbench.md",
+        "extensions/data-agent/tests/workbench-execution.ts",
+        "evals/data-agent/t13-browser-result.json"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-40",
+      "scenario": "点击取消，Worker 延迟停止",
+      "pass_condition": "先显示取消中，再根据后端事实显示已取消；后台任务确实停止",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/",
+        "services/data-worker/tests/",
+        "extensions/data-agent/tests/workbench-browser.e2e.ts",
+        "evals/data-agent/t12-browser.txt",
+        "implementation/t12-workbench.md"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-41",
+      "scenario": "从对话确认操作并重复点击，或同时打开两个页面",
+      "pass_condition": "右列对应节点同步，确认幂等，版本变化后的旧确认被拒绝",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/",
+        "services/data-worker/tests/",
+        "extensions/data-agent/tests/host-smoke.ts",
+        "evals/data-agent/real-harness-tests.txt",
+        "extensions/data-agent/tests/workbench-browser.e2e.ts",
+        "evals/data-agent/t12-browser.txt",
+        "implementation/t12-workbench.md",
+        "extensions/data-agent/tests/workbench-execution.ts",
+        "evals/data-agent/t13-browser-result.json"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-42",
+      "scenario": "模型持续输出，但计算仍在排队或总量未知",
+      "pass_condition": "不展示虚构百分比；区分 Agent 活动与真实计算状态",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/",
+        "services/data-worker/tests/",
+        "extensions/data-agent/tests/workbench-browser.e2e.ts",
+        "evals/data-agent/t12-browser.txt",
+        "implementation/t12-workbench.md",
+        "extensions/data-agent/tests/workbench-execution.ts",
+        "evals/data-agent/t13-browser-result.json"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-43",
+      "scenario": "输入 100 万行 × 100 列的约定混合类型数据，完成四阶段业务与导出",
+      "pass_condition": "全量处理成功且达到 ready_for_training_contract，数据变化可对账，样本预览不能代替正式结果",
+      "status": "component_evidence_only",
+      "evidence": [
+        "implementation/t14-capacity.md",
+        "evals/data-agent/t14/environment.json",
+        "evals/data-agent/t14/baseline.json",
+        "evals/data-agent/t14/runs/9df66918-28e8-4eab-bc4b-af2f13f1dc64/result.json",
+        "evals/data-agent/t14/test_capacity.py"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-44",
+      "scenario": "从交付源码按固定上游提交构建并启动系统，执行一次 Skill 数据任务",
+      "pass_condition": "Harness 真实承担 Agent/会话/Skill 调用，业务工具、DAG 和产物记录能完整关联",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/host-smoke.ts",
+        "evals/data-agent/node-tests.txt",
+        "evals/data-agent/real-harness-tests.txt",
+        "extensions/data-agent/tests/workbench-execution.ts",
+        "evals/data-agent/t13-browser-result.json"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-45",
+      "scenario": "大文件分片上传中断、刷新并续传，重复请求完成上传",
+      "pass_condition": "已完成分片可复用，同名不覆盖，完成操作幂等，校验与解析成功后才 ready",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/catalog-smoke.ts"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-46",
+      "scenario": "经 Nginx 统一入口完成分片上传、下载与实时状态同步",
+      "pass_condition": "不新增浏览器直连存储端口；签名、路径、Host、查询参数、Range 和长连接正确",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/catalog-smoke.ts"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-47",
+      "scenario": "上传同一文件并改变编码/分隔符/空值配置，测试低频脏值",
+      "pass_condition": "产生不同导入版本，保留解析依据，类型失败与坏行处理可对账",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/",
+        "services/data-worker/tests/",
+        "extensions/data-agent/tests/catalog-smoke.ts",
+        "services/data-worker/tests/test_operations.py",
+        "evals/data-agent/t13-python.txt"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-48",
+      "scenario": "对报告、脚本和数据做预览、归档及未授权下载",
+      "pass_condition": "预览有界且隔离，归档保持来源版本，未授权访问被拒绝",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/catalog-smoke.ts",
+        "extensions/data-agent/tests/workbench-browser.e2e.ts",
+        "evals/data-agent/t12-browser.txt",
+        "implementation/t12-workbench.md",
+        "extensions/data-agent/tests/workbench-execution.ts",
+        "evals/data-agent/t13-browser-result.json"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-49",
+      "scenario": "全量影响超过预览授权上限，确认等待中修改版本或取消",
+      "pass_condition": "候选隔离、Worker 释放且不被租约任务重投；失效确认被拒绝，取消无需等待 Worker，只有当前候选可发布",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/",
+        "services/data-worker/tests/",
+        "extensions/data-agent/tests/remote-smoke.ts",
+        "services/data-worker/tests/test_remote.py"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-50",
+      "scenario": "对象上传后数据库提交失败、成功响应丢失后重放、旧 Attempt 晚到或 Outbox 中断",
+      "pass_condition": "同摘要返回同一回执，异摘要冲突；无半成品正式引用，有效结果唯一发布，孤儿可回收、事件可补放",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/",
+        "services/data-worker/tests/",
+        "extensions/data-agent/tests/host-smoke.ts",
+        "evals/data-agent/node-tests.txt",
+        "extensions/data-agent/tests/remote-smoke.ts",
+        "services/data-worker/tests/test_remote.py",
+        "evals/data-agent/real-harness-tests.txt"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-51",
+      "scenario": "相同 Run 状态事务并发提交并发生连接重建",
+      "pass_condition": "快照游标不漏已提交变更，重复/迟到事件不回退状态，卡片与右列一致",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/",
+        "services/data-worker/tests/",
+        "extensions/data-agent/tests/host-smoke.ts",
+        "evals/data-agent/real-harness-tests.txt",
+        "extensions/data-agent/tests/workbench-browser.e2e.ts",
+        "evals/data-agent/t12-browser.txt",
+        "implementation/t12-workbench.md"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-52",
+      "scenario": "归档后删除会话、清理缓存或执行备份恢复",
+      "pass_condition": "被正式产物和血缘引用的数据不误删；恢复后可读取关联版本并校验内容",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/catalog-smoke.ts"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-53",
+      "scenario": "首次运行的 split/fit 产物尚不存在，完成上游后启动下游",
+      "pass_condition": "冻结图使用具名输出引用；只绑定已正式发布的版本，图与参数未被动态改写",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/",
+        "services/data-worker/tests/",
+        "extensions/data-agent/tests/remote-smoke.ts",
+        "services/data-worker/tests/test_remote.py",
+        "extensions/data-agent/tests/workbench-execution.ts",
+        "evals/data-agent/t13-browser-result.json"
+      ],
+      "product_acceptance_passed": false
+    },
+    {
+      "id": "AC-54",
+      "scenario": "四阶段分多次 Run 执行，切换历史分支并分别取消 Run/任务",
+      "pass_condition": "运行链归属正确，阶段成功不冒充业务完成；取消范围明确，最终导出契约可追溯",
+      "status": "component_evidence_only",
+      "evidence": [
+        "extensions/data-agent/tests/workbench-browser.e2e.ts",
+        "evals/data-agent/t12-browser.txt",
+        "implementation/t12-workbench.md",
+        "extensions/data-agent/tests/workbench-execution.ts",
+        "evals/data-agent/t13-browser-result.json"
+      ],
+      "product_acceptance_passed": false
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "samples": [
+    {
+      "elapsed_seconds": 0.40132175001781434,
+      "memory.peak": "73408512\n",
+      "memory.current": "73408512\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 122838\nuser_usec 89337\nsystem_usec 33501\nnice_usec 0\nnr_periods 2\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 1138688
+    }
+  ],
+  "container": "data-agent-2033bf08461846199d534ceae1317d86",
+  "operator": "transform",
+  "node_id": "standard_validation",
+  "compute_seconds": 0.1726605830481276,
+  "docker_state": {
+    "Status": "running",
+    "Running": true,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 35870,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-09-16T05:10:59.383683385Z",
+    "FinishedAt": "0001-01-01T00:00:00Z"
+  },
+  "result": {
+    "run_id": "a7d090f0-47f8-4b64-9e30-3978d698821e",
+    "job_id": "36b0b5f7-f6d7-46ac-af14-71837f799cd9",
+    "manifest_digest": "fa8639be0a8d3c6bc491dd3cb335d6c26b377154791ae7f597addb6edbe325fe",
+    "status": "published"
+  },
+  "wall_seconds": 0.5527834580279887,
+  "memory_peak_bytes": 73408512,
+  "observed_tmp_peak_bytes": 0,
+  "observed_output_peak_bytes": 1138688
+}

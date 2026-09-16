@@ -42,7 +42,10 @@ export async function bridge(
   const headers = Object.fromEntries(
     Object.entries(req.headers).filter(([, value]) => typeof value === 'string') as [string, string][],
   )
-  const bodyMode = apiHandler.requestBodyMode({ method, url })
+  // GET/HEAD cannot carry a Fetch body, even on a route that streams uploads.
+  const bodyMode = method === 'GET' || method === 'HEAD'
+    ? 'buffered'
+    : apiHandler.requestBodyMode({ method, url })
   let request: Request
   if (bodyMode === 'buffered') {
     const declaredLength = req.headers['content-length']

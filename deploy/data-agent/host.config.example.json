@@ -1,0 +1,40 @@
+{
+  "database_env": "DATA_AGENT_DATABASE_URL",
+  "storage_root": "/srv/data-agent/objects",
+  "host": "127.0.0.1",
+  "port": 55440,
+  "trusted_hosts": [
+    "127.0.0.1:55440"
+  ],
+  "max_body_bytes": 1048576,
+  "request_timeout_ms": 30000,
+  "shutdown_grace_ms": 500,
+  "database_timeout_ms": 1000,
+  "database_pool_size": 8,
+  "lease_ms": 60000,
+  "max_attempts": 3,
+  "max_running_jobs": 1,
+  "recovery_interval_ms": 10000,
+  "accounts": [
+    {
+      "owner": "worker-1",
+      "projects": [
+        "REPLACE_WITH_PROJECT_ID"
+      ],
+      "credential_sha256": "REPLACE_WITH_SHA256_OF_RANDOM_SERVICE_CREDENTIAL"
+    }
+  ],
+  "max_object_bytes": 1073741824,
+  "max_upload_bytes": 1073741824,
+  "part_bytes": 8388608,
+  "upload_ttl_ms": 86400000,
+  "environment_digest": "REPLACE_WITH_ENVIRONMENT_SHA256",
+  "allowed_origins": [],
+  "user_accounts": [],
+  "skill_allowed_tools": [
+    "inspect_dataset",
+    "propose_workflow_patch"
+  ],
+  "upload_cleanup_grace_ms": 60000,
+  "harness": null
+}

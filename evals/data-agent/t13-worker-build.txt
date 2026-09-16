@@ -1,0 +1,47 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Worker.Dockerfile
+#1 transferring dockerfile: 546B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python@sha256:019e31cc1f52e4139d338bca44f27b71339a9da261738fd80fab9cf4595152fc
+#2 DONE 5.7s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/6] FROM docker.io/library/python@sha256:019e31cc1f52e4139d338bca44f27b71339a9da261738fd80fab9cf4595152fc
+#4 resolve docker.io/library/python@sha256:019e31cc1f52e4139d338bca44f27b71339a9da261738fd80fab9cf4595152fc done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 12.11kB 2.0s done
+#5 DONE 2.0s
+
+#6 [2/6] WORKDIR /app
+#6 CACHED
+
+#7 [3/6] COPY services/data-worker/requirements.runtime.txt /app/requirements.runtime.txt
+#7 CACHED
+
+#8 [4/6] RUN pip install --no-cache-dir --only-binary=:all: -r /app/requirements.runtime.txt
+#8 CACHED
+
+#9 [5/6] COPY services/data-worker/*.py /app/services/data-worker/
+#9 DONE 0.0s
+
+#10 [6/6] COPY domain-contracts /app/domain-contracts
+#10 DONE 0.0s
+
+#11 exporting to image
+#11 exporting layers 0.0s done
+#11 exporting manifest sha256:5dd8cf125223d561222987aabcbbf4c47c3b81b6f767e00314a9bf669ac77740 done
+#11 exporting config sha256:3bf974c60fb8aa4796752bbcfe0b228cd9cb65e45b655e2faf1563cf5ff20861 done
+#11 exporting attestation manifest sha256:243c80ef0772f04bb176639572048509aee735131608c32e22c09ad640aa1393 done
+#11 exporting manifest list sha256:658395b6f622bd26525d7f644ed856d6682608943a769d859467bad75f0a57f8 done
+#11 naming to docker.io/library/deepseek-harness-t13-worker:local done
+#11 unpacking to docker.io/library/deepseek-harness-t13-worker:local 0.0s done
+#11 DONE 0.1s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/1dbtcf2zf0anezkx3kd3un10y

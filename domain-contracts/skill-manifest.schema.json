@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "input_schema": {
+      "type": "string",
+      "const": "contracts/input.schema.json"
+    },
+    "output_schema": {
+      "type": "string",
+      "const": "contracts/output.schema.json"
+    },
+    "required_tools": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,127}$"
+      }
+    },
+    "operator_dependencies": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,127}$"
+      },
+      "additionalProperties": {
+        "type": "string",
+        "const": "1"
+      }
+    },
+    "evaluation_suite": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,127}$"
+    }
+  },
+  "required": [
+    "id",
+    "version",
+    "description",
+    "input_schema",
+    "output_schema",
+    "required_tools",
+    "operator_dependencies",
+    "evaluation_suite"
+  ],
+  "additionalProperties": false
+}

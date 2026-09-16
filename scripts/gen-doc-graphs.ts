@@ -186,6 +186,14 @@ const SERVICE_ROLES: ServiceRole[] = [
     note: 'Projects the credential-reference seam onto the generated Remote namespace: batch fan-out, view projection, and refusal mapping live here, not on the seam Definition.',
   },
   {
+    key: 'dataAgentController',
+    pkg: 'api-data-agent-controller',
+    title: 'Data Agent domain Web adapter',
+    mode: 'core',
+    consumers: ['client-ui-data-agent'],
+    note: 'Forwards bounded authenticated domain requests to a configured loopback host; execution and project permissions remain in the domain repository.',
+  },
+  {
     key: 'settingsController',
     pkg: 'api-settings-controller',
     title: 'Host settings-surface Remote controller',

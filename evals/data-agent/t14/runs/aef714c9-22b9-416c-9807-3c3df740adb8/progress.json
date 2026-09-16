@@ -1,0 +1,629 @@
+{
+  "nodes": [
+    {
+      "samples": [
+        {
+          "elapsed_seconds": 0.7464742499869317,
+          "memory.peak": "936935424\n",
+          "memory.current": "936935424\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 1222305\nuser_usec 481544\nsystem_usec 740761\nnice_usec 0\nnr_periods 5\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 0
+        },
+        {
+          "elapsed_seconds": 1.4405251670395955,
+          "memory.peak": "3265978368\n",
+          "memory.current": "3265978368\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 3775681\nuser_usec 1564553\nsystem_usec 2211128\nnice_usec 0\nnr_periods 12\nnr_throttled 3\nthrottled_usec 19815\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 0
+        },
+        {
+          "elapsed_seconds": 2.4457683749496937,
+          "memory.peak": "3626553344\n",
+          "memory.current": "3580252160\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 4670725\nuser_usec 1884503\nsystem_usec 2786222\nnice_usec 0\nnr_periods 22\nnr_throttled 3\nthrottled_usec 19815\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 0
+        },
+        {
+          "elapsed_seconds": 3.0451129579450935,
+          "memory.peak": "3626553344\n",
+          "memory.current": "3567042560\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 5492927\nuser_usec 2619827\nsystem_usec 2873100\nnice_usec 0\nnr_periods 28\nnr_throttled 3\nthrottled_usec 19815\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 13623296
+        },
+        {
+          "elapsed_seconds": 3.7033048330340534,
+          "memory.peak": "3626553344\n",
+          "memory.current": "3578167296\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 6360742\nuser_usec 3400058\nsystem_usec 2960684\nnice_usec 0\nnr_periods 35\nnr_throttled 3\nthrottled_usec 19815\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 25874432
+        },
+        {
+          "elapsed_seconds": 4.321412249933928,
+          "memory.peak": "3626553344\n",
+          "memory.current": "3598315520\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 7233422\nuser_usec 4239372\nsystem_usec 2994050\nnice_usec 0\nnr_periods 41\nnr_throttled 3\nthrottled_usec 19815\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 41426944
+        },
+        {
+          "elapsed_seconds": 5.233284582966007,
+          "memory.peak": "3626553344\n",
+          "memory.current": "419790848\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 7768578\nuser_usec 4634957\nsystem_usec 3133620\nnice_usec 0\nnr_periods 50\nnr_throttled 3\nthrottled_usec 19815\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 53342208
+        }
+      ],
+      "container": "data-agent-ccc2f77bd5c14ff0974222b61476d0be",
+      "operator": "import",
+      "node_id": "import",
+      "compute_seconds": 4.648499042028561,
+      "docker_state": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 40976,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-16T05:16:29.904949177Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "result": {
+        "run_id": "9a332dbc-b049-4002-a7bd-6a59c8c12889",
+        "job_id": "0aa93f6c-d4a0-433f-bd3f-b2acc231108c",
+        "manifest_digest": "8997d85365b5f9600ebbf6e8513a760210a84c80497948aa1a1bcd77c3402875",
+        "status": "published"
+      },
+      "wall_seconds": 5.7642109169391915,
+      "memory_peak_bytes": 3626553344,
+      "observed_tmp_peak_bytes": 0,
+      "observed_output_peak_bytes": 53342208
+    },
+    {
+      "samples": [
+        {
+          "elapsed_seconds": 0.7344426249619573,
+          "memory.peak": "1336008704\n",
+          "memory.current": "1336127488\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 1033020\nuser_usec 721203\nsystem_usec 311817\nnice_usec 0\nnr_periods 5\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 0
+        },
+        {
+          "elapsed_seconds": 1.3515289159258828,
+          "memory.peak": "3461525504\n",
+          "memory.current": "445140992\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 2783319\nuser_usec 1945631\nsystem_usec 837688\nnice_usec 0\nnr_periods 11\nnr_throttled 1\nthrottled_usec 19233\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 12288
+        },
+        {
+          "elapsed_seconds": 1.4582139159319922,
+          "memory.peak": "3461525504\n",
+          "memory.current": "445112320\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 2802658\nuser_usec 1957823\nsystem_usec 844835\nnice_usec 0\nnr_periods 12\nnr_throttled 1\nthrottled_usec 19233\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 12288
+        }
+      ],
+      "container": "data-agent-6eb7c37f21ca4b988d00e8a17d8f4b98",
+      "operator": "preview",
+      "node_id": "preview",
+      "compute_seconds": 1.2137654999969527,
+      "docker_state": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 41259,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-16T05:16:36.059359972Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "result": {
+        "run_id": "156db351-f88b-4c6c-b934-735175d3eace",
+        "job_id": "ed584ece-f8d1-40c3-83a1-5914c1dee3c6",
+        "manifest_digest": "35072ae61bcc66232572336add4ab3b4e39b0996cf022a1db70a2d3abb79422d",
+        "status": "published"
+      },
+      "wall_seconds": 1.7375922499923036,
+      "memory_peak_bytes": 3461525504,
+      "observed_tmp_peak_bytes": 0,
+      "observed_output_peak_bytes": 12288
+    },
+    {
+      "samples": [
+        {
+          "elapsed_seconds": 0.7114510830724612,
+          "memory.peak": "1983299584\n",
+          "memory.current": "1983823872\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 1385444\nuser_usec 981858\nsystem_usec 403585\nnice_usec 0\nnr_periods 5\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 0
+        },
+        {
+          "elapsed_seconds": 1.2968325830297545,
+          "memory.peak": "3491295232\n",
+          "memory.current": "3439202304\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 2737497\nuser_usec 2052872\nsystem_usec 684625\nnice_usec 0\nnr_periods 11\nnr_throttled 1\nthrottled_usec 3040\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 0
+        },
+        {
+          "elapsed_seconds": 1.8622244159923866,
+          "memory.peak": "3491295232\n",
+          "memory.current": "3439218688\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 3912565\nuser_usec 3133670\nsystem_usec 778895\nnice_usec 0\nnr_periods 17\nnr_throttled 1\nthrottled_usec 3040\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 0
+        },
+        {
+          "elapsed_seconds": 2.4377345830434933,
+          "memory.peak": "3491295232\n",
+          "memory.current": "3439624192\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 5107120\nuser_usec 4235026\nsystem_usec 872094\nnice_usec 0\nnr_periods 23\nnr_throttled 1\nthrottled_usec 3040\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 0
+        },
+        {
+          "elapsed_seconds": 3.0194995410274714,
+          "memory.peak": "3491295232\n",
+          "memory.current": "3435470848\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 6303373\nuser_usec 5337251\nsystem_usec 966122\nnice_usec 0\nnr_periods 28\nnr_throttled 1\nthrottled_usec 3040\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 0
+        },
+        {
+          "elapsed_seconds": 3.797471125028096,
+          "memory.peak": "3491295232\n",
+          "memory.current": "3438821376\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 7883197\nuser_usec 6770433\nsystem_usec 1112764\nnice_usec 0\nnr_periods 36\nnr_throttled 1\nthrottled_usec 3040\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 0
+        },
+        {
+          "elapsed_seconds": 4.42944170802366,
+          "memory.peak": "3491295232\n",
+          "memory.current": "3437502464\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 9087777\nuser_usec 7839970\nsystem_usec 1247806\nnice_usec 0\nnr_periods 42\nnr_throttled 1\nthrottled_usec 3040\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 0
+        },
+        {
+          "elapsed_seconds": 5.011732375016436,
+          "memory.peak": "3491295232\n",
+          "memory.current": "3429830656\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 10256138\nuser_usec 8910533\nsystem_usec 1345605\nnice_usec 0\nnr_periods 48\nnr_throttled 1\nthrottled_usec 3040\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 0
+        },
+        {
+          "elapsed_seconds": 5.580102541018277,
+          "memory.peak": "3491295232\n",
+          "memory.current": "3445538816\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 10901513\nuser_usec 9407355\nsystem_usec 1494157\nnice_usec 0\nnr_periods 54\nnr_throttled 1\nthrottled_usec 3040\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 0
+        },
+        {
+          "elapsed_seconds": 6.162664583069272,
+          "memory.peak": "3491295232\n",
+          "memory.current": "3427061760\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 11499757\nuser_usec 9861172\nsystem_usec 1638585\nnice_usec 0\nnr_periods 60\nnr_throttled 1\nthrottled_usec 3040\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 0
+        }
+      ],
+      "container": "data-agent-15c5786e700c44adbb723fadb442ec1d",
+      "operator": "inspect",
+      "node_id": "inspect",
+      "compute_seconds": 6.899537667050026,
+      "docker_state": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": true,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 137,
+        "Error": "",
+        "StartedAt": "2026-09-16T05:16:38.793165667Z",
+        "FinishedAt": "2026-09-16T05:16:45.615936004Z"
+      },
+      "error": "COMPUTE_FAILED",
+      "wall_seconds": 7.402285875054076,
+      "memory_peak_bytes": 3491295232,
+      "observed_tmp_peak_bytes": 0,
+      "observed_output_peak_bytes": 0
+    }
+  ],
+  "latencies": [
+    {
+      "path": "/uploads/d5857677-478c-46bb-9f60-e3f0de4dc2dd",
+      "seconds": 0.012287374999999883,
+      "under_load": false
+    },
+    {
+      "path": "/datasets",
+      "seconds": 0.009974541999999928,
+      "under_load": false
+    },
+    {
+      "path": "/datasets",
+      "seconds": 0.007054207999999562,
+      "under_load": false
+    },
+    {
+      "path": "/datasets",
+      "seconds": 0.005001333000000159,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "seconds": 0.004612709000000905,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "seconds": 0.005928208000001178,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "seconds": 0.019824208,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "seconds": 0.03537049999999908,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "seconds": 0.016619375000000217,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "seconds": 0.012096749999998792,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "seconds": 0.015333583999999973,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "seconds": 0.012531166999999186,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "seconds": 0.00941583399999945,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "seconds": 0.0051311669999995506,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "seconds": 0.00413050000000112,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "seconds": 0.003704084000000876,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/475aacf8-533d-4204-bfad-b9da8b86d1f0/preview",
+      "seconds": 0.007460707999998703,
+      "under_load": false
+    },
+    {
+      "path": "/datasets",
+      "seconds": 0.0026647910000010596,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "seconds": 0.005512249999999767,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "seconds": 0.005847249999998894,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "seconds": 0.0033293330000014974,
+      "under_load": true
+    },
+    {
+      "path": "/runs/156db351-f88b-4c6c-b934-735175d3eace",
+      "seconds": 0.0054404169999979785,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6e99af77-a768-4668-b341-3b2d6714c1f8/report",
+      "seconds": 0.0027911249999997383,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6e99af77-a768-4668-b341-3b2d6714c1f8/report",
+      "seconds": 0.0021818329999987326,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6e99af77-a768-4668-b341-3b2d6714c1f8/report",
+      "seconds": 0.003293792000000394,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6e99af77-a768-4668-b341-3b2d6714c1f8/report",
+      "seconds": 0.003132166999999754,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6e99af77-a768-4668-b341-3b2d6714c1f8/report",
+      "seconds": 0.0021748330000009447,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6e99af77-a768-4668-b341-3b2d6714c1f8/report",
+      "seconds": 0.0017819170000002488,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6e99af77-a768-4668-b341-3b2d6714c1f8/report",
+      "seconds": 0.006591749999999593,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6e99af77-a768-4668-b341-3b2d6714c1f8/report",
+      "seconds": 0.0068368750000008735,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6e99af77-a768-4668-b341-3b2d6714c1f8/report",
+      "seconds": 0.004790333000000828,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6e99af77-a768-4668-b341-3b2d6714c1f8/report",
+      "seconds": 0.0021476670000010927,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6e99af77-a768-4668-b341-3b2d6714c1f8/report",
+      "seconds": 0.003734874999998283,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6e99af77-a768-4668-b341-3b2d6714c1f8/report",
+      "seconds": 0.0018485000000000582,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6e99af77-a768-4668-b341-3b2d6714c1f8/report",
+      "seconds": 0.0033654160000005503,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6e99af77-a768-4668-b341-3b2d6714c1f8/report",
+      "seconds": 0.0022497499999990394,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6e99af77-a768-4668-b341-3b2d6714c1f8/report",
+      "seconds": 0.0020724580000023706,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6e99af77-a768-4668-b341-3b2d6714c1f8/report",
+      "seconds": 0.002500749999999243,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6e99af77-a768-4668-b341-3b2d6714c1f8/report",
+      "seconds": 0.0018271249999997964,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6e99af77-a768-4668-b341-3b2d6714c1f8/report",
+      "seconds": 0.002254417000000103,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6e99af77-a768-4668-b341-3b2d6714c1f8/report",
+      "seconds": 0.0023348340000011376,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6e99af77-a768-4668-b341-3b2d6714c1f8/report",
+      "seconds": 0.0021429170000010346,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6e99af77-a768-4668-b341-3b2d6714c1f8/report",
+      "seconds": 0.0026104589999995367,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6e99af77-a768-4668-b341-3b2d6714c1f8/report",
+      "seconds": 0.0017667919999985314,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6e99af77-a768-4668-b341-3b2d6714c1f8/report",
+      "seconds": 0.0017236659999980476,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6e99af77-a768-4668-b341-3b2d6714c1f8/report",
+      "seconds": 0.002906999999999243,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6e99af77-a768-4668-b341-3b2d6714c1f8/report",
+      "seconds": 0.0022537090000005265,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6e99af77-a768-4668-b341-3b2d6714c1f8/report",
+      "seconds": 0.0017478750000009314,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6e99af77-a768-4668-b341-3b2d6714c1f8/report",
+      "seconds": 0.002322875000001659,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6e99af77-a768-4668-b341-3b2d6714c1f8/report",
+      "seconds": 0.0016243329999997514,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6e99af77-a768-4668-b341-3b2d6714c1f8/report",
+      "seconds": 0.0016585420000010344,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6e99af77-a768-4668-b341-3b2d6714c1f8/report",
+      "seconds": 0.0018144170000014127,
+      "under_load": false
+    },
+    {
+      "path": "/sessions",
+      "seconds": 0.0022451250000012804,
+      "under_load": false
+    },
+    {
+      "path": "/tasks/7f78cc6d-8d63-4477-9251-bf1b29123341",
+      "seconds": 0.007191500000000815,
+      "under_load": false
+    },
+    {
+      "path": "/tasks/7f78cc6d-8d63-4477-9251-bf1b29123341",
+      "seconds": 0.008113124999999855,
+      "under_load": false
+    },
+    {
+      "path": "/datasets",
+      "seconds": 0.003741290999998455,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "seconds": 0.0054874999999992725,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "seconds": 0.005660041999999521,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "seconds": 0.0040393330000006245,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "seconds": 0.005808167000002868,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "seconds": 0.0046126249999979335,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "seconds": 0.006713832999997976,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "seconds": 0.029337584000000787,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "seconds": 0.020808124999999563,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "seconds": 0.008315000000002327,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "seconds": 0.0038212079999975683,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "seconds": 0.004685499999999593,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "seconds": 0.007975999999998748,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "seconds": 0.004585541000000376,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "seconds": 0.014287457999998879,
+      "under_load": true
+    }
+  ],
+  "disk": [
+    210370164,
+    210378472,
+    210397029
+  ]
+}

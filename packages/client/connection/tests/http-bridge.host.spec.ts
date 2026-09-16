@@ -145,3 +145,31 @@ describe('HTTP bridge abort', () => {
     expect(destroyed).toEqual([true])
   })
 })
+
+
+describe('bodyless requests on streaming routes', () => {
+  it.each(['GET', 'HEAD'])('%s reaches the download handler without a request body', async (method) => {
+    const request = Readable.from([]) as unknown as IncomingMessage
+    Object.assign(request, { url:'/api/data-agent/bytes',method,headers:{} })
+    let status: number | undefined
+    const bytes: Uint8Array[] = []
+    const response = Object.assign(new EventEmitter(), {
+      writableEnded:false,
+      writeHead(code:number){status=code;return this},
+      write(chunk:Uint8Array){bytes.push(chunk);return true},
+      end(){this.writableEnded=true;return this},
+    }) as unknown as ServerResponse
+    await bridge(request,response,{
+      requestBodyMode:()=> 'streaming',
+      fetch:async (input)=>{
+        expect(input.method).toBe(method)
+        expect(input.body).toBeNull()
+        expect(input.signal.aborted).toBe(false)
+        return new Response(method==='HEAD'?null:'training bundle',{ headers:{ 'content-type':'application/octet-stream' } })
+      },
+    })
+    expect(status).toBe(200)
+    expect(Buffer.concat(bytes).toString()).toBe(method==='HEAD'?'':'training bundle')
+    expect(response.writableEnded).toBe(true)
+  })
+})

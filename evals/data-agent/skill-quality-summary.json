@@ -1,0 +1,65 @@
+{
+  "version": "0.1.1",
+  "gateway": "https://api.deepseek.com",
+  "model": "deepseek-v4-flash",
+  "planning_sessions": 72,
+  "rows": [
+    {
+      "skill": "data-analysis",
+      "candidate_passed": 7,
+      "baseline_passed": 7,
+      "attempts_per_variant": 9,
+      "frozen_passed": true,
+      "blocking_failures": [
+        "MODEL_TIMEOUT",
+        "NO_RESULT"
+      ],
+      "status": "failed"
+    },
+    {
+      "skill": "data-cleaning",
+      "candidate_passed": 7,
+      "baseline_passed": 8,
+      "attempts_per_variant": 9,
+      "frozen_passed": true,
+      "blocking_failures": [
+        "INVALID_RESULT"
+      ],
+      "status": "failed"
+    },
+    {
+      "skill": "feature-engineering",
+      "candidate_passed": 8,
+      "baseline_passed": 6,
+      "attempts_per_variant": 9,
+      "frozen_passed": true,
+      "blocking_failures": [
+        "NO_RESULT"
+      ],
+      "status": "failed"
+    },
+    {
+      "skill": "numeric-quality-review",
+      "candidate_passed": 8,
+      "baseline_passed": 7,
+      "attempts_per_variant": 9,
+      "frozen_passed": true,
+      "blocking_failures": [
+        "NO_RESULT"
+      ],
+      "status": "failed"
+    }
+  ],
+  "suite_duration_ms": 509213,
+  "session_usage_totals": {
+    "inputTokens": 127930,
+    "outputTokens": 37766,
+    "totalTokens": 913856,
+    "cacheReadTokens": 748160
+  },
+  "usage_includes_diagnostic_smoke": true,
+  "monetary_cost": null,
+  "published": false,
+  "business_acceptance": false,
+  "scoring_corrections": "Allow exact supplementary row_count and read-only verification nodes; preserve strict schema and mandatory confirmation failures."
+}

@@ -482,3 +482,9 @@
       name: '@deepseek-ai/dsh-agent-presets'
       config:
         default: standard
+
+# Optional project-scoped data workbench, enabled by its deployment overlay.
+- insert:
+    - id: ui-data-agent
+      name: '@deepseek-ai/dsh-client-ui-data-agent'
+      disabled: true

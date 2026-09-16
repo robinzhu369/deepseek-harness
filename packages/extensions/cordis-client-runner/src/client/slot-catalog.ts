@@ -245,6 +245,7 @@ export const CLIENT_SLOT_API: readonly ClientSlotEntry[] = [
       'MessageImageLoader',
       'OpenFileOptions',
       'RenderMessageImages',
+      'Session',
       'TurnProcessOwnerProps',
       'TurnTailOwnerProps',
     ],
@@ -356,6 +357,7 @@ export const CLIENT_SLOT_API: readonly ClientSlotEntry[] = [
       '/** Owner values used to elect a composer takeover. */\nexport interface ComposerChainProps {\n  /** Current Session identity used by temporary business-owned entries. */\n  sessionId: SessionId | undefined\n  /** Current Session lifecycle state, absent without a selected Session. */\n  session: SessionSnapshot | undefined\n  /** Effective business-owned interaction awaiting the user in this Session. */\n  pendingInteraction: SessionPendingInteraction | undefined\n}',
     ],
     ownerPropsReferences: [
+      'Session',
       'SessionId',
       'SessionPendingInteraction',
       'SessionSnapshot',
@@ -958,6 +960,7 @@ export const CLIENT_SLOT_API: readonly ClientSlotEntry[] = [
       'Message',
       'MessageImageLoader',
       'MessageImageSource',
+      'Session',
     ],
     standardProps: [
       'useResource: UseResource',
@@ -1087,7 +1090,9 @@ export const CLIENT_SLOT_API: readonly ClientSlotEntry[] = [
     ownerProps: [
       '/** Header actions derive their state from standard Session props. */\nexport interface ConversationHeaderActionOwnerProps {\n  /** Marker field: entries receive no owner-specific values. */\n  children?: never\n}',
     ],
-    ownerPropsReferences: [],
+    ownerPropsReferences: [
+      'Session',
+    ],
     standardProps: [
       'useResource: UseResource',
       'useWorkspaces: SnapshotSelectorHook<WorkspaceSnapshot>',
@@ -1128,7 +1133,9 @@ export const CLIENT_SLOT_API: readonly ClientSlotEntry[] = [
     ownerProps: [
       '/** The header corner\'s occupant derives its state from standard Session props. */\nexport interface ConversationHeaderCornerOwnerProps {\n  /** Marker field: the occupant receives no owner-specific values. */\n  children?: never\n}',
     ],
-    ownerPropsReferences: [],
+    ownerPropsReferences: [
+      'Session',
+    ],
     standardProps: [
       'useResource: UseResource',
       'useWorkspaces: SnapshotSelectorHook<WorkspaceSnapshot>',
@@ -1167,6 +1174,7 @@ export const CLIENT_SLOT_API: readonly ClientSlotEntry[] = [
       '/** Plain breadcrumb data handed to the optional lineage renderer. */\nexport interface ConversationHeaderLineageOwnerProps {\n  /** Session represented by this breadcrumb title. */\n  lineageSessionId: SessionId\n  /** Display title available to a combined title/control renderer. */\n  displayTitle: string\n  /** Navigate to an ancestor title when present. */\n  openTitle?: () => void\n}',
     ],
     ownerPropsReferences: [
+      'Session',
       'SessionId',
     ],
     standardProps: [
@@ -1225,7 +1233,9 @@ export const CLIENT_SLOT_API: readonly ClientSlotEntry[] = [
     ownerProps: [
       '/** Header actions derive their state from standard Session props. */\nexport interface ConversationHeaderActionOwnerProps {\n  /** Marker field: entries receive no owner-specific values. */\n  children?: never\n}',
     ],
-    ownerPropsReferences: [],
+    ownerPropsReferences: [
+      'Session',
+    ],
     standardProps: [
       'useResource: UseResource',
       'useWorkspaces: SnapshotSelectorHook<WorkspaceSnapshot>',
@@ -1268,6 +1278,7 @@ export const CLIENT_SLOT_API: readonly ClientSlotEntry[] = [
       'Message',
       'MessageImageLoader',
       'MessageImageSource',
+      'Session',
     ],
     standardProps: [
       'useResource: UseResource',
@@ -1380,12 +1391,13 @@ export const CLIENT_SLOT_API: readonly ClientSlotEntry[] = [
       'useSessionPendingInteraction: UseSessionPendingInteraction',
       'useWorkspaces: SnapshotSelectorHook<WorkspaceSnapshot>',
     ],
-    keyDomain: 'open: any string the owner dispatches (no compile-time key set), already taken: conversation',
+    keyDomain: 'open: any string the owner dispatches (no compile-time key set), already taken: conversation, data-agent',
     hookContext: '',
     slotInject: '',
     declaredBy: 'an entry in \'root\' (client-ui-layout), so it exists while that entry is mounted',
     occupants: [
       'client-ui-conversation ConversationPanel key \'conversation\'',
+      'client-ui-data-agent Conversation key \'data-agent\'',
     ],
     replaceRisk: 'shadows-shipped-ui',
     example: 'return {\n  inject: [\'slots\'],\n  apply(ctx) {\n    ctx.slots.inject(\'main\', () => ctx.slots.register(\n      { name: \'main\', key: \'<one key the owner dispatches>\' },\n      () => React.createElement(\'div\', null, \'hello\'),\n    ))\n  },\n}',
@@ -1449,6 +1461,7 @@ export const CLIENT_SLOT_API: readonly ClientSlotEntry[] = [
     slotInject: '',
     declaredBy: 'an entry in \'root\' (client-ui-layout), so it exists while that entry is mounted',
     occupants: [
+      'client-ui-data-agent Rightbar',
       'client-ui-sidebar-right RightbarRoot',
     ],
     replaceRisk: 'shadows-shipped-ui',
@@ -2032,7 +2045,9 @@ export const CLIENT_SLOT_API: readonly ClientSlotEntry[] = [
     hookContext: '',
     slotInject: '',
     declaredBy: 'an entry in \'root\' (client-ui-layout), so it exists while that entry is mounted',
-    occupants: [],
+    occupants: [
+      'client-ui-data-agent Manager id \'data-agent-manager\'',
+    ],
     replaceRisk: 'none',
     example: 'return {\n  inject: [\'slots\'],\n  apply(ctx) {\n    ctx.slots.inject(\'shell.overlay\', () => ctx.slots.register(\n      { name: \'shell.overlay\', id: \'my-entry\', order: 100, label: \'My entry\' },\n      () => React.createElement(\'div\', null, \'hello\'),\n    ))\n  },\n}',
     source: 'packages/client/ui-layout/src/client/index.ts:91',
@@ -2061,6 +2076,7 @@ export const CLIENT_SLOT_API: readonly ClientSlotEntry[] = [
     slotInject: '',
     declaredBy: 'an entry in \'root\' (client-ui-layout), so it exists while that entry is mounted',
     occupants: [
+      'client-ui-data-agent Sidebar',
       'client-ui-sidebar SidebarRoot',
     ],
     replaceRisk: 'shadows-shipped-ui',
@@ -2332,6 +2348,7 @@ export const CLIENT_SLOT_API: readonly ClientSlotEntry[] = [
     ],
     ownerPropsReferences: [
       'DocumentTextPage',
+      'Session',
     ],
     standardProps: [
       'useResource: UseResource',
@@ -2567,6 +2584,7 @@ export const CLIENT_SLOT_API: readonly ClientSlotEntry[] = [
     ownerPropsReferences: [
       'MessageImageLoader',
       'MessageImageSource',
+      'Session',
     ],
     standardProps: [
       'useResource: UseResource',
@@ -2616,6 +2634,7 @@ export const CLIENT_SLOT_API: readonly ClientSlotEntry[] = [
       'ChatNodeOwnerProps',
       'MessageImageLoader',
       'OpenFileOptions',
+      'Session',
     ],
     standardProps: [
       'useResource: UseResource',

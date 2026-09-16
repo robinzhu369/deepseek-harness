@@ -11,3 +11,8 @@
 # Pairing records are generated from the three confirmed owner-blob pairs.
 # The worktree-local installer registers the fail-closed driver command.
 *.i18n.yaml merge=dsh-translation-pairing
+
+# Preserve frozen requirement bytes and verbatim command-output evidence.
+implementation/requirements-v1.0.md whitespace=-blank-at-eol
+evals/data-agent/**/*.txt whitespace=-blank-at-eol,-blank-at-eof
+evals/data-agent/*.txt whitespace=-blank-at-eol,-blank-at-eof

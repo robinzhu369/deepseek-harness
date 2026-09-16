@@ -1,0 +1,16 @@
+{
+  "provider": "deepseek-official",
+  "max_result_bytes": 262144,
+  "max_context_bytes": 65536,
+  "runtime": {
+    "harness_commit": "c291e7961a515f6d7af9304e7fd1d257929aef26",
+    "model_id": "deepseek-v4-flash",
+    "model_snapshot": null,
+    "environment_digest": "REPLACE_WITH_ENVIRONMENT_SHA256",
+    "policy_version": "REPLACE_WITH_POLICY_VERSION",
+    "parameters": {
+      "thinking": "disabled",
+      "max_tokens": 2048
+    }
+  }
+}

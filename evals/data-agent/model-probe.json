@@ -1,0 +1,18 @@
+{
+  "date": "2026-09-15",
+  "base_url": "https://api.deepseek.com",
+  "requested_model": "deepseek-v4-flash",
+  "reported_model": "deepseek-flash",
+  "status": "passed",
+  "tool": "inspect_dataset",
+  "verified_arguments": {
+    "dataset_id": "synthetic-only"
+  },
+  "usage": {
+    "prompt_tokens": 290,
+    "completion_tokens": 36,
+    "total_tokens": 326
+  },
+  "duration_ms": 1074,
+  "scope": "synthetic connection and forced tool-call protocol only; not Skill quality acceptance"
+}

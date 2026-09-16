@@ -1,0 +1,7 @@
+{
+  "name": "dsh-profile-data-agent-worker-host",
+  "private": true,
+  "type": "module",
+  "dependencies": {},
+  "dsh": { "profile": { "bundles": [], "patchReload": "startup" } }
+}

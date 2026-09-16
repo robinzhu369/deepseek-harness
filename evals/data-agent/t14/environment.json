@@ -1,0 +1,46 @@
+{
+  "captured_at": "2026-09-16T05:21:12Z",
+  "host": {
+    "os": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "memory_bytes": 25769803776,
+    "logical_cpus": 10
+  },
+  "docker": {
+    "cpus": 10,
+    "memory_bytes": 8321712128,
+    "version": "29.5.2"
+  },
+  "git_head": "c291e7961a515f6d7af9304e7fd1d257929aef26",
+  "working_tree_uncommitted": true,
+  "node": "v24.14.1",
+  "pnpm": "11.19.0",
+  "worker_image": "sha256:658395b6f622bd26525d7f644ed856d6682608943a769d859467bad75f0a57f8",
+  "postgres_image": "sha256:33df03f2682e6ffe0aed5c0249c3ba720f730d4d39ce7286acf341dc608b3619",
+  "source_sha256": {
+    "services/data-worker/importer.py": "b8bc27b2b1a9b0c3ed06385b6946724f16bf6743faf053306c683daa63fe66c3",
+    "services/data-worker/evaluate_plan.py": "a9457e6d0864ae50af917f48b014154bbc7b16263763654c2a4dd5e535be1fa8",
+    "services/data-worker/container_entry.py": "839d20946d32da217ce7277300e8f7669dbac1bec759d8b750cde38848eca125",
+    "services/data-worker/remote.py": "7e79629e8373859323853552ab99c22bf65bd611dde8378a713fe56bdb54d55c",
+    "services/data-worker/execute.py": "8983008415ddedd40ec935555b50210bb17191b0480a28c6778c969211da8cbc",
+    "services/data-worker/engine.py": "97625243ebf7c9e7a17f204b48a02500dfd0f472561eb09a5e077c3c8fc3a695",
+    "services/data-worker/operators.py": "7e0aa4dc12c4c59264d9c627e8c10885ad9850d6fabd7096599925bae21e23b8",
+    "services/data-worker/evaluate_quality.py": "5e971c6f0b981bce254201496b43200460c6a75720772a3dbc59ce22ce2b842f",
+    "domain-contracts/skill-manifest.schema.json": "695d0af31f8d941f3658aadc5e929e086e9fae5a876d78fbdfb25304cd5e3cce",
+    "domain-contracts/import-options.schema.json": "54ce47a4f239d6dac242ab39f5a0c44668602739baeb65ad200ca9366fac4c13",
+    "domain-contracts/skill-result.schema.json": "afd51b483ee6a2f05ca4400c5be53ed60c44090569da916045d10264915d13e4",
+    "domain-contracts/skill-input.schema.json": "2eb296defd882387affc672b8690a2fc0640558e31c03b2f78c37b93a10d21b2",
+    "domain-contracts/operators.json": "909e96b77bdfff7d95be45e7d65acf95f0936af631908298fb6d33652daec5fd",
+    "domain-contracts/worker-result.schema.json": "90fc36c6e86e7d00b8600374afefcb939845e61c63ff01225b644092e458bbaa",
+    "domain-contracts/workflow.schema.json": "647c90bcc6ee5cfab5d78b4979fc5b302fb0465f6411682d4afd27553e23c97f",
+    "evals/data-agent/t14/worker_probe.py": "b55053e23daeba9a242aca9bbf9c4f82b972cc88839dd3ede5b2622934e99e8a",
+    "evals/data-agent/t14/generate.py": "2ed7daf56c4b0e3ff7508d03155475f465d712ea7931b58a341e2d17aa0498f3",
+    "evals/data-agent/t14/test_capacity.py": "424cbc53c5cfd0219d85a51bde400eaafe3ce4b4ba6cf983fc36870a6be24ecd",
+    "evals/data-agent/t14/verify_bundle.py": "20899839bee12f253dfa04e681f5ee44d0e5a39a0ace6e6965d92ea1e6b69657",
+    "evals/data-agent/t14/baseline.json": "9348504623dfed920dc8e3a97ddffaa06e1cf861daaf0e29ab78702fc9708f68",
+    "extensions/data-agent/tests/workbench-capacity.ts": "759b4f477e92c6bdf25a63d0231b8521a9949cd939c4791df594955283ec597d",
+    "extensions/data-agent/tests/workbench-browser.e2e.ts": "aa441b36eded87e6b7b0c51a9902d35f751748f95dbb56f192946de9ded38e42",
+    "extensions/data-agent/tests/harness-model.fixture.ts": "d7b52781ee902c1584fe8617f55ce21ccd284afaa1fc22cfa2423178772c7715"
+  },
+  "target_environment_acceptance": false,
+  "other_business_containers_running": true
+}

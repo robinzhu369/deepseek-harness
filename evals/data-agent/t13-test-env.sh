@@ -1,0 +1,4 @@
+# Local, synthetic T13 fixtures only. No model credentials or business data.
+export DATA_AGENT_TEST_PYTHON=/opt/homebrew/opt/python@3.10/bin/python3.10
+export DATA_AGENT_TEST_IMAGE=sha256:658395b6f622bd26525d7f644ed856d6682608943a769d859467bad75f0a57f8
+export DATA_AGENT_ISOLATION_IMAGE=sha256:1147a44d105441c0141079ac90994ad72b75152290e3b0ad7a924ecdaa9365e5

@@ -1,0 +1,7 @@
+{
+  "status": "cancelled",
+  "final_export_refs": [],
+  "run_statuses": ["cancelled", "cancelled"],
+  "unchanged_follow": false,
+  "logged_tools": ["submit_task_run", "get_task_snapshot"]
+}

@@ -1,0 +1,49 @@
+
+> @deepseek-ai/dsh-data-agent@0.1.0 test
+> node --import tsx/esm --test tests/*.test.ts
+
+✔ symbolic split/fit outputs compile before artifacts exist (9.916458ms)
+✔ layout and JSON key order do not change computation identity (2.881125ms)
+✔ parameter edits invalidate descendants, not ancestors (0.429625ms)
+✔ reject cross-project data, dangling ports, arbitrary operators, cycles and non-train fitting (0.491292ms)
+✔ reject fitting transformed test ancestry (0.1905ms)
+✔ business column names can be Chinese without becoming executable expressions (0.138541ms)
+✔ migrations reapply without destroying business data (120.4915ms)
+✔ server rejects viewer writes and cross-project snapshots (77.457083ms)
+✔ optimistic revision conflicts and stale approvals are rejected (64.791875ms)
+✔ concurrent submit returns a single run, and changed request conflicts (77.888291ms)
+✔ concurrent acquire claims only the ready node and downstream binds published ports (100.108458ms)
+✔ lost commit response replays exact receipt; different manifest conflicts (81.967375ms)
+✔ expired workers cannot heartbeat or publish after recovery (75.233791ms)
+✔ candidate releases worker, is not retried, and cannot publish after cancellation (79.270667ms)
+✔ candidate approval is idempotent and requires unchanged intent (85.788959ms)
+✔ cancel remains requested until executor confirms exit, and blocks result (82.518542ms)
+✔ real Python process computes DAG outputs and publishes verified bytes (591.255125ms)
+✔ database publication failure leaves no formal outputs and retry can commit (78.700042ms)
+✔ old candidate approval after workflow edit is rejected (66.869083ms)
+✔ progress is monotonic and every snapshot cursor covers committed state (73.223625ms)
+✔ node failure prevents new dependent work without deleting upstream output (81.992042ms)
+✔ configured heavy-job budget queues a second ready run (64.023083ms)
+✔ internal HTTP binds worker identity, attempt credentials and persisted receipt replay (134.803541ms)
+✔ actual Python deletion produces quarantined row references and waits for impact approval (327.77675ms)
+✔ dsh profile mounts authenticated Worker routes and awaits SIGTERM cleanup (461.09925ms)
+✔ dsh refuses a newer database schema and exits without leaking its credential (318.499208ms)
+✔ remote Worker transfers objects over HTTP and publishes a Docker-computed report (834.8045ms)
+✔ remote cancellation waits for the actual compute container to stop (822.545458ms)
+✔ data center resumes multipart upload and creates immutable Docker import versions (1580.008916ms)
+✔ Skill lifecycle gates release and preserves locked snapshots across edits, rollback and retirement (283.408333ms)
+✔ Worker restart stops an orphan container before acknowledging an expired cancellation (623.777709ms)
+✔ real dsh session binds identity, executes scoped tools and restores locked Skill snapshots (1162.028875ms)
+✔ validates immutable data-analysis package and capability narrowing (10.26675ms)
+✔ validates immutable data-cleaning package and capability narrowing (1.429084ms)
+✔ validates immutable feature-engineering package and capability narrowing (1.489083ms)
+✔ validates immutable numeric-quality-review package and capability narrowing (1.513166ms)
+✔ rejects fabricated executed artifacts and wrong result status (1.481959ms)
+ℹ tests 37
+ℹ suites 0
+ℹ pass 37
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8522.706

@@ -93,3 +93,37 @@ Connection 拥有 request correlation、`/api` carrier、trust check、精确 Fe
 - [API Gateway](../api-gateway.zh.md)：Host method、生成的 Remote contribution、stream 与 forwarded event。
 - [Web Client Slots](slots.zh.md)：component、hook、store、injection 与 placement。
 - [Conversation](conversation.zh.md)：持久 event correlation、target snapshot，以及 Chat 或 Trajectory view contribution。
+
+<!-- BEGIN GENERATED cordis-surface (gen-cordis-catalog.ts) — do not edit between markers -->
+
+<a id="cordis-surface"></a>
+
+## Cordis API
+
+Generated from source by `scripts/gen-cordis-catalog.ts` (verified fresh by `pnpm run verify-cordis-catalog` in doc-sync; regenerate with `pnpm run gen-cordis-catalog`) — the language sides differ only in locale-specific paired document paths. Signature blocks use a `ts cordis-catalog` fence and keep the original source JSDoc; dispatch modes are defined in the [primer](../cordis-primer.zh.md#dispatch-modes), and the framework-inherited `ctx` API lives in [cordis-api/inherited.md](../cordis-api/inherited.md).
+
+<a id="ctxdataagentcontroller--dataagentcontroller"></a>
+
+### `ctx.dataAgentController` — `DataAgentController`
+
+Proxy only the configured loopback domain service; it rechecks member identity for every request.
+
+```ts cordis-catalog
+/** Read non-secret browser resource limits from the deployment.
+ * @returns Polling interval and maximum buffered upload size.
+ */
+@Remote configuration(): Promise<{ pollIntervalMs: number; maxUploadBytes: number }>
+
+/** Forward one bounded JSON domain operation through the existing Remote carrier.
+ * @param credential - User credential; never an actor ID or Worker credential.
+ * @param method - Domain read or command.
+ * @param path - Project-scoped domain path.
+ * @param body - Serialized JSON for commands; empty for reads.
+ * @param signal - Caller cancellation, independent of accepted data computation.
+ * @returns Original HTTP status and bounded JSON response.
+ */
+@Remote async request( credential: string, method: 'GET' | 'POST', path: string, body: string, signal: AbortSignal, ): Promise<DomainResponse>
+```
+
+Source: [`packages/api/data-agent-controller/src/index.ts`](../../packages/api/data-agent-controller/src/index.ts)
+<!-- END GENERATED cordis-surface -->

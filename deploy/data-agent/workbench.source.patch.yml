@@ -1,0 +1,17 @@
+# Apply after the web profile. Reuses its agents, sessions, tools and Skill registry.
+- id: ui-data-agent
+  disabled: false
+- insert:
+    - id: data-agent-host
+      name: '../../extensions/data-agent/src/host.ts'
+      inject: [agents, sessions, tools, skills]
+      config: !!js JSON.parse(process.env.DATA_AGENT_HOST_CONFIG ?? 'null')
+    - id: data-agent-controller
+      name: '../../packages/api/data-agent-controller/src/index.ts'
+      config:
+        pollIntervalMs: 2000
+        maxUploadBytes: 67108864
+        endpoint: !!js process.env.DATA_AGENT_DOMAIN_ENDPOINT
+        timeoutMs: 120000
+        maxBodyBytes: 4194304
+        maxResultBytes: 4194304

@@ -1,0 +1,14 @@
+✔ quality oracle permits true supplementary statistics but rejects fabricated evidence (4.029792ms)
+✔ quality oracle blocks protected-field changes, omitted approval and malformed status (0.752333ms)
+✔ synthetic suites are never business release evidence (0.120792ms)
+✔ quality oracle accepts an additional read-only check after a valid change (4.966958ms)
+✔ v010: recorded model proposals retain strict failures while valid supplementary row counts pass (39.494ms)
+✔ real: recorded model proposals retain strict failures while valid supplementary row counts pass (33.241125ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 244.109666

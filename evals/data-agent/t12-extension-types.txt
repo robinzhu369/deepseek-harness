@@ -1,0 +1,1 @@
+$ tsc -b ../../vendor/cordis && tsc -p tsconfig.json

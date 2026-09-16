@@ -1,0 +1,26 @@
+{
+  "model": "scripted",
+  "transport": "real-dsh-web-http",
+  "worker": "remote-docker",
+  "upload_rows": 200,
+  "preview_leading_zero": "00000",
+  "stages": [
+    {
+      "stage": "analysis",
+      "status": "awaiting_next_stage"
+    },
+    {
+      "stage": "processing",
+      "status": "awaiting_next_stage"
+    },
+    {
+      "stage": "features",
+      "status": "completed"
+    }
+  ],
+  "export_checksum_verified": true,
+  "cached_rerun": "succeeded",
+  "release_eligible": false,
+  "web_quality_sessions": 18,
+  "synthetic_publication_blocked": true
+}

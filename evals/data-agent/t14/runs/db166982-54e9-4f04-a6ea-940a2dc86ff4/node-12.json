@@ -1,0 +1,35 @@
+{
+  "samples": [
+    {
+      "elapsed_seconds": 0.804289749939926,
+      "memory.peak": "1037946880\n",
+      "memory.current": "1002958848\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 1288343\nuser_usec 766822\nsystem_usec 521521\nnice_usec 0\nnr_periods 5\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 0
+    }
+  ],
+  "container": "data-agent-f2d92f066e3346b890c5ad7f4cebe953",
+  "operator": "fit",
+  "node_id": "fit_onehot",
+  "compute_seconds": 0.7712520830100402,
+  "docker_state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 2,
+    "Error": "",
+    "StartedAt": "2026-09-16T05:18:23.762689383Z",
+    "FinishedAt": "2026-09-16T05:18:24.467674966Z"
+  },
+  "error": "COMPUTE_FAILED",
+  "wall_seconds": 1.2069442919455469,
+  "memory_peak_bytes": 1037946880,
+  "observed_tmp_peak_bytes": 0,
+  "observed_output_peak_bytes": 0
+}

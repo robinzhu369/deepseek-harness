@@ -1,0 +1,103 @@
+{
+  "samples": [
+    {
+      "elapsed_seconds": 0.7526408749399707,
+      "memory.peak": "728825856\n",
+      "memory.current": "728825856\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 1150333\nuser_usec 510924\nsystem_usec 639408\nnice_usec 0\nnr_periods 5\nnr_throttled 1\nthrottled_usec 12940\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 0
+    },
+    {
+      "elapsed_seconds": 1.334113624994643,
+      "memory.peak": "2849542144\n",
+      "memory.current": "2848882688\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 3450706\nuser_usec 1667172\nsystem_usec 1783533\nnice_usec 0\nnr_periods 10\nnr_throttled 4\nthrottled_usec 20072\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 0
+    },
+    {
+      "elapsed_seconds": 2.0558989169076085,
+      "memory.peak": "3624521728\n",
+      "memory.current": "3606974464\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 4502829\nuser_usec 2098980\nsystem_usec 2403849\nnice_usec 0\nnr_periods 18\nnr_throttled 5\nthrottled_usec 43143\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 0
+    },
+    {
+      "elapsed_seconds": 2.767587958020158,
+      "memory.peak": "3650326528\n",
+      "memory.current": "3600814080\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 5463954\nuser_usec 2850846\nsystem_usec 2613108\nnice_usec 0\nnr_periods 25\nnr_throttled 5\nthrottled_usec 43143\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 6152192
+    },
+    {
+      "elapsed_seconds": 3.4322113749803975,
+      "memory.peak": "3650326528\n",
+      "memory.current": "3615973376\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 6529757\nuser_usec 3818273\nsystem_usec 2711483\nnice_usec 0\nnr_periods 31\nnr_throttled 5\nthrottled_usec 43143\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 19640320
+    },
+    {
+      "elapsed_seconds": 4.12493320798967,
+      "memory.peak": "3650326528\n",
+      "memory.current": "3625897984\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 7236103\nuser_usec 4490673\nsystem_usec 2745429\nnice_usec 0\nnr_periods 38\nnr_throttled 5\nthrottled_usec 43143\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 35057664
+    },
+    {
+      "elapsed_seconds": 4.854439582908526,
+      "memory.peak": "3650326528\n",
+      "memory.current": "3635105792\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 8318739\nuser_usec 5511965\nsystem_usec 2806774\nnice_usec 0\nnr_periods 45\nnr_throttled 5\nthrottled_usec 43143\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 47505408
+    },
+    {
+      "elapsed_seconds": 5.963218874996528,
+      "memory.peak": "3650326528\n",
+      "memory.current": "464834560\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 8857721\nuser_usec 5834598\nsystem_usec 3023123\nnice_usec 0\nnr_periods 57\nnr_throttled 5\nthrottled_usec 43143\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 53342208
+    }
+  ],
+  "container": "data-agent-054e7fbfff2640caac68ad89fd8500cd",
+  "operator": "import",
+  "node_id": "import",
+  "compute_seconds": 5.080758832977153,
+  "docker_state": {
+    "Status": "running",
+    "Running": true,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 48086,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-09-16T05:22:17.340384671Z",
+    "FinishedAt": "0001-01-01T00:00:00Z"
+  },
+  "result": {
+    "run_id": "28219b6b-aaf0-42bc-8f95-d3f1374664ad",
+    "job_id": "dcd4b031-dd56-4157-b8d7-7cb3696112ed",
+    "manifest_digest": "f5cf72e98b29e90d23d4f27697ee484cb02899489245ed31d84be079bb2f01ac",
+    "status": "published"
+  },
+  "wall_seconds": 6.726382082910277,
+  "memory_peak_bytes": 3650326528,
+  "observed_tmp_peak_bytes": 0,
+  "observed_output_peak_bytes": 53342208
+}

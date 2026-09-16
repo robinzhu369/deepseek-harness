@@ -1,0 +1,59 @@
+- complementary:
+  - strong: Current run
+  - button "Save column widths"
+  - button "Task status"
+  - button "Workflow"
+  - text: Select run
+  - combobox "Select run":
+    - option "Follow latest run"
+    - option "Current run · queued · <run>" [selected]
+  - group: Run identity and frozen revision
+  - group: Skill stages and replanning
+  - text: Editable draft · Changes require a new proposal and approval
+  - button "New blank draft"
+  - button "Copy to new draft"
+  - text: Import workflow JSON
+  - button "Import workflow JSON"
+  - button "Export workflow JSON"
+  - application:
+    - group:
+      - strong: inspect · inspect
+      - text: data report
+    - img
+    - button "Zoom In":
+      - img
+    - button "Zoom Out":
+      - img
+    - button "Fit View":
+      - img
+    - link "React Flow attribution":
+      - /url: https://reactflow.dev?utm_source=attribution
+      - text: React Flow
+  - combobox "Operator":
+    - option "Choose" [selected]
+    - option "import"
+    - option "preview"
+    - option "fill_constant"
+    - option "normalize"
+    - option "map_categories"
+    - option "deduplicate"
+    - option "filter_rows"
+    - option "bounds"
+    - option "derive"
+    - option "inspect"
+    - option "split"
+    - option "fit"
+    - option "transform"
+    - option "select"
+    - option "export"
+    - option "quality"
+  - button "Add operator" [disabled]
+  - button "Save revision"
+  - text: "Revision: 1"
+  - textbox "Task purpose"
+  - text: Proposal evidence JSON
+  - textbox "Proposal evidence JSON": "[]"
+  - text: Changed nodes require published evidence with ref, inputs, scope and description; unknown impact is not a measured result.
+  - button "Create review proposal" [disabled]
+  - textbox "Template name"
+  - button "Save template" [disabled]

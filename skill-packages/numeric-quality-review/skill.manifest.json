@@ -1,0 +1,15 @@
+{
+  "id": "numeric-quality-review",
+  "version": "0.1.1",
+  "description": "数值质量复核",
+  "input_schema": "contracts/input.schema.json",
+  "output_schema": "contracts/output.schema.json",
+  "required_tools": [
+    "inspect_dataset",
+    "propose_workflow_patch"
+  ],
+  "operator_dependencies": {
+    "inspect": "1"
+  },
+  "evaluation_suite": "numeric-quality-review-core-v1"
+}

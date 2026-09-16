@@ -1,0 +1,58 @@
+{
+  "samples": [
+    {
+      "elapsed_seconds": 0.7528878339799121,
+      "memory.peak": "1354346496\n",
+      "memory.current": "1354608640\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 1124367\nuser_usec 816777\nsystem_usec 307590\nnice_usec 0\nnr_periods 5\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 0
+    },
+    {
+      "elapsed_seconds": 1.3210121670272201,
+      "memory.peak": "1449766912\n",
+      "memory.current": "1414938624\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 1850727\nuser_usec 1500451\nsystem_usec 350276\nnice_usec 0\nnr_periods 11\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 39628800
+    },
+    {
+      "elapsed_seconds": 2.0906067920150235,
+      "memory.peak": "1501278208\n",
+      "memory.current": "390500352\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 2439088\nuser_usec 1957217\nsystem_usec 481871\nnice_usec 0\nnr_periods 19\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 66924544
+    }
+  ],
+  "container": "data-agent-fd3615343d284d42b32cc7d90e2c6601",
+  "operator": "transform",
+  "node_id": "median_train",
+  "compute_seconds": 1.5449429170694202,
+  "docker_state": {
+    "Status": "running",
+    "Running": true,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 43282,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-09-16T05:18:12.541804086Z",
+    "FinishedAt": "0001-01-01T00:00:00Z"
+  },
+  "result": {
+    "run_id": "d74f0c66-a3a0-4da3-b8a6-c2b67eb5fa12",
+    "job_id": "0ce4cd4f-c5c1-4652-af43-f0c4facf6be2",
+    "manifest_digest": "bba4330457204028e4fec2c0594eac0d92e67b44bc3f22260b0978c0264dc55e",
+    "status": "published"
+  },
+  "wall_seconds": 2.3778615420451388,
+  "memory_peak_bytes": 1501278208,
+  "observed_tmp_peak_bytes": 0,
+  "observed_output_peak_bytes": 66924544
+}

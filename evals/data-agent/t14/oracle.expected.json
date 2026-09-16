@@ -1,0 +1,12 @@
+{
+  "status": "ready_for_training_contract",
+  "rows_reconciled": 1000,
+  "input_columns": 6,
+  "output_columns": 10,
+  "all_files_sha256_verified": true,
+  "labels_and_entity_ids_preserved": true,
+  "entity_partitions_disjoint": true,
+  "train_only_statistics_recomputed": true,
+  "all_feature_values_checked": true,
+  "transformer_count": 3
+}

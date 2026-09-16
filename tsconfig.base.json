@@ -28,6 +28,7 @@
     // not declaration path aliases, keep each package/vendor source compiled
     // under its own tsconfig boundary.
     "paths": {
+      "@deepseek-ai/dsh-api-data-agent-controller": ["./packages/api/data-agent-controller/src/index.ts"],
       "@deepseek-ai/cordis": ["./vendor/cordis/src"],
       "@deepseek-ai/cosmokit": ["./vendor/cosmokit/src"],
       "@deepseek-ai/schemastery": ["./vendor/schemastery/src"],
@@ -203,6 +204,7 @@
       "@deepseek-ai/dsh-client-ui-reference": ["./packages/client/ui-reference/src"],
       "@deepseek-ai/dsh-client-ui-commands": ["./packages/client/ui-commands/src"],
       "@deepseek-ai/dsh-client-ui-model-selection": ["./packages/client/ui-model-selection/src"],
+      "@deepseek-ai/dsh-client-ui-data-agent": ["./packages/client/ui-data-agent/src"],
       "@deepseek-ai/dsh-client-ui-goal": ["./packages/client/ui-goal/src"],
       "@deepseek-ai/dsh-client-ui-message-feedback": ["./packages/client/ui-message-feedback/src"],
       "@deepseek-ai/dsh-client-ui-agent-preset": ["./packages/client/ui-agent-preset/src"],

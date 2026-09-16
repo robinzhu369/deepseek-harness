@@ -1,0 +1,48 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Worker.Dockerfile
+#1 transferring dockerfile: 546B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python@sha256:019e31cc1f52e4139d338bca44f27b71339a9da261738fd80fab9cf4595152fc
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/6] FROM docker.io/library/python@sha256:019e31cc1f52e4139d338bca44f27b71339a9da261738fd80fab9cf4595152fc
+#4 resolve docker.io/library/python@sha256:019e31cc1f52e4139d338bca44f27b71339a9da261738fd80fab9cf4595152fc done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 60.89kB 1.9s done
+#5 DONE 1.9s
+
+#6 [2/6] WORKDIR /app
+#6 CACHED
+
+#7 [3/6] COPY services/data-worker/requirements.runtime.txt /app/requirements.runtime.txt
+#7 CACHED
+
+#8 [4/6] RUN pip install --no-cache-dir --only-binary=:all: -r /app/requirements.runtime.txt
+#8 CACHED
+
+#9 [5/6] COPY services/data-worker/*.py /app/services/data-worker/
+#9 DONE 0.0s
+
+#10 [6/6] COPY domain-contracts /app/domain-contracts
+#10 DONE 0.0s
+
+#11 exporting to image
+#11 exporting layers 0.0s done
+#11 exporting manifest sha256:e3cb9407ab59cce2531e47755bdaf6cab42dd73597b9bace5b0d4e7aba75c89f done
+#11 exporting config sha256:f5b21ef977ab7259b332c57de45c01449852175319b3c5353876664d7fe2aea8
+#11 exporting config sha256:f5b21ef977ab7259b332c57de45c01449852175319b3c5353876664d7fe2aea8 done
+#11 exporting attestation manifest sha256:96701f649f2f341da0a2c79b653de2a2255b53e906fc769b5e7f09830ec9ef1e done
+#11 exporting manifest list sha256:b4926bcd8a518506c14841782dbd4f65d489790a8c46643595200ff98be3ed07 done
+#11 naming to docker.io/library/data-agent-worker:dev done
+#11 unpacking to docker.io/library/data-agent-worker:dev 0.0s done
+#11 DONE 0.1s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/10ol1z5tr6ce1i89yrk2sxtau

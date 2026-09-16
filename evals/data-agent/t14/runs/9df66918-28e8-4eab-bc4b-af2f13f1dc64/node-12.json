@@ -1,0 +1,58 @@
+{
+  "samples": [
+    {
+      "elapsed_seconds": 0.8695396250113845,
+      "memory.peak": "23998464\n",
+      "memory.current": "23998464\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 514722\nuser_usec 290759\nsystem_usec 223963\nnice_usec 0\nnr_periods 3\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 0
+    },
+    {
+      "elapsed_seconds": 1.4411356670316309,
+      "memory.peak": "494821376\n",
+      "memory.current": "490717184\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 1569593\nuser_usec 901040\nsystem_usec 668552\nnice_usec 0\nnr_periods 9\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 11292672
+    },
+    {
+      "elapsed_seconds": 1.9625679170712829,
+      "memory.peak": "507973632\n",
+      "memory.current": "323760128\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 1880696\nuser_usec 1181884\nsystem_usec 698812\nnice_usec 0\nnr_periods 14\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 32047104
+    }
+  ],
+  "container": "data-agent-142c44049ce34110b6da2b6f98d8d923",
+  "operator": "transform",
+  "node_id": "standard_validation",
+  "compute_seconds": 1.577182792010717,
+  "docker_state": {
+    "Status": "running",
+    "Running": true,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 46271,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-09-16T05:19:34.331676013Z",
+    "FinishedAt": "0001-01-01T00:00:00Z"
+  },
+  "result": {
+    "run_id": "e9e67b8c-f41a-474b-8d2d-58c7a848e07d",
+    "job_id": "a18a3def-5f0c-415e-8dd5-ae5fbcd70b9c",
+    "manifest_digest": "1dbe4f486cce6350633292bb94c4ef031a1c3a51d67c1fe372f73536d3bdaec4",
+    "status": "published"
+  },
+  "wall_seconds": 2.224787792074494,
+  "memory_peak_bytes": 507973632,
+  "observed_tmp_peak_bytes": 0,
+  "observed_output_peak_bytes": 32047104
+}

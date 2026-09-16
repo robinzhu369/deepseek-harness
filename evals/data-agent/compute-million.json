@@ -1,0 +1,23 @@
+{
+  "scope": "compute_only_not_AC43",
+  "rows": 1000000,
+  "input_columns": 100,
+  "output_columns": 208,
+  "input_bytes": 16747488,
+  "output_bytes": 174517936,
+  "status": "ready_for_training_contract",
+  "polars_version": "1.0.0",
+  "python": "3.10.20",
+  "platform": "macOS-26.6.2-arm64-arm-64bit",
+  "timings_seconds": {
+    "generate": 1.089,
+    "import": 0.174,
+    "inspect": 2.003,
+    "split": 0.385,
+    "fit_transform": 1.062,
+    "quality_export": 2.063
+  },
+  "total_seconds": 6.799,
+  "peak_rss_bytes": 3245834240,
+  "evidence_limit": "No multipart upload, model, Harness session, UI, or offline installation exercised; generated temporary artifacts removed after checks."
+}

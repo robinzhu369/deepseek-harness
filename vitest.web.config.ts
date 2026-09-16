@@ -25,6 +25,7 @@ export default defineConfig({
     execArgv: vitestExecArgv,
     include: [
       'apps/web/tests/**/*.e2e.ts',
+      'extensions/data-agent/tests/workbench-browser.e2e.ts',
       'apps/web/tests/**/*.snapshot.ts',
       'packages/experimental/inspector/tests/client-browser.e2e.ts',
     ],

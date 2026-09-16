@@ -1,0 +1,12 @@
+✔ business task requires ordered completed stages; branch creation preserves selection and idempotency (308.485291ms)
+✔ frozen replay ignores current draft and preserves original locks; scopes exclude nodes and force descendants (146.455417ms)
+✔ missing cache bytes cause recomputation; changed proposal invalidates descendants only (145.036417ms)
+✔ pause stops acquisition at node boundaries; task cancel drains active attempts and blocks new phases (139.838958ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 855.775417

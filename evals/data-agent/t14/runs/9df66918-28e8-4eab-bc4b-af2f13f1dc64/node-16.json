@@ -1,0 +1,58 @@
+{
+  "samples": [
+    {
+      "elapsed_seconds": 0.6958675000350922,
+      "memory.peak": "967020544\n",
+      "memory.current": "931954688\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 1250253\nuser_usec 1010843\nsystem_usec 239410\nnice_usec 0\nnr_periods 5\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 4096
+    },
+    {
+      "elapsed_seconds": 1.269179750001058,
+      "memory.peak": "989184000\n",
+      "memory.current": "989184000\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 1904111\nuser_usec 1644136\nsystem_usec 259974\nnice_usec 0\nnr_periods 11\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 48721920
+    },
+    {
+      "elapsed_seconds": 2.0968242920935154,
+      "memory.peak": "1015984128\n",
+      "memory.current": "473829376\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 2527591\nuser_usec 2174904\nsystem_usec 352687\nnice_usec 0\nnr_periods 19\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 78934016
+    }
+  ],
+  "container": "data-agent-ccac225d562744c0bcf0d452b7388a96",
+  "operator": "transform",
+  "node_id": "onehot_train",
+  "compute_seconds": 1.5577054999303073,
+  "docker_state": {
+    "Status": "running",
+    "Running": true,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 46828,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-09-16T05:19:43.165698336Z",
+    "FinishedAt": "0001-01-01T00:00:00Z"
+  },
+  "result": {
+    "run_id": "e9e67b8c-f41a-474b-8d2d-58c7a848e07d",
+    "job_id": "3b2ce72f-4f21-4e35-a346-3436bb463f0b",
+    "manifest_digest": "dad0c912c16efb7490ba5f0e4da9a389281e0b27239c0fbb980aa561d6173d38",
+    "status": "published"
+  },
+  "wall_seconds": 2.414336209069006,
+  "memory_peak_bytes": 1015984128,
+  "observed_tmp_peak_bytes": 0,
+  "observed_output_peak_bytes": 78934016
+}

@@ -1,0 +1,58 @@
+{
+  "samples": [
+    {
+      "elapsed_seconds": 0.6837170420913026,
+      "memory.peak": "1242689536\n",
+      "memory.current": "1242689536\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 1301433\nuser_usec 618081\nsystem_usec 683351\nnice_usec 0\nnr_periods 6\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 0
+    },
+    {
+      "elapsed_seconds": 1.2568087499821559,
+      "memory.peak": "1398542336\n",
+      "memory.current": "1304961024\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 2238556\nuser_usec 1358874\nsystem_usec 879681\nnice_usec 0\nnr_periods 11\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 9351168
+    },
+    {
+      "elapsed_seconds": 1.9321520420489833,
+      "memory.peak": "1398542336\n",
+      "memory.current": "352559104\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 2777313\nuser_usec 1820761\nsystem_usec 956552\nnice_usec 0\nnr_periods 18\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 19582976
+    }
+  ],
+  "container": "data-agent-d8a4a432a52342dcb36a8208a24bafd8",
+  "operator": "bounds",
+  "node_id": "clip",
+  "compute_seconds": 1.5980147499358281,
+  "docker_state": {
+    "Status": "running",
+    "Running": true,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 38149,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-09-16T05:15:08.519803625Z",
+    "FinishedAt": "0001-01-01T00:00:00Z"
+  },
+  "result": {
+    "run_id": "e184f289-3a83-4529-8b4a-7bee4829d878",
+    "job_id": "da9ec25d-5a08-4334-8dd5-2f854a83cd8d",
+    "manifest_digest": "840f1bd3449d65a05fb35f8f17eba0e39ec77c81211e12120f8494a49dedc334",
+    "status": "published"
+  },
+  "wall_seconds": 2.1522890420164913,
+  "memory_peak_bytes": 1398542336,
+  "observed_tmp_peak_bytes": 0,
+  "observed_output_peak_bytes": 19582976
+}

@@ -1,0 +1,13 @@
+{
+  "status": "unconfigured_not_deployable",
+  "harness_commit": "c291e7961a515f6d7af9304e7fd1d257929aef26",
+  "model": {"base_url": null, "model_id": null, "credential_env": "DATA_AGENT_MODEL_KEY", "tls_ca_path": null, "timeout_ms": null, "concurrency": null, "allow_public_fallback": false},
+  "database": {"connection_env": "DATA_AGENT_DATABASE_URL", "schema": "data_agent"},
+  "worker": {"python_absolute_path": null, "image_digest": null, "memory_bytes": null, "disk_bytes": null, "max_running_jobs": 1},
+  "identity": {"provider": null, "project_membership_source": null},
+  "ingress": {"public_origin": null, "trusted_hosts": [], "tls_certificate_path": null},
+  "storage": {"kind": null, "internal_endpoint": null, "browser_endpoint": null, "bucket": null, "credential_env": "DATA_AGENT_STORAGE_CREDENTIALS"},
+  "network": {"allowlisted_endpoints": [], "DSH_TELEMETRY_MODE": "DISABLED", "public_egress": false},
+  "backup": {"location": null, "rpo_seconds": null, "rto_seconds": null},
+  "offline_artifact_manifest": null
+}

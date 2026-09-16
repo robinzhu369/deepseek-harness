@@ -1,0 +1,11 @@
+{
+  "local_only": true,
+  "sha256": {
+    "extensions/data-agent/src/quality-evaluation.ts": "f4406d578f228199b97ab9698d02a3c7d3b72779b97e16a4bc8795f13e5a0771",
+    "extensions/data-agent/src/contracts.ts": "890320b92f3408898a9e7d1f2934ff895a218ff666523867fef0355b09f4101b",
+    "extensions/data-agent/src/skill-contracts.ts": "0ff8327c9a4a99e41680e6d97c3ea841d2bd1358eadac50fc7dd41c4c56c9088",
+    "services/data-worker/engine.py": "d440c85aa0e0aec7f5483552f09de6e8a0993ae4dc3927e7075e5e9735d7fbaa",
+    "services/data-worker/operators.py": "7e0aa4dc12c4c59264d9c627e8c10885ad9850d6fabd7096599925bae21e23b8",
+    "services/data-worker/evaluate_quality.py": "5e971c6f0b981bce254201496b43200460c6a75720772a3dbc59ce22ce2b842f"
+  }
+}

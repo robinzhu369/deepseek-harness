@@ -1,0 +1,34 @@
+The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
+
+ RUN  v4.1.8 /Users/robinzhu/Documents/ChatGPT/DeepSeekHarness/deepseek-harness
+
+ ❯ extensions/data-agent/tests/workbench-browser.e2e.ts (1 test | 1 failed) 40873ms
+   × data workbench: three columns, immutable history, editable draft, template and restored selection 40873ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  extensions/data-agent/tests/workbench-browser.e2e.ts > data workbench: three columns, immutable history, editable draft, template and restored selection
+Error: Command failed: /opt/homebrew/opt/python@3.10/bin/python3.10 /Users/robinzhu/Documents/ChatGPT/DeepSeekHarness/deepseek-harness/evals/data-agent/t14/worker_probe.py --config /var/folders/5h/k2fmyml96zz1q33_gbn0pdp40000gn/T/data-workbench-bO14fV/capacity-worker.json --report /Users/robinzhu/Documents/ChatGPT/DeepSeekHarness/deepseek-harness/evals/data-agent/t14/runs/db166982-54e9-4f04-a6ea-940a2dc86ff4/node-12.json --sample-seconds 0.5
+Traceback (most recent call last):
+  File "/Users/robinzhu/Documents/ChatGPT/DeepSeekHarness/deepseek-harness/evals/data-agent/t14/worker_probe.py", line 71, in <module>
+    if __name__=='__main__':main()
+  File "/Users/robinzhu/Documents/ChatGPT/DeepSeekHarness/deepseek-harness/evals/data-agent/t14/worker_probe.py", line 57, in main
+    result=worker.once();metrics['result']=result
+  File "/Users/robinzhu/Documents/ChatGPT/DeepSeekHarness/deepseek-harness/services/data-worker/remote.py", line 283, in once
+    raise error
+  File "/Users/robinzhu/Documents/ChatGPT/DeepSeekHarness/deepseek-harness/services/data-worker/remote.py", line 252, in once
+    manifest=docker.run({'spec':claim['spec'],'inputs':resolved,'seed':claim['seed'],'recipe':claim.get('recipe'),
+  File "/Users/robinzhu/Documents/ChatGPT/DeepSeekHarness/deepseek-harness/evals/data-agent/t14/worker_probe.py", line 44, in run
+    try:return super().run(request,check)
+  File "/Users/robinzhu/Documents/ChatGPT/DeepSeekHarness/deepseek-harness/services/data-worker/remote.py", line 118, in run
+    if not raw: raise WorkerError('COMPUTE_FAILED')
+remote.WorkerError: COMPUTE_FAILED
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed (1)
+   Start at  13:17:44
+   Duration  41.12s (transform 69ms, setup 0ms, import 179ms, tests 40.87s, environment 0ms)
+

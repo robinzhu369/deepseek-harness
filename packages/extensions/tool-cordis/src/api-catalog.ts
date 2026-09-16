@@ -814,6 +814,25 @@ export const SERVICE_API: readonly ServiceApiEntry[] = [
     ],
   },
   {
+    key: 'dataAgentController',
+    summary: 'Proxy only the configured loopback domain service; it rechecks member identity for every request.',
+    description: 'Proxy only the configured loopback domain service; it rechecks member identity for every request.',
+    methods: [
+      {
+        signature: '@Remote configuration(): Promise<{ pollIntervalMs: number; maxUploadBytes: number }>',
+        description: 'Read non-secret browser resource limits from the deployment.',
+        parameters: [],
+        returns: 'Polling interval and maximum buffered upload size.',
+      },
+      {
+        signature: '@Remote async request( credential: string, method: \'GET\' | \'POST\', path: string, body: string, signal: AbortSignal, ): Promise<DomainResponse>',
+        description: 'Forward one bounded JSON domain operation through the existing Remote carrier.',
+        parameters: [{ name: 'credential', description: 'User credential; never an actor ID or Worker credential.' }, { name: 'method', description: 'Domain read or command.' }, { name: 'path', description: 'Project-scoped domain path.' }, { name: 'body', description: 'Serialized JSON for commands; empty for reads.' }, { name: 'signal', description: 'Caller cancellation, independent of accepted data computation.' }],
+        returns: 'Original HTTP status and bounded JSON response.',
+      },
+    ],
+  },
+  {
     key: 'deepseekLlmApiExtensions',
     summary: 'Registry of independently owned top-level fields for official DeepSeek requests.',
     description: 'Registry of independently owned top-level fields for official DeepSeek requests.',
@@ -4151,6 +4170,10 @@ export const TYPE_API: readonly TypeApiEntry[] = [
     declaration: 'export class DomainImpl {\n    readonly name: string;\n    constructor(private readonly ctx: Context, spec: DomainSpec, private readonly unit: KvUnit, records: Map<string, Map<string, unknown>>, globalValue: unknown, private readonly onClosed: () => void);\n    get global(): DomainGlobal<unknown>;\n    table(name: string): KvTable<string, unknown>;\n    close(): Promise<void>;\n}',
   },
   {
+    name: 'DomainResponse',
+    declaration: 'export interface DomainResponse {\n    status: number;\n    body: string;\n}',
+  },
+  {
     name: 'DomainSpec',
     declaration: 'export interface DomainSpec {\n    readonly name: string;\n    readonly version: number;\n    readonly layout?: \'single\' | \'per-record\';\n    readonly compatibleVersions?: readonly number[];\n    readonly invalidRecords?: \'backup-and-skip\';\n    readonly global?: DomainGlobalSpec<unknown>;\n    readonly tables: Record<string, DomainTableSpec>;\n}',
   },
@@ -5039,10 +5062,6 @@ export const TYPE_API: readonly TypeApiEntry[] = [
     declaration: 'export interface SendTeamMessageResult {\n    readonly messageId: TeamMessageId;\n    readonly status: \'accepted\' | \'queued\';\n}',
   },
   {
-    name: 'Session',
-    declaration: 'export class Session {\n    get surface(): SessionSurface;\n    readonly header: SessionHeader;\n    readonly inheritedEventCount: SessionLogOffset;\n    get id(): SessionId;\n    readonly firstLiveSeq: SessionLogOffset;\n    static create(id: SessionId, seed?: readonly SessionEvent[], header?: SessionHeader, inheritedEventCount?: SessionLogOffset): Session;\n    static fromRestore(id: SessionId, seed: readonly SessionEvent[], header: SessionHeader, inheritedEventCount: SessionLogOffset, eventState: SessionSeedEventState): Session;\n    eventAt(seq: SessionSeq): SessionEvent | undefined;\n    snapshotEvents(fromSeq: SessionLogOffset = SessionLogOffset(0), toSeqExclusive: SessionLogOffset = this.seq): readonly SessionEvent[];\n    ownEvents(): readonly SessionEvent[];\n    isOwnSeq(seq: SessionSeq): boolean;\n    get seq(): SessionLogOffset;\n    append<T extends SessionEventType>(type: T, data: SessionEventMap[T], ...opts: T extends SurfaceEventType ? [\n        opts: SurfaceIntent<T>\n    ] : [\n    ]): SessionEvent<T>;\n    requestHeader(): EpochHeader | undefined;\n    requestContext(): RequestContext | undefined;\n    deriveMessages(): Message[];\n    deriveEventMessage(event: SessionEvent): Message | null;\n}',
-  },
-  {
     name: 'SessionAccess',
     declaration: 'export type SessionAccess = \'read\' | \'write\';',
   },
@@ -5445,10 +5464,6 @@ export const TYPE_API: readonly TypeApiEntry[] = [
   {
     name: 'SessionSummary',
     declaration: 'export interface SessionSummary {\n    readonly sessionId: SessionId;\n    readonly updatedAt: number;\n    readonly running: boolean;\n    readonly blank: boolean;\n    readonly parentSessionId?: SessionId;\n    readonly origin?: \'subagent\';\n    readonly cwd?: string;\n    readonly projections?: SessionProjectionHints;\n}',
-  },
-  {
-    name: 'SessionSurface',
-    declaration: 'export interface SessionSurface {\n    readonly nodes: readonly SessionSeq[];\n    readonly replaceGeneration: number;\n}',
   },
   {
     name: 'SessionSurfaceSnapshot',

@@ -1,0 +1,1033 @@
+{
+  "local_only": true,
+  "source": "skill-quality-real.json",
+  "mode": "historical-replay-not-fresh-heldout",
+  "summary": {
+    "total": 72,
+    "candidate_passes": 30,
+    "baseline_passes": 28,
+    "executed_plans": 38,
+    "execution_failures": 0,
+    "release_eligible": false
+  },
+  "observations": [
+    {
+      "skill_id": "data-analysis",
+      "session_id": "efcbf301-690f-4707-af39-14e81cf3ce9f",
+      "variant": "baseline",
+      "repetition": 0,
+      "input_digest": "228162fe33c7e12e3c856f2c28b1e145efeaf0df9d34b32cad00e08addb45307",
+      "blocking_failures": [],
+      "execution": {
+        "passed": true,
+        "metrics": {
+          "executed_nodes": 1,
+          "checked_outputs": 1,
+          "rows": 3,
+          "execution_failures": 0
+        },
+        "blocking_failures": []
+      }
+    },
+    {
+      "skill_id": "data-analysis",
+      "session_id": "455ec004-bef6-44e7-9f65-7120bf5e2fb4",
+      "variant": "candidate",
+      "repetition": 0,
+      "input_digest": "228162fe33c7e12e3c856f2c28b1e145efeaf0df9d34b32cad00e08addb45307",
+      "blocking_failures": [],
+      "execution": {
+        "passed": true,
+        "metrics": {
+          "executed_nodes": 1,
+          "checked_outputs": 1,
+          "rows": 3,
+          "execution_failures": 0
+        },
+        "blocking_failures": []
+      }
+    },
+    {
+      "skill_id": "data-analysis",
+      "session_id": "217a00a3-f4ea-4cb7-b143-6cd1e04bbe01",
+      "variant": "baseline",
+      "repetition": 1,
+      "input_digest": "228162fe33c7e12e3c856f2c28b1e145efeaf0df9d34b32cad00e08addb45307",
+      "blocking_failures": [
+        "STATISTICS_RECALL_OR_FALSE_POSITIVE"
+      ],
+      "execution": null
+    },
+    {
+      "skill_id": "data-analysis",
+      "session_id": "c3a634f7-6ef9-4e94-883e-556aa17ecbed",
+      "variant": "candidate",
+      "repetition": 1,
+      "input_digest": "228162fe33c7e12e3c856f2c28b1e145efeaf0df9d34b32cad00e08addb45307",
+      "blocking_failures": [],
+      "execution": {
+        "passed": true,
+        "metrics": {
+          "executed_nodes": 1,
+          "checked_outputs": 1,
+          "rows": 3,
+          "execution_failures": 0
+        },
+        "blocking_failures": []
+      }
+    },
+    {
+      "skill_id": "data-analysis",
+      "session_id": "b5106e4d-80e0-4cef-bb0d-bab30bda0b20",
+      "variant": "baseline",
+      "repetition": 2,
+      "input_digest": "228162fe33c7e12e3c856f2c28b1e145efeaf0df9d34b32cad00e08addb45307",
+      "blocking_failures": [],
+      "execution": {
+        "passed": true,
+        "metrics": {
+          "executed_nodes": 1,
+          "checked_outputs": 1,
+          "rows": 3,
+          "execution_failures": 0
+        },
+        "blocking_failures": []
+      }
+    },
+    {
+      "skill_id": "data-analysis",
+      "session_id": "1c28ae73-9f9e-4ef7-aa65-822b875498b5",
+      "variant": "candidate",
+      "repetition": 2,
+      "input_digest": "228162fe33c7e12e3c856f2c28b1e145efeaf0df9d34b32cad00e08addb45307",
+      "blocking_failures": [
+        "MODEL_TIMEOUT"
+      ],
+      "execution": null
+    },
+    {
+      "skill_id": "data-analysis",
+      "session_id": "ec6ce322-efe2-4133-8864-38a2c726abba",
+      "variant": "baseline",
+      "repetition": 0,
+      "input_digest": "7dc740d3b4019a167d0ca6cb3013b41a9930e55b33ba83d748058faee3b8601d",
+      "blocking_failures": [],
+      "execution": {
+        "passed": true,
+        "metrics": {
+          "executed_nodes": 1,
+          "checked_outputs": 1,
+          "rows": 5,
+          "execution_failures": 0
+        },
+        "blocking_failures": []
+      }
+    },
+    {
+      "skill_id": "data-analysis",
+      "session_id": "b6dbb4e9-4d3c-44e7-9cec-77fb82a7006d",
+      "variant": "candidate",
+      "repetition": 0,
+      "input_digest": "7dc740d3b4019a167d0ca6cb3013b41a9930e55b33ba83d748058faee3b8601d",
+      "blocking_failures": [],
+      "execution": {
+        "passed": true,
+        "metrics": {
+          "executed_nodes": 1,
+          "checked_outputs": 1,
+          "rows": 5,
+          "execution_failures": 0
+        },
+        "blocking_failures": []
+      }
+    },
+    {
+      "skill_id": "data-analysis",
+      "session_id": "f25acca5-9dff-4699-b29b-50bb0d61ebd9",
+      "variant": "baseline",
+      "repetition": 1,
+      "input_digest": "7dc740d3b4019a167d0ca6cb3013b41a9930e55b33ba83d748058faee3b8601d",
+      "blocking_failures": [],
+      "execution": {
+        "passed": true,
+        "metrics": {
+          "executed_nodes": 1,
+          "checked_outputs": 1,
+          "rows": 5,
+          "execution_failures": 0
+        },
+        "blocking_failures": []
+      }
+    },
+    {
+      "skill_id": "data-analysis",
+      "session_id": "77be0281-32df-49f7-bb68-660a04d04a2c",
+      "variant": "candidate",
+      "repetition": 1,
+      "input_digest": "7dc740d3b4019a167d0ca6cb3013b41a9930e55b33ba83d748058faee3b8601d",
+      "blocking_failures": [],
+      "execution": {
+        "passed": true,
+        "metrics": {
+          "executed_nodes": 1,
+          "checked_outputs": 1,
+          "rows": 5,
+          "execution_failures": 0
+        },
+        "blocking_failures": []
+      }
+    },
+    {
+      "skill_id": "data-analysis",
+      "session_id": "c9e14639-d31b-4407-b9a7-0f54d2fd0067",
+      "variant": "baseline",
+      "repetition": 2,
+      "input_digest": "7dc740d3b4019a167d0ca6cb3013b41a9930e55b33ba83d748058faee3b8601d",
+      "blocking_failures": [],
+      "execution": {
+        "passed": true,
+        "metrics": {
+          "executed_nodes": 1,
+          "checked_outputs": 1,
+          "rows": 5,
+          "execution_failures": 0
+        },
+        "blocking_failures": []
+      }
+    },
+    {
+      "skill_id": "data-analysis",
+      "session_id": "5eec07be-0fb9-4b9e-83b6-9e927c52a9bb",
+      "variant": "candidate",
+      "repetition": 2,
+      "input_digest": "7dc740d3b4019a167d0ca6cb3013b41a9930e55b33ba83d748058faee3b8601d",
+      "blocking_failures": [],
+      "execution": {
+        "passed": true,
+        "metrics": {
+          "executed_nodes": 1,
+          "checked_outputs": 1,
+          "rows": 5,
+          "execution_failures": 0
+        },
+        "blocking_failures": []
+      }
+    },
+    {
+      "skill_id": "data-analysis",
+      "session_id": "758a9454-a4ec-4cfc-88ab-20b99ed816d8",
+      "variant": "baseline",
+      "repetition": 0,
+      "input_digest": "6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756",
+      "blocking_failures": [],
+      "execution": null
+    },
+    {
+      "skill_id": "data-analysis",
+      "session_id": "01f8c1e9-0c11-4438-a9b0-38101c9a57bf",
+      "variant": "candidate",
+      "repetition": 0,
+      "input_digest": "6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756",
+      "blocking_failures": [],
+      "execution": null
+    },
+    {
+      "skill_id": "data-analysis",
+      "session_id": "ca230031-14d0-4405-bab5-6f61397956ea",
+      "variant": "baseline",
+      "repetition": 1,
+      "input_digest": "6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756",
+      "blocking_failures": [],
+      "execution": null
+    },
+    {
+      "skill_id": "data-analysis",
+      "session_id": "fcba4183-e353-4aaf-8527-4c11c09f240e",
+      "variant": "candidate",
+      "repetition": 1,
+      "input_digest": "6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756",
+      "blocking_failures": [],
+      "execution": null
+    },
+    {
+      "skill_id": "data-analysis",
+      "session_id": "6953529d-738a-4490-88a0-652a4c20b749",
+      "variant": "baseline",
+      "repetition": 2,
+      "input_digest": "6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756",
+      "blocking_failures": [
+        "INVALID_RESULT"
+      ],
+      "execution": null
+    },
+    {
+      "skill_id": "data-analysis",
+      "session_id": "90c34a93-dc48-4b2a-9701-9dac54b4194d",
+      "variant": "candidate",
+      "repetition": 2,
+      "input_digest": "6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756",
+      "blocking_failures": [
+        "NO_RESULT"
+      ],
+      "execution": null
+    },
+    {
+      "skill_id": "data-cleaning",
+      "session_id": "60ef22d4-ae80-4797-81d1-53e7ddbec679",
+      "variant": "baseline",
+      "repetition": 0,
+      "input_digest": "23bd0eb51736d56a9d9875191affee10a1433f82ddeb4aaaf50947be479b4e73",
+      "blocking_failures": [],
+      "execution": {
+        "passed": true,
+        "metrics": {
+          "executed_nodes": 1,
+          "checked_outputs": 1,
+          "rows": 3,
+          "execution_failures": 0
+        },
+        "blocking_failures": []
+      }
+    },
+    {
+      "skill_id": "data-cleaning",
+      "session_id": "0f3faa39-182d-483b-8a51-e162bcb0fb56",
+      "variant": "candidate",
+      "repetition": 0,
+      "input_digest": "23bd0eb51736d56a9d9875191affee10a1433f82ddeb4aaaf50947be479b4e73",
+      "blocking_failures": [
+        "INVALID_RESULT"
+      ],
+      "execution": null
+    },
+    {
+      "skill_id": "data-cleaning",
+      "session_id": "24f62fd4-873a-485a-b8f3-9c70f7d345b7",
+      "variant": "baseline",
+      "repetition": 1,
+      "input_digest": "23bd0eb51736d56a9d9875191affee10a1433f82ddeb4aaaf50947be479b4e73",
+      "blocking_failures": [],
+      "execution": {
+        "passed": true,
+        "metrics": {
+          "executed_nodes": 1,
+          "checked_outputs": 1,
+          "rows": 3,
+          "execution_failures": 0
+        },
+        "blocking_failures": []
+      }
+    },
+    {
+      "skill_id": "data-cleaning",
+      "session_id": "0c73b1be-279c-49d8-a236-02306463c0cc",
+      "variant": "candidate",
+      "repetition": 1,
+      "input_digest": "23bd0eb51736d56a9d9875191affee10a1433f82ddeb4aaaf50947be479b4e73",
+      "blocking_failures": [],
+      "execution": {
+        "passed": true,
+        "metrics": {
+          "executed_nodes": 1,
+          "checked_outputs": 1,
+          "rows": 3,
+          "execution_failures": 0
+        },
+        "blocking_failures": []
+      }
+    },
+    {
+      "skill_id": "data-cleaning",
+      "session_id": "967e81fa-3fed-4dbe-9844-8ae4dbe925ef",
+      "variant": "baseline",
+      "repetition": 2,
+      "input_digest": "23bd0eb51736d56a9d9875191affee10a1433f82ddeb4aaaf50947be479b4e73",
+      "blocking_failures": [
+        "INVALID_RESULT"
+      ],
+      "execution": null
+    },
+    {
+      "skill_id": "data-cleaning",
+      "session_id": "6c00cdb0-facd-4ee7-8efc-612a6e01bc1f",
+      "variant": "candidate",
+      "repetition": 2,
+      "input_digest": "23bd0eb51736d56a9d9875191affee10a1433f82ddeb4aaaf50947be479b4e73",
+      "blocking_failures": [],
+      "execution": {
+        "passed": true,
+        "metrics": {
+          "executed_nodes": 1,
+          "checked_outputs": 1,
+          "rows": 3,
+          "execution_failures": 0
+        },
+        "blocking_failures": []
+      }
+    },
+    {
+      "skill_id": "data-cleaning",
+      "session_id": "1b553dff-8176-431e-8878-3c3178922bd0",
+      "variant": "baseline",
+      "repetition": 0,
+      "input_digest": "8513d19da0835ece7849e0f5f9c12f7e994a5bf5fe1700fa841c28fe4b7d905e",
+      "blocking_failures": [],
+      "execution": {
+        "passed": true,
+        "metrics": {
+          "executed_nodes": 1,
+          "checked_outputs": 1,
+          "rows": 5,
+          "execution_failures": 0
+        },
+        "blocking_failures": []
+      }
+    },
+    {
+      "skill_id": "data-cleaning",
+      "session_id": "830ffa2f-e49e-46ce-9923-394a35bff141",
+      "variant": "candidate",
+      "repetition": 0,
+      "input_digest": "8513d19da0835ece7849e0f5f9c12f7e994a5bf5fe1700fa841c28fe4b7d905e",
+      "blocking_failures": [
+        "INVALID_RESULT"
+      ],
+      "execution": null
+    },
+    {
+      "skill_id": "data-cleaning",
+      "session_id": "562ca0e2-e167-47f9-818b-e9f3462c7bec",
+      "variant": "baseline",
+      "repetition": 1,
+      "input_digest": "8513d19da0835ece7849e0f5f9c12f7e994a5bf5fe1700fa841c28fe4b7d905e",
+      "blocking_failures": [],
+      "execution": {
+        "passed": true,
+        "metrics": {
+          "executed_nodes": 1,
+          "checked_outputs": 1,
+          "rows": 5,
+          "execution_failures": 0
+        },
+        "blocking_failures": []
+      }
+    },
+    {
+      "skill_id": "data-cleaning",
+      "session_id": "137e59bd-f027-4145-b159-7c0be542149f",
+      "variant": "candidate",
+      "repetition": 1,
+      "input_digest": "8513d19da0835ece7849e0f5f9c12f7e994a5bf5fe1700fa841c28fe4b7d905e",
+      "blocking_failures": [],
+      "execution": {
+        "passed": true,
+        "metrics": {
+          "executed_nodes": 2,
+          "checked_outputs": 2,
+          "rows": 5,
+          "execution_failures": 0
+        },
+        "blocking_failures": []
+      }
+    },
+    {
+      "skill_id": "data-cleaning",
+      "session_id": "ccca4b1e-cb6f-49f5-814f-29690850c628",
+      "variant": "baseline",
+      "repetition": 2,
+      "input_digest": "8513d19da0835ece7849e0f5f9c12f7e994a5bf5fe1700fa841c28fe4b7d905e",
+      "blocking_failures": [],
+      "execution": {
+        "passed": true,
+        "metrics": {
+          "executed_nodes": 1,
+          "checked_outputs": 1,
+          "rows": 5,
+          "execution_failures": 0
+        },
+        "blocking_failures": []
+      }
+    },
+    {
+      "skill_id": "data-cleaning",
+      "session_id": "06fcf211-ae13-45a6-a539-13d1e1ae774d",
+      "variant": "candidate",
+      "repetition": 2,
+      "input_digest": "8513d19da0835ece7849e0f5f9c12f7e994a5bf5fe1700fa841c28fe4b7d905e",
+      "blocking_failures": [],
+      "execution": {
+        "passed": true,
+        "metrics": {
+          "executed_nodes": 1,
+          "checked_outputs": 1,
+          "rows": 5,
+          "execution_failures": 0
+        },
+        "blocking_failures": []
+      }
+    },
+    {
+      "skill_id": "data-cleaning",
+      "session_id": "3c9a6fc6-0046-400c-b47e-e938266c515f",
+      "variant": "baseline",
+      "repetition": 0,
+      "input_digest": "6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756",
+      "blocking_failures": [],
+      "execution": null
+    },
+    {
+      "skill_id": "data-cleaning",
+      "session_id": "eaa1e15c-5246-4540-aec6-ccc76a848801",
+      "variant": "candidate",
+      "repetition": 0,
+      "input_digest": "6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756",
+      "blocking_failures": [],
+      "execution": null
+    },
+    {
+      "skill_id": "data-cleaning",
+      "session_id": "a46b6eb0-fad9-4657-adcf-eabd7bfe955e",
+      "variant": "baseline",
+      "repetition": 1,
+      "input_digest": "6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756",
+      "blocking_failures": [],
+      "execution": null
+    },
+    {
+      "skill_id": "data-cleaning",
+      "session_id": "1fc47b1c-fe5b-4257-8023-892a186500c1",
+      "variant": "candidate",
+      "repetition": 1,
+      "input_digest": "6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756",
+      "blocking_failures": [],
+      "execution": null
+    },
+    {
+      "skill_id": "data-cleaning",
+      "session_id": "a91d6b86-1bbc-4252-bb13-fc6ae91c016b",
+      "variant": "baseline",
+      "repetition": 2,
+      "input_digest": "6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756",
+      "blocking_failures": [],
+      "execution": null
+    },
+    {
+      "skill_id": "data-cleaning",
+      "session_id": "a102fb7f-639d-4273-bc8e-fcf0ad87485a",
+      "variant": "candidate",
+      "repetition": 2,
+      "input_digest": "6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756",
+      "blocking_failures": [],
+      "execution": null
+    },
+    {
+      "skill_id": "feature-engineering",
+      "session_id": "c9ed3115-cac0-4711-b065-0c579ace3f82",
+      "variant": "baseline",
+      "repetition": 0,
+      "input_digest": "0b29bd9c1e20fef0f9bb2d54e68da962473e9371bb81ff827c349cdcca951426",
+      "blocking_failures": [
+        "NO_RESULT"
+      ],
+      "execution": null
+    },
+    {
+      "skill_id": "feature-engineering",
+      "session_id": "2e39bfe5-a032-464a-a32e-641d2a36b17c",
+      "variant": "candidate",
+      "repetition": 0,
+      "input_digest": "0b29bd9c1e20fef0f9bb2d54e68da962473e9371bb81ff827c349cdcca951426",
+      "blocking_failures": [],
+      "execution": {
+        "passed": true,
+        "metrics": {
+          "executed_nodes": 1,
+          "checked_outputs": 1,
+          "rows": 3,
+          "execution_failures": 0
+        },
+        "blocking_failures": []
+      }
+    },
+    {
+      "skill_id": "feature-engineering",
+      "session_id": "3e7b3b70-796e-43cc-ba10-3692718fa548",
+      "variant": "baseline",
+      "repetition": 1,
+      "input_digest": "0b29bd9c1e20fef0f9bb2d54e68da962473e9371bb81ff827c349cdcca951426",
+      "blocking_failures": [],
+      "execution": {
+        "passed": true,
+        "metrics": {
+          "executed_nodes": 1,
+          "checked_outputs": 1,
+          "rows": 3,
+          "execution_failures": 0
+        },
+        "blocking_failures": []
+      }
+    },
+    {
+      "skill_id": "feature-engineering",
+      "session_id": "df3dfbfe-d0b0-4da1-a363-e46b40fb975b",
+      "variant": "candidate",
+      "repetition": 1,
+      "input_digest": "0b29bd9c1e20fef0f9bb2d54e68da962473e9371bb81ff827c349cdcca951426",
+      "blocking_failures": [],
+      "execution": {
+        "passed": true,
+        "metrics": {
+          "executed_nodes": 1,
+          "checked_outputs": 1,
+          "rows": 3,
+          "execution_failures": 0
+        },
+        "blocking_failures": []
+      }
+    },
+    {
+      "skill_id": "feature-engineering",
+      "session_id": "2a6ab349-de08-496f-8ab3-4963b6484cf7",
+      "variant": "baseline",
+      "repetition": 2,
+      "input_digest": "0b29bd9c1e20fef0f9bb2d54e68da962473e9371bb81ff827c349cdcca951426",
+      "blocking_failures": [],
+      "execution": {
+        "passed": true,
+        "metrics": {
+          "executed_nodes": 1,
+          "checked_outputs": 1,
+          "rows": 3,
+          "execution_failures": 0
+        },
+        "blocking_failures": []
+      }
+    },
+    {
+      "skill_id": "feature-engineering",
+      "session_id": "867fb347-1a0e-4fb6-a2da-2234214de2fe",
+      "variant": "candidate",
+      "repetition": 2,
+      "input_digest": "0b29bd9c1e20fef0f9bb2d54e68da962473e9371bb81ff827c349cdcca951426",
+      "blocking_failures": [],
+      "execution": {
+        "passed": true,
+        "metrics": {
+          "executed_nodes": 1,
+          "checked_outputs": 1,
+          "rows": 3,
+          "execution_failures": 0
+        },
+        "blocking_failures": []
+      }
+    },
+    {
+      "skill_id": "feature-engineering",
+      "session_id": "11c49927-4560-4367-8215-24dd024c7d40",
+      "variant": "baseline",
+      "repetition": 0,
+      "input_digest": "db53f8bf0946ce526e93cedcad01e52ecd90dd3060cf2f3a81b5d2e56f46b089",
+      "blocking_failures": [],
+      "execution": {
+        "passed": true,
+        "metrics": {
+          "executed_nodes": 1,
+          "checked_outputs": 1,
+          "rows": 5,
+          "execution_failures": 0
+        },
+        "blocking_failures": []
+      }
+    },
+    {
+      "skill_id": "feature-engineering",
+      "session_id": "54659158-a843-4682-aeba-94078b376130",
+      "variant": "candidate",
+      "repetition": 0,
+      "input_digest": "db53f8bf0946ce526e93cedcad01e52ecd90dd3060cf2f3a81b5d2e56f46b089",
+      "blocking_failures": [
+        "NO_RESULT"
+      ],
+      "execution": null
+    },
+    {
+      "skill_id": "feature-engineering",
+      "session_id": "eeb5bcca-eb29-447d-9145-e08095aab0d4",
+      "variant": "baseline",
+      "repetition": 1,
+      "input_digest": "db53f8bf0946ce526e93cedcad01e52ecd90dd3060cf2f3a81b5d2e56f46b089",
+      "blocking_failures": [],
+      "execution": {
+        "passed": true,
+        "metrics": {
+          "executed_nodes": 1,
+          "checked_outputs": 1,
+          "rows": 5,
+          "execution_failures": 0
+        },
+        "blocking_failures": []
+      }
+    },
+    {
+      "skill_id": "feature-engineering",
+      "session_id": "68019ad5-d017-49bf-afa6-13f558f10226",
+      "variant": "candidate",
+      "repetition": 1,
+      "input_digest": "db53f8bf0946ce526e93cedcad01e52ecd90dd3060cf2f3a81b5d2e56f46b089",
+      "blocking_failures": [],
+      "execution": {
+        "passed": true,
+        "metrics": {
+          "executed_nodes": 1,
+          "checked_outputs": 1,
+          "rows": 5,
+          "execution_failures": 0
+        },
+        "blocking_failures": []
+      }
+    },
+    {
+      "skill_id": "feature-engineering",
+      "session_id": "0a2a6e5d-bfcf-49b3-84ed-73cb948b7365",
+      "variant": "baseline",
+      "repetition": 2,
+      "input_digest": "db53f8bf0946ce526e93cedcad01e52ecd90dd3060cf2f3a81b5d2e56f46b089",
+      "blocking_failures": [
+        "NO_PROPOSAL"
+      ],
+      "execution": null
+    },
+    {
+      "skill_id": "feature-engineering",
+      "session_id": "91f27b32-29ee-44ce-a9b4-05eb89fba8c7",
+      "variant": "candidate",
+      "repetition": 2,
+      "input_digest": "db53f8bf0946ce526e93cedcad01e52ecd90dd3060cf2f3a81b5d2e56f46b089",
+      "blocking_failures": [],
+      "execution": {
+        "passed": true,
+        "metrics": {
+          "executed_nodes": 1,
+          "checked_outputs": 1,
+          "rows": 5,
+          "execution_failures": 0
+        },
+        "blocking_failures": []
+      }
+    },
+    {
+      "skill_id": "feature-engineering",
+      "session_id": "3f467d4c-1410-407b-8be6-8b2ae9f4fa76",
+      "variant": "baseline",
+      "repetition": 0,
+      "input_digest": "6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756",
+      "blocking_failures": [
+        "MODEL_TIMEOUT"
+      ],
+      "execution": null
+    },
+    {
+      "skill_id": "feature-engineering",
+      "session_id": "ade5c1af-e9c2-4a78-af67-353987962431",
+      "variant": "candidate",
+      "repetition": 0,
+      "input_digest": "6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756",
+      "blocking_failures": [],
+      "execution": null
+    },
+    {
+      "skill_id": "feature-engineering",
+      "session_id": "e7beb818-fc2b-4d13-ba42-cdaf1a5a817f",
+      "variant": "baseline",
+      "repetition": 1,
+      "input_digest": "6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756",
+      "blocking_failures": [],
+      "execution": null
+    },
+    {
+      "skill_id": "feature-engineering",
+      "session_id": "cb987dc3-4045-4584-a791-fcd620e11c77",
+      "variant": "candidate",
+      "repetition": 1,
+      "input_digest": "6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756",
+      "blocking_failures": [],
+      "execution": null
+    },
+    {
+      "skill_id": "feature-engineering",
+      "session_id": "e6f1e4f4-4352-42a9-b47c-ed5494f27ce6",
+      "variant": "baseline",
+      "repetition": 2,
+      "input_digest": "6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756",
+      "blocking_failures": [],
+      "execution": null
+    },
+    {
+      "skill_id": "feature-engineering",
+      "session_id": "91f63d93-6d86-4d30-b423-9100d60c52d1",
+      "variant": "candidate",
+      "repetition": 2,
+      "input_digest": "6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756",
+      "blocking_failures": [],
+      "execution": null
+    },
+    {
+      "skill_id": "numeric-quality-review",
+      "session_id": "97706edc-9924-4300-ae3f-3375a68f2a35",
+      "variant": "baseline",
+      "repetition": 0,
+      "input_digest": "63766ad002e2d59ab23e2aa47c328806dbc7e0d6d658715f1c56583c9ff4d3cd",
+      "blocking_failures": [
+        "STATISTICS_RECALL_OR_FALSE_POSITIVE"
+      ],
+      "execution": null
+    },
+    {
+      "skill_id": "numeric-quality-review",
+      "session_id": "57d5ff82-c93c-4e6b-b40b-5133e7b7dd0a",
+      "variant": "candidate",
+      "repetition": 0,
+      "input_digest": "63766ad002e2d59ab23e2aa47c328806dbc7e0d6d658715f1c56583c9ff4d3cd",
+      "blocking_failures": [],
+      "execution": {
+        "passed": true,
+        "metrics": {
+          "executed_nodes": 1,
+          "checked_outputs": 1,
+          "rows": 3,
+          "execution_failures": 0
+        },
+        "blocking_failures": []
+      }
+    },
+    {
+      "skill_id": "numeric-quality-review",
+      "session_id": "1fea969f-0f54-4e22-a0ea-cf6fd9b3a33a",
+      "variant": "baseline",
+      "repetition": 1,
+      "input_digest": "63766ad002e2d59ab23e2aa47c328806dbc7e0d6d658715f1c56583c9ff4d3cd",
+      "blocking_failures": [],
+      "execution": {
+        "passed": true,
+        "metrics": {
+          "executed_nodes": 1,
+          "checked_outputs": 1,
+          "rows": 3,
+          "execution_failures": 0
+        },
+        "blocking_failures": []
+      }
+    },
+    {
+      "skill_id": "numeric-quality-review",
+      "session_id": "23688e23-70fe-445c-be85-5221e7699b90",
+      "variant": "candidate",
+      "repetition": 1,
+      "input_digest": "63766ad002e2d59ab23e2aa47c328806dbc7e0d6d658715f1c56583c9ff4d3cd",
+      "blocking_failures": [],
+      "execution": {
+        "passed": true,
+        "metrics": {
+          "executed_nodes": 1,
+          "checked_outputs": 1,
+          "rows": 3,
+          "execution_failures": 0
+        },
+        "blocking_failures": []
+      }
+    },
+    {
+      "skill_id": "numeric-quality-review",
+      "session_id": "0d888a9d-7895-47ae-9963-bfbc39db96bb",
+      "variant": "baseline",
+      "repetition": 2,
+      "input_digest": "63766ad002e2d59ab23e2aa47c328806dbc7e0d6d658715f1c56583c9ff4d3cd",
+      "blocking_failures": [],
+      "execution": {
+        "passed": true,
+        "metrics": {
+          "executed_nodes": 1,
+          "checked_outputs": 1,
+          "rows": 3,
+          "execution_failures": 0
+        },
+        "blocking_failures": []
+      }
+    },
+    {
+      "skill_id": "numeric-quality-review",
+      "session_id": "0917bbb8-8f81-47bc-a5d8-11be97fbcb5a",
+      "variant": "candidate",
+      "repetition": 2,
+      "input_digest": "63766ad002e2d59ab23e2aa47c328806dbc7e0d6d658715f1c56583c9ff4d3cd",
+      "blocking_failures": [],
+      "execution": {
+        "passed": true,
+        "metrics": {
+          "executed_nodes": 1,
+          "checked_outputs": 1,
+          "rows": 3,
+          "execution_failures": 0
+        },
+        "blocking_failures": []
+      }
+    },
+    {
+      "skill_id": "numeric-quality-review",
+      "session_id": "7d38a33e-813c-4d4b-99b3-705f534a84e3",
+      "variant": "baseline",
+      "repetition": 0,
+      "input_digest": "6074ab0ba3181250cbdb0c78ef7c568735351e5fc4c80428149b4c4e4def288e",
+      "blocking_failures": [],
+      "execution": {
+        "passed": true,
+        "metrics": {
+          "executed_nodes": 1,
+          "checked_outputs": 1,
+          "rows": 5,
+          "execution_failures": 0
+        },
+        "blocking_failures": []
+      }
+    },
+    {
+      "skill_id": "numeric-quality-review",
+      "session_id": "c1ea0851-1a95-4dff-8bd8-95791163ae47",
+      "variant": "candidate",
+      "repetition": 0,
+      "input_digest": "6074ab0ba3181250cbdb0c78ef7c568735351e5fc4c80428149b4c4e4def288e",
+      "blocking_failures": [],
+      "execution": {
+        "passed": true,
+        "metrics": {
+          "executed_nodes": 1,
+          "checked_outputs": 1,
+          "rows": 5,
+          "execution_failures": 0
+        },
+        "blocking_failures": []
+      }
+    },
+    {
+      "skill_id": "numeric-quality-review",
+      "session_id": "2dedd528-fd0a-4714-b39d-279b093c73f0",
+      "variant": "baseline",
+      "repetition": 1,
+      "input_digest": "6074ab0ba3181250cbdb0c78ef7c568735351e5fc4c80428149b4c4e4def288e",
+      "blocking_failures": [],
+      "execution": {
+        "passed": true,
+        "metrics": {
+          "executed_nodes": 1,
+          "checked_outputs": 1,
+          "rows": 5,
+          "execution_failures": 0
+        },
+        "blocking_failures": []
+      }
+    },
+    {
+      "skill_id": "numeric-quality-review",
+      "session_id": "f602d4e8-2912-491c-b6c3-658074e18591",
+      "variant": "candidate",
+      "repetition": 1,
+      "input_digest": "6074ab0ba3181250cbdb0c78ef7c568735351e5fc4c80428149b4c4e4def288e",
+      "blocking_failures": [],
+      "execution": {
+        "passed": true,
+        "metrics": {
+          "executed_nodes": 1,
+          "checked_outputs": 1,
+          "rows": 5,
+          "execution_failures": 0
+        },
+        "blocking_failures": []
+      }
+    },
+    {
+      "skill_id": "numeric-quality-review",
+      "session_id": "c76a504e-82b6-49ee-b86b-b43285baf80f",
+      "variant": "baseline",
+      "repetition": 2,
+      "input_digest": "6074ab0ba3181250cbdb0c78ef7c568735351e5fc4c80428149b4c4e4def288e",
+      "blocking_failures": [
+        "NO_RESULT"
+      ],
+      "execution": null
+    },
+    {
+      "skill_id": "numeric-quality-review",
+      "session_id": "1ab41fce-577a-4e04-a3e1-788d5896c9b0",
+      "variant": "candidate",
+      "repetition": 2,
+      "input_digest": "6074ab0ba3181250cbdb0c78ef7c568735351e5fc4c80428149b4c4e4def288e",
+      "blocking_failures": [],
+      "execution": {
+        "passed": true,
+        "metrics": {
+          "executed_nodes": 1,
+          "checked_outputs": 1,
+          "rows": 5,
+          "execution_failures": 0
+        },
+        "blocking_failures": []
+      }
+    },
+    {
+      "skill_id": "numeric-quality-review",
+      "session_id": "3573bedb-3686-4d73-8e39-6c31b58402d1",
+      "variant": "baseline",
+      "repetition": 0,
+      "input_digest": "6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756",
+      "blocking_failures": [],
+      "execution": null
+    },
+    {
+      "skill_id": "numeric-quality-review",
+      "session_id": "51f516ee-7d5f-48fa-a2e9-e3fa71cdc89c",
+      "variant": "candidate",
+      "repetition": 0,
+      "input_digest": "6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756",
+      "blocking_failures": [
+        "NO_RESULT"
+      ],
+      "execution": null
+    },
+    {
+      "skill_id": "numeric-quality-review",
+      "session_id": "eeb7cea4-c2d8-4b77-869d-9a535c0a0119",
+      "variant": "baseline",
+      "repetition": 1,
+      "input_digest": "6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756",
+      "blocking_failures": [],
+      "execution": null
+    },
+    {
+      "skill_id": "numeric-quality-review",
+      "session_id": "aae26a73-1ae6-4a51-821e-b30b30e52b7e",
+      "variant": "candidate",
+      "repetition": 1,
+      "input_digest": "6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756",
+      "blocking_failures": [],
+      "execution": null
+    },
+    {
+      "skill_id": "numeric-quality-review",
+      "session_id": "57d1fb7e-181e-404d-8772-9ce407107104",
+      "variant": "baseline",
+      "repetition": 2,
+      "input_digest": "6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756",
+      "blocking_failures": [],
+      "execution": null
+    },
+    {
+      "skill_id": "numeric-quality-review",
+      "session_id": "d885b72c-c5f7-41b2-ad3c-012ab7c46f1a",
+      "variant": "candidate",
+      "repetition": 2,
+      "input_digest": "6acc89196c644d610339c4c4502c8422d8c0a1621c1a2cb68b907678c85ba756",
+      "blocking_failures": [],
+      "execution": null
+    }
+  ]
+}

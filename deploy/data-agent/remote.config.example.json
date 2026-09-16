@@ -1,0 +1,23 @@
+{
+  "endpoint": "https://REPLACE_WITH_INTERNAL_WORKER_GATEWAY",
+  "root": "/srv/data-agent/supervisor",
+  "image": "REPLACE_WITH_IMMUTABLE_SHA256_IMAGE_ID",
+  "instance_id": "worker-1",
+  "docker": "/usr/bin/docker",
+  "docker_home": "/srv/data-agent/docker-home",
+  "credential_env": "DATA_AGENT_WORKER_TOKEN",
+  "http_timeout_seconds": 10,
+  "docker_timeout_seconds": 30,
+  "heartbeat_seconds": 5,
+  "poll_seconds": 2,
+  "execution_seconds": 600,
+  "input_bytes": 1073741824,
+  "output_bytes": 1073741824,
+  "temporary_bytes": 536870912,
+  "manifest_bytes": 1048576,
+  "memory_bytes": 4294967296,
+  "pids": 128,
+  "cpus": 2,
+  "polars_threads": 2,
+  "max_columns": 100
+}

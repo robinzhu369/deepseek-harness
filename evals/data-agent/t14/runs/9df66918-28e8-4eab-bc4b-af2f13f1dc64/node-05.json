@@ -1,0 +1,76 @@
+{
+  "samples": [
+    {
+      "elapsed_seconds": 0.6938292500562966,
+      "memory.peak": "2100912128\n",
+      "memory.current": "2100912128\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 1306634\nuser_usec 897609\nsystem_usec 409024\nnice_usec 0\nnr_periods 5\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 0
+    },
+    {
+      "elapsed_seconds": 1.2597470830660313,
+      "memory.peak": "2797051904\n",
+      "memory.current": "2782195712\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 2037305\nuser_usec 1529496\nsystem_usec 507808\nnice_usec 0\nnr_periods 11\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 28315648
+    },
+    {
+      "elapsed_seconds": 1.8246067910222337,
+      "memory.peak": "2816450560\n",
+      "memory.current": "2485436416\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 2662409\nuser_usec 2108749\nsystem_usec 553660\nnice_usec 0\nnr_periods 17\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 65130496
+    },
+    {
+      "elapsed_seconds": 2.3928817909909412,
+      "memory.peak": "2816450560\n",
+      "memory.current": "2679123968\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 3327884\nuser_usec 2713660\nsystem_usec 614223\nnice_usec 0\nnr_periods 22\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 100618240
+    },
+    {
+      "elapsed_seconds": 3.641329040983692,
+      "memory.peak": "2816450560\n",
+      "memory.current": "648097792\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 3989372\nuser_usec 3175069\nsystem_usec 814302\nnice_usec 0\nnr_periods 35\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 126590976
+    }
+  ],
+  "container": "data-agent-447f253cfe81451992ad22c0f7ad0253",
+  "operator": "split",
+  "node_id": "split",
+  "compute_seconds": 2.7579664579825476,
+  "docker_state": {
+    "Status": "running",
+    "Running": true,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 45166,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-09-16T05:19:18.800582589Z",
+    "FinishedAt": "0001-01-01T00:00:00Z"
+  },
+  "result": {
+    "run_id": "e9e67b8c-f41a-474b-8d2d-58c7a848e07d",
+    "job_id": "2185b229-f72a-4711-8930-57a0930c7c2b",
+    "manifest_digest": "fa4e027a14c4646d051adc59766793e33715d1f05bf1de06e65a62a2de39a805",
+    "status": "published"
+  },
+  "wall_seconds": 4.163732832996175,
+  "memory_peak_bytes": 2816450560,
+  "observed_tmp_peak_bytes": 0,
+  "observed_output_peak_bytes": 126590976
+}

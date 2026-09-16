@@ -1,0 +1,62 @@
+
+> @deepseek-ai/dsh-data-agent@0.1.0 test
+> node --import tsx/esm --test tests/*.test.ts
+
+✔ symbolic split/fit outputs compile before artifacts exist (18.373583ms)
+✔ layout and JSON key order do not change computation identity (2.292416ms)
+✔ parameter edits invalidate descendants, not ancestors (0.25975ms)
+✔ reject cross-project data, dangling ports, arbitrary operators, cycles and non-train fitting (0.750292ms)
+✔ reject fitting transformed test ancestry (0.440958ms)
+✔ business column names can be Chinese without becoming executable expressions (0.549375ms)
+✔ quality oracle permits true supplementary statistics but rejects fabricated evidence (2.4755ms)
+✔ quality oracle blocks protected-field changes, omitted approval and malformed status (0.656708ms)
+✔ synthetic suites are never business release evidence (0.103708ms)
+✔ quality oracle accepts an additional read-only check after a valid change (4.473041ms)
+✔ v010: recorded model proposals retain strict failures while valid supplementary row counts pass (58.2815ms)
+✔ real: recorded model proposals retain strict failures while valid supplementary row counts pass (48.223292ms)
+✔ migrations reapply without destroying business data (99.538667ms)
+✔ server rejects viewer writes and cross-project snapshots (76.701375ms)
+✔ optimistic revision conflicts and stale approvals are rejected (60.616333ms)
+✔ concurrent submit returns a single run, and changed request conflicts (65.551916ms)
+✔ concurrent acquire claims only the ready node and downstream binds published ports (108.826875ms)
+✔ lost commit response replays exact receipt; different manifest conflicts (76.743958ms)
+✔ expired workers cannot heartbeat or publish after recovery (79.109708ms)
+✔ candidate releases worker, is not retried, and cannot publish after cancellation (78.278375ms)
+✔ candidate approval is idempotent and requires unchanged intent (80.317625ms)
+✔ cancel remains requested until executor confirms exit, and blocks result (78.788708ms)
+✔ real Python process computes DAG outputs and publishes verified bytes (549.210083ms)
+✔ database publication failure leaves no formal outputs and retry can commit (77.020542ms)
+✔ old candidate approval after workflow edit is rejected (69.670416ms)
+✔ progress is monotonic and every snapshot cursor covers committed state (72.226084ms)
+✔ node failure prevents new dependent work without deleting upstream output (76.836041ms)
+✔ configured heavy-job budget queues a second ready run (69.892125ms)
+✔ internal HTTP binds worker identity, attempt credentials and persisted receipt replay (121.954375ms)
+✔ actual Python deletion produces quarantined row references and waits for impact approval (362.534125ms)
+✔ dsh profile mounts authenticated Worker routes and awaits SIGTERM cleanup (527.109291ms)
+✔ dsh refuses a newer database schema and exits without leaking its credential (323.309792ms)
+✔ remote Worker transfers objects over HTTP and publishes a Docker-computed report (743.064333ms)
+✔ remote cancellation waits for the actual compute container to stop (601.490042ms)
+✔ data center resumes multipart upload and creates immutable Docker import versions (1581.947667ms)
+✔ Skill lifecycle gates release and preserves locked snapshots across edits, rollback and retirement (174.100333ms)
+✔ Worker restart stops an orphan container before acknowledging an expired cancellation (574.180208ms)
+✔ real dsh session binds identity, executes scoped tools and restores locked Skill snapshots (1110.286791ms)
+✔ unified proposals persist evidence, require human decisions and submit idempotently (88.36ms)
+✔ proposal validation rolls back draft changes and unresolved prerequisites block approval (59.344833ms)
+✔ concurrent proposal writers share the canvas optimistic revision lock (51.567375ms)
+✔ candidate review exposes actual impact and rejection never publishes or schedules descendants (85.763417ms)
+✔ candidate publication rechecks object integrity after review waiting (83.612291ms)
+✔ proposal evidence refuses foreign identities and sample-to-full relabelling (58.178417ms)
+✔ proposal business validation blocks protected fields before draft creation (52.306084ms)
+✔ validates immutable data-analysis package and capability narrowing (15.379791ms)
+✔ validates immutable data-cleaning package and capability narrowing (3.813667ms)
+✔ validates immutable feature-engineering package and capability narrowing (1.455292ms)
+✔ validates immutable numeric-quality-review package and capability narrowing (1.975333ms)
+✔ rejects fabricated executed artifacts and wrong result status (1.170083ms)
+ℹ tests 50
+ℹ suites 0
+ℹ pass 50
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8530.672583

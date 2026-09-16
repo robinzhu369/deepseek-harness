@@ -1,0 +1,30 @@
+{
+  "data-analysis": {
+    "status": "passed",
+    "sessions": 18,
+    "executed_plans": 12,
+    "failed_plans": 0,
+    "release_eligible": false
+  },
+  "data-cleaning": {
+    "status": "passed",
+    "sessions": 18,
+    "executed_plans": 12,
+    "failed_plans": 0,
+    "release_eligible": false
+  },
+  "feature-engineering": {
+    "status": "passed",
+    "sessions": 18,
+    "executed_plans": 12,
+    "failed_plans": 0,
+    "release_eligible": false
+  },
+  "numeric-quality-review": {
+    "status": "passed",
+    "sessions": 18,
+    "executed_plans": 12,
+    "failed_plans": 0,
+    "release_eligible": false
+  }
+}

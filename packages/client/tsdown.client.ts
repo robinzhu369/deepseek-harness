@@ -15,6 +15,7 @@ import { basename, dirname, isAbsolute, relative, resolve as resolvePath, sep } 
 import { fileURLToPath } from 'node:url'
 import type { UserConfig } from 'tsdown'
 import { transform } from 'lightningcss'
+import { createRequire } from 'node:module'
 import { optionalStringArray } from './modules/src/client/manifest.ts'
 import { PLATFORM_MODULES, PRELOADED_CLIENT_EXTERNALS } from './web/src/platform.ts'
 import { clientBuildEnvironmentDefines } from '../../scripts/client-build-environment.ts'
@@ -616,6 +617,7 @@ const SOURCEMAP_COMMENT = /\n\/\/# sourceMappingURL=.*\s*$/
 
 /** Resolve an emitted JS asset import against its source-tree counterpart. */
 function sourceAssetPath(source: string, importer: string): string {
+  if (!source.startsWith('.') && !source.startsWith('/')) return createRequire(importer).resolve(source)
   const emitted = resolvePath(dirname(importer), source)
   if (existsSync(emitted)) return emitted
   const boundary = emitted.indexOf(TYPES_MARKER)

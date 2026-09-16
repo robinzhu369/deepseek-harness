@@ -1,0 +1,18 @@
+{
+  "baseline_runs": [
+    "215c65ab-d477-4f7a-a037-3d6623b68c6f",
+    "9df66918-28e8-4eab-bc4b-af2f13f1dc64"
+  ],
+  "wide_runs": [
+    "aef714c9-22b9-416c-9807-3c3df740adb8",
+    "e8e90dcb-71a0-410a-8dff-563a4471d234"
+  ],
+  "long_cardinality_runs": [
+    "db166982-54e9-4f04-a6ea-940a2dc86ff4"
+  ],
+  "preflight_runs": [
+    "27dcbec2-8ac9-4a08-a87b-9f4083227cb2"
+  ],
+  "target_environment_acceptance": false,
+  "release_ready": false
+}

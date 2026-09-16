@@ -1,6 +1,7 @@
 /** Platform-neutral assembly of generated Host Remote contributions. */
 
 import type { Context } from '@deepseek-ai/cordis'
+import dataAgentRemote from '@deepseek-ai/dsh-api-data-agent-controller/remote'
 import agentPresetsRemote from '@deepseek-ai/dsh-agent-presets/remote'
 import commandsRemote from '@deepseek-ai/dsh-commands/remote'
 import settingsControllerRemote from '@deepseek-ai/dsh-api-settings-controller/remote'
@@ -18,6 +19,7 @@ import workspaceRemote from '@deepseek-ai/dsh-api-workspace-controller/remote'
 import workspaceFilesRemote from '@deepseek-ai/dsh-api-workspace-files/remote'
 import type { ClientRemote } from '@deepseek-ai/dsh-api-gateway/client'
 
+export type {} from '@deepseek-ai/dsh-api-data-agent-controller/remote'
 export type { ClientRemote } from '@deepseek-ai/dsh-api-gateway/client'
 export type { PluginInventorySnapshot } from '@deepseek-ai/dsh-host-plugin-inventory/types'
 export type {} from '@deepseek-ai/dsh-agent-presets/remote'
@@ -151,6 +153,7 @@ export async function apply(ctx: Context): Promise<() => Promise<void>> {
   const disposers: Array<() => Promise<void>> = []
   try {
     for (const contribution of [
+      dataAgentRemote,
       agentPresetsRemote, commandsRemote, settingsControllerRemote, goalsRemote, llmRemote, dynamicRemote,
       pluginInventoryRemote, messageFeedbackRemote, sessionFeedbackRemote, fileUploadsRemote, sessionReferencesRemote,
       subagentsRemote, sessionRemote, workspaceRemote, workspaceFilesRemote,

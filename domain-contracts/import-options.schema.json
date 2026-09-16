@@ -1,0 +1,151 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "anyOf": [
+    {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string",
+          "const": "parquet"
+        }
+      },
+      "required": [
+        "format"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string",
+          "const": "csv"
+        },
+        "encoding": {
+          "type": "string",
+          "enum": [
+            "utf-8",
+            "utf-8-sig",
+            "gb18030",
+            "utf-16",
+            "utf-16-le",
+            "utf-16-be"
+          ]
+        },
+        "delimiter": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1
+        },
+        "has_header": {
+          "type": "boolean"
+        },
+        "columns": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
+        },
+        "null_values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "bad_rows": {
+          "type": "string",
+          "enum": [
+            "error",
+            "quarantine"
+          ]
+        },
+        "types": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "string",
+                  "int64",
+                  "float64",
+                  "date",
+                  "boolean"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "decimal"
+                  },
+                  "precision": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 28
+                  },
+                  "scale": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 28
+                  },
+                  "rounding": {
+                    "type": "string",
+                    "enum": [
+                      "half_even",
+                      "half_up",
+                      "down"
+                    ]
+                  }
+                },
+                "required": [
+                  "type",
+                  "precision",
+                  "scale",
+                  "rounding"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "datetime"
+                  },
+                  "format": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "timezone": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "type",
+                  "format",
+                  "timezone"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
+        }
+      },
+      "required": [
+        "format"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

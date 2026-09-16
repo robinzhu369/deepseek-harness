@@ -1,0 +1,15 @@
+{
+  "id": "feature-engineering",
+  "version": "0.1.1",
+  "description": "特征工程",
+  "input_schema": "contracts/input.schema.json",
+  "output_schema": "contracts/output.schema.json",
+  "required_tools": [
+    "inspect_dataset",
+    "propose_workflow_patch"
+  ],
+  "operator_dependencies": {
+    "inspect": "1"
+  },
+  "evaluation_suite": "feature-engineering-core-v1"
+}

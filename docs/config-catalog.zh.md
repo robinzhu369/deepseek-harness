@@ -185,6 +185,31 @@ export interface Config {
 
 来源：[`packages/core/agent-tool-presentation/src/index.ts:38`](../packages/core/agent-tool-presentation/src/index.ts)
 
+<a id="deepseek-aidsh-api-data-agent-controller"></a>
+
+## `@deepseek-ai/dsh-api-data-agent-controller`
+
+需要： `typert` · `connection`
+
+```ts config-catalog
+interface Config {
+  /** Milliseconds between completed workbench snapshot reads. */
+  pollIntervalMs: number
+  /** Maximum file size the workbench buffers to hash an upload. */
+  maxUploadBytes: number
+  /** Exact loopback origin of the domain listener. */
+  endpoint: string
+  /** Maximum lifetime of one forwarded request in milliseconds. */
+  timeoutMs: number
+  /** Maximum bytes of a JSON command body. */
+  maxBodyBytes: number
+  /** Maximum bytes of a JSON response. */
+  maxResultBytes: number
+}
+```
+
+来源： [`packages/api/data-agent-controller/src/index.ts:7`](../packages/api/data-agent-controller/src/index.ts)
+
 <a id="deepseek-aidsh-api-gateway"></a>
 
 ## `@deepseek-ai/dsh-api-gateway`
@@ -3461,6 +3486,7 @@ export interface Config {
 - `@deepseek-ai/dsh-client-ui-commands`（[`packages/client/ui-commands/src/index.ts`](../packages/client/ui-commands/src/index.ts)）
 - `@deepseek-ai/dsh-client-ui-conversation`（[`packages/client/ui-conversation/src/index.ts`](../packages/client/ui-conversation/src/index.ts)）
 - `@deepseek-ai/dsh-client-ui-cordis`（[`packages/extensions/ui-cordis/src/index.ts`](../packages/extensions/ui-cordis/src/index.ts)）
+- `@deepseek-ai/dsh-client-ui-data-agent` ([`packages/client/ui-data-agent/src/index.ts`](../packages/client/ui-data-agent/src/index.ts))
 - `@deepseek-ai/dsh-client-ui-deliverables` — 需要 `systemPrompt` · `connection` · `sessionQuery` · `sessionController` · `workspaceFiles` · `fs` · `sandboxPolicy`（[`packages/client/ui-deliverables/src/index.ts`](../packages/client/ui-deliverables/src/index.ts)）
 - `@deepseek-ai/dsh-client-ui-directory-picker-browse`（[`packages/client/ui-directory-picker-browse/src/index.ts`](../packages/client/ui-directory-picker-browse/src/index.ts)）
 - `@deepseek-ai/dsh-client-ui-directory-picker-native`（[`packages/client/ui-directory-picker-native/src/index.ts`](../packages/client/ui-directory-picker-native/src/index.ts)）

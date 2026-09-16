@@ -1,0 +1,9 @@
+{
+  "repetitions": 3,
+  "case_timeout_ms": 60000,
+  "python": "/absolute/path/to/python3",
+  "frozen_timeout_ms": 60000,
+  "max_context_bytes": 131072,
+  "max_result_bytes": 65536,
+  "max_running_evaluations": 1
+}

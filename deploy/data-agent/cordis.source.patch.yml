@@ -1,0 +1,7 @@
+- insert:
+    - id: data-agent-console
+      name: ../../vendor/logger-console/src/index.ts
+      config: {}
+    - id: data-agent-host
+      name: '../../extensions/data-agent/src/host.ts'
+      config: !!js JSON.parse(process.env.DATA_AGENT_HOST_CONFIG ?? 'null')

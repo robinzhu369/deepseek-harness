@@ -1,0 +1,30 @@
+{
+  "name": "@deepseek-ai/dsh-data-agent",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --import tsx/esm --test tests/*.test.ts",
+    "typecheck": "tsc -b ../../vendor/cordis && tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "pg": "8.16.3",
+    "zod": "4.4.3",
+    "@deepseek-ai/dsh-agent": "workspace:^",
+    "@deepseek-ai/dsh-tools": "workspace:^",
+    "@deepseek-ai/dsh-llm": "workspace:^",
+    "@deepseek-ai/dsh-session": "workspace:^",
+    "@deepseek-ai/dsh-skill": "workspace:^",
+    "@deepseek-ai/dsh-brand": "workspace:^"
+  },
+  "devDependencies": {
+    "@types/pg": "8.15.5",
+    "@deepseek-ai/cordis": "workspace:^",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "workspace:^"
+  },
+  "license": "MIT"
+}

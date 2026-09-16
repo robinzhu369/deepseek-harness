@@ -1,0 +1,13 @@
+{
+  "local_only": true,
+  "sha256": {
+    "extensions/data-agent/src/quality-evaluation.ts": "b04180032255419ca479dc93299163ea4372133428c2d1d317f4800a7779e69e",
+    "extensions/data-agent/src/contracts.ts": "5c768aaf370dd8146befd7ef36e62fe1c16e7a43bc1158b41f4e64d0f484d3e3",
+    "extensions/data-agent/src/skill-contracts.ts": "0ff8327c9a4a99e41680e6d97c3ea841d2bd1358eadac50fc7dd41c4c56c9088",
+    "services/data-worker/engine.py": "97625243ebf7c9e7a17f204b48a02500dfd0f472561eb09a5e077c3c8fc3a695",
+    "services/data-worker/operators.py": "7e0aa4dc12c4c59264d9c627e8c10885ad9850d6fabd7096599925bae21e23b8",
+    "services/data-worker/evaluate_quality.py": "5e971c6f0b981bce254201496b43200460c6a75720772a3dbc59ce22ce2b842f",
+    "services/data-worker/evaluate_plan.py": "a9457e6d0864ae50af917f48b014154bbc7b16263763654c2a4dd5e535be1fa8",
+    "services/data-worker/importer.py": "b8bc27b2b1a9b0c3ed06385b6946724f16bf6743faf053306c683daa63fe66c3"
+  }
+}
