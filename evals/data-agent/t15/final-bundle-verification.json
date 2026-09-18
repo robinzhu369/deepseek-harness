@@ -1,0 +1,36 @@
+{
+  "format": 1,
+  "kind": "application",
+  "release": "local-t15-v1",
+  "platform": {
+    "os": "Darwin",
+    "machine": "arm64"
+  },
+  "node": "v24.14.1",
+  "images": {
+    "worker": {
+      "id": "sha256:2aa4f944cb5512a479c03c64a7e840a1a730fcde75e266b2b513b6fabf6f372a",
+      "os": "linux",
+      "architecture": "arm64"
+    },
+    "postgres": {
+      "id": "sha256:33df03f2682e6ffe0aed5c0249c3ba720f730d4d39ce7286acf341dc608b3619",
+      "os": "linux",
+      "architecture": "arm64"
+    },
+    "nginx": {
+      "id": "sha256:43f84772b5f52f01a28cf2c5f651cc03ee928060493e1c947888850cc5fa685e",
+      "os": "linux",
+      "architecture": "amd64"
+    }
+  },
+  "compatibility": {
+    "database_schema": 8,
+    "workflow_schema": "1",
+    "operator": "1",
+    "skill_contract": "1"
+  },
+  "source_commit": "42be85689740ed671935a42aeb2871306f5b07c3",
+  "created_at": 1789539792.742334,
+  "release_ready": false
+}

@@ -1,0 +1,25 @@
+{
+  "activate": {
+    "active": "local-t15-v1",
+    "previous": null
+  },
+  "backup": {
+    "format": 1,
+    "kind": "backup",
+    "platform": {
+      "os": "Darwin",
+      "machine": "arm64"
+    },
+    "database": "data_agent_test",
+    "created_at": 1789540403.262311,
+    "consistency": "quiescent-services",
+    "credentials_included": false
+  },
+  "restore": {
+    "restored": true,
+    "seconds": 0.21698591706808656,
+    "checkpoint": 1789540403.262311,
+    "loss_after_checkpoint": "not captured",
+    "credentials_restored": false
+  }
+}

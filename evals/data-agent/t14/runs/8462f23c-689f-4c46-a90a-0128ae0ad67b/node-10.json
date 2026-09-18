@@ -1,0 +1,49 @@
+{
+  "samples": [
+    {
+      "elapsed_seconds": 0.721462040906772,
+      "memory.peak": "1071251456\n",
+      "memory.current": "1071251456\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 968276\nuser_usec 715158\nsystem_usec 253117\nnice_usec 0\nnr_periods 5\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 0
+    },
+    {
+      "elapsed_seconds": 1.0130017079645768,
+      "memory.peak": "1147723776\n",
+      "memory.current": "355639296\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 1149605\nuser_usec 859189\nsystem_usec 290416\nnice_usec 0\nnr_periods 8\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 8192
+    }
+  ],
+  "container": "data-agent-a7318a615b65463ebf36782a4fb08f0e",
+  "operator": "fit",
+  "node_id": "fit_standard",
+  "compute_seconds": 0.7216761250747368,
+  "docker_state": {
+    "Status": "running",
+    "Running": true,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 61348,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-09-16T05:59:10.383817751Z",
+    "FinishedAt": "0001-01-01T00:00:00Z"
+  },
+  "result": {
+    "run_id": "5833526d-7118-457c-aa45-093aac54d20c",
+    "job_id": "332d6677-78e1-426d-a306-0f3c09d632f4",
+    "manifest_digest": "1ca414ecb81408cca23cbb6659381fd460f612d226827ed84f027447e7d56919",
+    "status": "published"
+  },
+  "wall_seconds": 1.175009207916446,
+  "memory_peak_bytes": 1147723776,
+  "observed_tmp_peak_bytes": 0,
+  "observed_output_peak_bytes": 8192
+}

@@ -1,0 +1,6 @@
+; Local macOS exercise: application and descendants may reach loopback services only.
+(version 1)
+(allow default)
+(deny network-outbound)
+(allow network-outbound (remote ip "localhost:*"))
+(allow network-outbound (remote unix-socket (literal (param "DOCKER_SOCKET"))))

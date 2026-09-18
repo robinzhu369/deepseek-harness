@@ -1,0 +1,17 @@
+{
+  "state": "/var/folders/5h/k2fmyml96zz1q33_gbn0pdp40000gn/T/data-agent-offline-6zQlRt",
+  "release": "/Users/robinzhu/Documents/ChatGPT/DeepSeekHarness/deepseek-harness/.artifacts/data-agent-t15/install/releases/local-t15-v1",
+  "model": "scripted",
+  "release_ready": false,
+  "status": "passed",
+  "browser_external_requests": [],
+  "request_count": 163,
+  "websocket_count": 1,
+  "tls_untrusted_rejected": true,
+  "tls_pinned_trusted": true,
+  "proxy": "nginx",
+  "application_egress": "kernel-loopback-only",
+  "proxy_network": "docker-bridge-static-upstream; egress firewall not validated",
+  "quality_python": "delivered-worker-image",
+  "nginx_log_sha256": "32c163da5aa49460cb8660d1df643dad4016f08096eb5265bc8918660d4eb904"
+}

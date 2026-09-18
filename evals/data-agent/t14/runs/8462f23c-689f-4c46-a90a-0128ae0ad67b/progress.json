@@ -1,0 +1,1962 @@
+{
+  "nodes": [
+    {
+      "samples": [
+        {
+          "elapsed_seconds": 0.729551124968566,
+          "memory.peak": "1133801472\n",
+          "memory.current": "1134063616\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 1124257\nuser_usec 481538\nsystem_usec 642718\nnice_usec 0\nnr_periods 5\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 0
+        },
+        {
+          "elapsed_seconds": 1.311591999954544,
+          "memory.peak": "1774821376\n",
+          "memory.current": "1758846976\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 2013990\nuser_usec 981457\nsystem_usec 1032533\nnice_usec 0\nnr_periods 11\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 4296704
+        },
+        {
+          "elapsed_seconds": 1.9048872919520363,
+          "memory.peak": "1801388032\n",
+          "memory.current": "407379968\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 2745411\nuser_usec 1633029\nsystem_usec 1112382\nnice_usec 0\nnr_periods 16\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 20733952
+        },
+        {
+          "elapsed_seconds": 2.1610967919696122,
+          "memory.peak": "1801388032\n",
+          "memory.current": "407830528\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 2801771\nuser_usec 1659340\nsystem_usec 1142430\nnice_usec 0\nnr_periods 19\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 20733952
+        }
+      ],
+      "container": "data-agent-a8bc50b6d7564666a94df7a8bcc8fff9",
+      "operator": "import",
+      "node_id": "import",
+      "compute_seconds": 1.7885434589115903,
+      "docker_state": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 59612,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-16T05:58:43.086423044Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "result": {
+        "run_id": "a2aec671-7126-4a6d-adf0-76f12ab49c05",
+        "job_id": "dafa5c69-c8a9-4e8d-9736-484627e69d53",
+        "manifest_digest": "77c848be1d70bb4fca9a6d0120762a6d709c4e73b8342734684e6bac17654508",
+        "status": "published"
+      },
+      "wall_seconds": 2.3772573330206797,
+      "memory_peak_bytes": 1801388032,
+      "observed_tmp_peak_bytes": 0,
+      "observed_output_peak_bytes": 20733952
+    },
+    {
+      "samples": [
+        {
+          "elapsed_seconds": 0.6894172090105712,
+          "memory.peak": "1552269312\n",
+          "memory.current": "322990080\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 1016971\nuser_usec 695383\nsystem_usec 321588\nnice_usec 0\nnr_periods 5\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 32768
+        }
+      ],
+      "container": "data-agent-4cc89290644e42d19976238dbb09567b",
+      "operator": "preview",
+      "node_id": "preview",
+      "compute_seconds": 0.49022224999498576,
+      "docker_state": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 59798,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-16T05:58:45.577815295Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "result": {
+        "run_id": "46954294-be88-456f-8d4b-f21911e676b9",
+        "job_id": "c5e1a57f-0192-429d-9cb3-c8192eb0b21a",
+        "manifest_digest": "18d180411bb035069e15ecc9c54a01eb3d339556cfc8710d00c3857124c98144",
+        "status": "published"
+      },
+      "wall_seconds": 0.8576532499864697,
+      "memory_peak_bytes": 1552269312,
+      "observed_tmp_peak_bytes": 0,
+      "observed_output_peak_bytes": 32768
+    },
+    {
+      "samples": [
+        {
+          "elapsed_seconds": 0.6919969170121476,
+          "memory.peak": "1601298432\n",
+          "memory.current": "1546850304\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 1098276\nuser_usec 796428\nsystem_usec 301847\nnice_usec 0\nnr_periods 5\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 0
+        },
+        {
+          "elapsed_seconds": 1.270921166986227,
+          "memory.peak": "1601298432\n",
+          "memory.current": "1548464128\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 2300336\nuser_usec 1901463\nsystem_usec 398873\nnice_usec 0\nnr_periods 11\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 0
+        },
+        {
+          "elapsed_seconds": 1.8330817919922993,
+          "memory.peak": "1601298432\n",
+          "memory.current": "1573900288\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 3335753\nuser_usec 2860938\nsystem_usec 474815\nnice_usec 0\nnr_periods 16\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 0
+        },
+        {
+          "elapsed_seconds": 2.981982707977295,
+          "memory.peak": "3262685184\n",
+          "memory.current": "3262947328\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 6704748\nuser_usec 4641927\nsystem_usec 2062820\nnice_usec 0\nnr_periods 28\nnr_throttled 4\nthrottled_usec 128131\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 0
+        },
+        {
+          "elapsed_seconds": 3.5947283749701455,
+          "memory.peak": "3313238016\n",
+          "memory.current": "379506688\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 8112726\nuser_usec 5875553\nsystem_usec 2237173\nnice_usec 0\nnr_periods 34\nnr_throttled 5\nthrottled_usec 136063\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 24576
+        }
+      ],
+      "container": "data-agent-287f60f02e3f438396b9fe599d9d975e",
+      "operator": "inspect",
+      "node_id": "inspect",
+      "compute_seconds": 3.3350115419598296,
+      "docker_state": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 59929,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-16T05:58:47.356181046Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "result": {
+        "run_id": "b78c1f22-0fed-4b94-acc9-85b00b2808e8",
+        "job_id": "c03e204a-512a-404a-9fa5-271fd805238b",
+        "manifest_digest": "35f1f3559e3231ba7ea7007f3abe4ccbad38901cdfe246c27aa63046ef0b78fe",
+        "status": "published"
+      },
+      "wall_seconds": 3.970161958015524,
+      "memory_peak_bytes": 3313238016,
+      "observed_tmp_peak_bytes": 0,
+      "observed_output_peak_bytes": 24576
+    },
+    {
+      "samples": [
+        {
+          "elapsed_seconds": 0.6847534169210121,
+          "memory.peak": "1032781824\n",
+          "memory.current": "1033043968\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 1065337\nuser_usec 508385\nsystem_usec 556951\nnice_usec 0\nnr_periods 5\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 0
+        },
+        {
+          "elapsed_seconds": 1.264315375010483,
+          "memory.peak": "1679187968\n",
+          "memory.current": "1658261504\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 2221716\nuser_usec 1300666\nsystem_usec 921050\nnice_usec 0\nnr_periods 10\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 6868992
+        },
+        {
+          "elapsed_seconds": 1.9390073749236763,
+          "memory.peak": "1679187968\n",
+          "memory.current": "397848576\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 2777770\nuser_usec 1777813\nsystem_usec 999956\nnice_usec 0\nnr_periods 17\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 20733952
+        }
+      ],
+      "container": "data-agent-cfd903879c7e4a4398c8dbc151525bea",
+      "operator": "bounds",
+      "node_id": "clip",
+      "compute_seconds": 1.60745895805303,
+      "docker_state": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 60133,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-16T05:58:52.324191132Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "result": {
+        "run_id": "b2403c4b-83a7-4aaa-be73-cc69002cdb1c",
+        "job_id": "2dc69b7d-9012-4585-a3d5-9a10a378980f",
+        "manifest_digest": "349d6e3d49fc25a4f95683c94f3f657280353a524128d62a122963d5bd1e7c52",
+        "status": "published"
+      },
+      "wall_seconds": 2.137371666962281,
+      "memory_peak_bytes": 1679187968,
+      "observed_tmp_peak_bytes": 0,
+      "observed_output_peak_bytes": 20733952
+    },
+    {
+      "samples": [
+        {
+          "elapsed_seconds": 0.6873432499123737,
+          "memory.peak": "2101547008\n",
+          "memory.current": "2101547008\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 1308180\nuser_usec 856766\nsystem_usec 451414\nnice_usec 0\nnr_periods 5\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 0
+        },
+        {
+          "elapsed_seconds": 1.2703130419831723,
+          "memory.peak": "2325917696\n",
+          "memory.current": "2272821248\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 2250934\nuser_usec 1649400\nsystem_usec 601534\nnice_usec 0\nnr_periods 11\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 12996608
+        },
+        {
+          "elapsed_seconds": 1.8864284589653835,
+          "memory.peak": "2325917696\n",
+          "memory.current": "2286198784\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 3082906\nuser_usec 2248020\nsystem_usec 834886\nnice_usec 0\nnr_periods 17\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 18501632
+        },
+        {
+          "elapsed_seconds": 2.277389374910854,
+          "memory.peak": "2325917696\n",
+          "memory.current": "395354112\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 3282786\nuser_usec 2354550\nsystem_usec 928236\nnice_usec 0\nnr_periods 21\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 20733952
+        }
+      ],
+      "container": "data-agent-967511f188c64167871119f527a7fd42",
+      "operator": "normalize",
+      "node_id": "normalize",
+      "compute_seconds": 1.9203088750364259,
+      "docker_state": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 60298,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-16T05:58:54.893720925Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "result": {
+        "run_id": "b2403c4b-83a7-4aaa-be73-cc69002cdb1c",
+        "job_id": "86787a1d-4a19-47de-9c00-3d929cc34d9a",
+        "manifest_digest": "149936cfcea95fcf1f9c9ded01fd76c6ddd7be0602e652662b404df233c84a64",
+        "status": "published"
+      },
+      "wall_seconds": 2.559037583996542,
+      "memory_peak_bytes": 2325917696,
+      "observed_tmp_peak_bytes": 0,
+      "observed_output_peak_bytes": 20733952
+    },
+    {
+      "samples": [
+        {
+          "elapsed_seconds": 0.6828356249025092,
+          "memory.peak": "1068855296\n",
+          "memory.current": "1068720128\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 1363629\nuser_usec 575551\nsystem_usec 788078\nnice_usec 0\nnr_periods 5\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 0
+        },
+        {
+          "elapsed_seconds": 1.2505920419935137,
+          "memory.peak": "3100864512\n",
+          "memory.current": "3062353920\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 2530631\nuser_usec 1237556\nsystem_usec 1293074\nnice_usec 0\nnr_periods 11\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 3371008
+        },
+        {
+          "elapsed_seconds": 1.8160743329208344,
+          "memory.peak": "3129257984\n",
+          "memory.current": "3089633280\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 3171080\nuser_usec 1841987\nsystem_usec 1329092\nnice_usec 0\nnr_periods 16\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 46866432
+        },
+        {
+          "elapsed_seconds": 2.382468874915503,
+          "memory.peak": "3129257984\n",
+          "memory.current": "3012505600\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 3806402\nuser_usec 2425184\nsystem_usec 1381217\nnice_usec 0\nnr_periods 22\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 87126016
+        },
+        {
+          "elapsed_seconds": 2.9518545829923823,
+          "memory.peak": "3129257984\n",
+          "memory.current": "2851483648\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 4443776\nuser_usec 2996030\nsystem_usec 1447746\nnice_usec 0\nnr_periods 28\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 128507904
+        },
+        {
+          "elapsed_seconds": 3.7636245829053223,
+          "memory.peak": "3129257984\n",
+          "memory.current": "711016448\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 4675286\nuser_usec 3096631\nsystem_usec 1578654\nnice_usec 0\nnr_periods 36\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 129617920
+        }
+      ],
+      "container": "data-agent-336c900efa024a4cac89ff7a3f92fa45",
+      "operator": "split",
+      "node_id": "split",
+      "compute_seconds": 2.9467011250089854,
+      "docker_state": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 60502,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-16T05:58:58.553777343Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "result": {
+        "run_id": "5833526d-7118-457c-aa45-093aac54d20c",
+        "job_id": "c58b781e-f361-4787-8ab9-76f198604cdb",
+        "manifest_digest": "475f5f5d91d5f49ea342993440169d5d534d8cacb126d5c9b2856c5848e642ef",
+        "status": "published"
+      },
+      "wall_seconds": 4.262642374960706,
+      "memory_peak_bytes": 3129257984,
+      "observed_tmp_peak_bytes": 0,
+      "observed_output_peak_bytes": 129617920
+    },
+    {
+      "samples": [
+        {
+          "elapsed_seconds": 0.7069338749861345,
+          "memory.peak": "1029496832\n",
+          "memory.current": "1001771008\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 1076424\nuser_usec 817803\nsystem_usec 258621\nnice_usec 0\nnr_periods 5\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 0
+        },
+        {
+          "elapsed_seconds": 1.2528976670000702,
+          "memory.peak": "1170296832\n",
+          "memory.current": "285900800\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 1851167\nuser_usec 1499475\nsystem_usec 351691\nnice_usec 0\nnr_periods 11\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 4096
+        }
+      ],
+      "container": "data-agent-7c80028c241f44678a113f463f283298",
+      "operator": "fit",
+      "node_id": "fit_median",
+      "compute_seconds": 0.9933670000173151,
+      "docker_state": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 60772,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-16T05:59:03.178878637Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "result": {
+        "run_id": "5833526d-7118-457c-aa45-093aac54d20c",
+        "job_id": "be5f7b64-69cc-4662-8d33-e98c34c94a2d",
+        "manifest_digest": "e30faa142b7d7bfebf6570b838d62e3688bd5b7b2b91319079695e3b584833b8",
+        "status": "published"
+      },
+      "wall_seconds": 1.426745624979958,
+      "memory_peak_bytes": 1170296832,
+      "observed_tmp_peak_bytes": 0,
+      "observed_output_peak_bytes": 4096
+    },
+    {
+      "samples": [
+        {
+          "elapsed_seconds": 0.6806086249416694,
+          "memory.peak": "591642624\n",
+          "memory.current": "590221312\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 712858\nuser_usec 587410\nsystem_usec 125447\nnice_usec 0\nnr_periods 5\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 19075072
+        },
+        {
+          "elapsed_seconds": 1.0370806669816375,
+          "memory.peak": "617709568\n",
+          "memory.current": "324190208\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 901324\nuser_usec 741088\nsystem_usec 160235\nnice_usec 0\nnr_periods 9\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 30969856
+        }
+      ],
+      "container": "data-agent-5a7cdf0d3f5946cd800ca56ec6f29349",
+      "operator": "transform",
+      "node_id": "median_test",
+      "compute_seconds": 0.7134731250116602,
+      "docker_state": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 60905,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-16T05:59:04.678121679Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "result": {
+        "run_id": "5833526d-7118-457c-aa45-093aac54d20c",
+        "job_id": "010f75da-afe9-469c-a396-a8111a146de6",
+        "manifest_digest": "ba6b4992515055e87a685612705407b749e99bb6f7743b7cebfb32f774cf11be",
+        "status": "published"
+      },
+      "wall_seconds": 1.2334324589464813,
+      "memory_peak_bytes": 617709568,
+      "observed_tmp_peak_bytes": 0,
+      "observed_output_peak_bytes": 30969856
+    },
+    {
+      "samples": [
+        {
+          "elapsed_seconds": 0.6884071250678971,
+          "memory.peak": "581787648\n",
+          "memory.current": "572985344\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 751969\nuser_usec 614075\nsystem_usec 137894\nnice_usec 0\nnr_periods 5\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 19058688
+        },
+        {
+          "elapsed_seconds": 1.0647814159747213,
+          "memory.peak": "600485888\n",
+          "memory.current": "319733760\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 943556\nuser_usec 767013\nsystem_usec 176542\nnice_usec 0\nnr_periods 8\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 30973952
+        }
+      ],
+      "container": "data-agent-a5a8b3907eb64f15a95cea1377dd7047",
+      "operator": "transform",
+      "node_id": "median_validation",
+      "compute_seconds": 0.7232983330031857,
+      "docker_state": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 61034,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-16T05:59:06.239260597Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "result": {
+        "run_id": "5833526d-7118-457c-aa45-093aac54d20c",
+        "job_id": "078b67a2-0102-4c53-9d91-d45c32d01f71",
+        "manifest_digest": "2334eaad112fef5460efdf6f2497aa124d98a8558cb38b392c3b7f19eb52273a",
+        "status": "published"
+      },
+      "wall_seconds": 1.2888316659955308,
+      "memory_peak_bytes": 600485888,
+      "observed_tmp_peak_bytes": 0,
+      "observed_output_peak_bytes": 30973952
+    },
+    {
+      "samples": [
+        {
+          "elapsed_seconds": 0.6794160840800032,
+          "memory.peak": "1416839168\n",
+          "memory.current": "1385361408\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 1111106\nuser_usec 839707\nsystem_usec 271399\nnice_usec 0\nnr_periods 5\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 1773568
+        },
+        {
+          "elapsed_seconds": 1.249087083968334,
+          "memory.peak": "1468391424\n",
+          "memory.current": "1445404672\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 1766656\nuser_usec 1466639\nsystem_usec 300017\nnice_usec 0\nnr_periods 11\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 47677440
+        },
+        {
+          "elapsed_seconds": 1.9033089170698076,
+          "memory.peak": "1482321920\n",
+          "memory.current": "434724864\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 2095925\nuser_usec 1704389\nsystem_usec 391535\nnice_usec 0\nnr_periods 17\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 66924544
+        }
+      ],
+      "container": "data-agent-15b26acefd0d48f9b371d578eb54544b",
+      "operator": "transform",
+      "node_id": "median_train",
+      "compute_seconds": 1.399910166976042,
+      "docker_state": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 61182,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-16T05:59:07.751022208Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "result": {
+        "run_id": "5833526d-7118-457c-aa45-093aac54d20c",
+        "job_id": "763d3f57-8ffd-4332-ae31-d5a5aca0d0e7",
+        "manifest_digest": "33fea38345fd339c51444cd613d2d435efc91818249316f7d60cfbec825652e2",
+        "status": "published"
+      },
+      "wall_seconds": 2.195613084011711,
+      "memory_peak_bytes": 1482321920,
+      "observed_tmp_peak_bytes": 0,
+      "observed_output_peak_bytes": 66924544
+    },
+    {
+      "samples": [
+        {
+          "elapsed_seconds": 0.721462040906772,
+          "memory.peak": "1071251456\n",
+          "memory.current": "1071251456\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 968276\nuser_usec 715158\nsystem_usec 253117\nnice_usec 0\nnr_periods 5\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 0
+        },
+        {
+          "elapsed_seconds": 1.0130017079645768,
+          "memory.peak": "1147723776\n",
+          "memory.current": "355639296\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 1149605\nuser_usec 859189\nsystem_usec 290416\nnice_usec 0\nnr_periods 8\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 8192
+        }
+      ],
+      "container": "data-agent-a7318a615b65463ebf36782a4fb08f0e",
+      "operator": "fit",
+      "node_id": "fit_standard",
+      "compute_seconds": 0.7216761250747368,
+      "docker_state": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 61348,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-16T05:59:10.383817751Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "result": {
+        "run_id": "5833526d-7118-457c-aa45-093aac54d20c",
+        "job_id": "332d6677-78e1-426d-a306-0f3c09d632f4",
+        "manifest_digest": "1ca414ecb81408cca23cbb6659381fd460f612d226827ed84f027447e7d56919",
+        "status": "published"
+      },
+      "wall_seconds": 1.175009207916446,
+      "memory_peak_bytes": 1147723776,
+      "observed_tmp_peak_bytes": 0,
+      "observed_output_peak_bytes": 8192
+    },
+    {
+      "samples": [
+        {
+          "elapsed_seconds": 0.7175547080114484,
+          "memory.peak": "1409224704\n",
+          "memory.current": "1371402240\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 1207893\nuser_usec 837093\nsystem_usec 370799\nnice_usec 0\nnr_periods 5\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 294912
+        },
+        {
+          "elapsed_seconds": 1.4409982080105692,
+          "memory.peak": "1443082240\n",
+          "memory.current": "1443082240\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 2246247\nuser_usec 1779154\nsystem_usec 467093\nnice_usec 0\nnr_periods 12\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 50675712
+        },
+        {
+          "elapsed_seconds": 2.088115749997087,
+          "memory.peak": "1487650816\n",
+          "memory.current": "468377600\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 2936663\nuser_usec 2297532\nsystem_usec 639131\nnice_usec 0\nnr_periods 19\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 76169216
+        },
+        {
+          "elapsed_seconds": 2.5004895830061287,
+          "memory.peak": "1487650816\n",
+          "memory.current": "468119552\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 3034875\nuser_usec 2319616\nsystem_usec 715258\nnice_usec 0\nnr_periods 23\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 76169216
+        }
+      ],
+      "container": "data-agent-5f959d29c4a0419fb6209cdab8d8d2fd",
+      "operator": "transform",
+      "node_id": "standard_train",
+      "compute_seconds": 1.9591619579587132,
+      "docker_state": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 61478,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-16T05:59:11.857321168Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "result": {
+        "run_id": "5833526d-7118-457c-aa45-093aac54d20c",
+        "job_id": "124f0d75-7f20-4c20-ad14-1c19a9cba2ac",
+        "manifest_digest": "f70cc96091bd42d5474c53a9fc888917509c8daf701ade97cca43c3fe9518aaf",
+        "status": "published"
+      },
+      "wall_seconds": 2.9266786660300568,
+      "memory_peak_bytes": 1487650816,
+      "observed_tmp_peak_bytes": 0,
+      "observed_output_peak_bytes": 76169216
+    },
+    {
+      "samples": [
+        {
+          "elapsed_seconds": 0.6804087500786409,
+          "memory.peak": "594534400\n",
+          "memory.current": "555692032\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 1010571\nuser_usec 516270\nsystem_usec 494301\nnice_usec 0\nnr_periods 4\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 1880064
+        },
+        {
+          "elapsed_seconds": 1.2745153330033645,
+          "memory.peak": "602316800\n",
+          "memory.current": "314597376\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 1422434\nuser_usec 869654\nsystem_usec 552780\nnice_usec 0\nnr_periods 10\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 32714752
+        }
+      ],
+      "container": "data-agent-e25aa1d6cb45468bbe155ec638fa240e",
+      "operator": "transform",
+      "node_id": "standard_validation",
+      "compute_seconds": 0.9487250830279663,
+      "docker_state": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 61643,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-16T05:59:14.95905192Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "result": {
+        "run_id": "5833526d-7118-457c-aa45-093aac54d20c",
+        "job_id": "9523db6b-c4be-4c87-9d4c-9d1796c8eb5b",
+        "manifest_digest": "06b67bbdcf5228220a788edad548e352a1dcddbab60a62f54c757d47ccfb947b",
+        "status": "published"
+      },
+      "wall_seconds": 1.5165359580423683,
+      "memory_peak_bytes": 602316800,
+      "observed_tmp_peak_bytes": 0,
+      "observed_output_peak_bytes": 32714752
+    },
+    {
+      "samples": [
+        {
+          "elapsed_seconds": 0.710483375005424,
+          "memory.peak": "588881920\n",
+          "memory.current": "571572224\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 765838\nuser_usec 618243\nsystem_usec 147594\nnice_usec 0\nnr_periods 5\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 15314944
+        },
+        {
+          "elapsed_seconds": 1.2408392919460312,
+          "memory.peak": "604364800\n",
+          "memory.current": "314298368\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 1068829\nuser_usec 848082\nsystem_usec 220747\nnice_usec 0\nnr_periods 10\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 32681984
+        }
+      ],
+      "container": "data-agent-52559b8a83e84937b81e5132ba3e586b",
+      "operator": "transform",
+      "node_id": "standard_test",
+      "compute_seconds": 0.8241653749719262,
+      "docker_state": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 61790,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-16T05:59:17.089368754Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "result": {
+        "run_id": "5833526d-7118-457c-aa45-093aac54d20c",
+        "job_id": "9d8f7bbd-cbb1-4d1d-824f-80a9af697f26",
+        "manifest_digest": "13643ef7a3c87e20f8eeec6e47bc8137172ae5d84505f60fd12cb1b412554923",
+        "status": "published"
+      },
+      "wall_seconds": 1.482449832954444,
+      "memory_peak_bytes": 604364800,
+      "observed_tmp_peak_bytes": 0,
+      "observed_output_peak_bytes": 32681984
+    },
+    {
+      "samples": [
+        {
+          "elapsed_seconds": 0.7330490419408306,
+          "memory.peak": "1061056512\n",
+          "memory.current": "1061056512\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+          "cpu.stat": "usage_usec 964002\nuser_usec 621380\nsystem_usec 342621\nnice_usec 0\nnr_periods 5\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+          "/tmp": 0,
+          "/output": 0
+        }
+      ],
+      "container": "data-agent-606785487bef4e9fab4362660e8c6fd0",
+      "operator": "fit",
+      "node_id": "fit_onehot",
+      "compute_seconds": 0.5755938749061897,
+      "docker_state": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 2,
+        "Error": "",
+        "StartedAt": "2026-09-16T05:59:19.173169547Z",
+        "FinishedAt": "2026-09-16T05:59:19.749976964Z"
+      },
+      "error": "DIMENSION_LIMIT",
+      "wall_seconds": 0.9574632500298321,
+      "memory_peak_bytes": 1061056512,
+      "observed_tmp_peak_bytes": 0,
+      "observed_output_peak_bytes": 0
+    }
+  ],
+  "latencies": [
+    {
+      "path": "/uploads/e221a20b-f704-48f3-86fb-9c644cad1be7",
+      "method": "GET",
+      "seconds": 0.012050958999999238,
+      "under_load": false
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.00975183399999969,
+      "under_load": false
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.005067708000000493,
+      "under_load": false
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.00420941700000003,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.0051775829999996855,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.003763332999999875,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.003747499999999491,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.004618499999998676,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.003347707999999329,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.006302250000000641,
+      "under_load": false
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.0021491669999995793,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.004345167000001311,
+      "under_load": true
+    },
+    {
+      "path": "/runs/46954294-be88-456f-8d4b-f21911e676b9",
+      "method": "GET",
+      "seconds": 0.005244709000000512,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6f7c96ae-7dfc-4c6e-b75c-86c36ee1ffd3/report",
+      "method": "GET",
+      "seconds": 0.0032713339999991147,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6f7c96ae-7dfc-4c6e-b75c-86c36ee1ffd3/report",
+      "method": "GET",
+      "seconds": 0.0019893750000010185,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6f7c96ae-7dfc-4c6e-b75c-86c36ee1ffd3/report",
+      "method": "GET",
+      "seconds": 0.0017254160000011326,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6f7c96ae-7dfc-4c6e-b75c-86c36ee1ffd3/report",
+      "method": "GET",
+      "seconds": 0.002008041000000958,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6f7c96ae-7dfc-4c6e-b75c-86c36ee1ffd3/report",
+      "method": "GET",
+      "seconds": 0.004138000000000829,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6f7c96ae-7dfc-4c6e-b75c-86c36ee1ffd3/report",
+      "method": "GET",
+      "seconds": 0.0057121669999996814,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6f7c96ae-7dfc-4c6e-b75c-86c36ee1ffd3/report",
+      "method": "GET",
+      "seconds": 0.004398583000000144,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6f7c96ae-7dfc-4c6e-b75c-86c36ee1ffd3/report",
+      "method": "GET",
+      "seconds": 0.00984362499999952,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6f7c96ae-7dfc-4c6e-b75c-86c36ee1ffd3/report",
+      "method": "GET",
+      "seconds": 0.002269749999999476,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6f7c96ae-7dfc-4c6e-b75c-86c36ee1ffd3/report",
+      "method": "GET",
+      "seconds": 0.0018638749999990978,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6f7c96ae-7dfc-4c6e-b75c-86c36ee1ffd3/report",
+      "method": "GET",
+      "seconds": 0.0017259999999987485,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6f7c96ae-7dfc-4c6e-b75c-86c36ee1ffd3/report",
+      "method": "GET",
+      "seconds": 0.002190958999999566,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6f7c96ae-7dfc-4c6e-b75c-86c36ee1ffd3/report",
+      "method": "GET",
+      "seconds": 0.001850124999999025,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6f7c96ae-7dfc-4c6e-b75c-86c36ee1ffd3/report",
+      "method": "GET",
+      "seconds": 0.0021604580000002898,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6f7c96ae-7dfc-4c6e-b75c-86c36ee1ffd3/report",
+      "method": "GET",
+      "seconds": 0.0017739999999994325,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6f7c96ae-7dfc-4c6e-b75c-86c36ee1ffd3/report",
+      "method": "GET",
+      "seconds": 0.002027584000001298,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6f7c96ae-7dfc-4c6e-b75c-86c36ee1ffd3/report",
+      "method": "GET",
+      "seconds": 0.0018459159999983966,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6f7c96ae-7dfc-4c6e-b75c-86c36ee1ffd3/report",
+      "method": "GET",
+      "seconds": 0.001760958999999275,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6f7c96ae-7dfc-4c6e-b75c-86c36ee1ffd3/report",
+      "method": "GET",
+      "seconds": 0.0016040419999990264,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6f7c96ae-7dfc-4c6e-b75c-86c36ee1ffd3/report",
+      "method": "GET",
+      "seconds": 0.0016802499999994324,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6f7c96ae-7dfc-4c6e-b75c-86c36ee1ffd3/report",
+      "method": "GET",
+      "seconds": 0.0018240000000005238,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6f7c96ae-7dfc-4c6e-b75c-86c36ee1ffd3/report",
+      "method": "GET",
+      "seconds": 0.0019271669999998266,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6f7c96ae-7dfc-4c6e-b75c-86c36ee1ffd3/report",
+      "method": "GET",
+      "seconds": 0.0021557080000002317,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6f7c96ae-7dfc-4c6e-b75c-86c36ee1ffd3/report",
+      "method": "GET",
+      "seconds": 0.0017026249999998982,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6f7c96ae-7dfc-4c6e-b75c-86c36ee1ffd3/report",
+      "method": "GET",
+      "seconds": 0.00197320899999977,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6f7c96ae-7dfc-4c6e-b75c-86c36ee1ffd3/report",
+      "method": "GET",
+      "seconds": 0.0019315829999995912,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6f7c96ae-7dfc-4c6e-b75c-86c36ee1ffd3/report",
+      "method": "GET",
+      "seconds": 0.001668999999999869,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6f7c96ae-7dfc-4c6e-b75c-86c36ee1ffd3/report",
+      "method": "GET",
+      "seconds": 0.0016335829999989074,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6f7c96ae-7dfc-4c6e-b75c-86c36ee1ffd3/report",
+      "method": "GET",
+      "seconds": 0.0015956249999999272,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/6f7c96ae-7dfc-4c6e-b75c-86c36ee1ffd3/report",
+      "method": "GET",
+      "seconds": 0.0018498749999998835,
+      "under_load": false
+    },
+    {
+      "path": "/sessions",
+      "method": "GET",
+      "seconds": 0.00243683300000157,
+      "under_load": false
+    },
+    {
+      "path": "/tasks/33461674-2379-4d1e-a3c4-5a132e044cf7",
+      "method": "GET",
+      "seconds": 0.006482332999999926,
+      "under_load": false
+    },
+    {
+      "path": "/tasks/33461674-2379-4d1e-a3c4-5a132e044cf7",
+      "method": "GET",
+      "seconds": 0.005015083000000232,
+      "under_load": false
+    },
+    {
+      "path": "/tasks/33461674-2379-4d1e-a3c4-5a132e044cf7",
+      "method": "GET",
+      "seconds": 0.004077583000000232,
+      "under_load": false
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.0021996669999989537,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.004060457999999926,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.004748083999998926,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.006439667000000554,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.0071002090000001775,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.005407624999999826,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.0034397919999992156,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.0038168750000004367,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.002848374999999578,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.0032492920000004233,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.2538078750000004,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.03316816699999981,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.0035441659999996774,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.0056413339999999155,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.02374779099999978,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.0114028330000001,
+      "under_load": true
+    },
+    {
+      "path": "/tasks/33461674-2379-4d1e-a3c4-5a132e044cf7",
+      "method": "GET",
+      "seconds": 0.0266109579999993,
+      "under_load": false
+    },
+    {
+      "path": "/runs/b78c1f22-0fed-4b94-acc9-85b00b2808e8",
+      "method": "GET",
+      "seconds": 0.008987334000001283,
+      "under_load": false
+    },
+    {
+      "path": "/artifacts/33129399-2d7c-47e4-84a8-8b3ff6e71d65/report",
+      "method": "GET",
+      "seconds": 0.0055268340000002355,
+      "under_load": false
+    },
+    {
+      "path": "/tasks/33461674-2379-4d1e-a3c4-5a132e044cf7",
+      "method": "GET",
+      "seconds": 0.007588709000001473,
+      "under_load": false
+    },
+    {
+      "path": "/tasks/33461674-2379-4d1e-a3c4-5a132e044cf7",
+      "method": "GET",
+      "seconds": 0.006260666999998648,
+      "under_load": false
+    },
+    {
+      "path": "/tasks/33461674-2379-4d1e-a3c4-5a132e044cf7",
+      "method": "GET",
+      "seconds": 0.003984958000000915,
+      "under_load": false
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.0017639170000002195,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.0030601669999996374,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.007298208000000159,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.006310457999999926,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.004511958000002778,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.004605917000000772,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.003322041999999783,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.003721499999999651,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.0029072919999998705,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.003190042000001995,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.0037838750000009896,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.0039602919999997535,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.004480999999999767,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.006630999999997584,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.005062957999998616,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.004315875000000233,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.006822040999999444,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.0072510830000028365,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.002898750000000291,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.003225500000000466,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.010255791999999929,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.005321625000000494,
+      "under_load": true
+    },
+    {
+      "path": "/tasks/33461674-2379-4d1e-a3c4-5a132e044cf7",
+      "method": "GET",
+      "seconds": 0.010051791000001685,
+      "under_load": false
+    },
+    {
+      "path": "/runs/b2403c4b-83a7-4aaa-be73-cc69002cdb1c",
+      "method": "GET",
+      "seconds": 0.0061829999999972645,
+      "under_load": false
+    },
+    {
+      "path": "/tasks/33461674-2379-4d1e-a3c4-5a132e044cf7",
+      "method": "GET",
+      "seconds": 0.007390250000000378,
+      "under_load": false
+    },
+    {
+      "path": "/tasks/33461674-2379-4d1e-a3c4-5a132e044cf7",
+      "method": "GET",
+      "seconds": 0.00990654100000029,
+      "under_load": false
+    },
+    {
+      "path": "/tasks/33461674-2379-4d1e-a3c4-5a132e044cf7",
+      "method": "GET",
+      "seconds": 0.011740916999999173,
+      "under_load": false
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.0026309580000015557,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.0040752079999983835,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.005350084000001516,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.006848165999999764,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.003005374999997002,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.0037266670000026354,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.003232624999996915,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.0030825829999994313,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.0034448749999974096,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.0032634999999972933,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.0025897919999988517,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.0033457500000004074,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.003255084000000352,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.006612499999999273,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.003501125000002503,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.002688207999999577,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.0055453750000015135,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.014173915999999736,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.003432249999998021,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.0030737499999995634,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.005567415999998047,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.0076824169999999865,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.005163207999998121,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.003382792000000336,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.0032075000000004366,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.002848207999999431,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.0034213750000017173,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.0033882920000032754,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.0058603330000005375,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.0045737090000002355,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.005459834000001137,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.0061508329999996935,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.005453917000002548,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.00813758400000006,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.0062593329999981505,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.0059770000000025905,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.002582124999997177,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.002828541999999288,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.004361292000001413,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.004776000000001659,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.002920208999999886,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.003364916999998968,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.003203624999998283,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.002926540999997087,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.006926708999999392,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.008454583000006096,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.009513082999998005,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.010513582999999925,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.004764749999994819,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.005771667000000889,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.0032690829999992275,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.005438666000001831,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.0027936249999984284,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.0033707920000015292,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.004961250000000291,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.005299791999997978,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.002702124999996158,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.005495000000002619,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.012758458999996947,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.013684999999997671,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.003316416999994544,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.003922958000002836,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.002500499999994645,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.003967791999995825,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.0116729589999959,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.02680254199999763,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.006957125000000815,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.010572874999998021,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.0044844589999993335,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.005127167000006011,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.008261250000003202,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.004114207999999053,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.008930749999999535,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.008411166999998386,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.0036520000000018625,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.005916041000004043,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.005663333000004059,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.009948749999995926,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.002851542000003974,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.009122041999995417,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.008288999999997031,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.009993916999999783,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.004799250000003667,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.008392332999996142,
+      "under_load": true
+    },
+    {
+      "path": "/datasets",
+      "method": "GET",
+      "seconds": 0.002567750000001979,
+      "under_load": true
+    },
+    {
+      "path": "/artifacts/db89f2e3-4e9d-4baa-adfe-106b33aea275/preview",
+      "method": "POST",
+      "seconds": 0.0025176659999997355,
+      "under_load": true
+    }
+  ],
+  "disk": [
+    79952524,
+    79985232,
+    80025953,
+    100758461,
+    121485777,
+    251105377,
+    251107902,
+    282074676,
+    313045267,
+    379969113,
+    379974349,
+    456143407,
+    488856875,
+    521538256,
+    521538256
+  ]
+}

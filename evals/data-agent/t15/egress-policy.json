@@ -1,0 +1,1 @@
+{"probe": "public TCP connect denied before data transfer", "errno": 1, "application_policy": "loopback plus local Docker socket"}

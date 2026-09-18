@@ -1,0 +1,22 @@
+{
+  "state": "/Users/robinzhu/Documents/ChatGPT/DeepSeekHarness/deepseek-harness/.artifacts/data-agent-t15/restored-state",
+  "release": "/Users/robinzhu/Documents/ChatGPT/DeepSeekHarness/deepseek-harness/.artifacts/data-agent-t15/install/current",
+  "model": "scripted",
+  "release_ready": false,
+  "status": "passed",
+  "restored_artifacts": 13,
+  "restored_bytes": 35141,
+  "task_status": "completed",
+  "export_download_verified": true,
+  "no_duplicate_publication": true,
+  "browser_external_requests": [],
+  "request_count": 30,
+  "websocket_count": 1,
+  "tls_untrusted_rejected": true,
+  "tls_pinned_trusted": true,
+  "proxy": "nginx",
+  "application_egress": "kernel-loopback-only",
+  "proxy_network": "docker-bridge-static-upstream; egress firewall not validated",
+  "quality_python": "delivered-worker-image",
+  "nginx_log_sha256": "d9e86dc8626a1ad0d44549d94d33d41524f4f8cba47563205a31baeaeccdd708"
+}

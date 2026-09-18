@@ -1,0 +1,1 @@
+{"error": "COMMAND_FAILED:docker"}

@@ -49,9 +49,13 @@
       "id": "AC-04",
       "scenario": "用户拒绝删除某列或某批记录",
       "pass_condition": "对应操作不执行，后续流程反映拒绝后的方案",
-      "status": "not_run",
-      "evidence": [],
-      "product_acceptance_passed": false
+      "status": "component_evidence_only",
+      "evidence": [
+        "evals/data-agent/t15/synthetic-regression.txt",
+        "extensions/data-agent/tests/service.test.ts"
+      ],
+      "product_acceptance_passed": false,
+      "remaining_acceptance": "See implementation/t15-operations.md and implementation/t16-signoff.md; local synthetic evidence does not satisfy complete product acceptance."
     },
     {
       "id": "AC-05",
@@ -324,25 +328,37 @@
       "id": "AC-27",
       "scenario": "未预热依赖缓存的目标环境阻断公网，导入完整离线包后首次安装",
       "pass_condition": "不访问公网包源、镜像库或授权服务即可启动；缺少材料时报出明确清单",
-      "status": "not_run",
-      "evidence": [],
-      "product_acceptance_passed": false
+      "status": "component_evidence_only",
+      "evidence": [
+        "evals/data-agent/t15/package.json",
+        "evals/data-agent/t15/install.json"
+      ],
+      "product_acceptance_passed": false,
+      "remaining_acceptance": "See implementation/t15-operations.md and implementation/t16-signoff.md; local synthetic evidence does not satisfy complete product acceptance."
     },
     {
       "id": "AC-28",
       "scenario": "在禁公网环境使用全新浏览器会话执行完整业务流程",
       "pass_condition": "上传、对话、三项 Skill、人工确认、画布修改、重跑和导出全部可用",
-      "status": "not_run",
-      "evidence": [],
-      "product_acceptance_passed": false
+      "status": "component_evidence_only",
+      "evidence": [
+        "evals/data-agent/t15/offline-browser-result.json",
+        "evals/data-agent/t15/business-chain-result.json"
+      ],
+      "product_acceptance_passed": false,
+      "remaining_acceptance": "See implementation/t15-operations.md and implementation/t16-signoff.md; local synthetic evidence does not satisfy complete product acceptance."
     },
     {
       "id": "AC-29",
       "scenario": "检查浏览器、应用、Worker 及调度任务的网络记录",
       "pass_condition": "无未声明的公网请求或尝试；前端资源、更新检查、遥测与插件获取符合内网配置",
-      "status": "not_run",
-      "evidence": [],
-      "product_acceptance_passed": false
+      "status": "component_evidence_only",
+      "evidence": [
+        "evals/data-agent/t15/egress-policy.json",
+        "evals/data-agent/t15/offline-browser-result.json"
+      ],
+      "product_acceptance_passed": false,
+      "remaining_acceptance": "See implementation/t15-operations.md and implementation/t16-signoff.md; local synthetic evidence does not satisfy complete product acceptance."
     },
     {
       "id": "AC-30",
@@ -371,25 +387,38 @@
       "id": "AC-32",
       "scenario": "导入离线升级包，完成升级与故障回退演练",
       "pass_condition": "镜像、插件、Skill、数据库和产物格式按兼容清单工作，回退后能读取历史记录",
-      "status": "not_run",
-      "evidence": [],
-      "product_acceptance_passed": false
+      "status": "component_evidence_only",
+      "evidence": [
+        "evals/data-agent/t15/upgrade-result.json",
+        "evals/data-agent/t15/upgrade-browser.txt",
+        "evals/data-agent/t15/rollback-browser.txt"
+      ],
+      "product_acceptance_passed": false,
+      "remaining_acceptance": "See implementation/t15-operations.md and implementation/t16-signoff.md; local synthetic evidence does not satisfy complete product acceptance."
     },
     {
       "id": "AC-33",
       "scenario": "在恢复环境还原备份并核验一条历史流程",
       "pass_condition": "数据库引用与数据/Skill/转换器匹配，待恢复任务不重复发布产物；记录恢复耗时与数据损失范围",
-      "status": "not_run",
-      "evidence": [],
-      "product_acceptance_passed": false
+      "status": "component_evidence_only",
+      "evidence": [
+        "evals/data-agent/t15/recovery-result.json",
+        "evals/data-agent/t15/restored-browser-result.json"
+      ],
+      "product_acceptance_passed": false,
+      "remaining_acceptance": "See implementation/t15-operations.md and implementation/t16-signoff.md; local synthetic evidence does not satisfy complete product acceptance."
     },
     {
       "id": "AC-34",
       "scenario": "内网证书、模型凭据或已声明基础服务配置错误",
       "pass_condition": "明确报错且不关闭证书校验、不泄露凭据、不转向公网替代服务",
-      "status": "not_run",
-      "evidence": [],
-      "product_acceptance_passed": false
+      "status": "component_evidence_only",
+      "evidence": [
+        "evals/data-agent/t15/offline-browser-result.json",
+        "evals/data-agent/t15/delivery-unit.txt"
+      ],
+      "product_acceptance_passed": false,
+      "remaining_acceptance": "See implementation/t15-operations.md and implementation/t16-signoff.md; local synthetic evidence does not satisfy complete product acceptance."
     },
     {
       "id": "AC-35",

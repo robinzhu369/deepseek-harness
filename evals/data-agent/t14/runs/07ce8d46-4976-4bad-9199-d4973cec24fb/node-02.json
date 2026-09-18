@@ -1,0 +1,107 @@
+{
+  "samples": [
+    {
+      "elapsed_seconds": 0.7261120409239084,
+      "memory.peak": "2077908992\n",
+      "memory.current": "2077908992\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 1456884\nuser_usec 896003\nsystem_usec 560880\nnice_usec 0\nnr_periods 5\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 0
+    },
+    {
+      "elapsed_seconds": 1.3089328330243006,
+      "memory.peak": "3480825856\n",
+      "memory.current": "3432079360\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 2764273\nuser_usec 1934185\nsystem_usec 830087\nnice_usec 0\nnr_periods 11\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 0
+    },
+    {
+      "elapsed_seconds": 1.8865760000189766,
+      "memory.peak": "3480825856\n",
+      "memory.current": "3436060672\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 3964027\nuser_usec 3064575\nsystem_usec 899451\nnice_usec 0\nnr_periods 17\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 0
+    },
+    {
+      "elapsed_seconds": 2.4654811249347404,
+      "memory.peak": "3480825856\n",
+      "memory.current": "3427950592\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 5155417\nuser_usec 4155560\nsystem_usec 999856\nnice_usec 0\nnr_periods 22\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 0
+    },
+    {
+      "elapsed_seconds": 3.034963040961884,
+      "memory.peak": "3480825856\n",
+      "memory.current": "3435806720\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 6307879\nuser_usec 5204451\nsystem_usec 1103427\nnice_usec 0\nnr_periods 28\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 0
+    },
+    {
+      "elapsed_seconds": 3.614743083016947,
+      "memory.peak": "3480825856\n",
+      "memory.current": "3436064768\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 7470814\nuser_usec 6282001\nsystem_usec 1188812\nnice_usec 0\nnr_periods 34\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 0
+    },
+    {
+      "elapsed_seconds": 4.186063457978889,
+      "memory.peak": "3480825856\n",
+      "memory.current": "3448180736\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 8432444\nuser_usec 7139321\nsystem_usec 1293122\nnice_usec 0\nnr_periods 40\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 0
+    },
+    {
+      "elapsed_seconds": 4.750890624942258,
+      "memory.peak": "3480825856\n",
+      "memory.current": "3440922624\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 9010706\nuser_usec 7570400\nsystem_usec 1440305\nnice_usec 0\nnr_periods 45\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 0
+    },
+    {
+      "elapsed_seconds": 5.335504582966678,
+      "memory.peak": "3480825856\n",
+      "memory.current": "3410776064\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 9604906\nuser_usec 7996217\nsystem_usec 1608688\nnice_usec 0\nnr_periods 51\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 0
+    }
+  ],
+  "container": "data-agent-9ff08f1f403c4f3491c1030c6eecebac",
+  "operator": "inspect",
+  "node_id": "inspect",
+  "compute_seconds": 5.391509916051291,
+  "docker_state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": true,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 137,
+    "Error": "",
+    "StartedAt": "2026-09-16T05:57:12.56800196Z",
+    "FinishedAt": "2026-09-16T05:57:17.853219755Z"
+  },
+  "error": "MEMORY_LIMIT",
+  "wall_seconds": 5.870214499998838,
+  "memory_peak_bytes": 3480825856,
+  "observed_tmp_peak_bytes": 0,
+  "observed_output_peak_bytes": 0
+}

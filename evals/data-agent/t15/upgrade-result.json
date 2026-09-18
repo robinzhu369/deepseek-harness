@@ -1,0 +1,15 @@
+{
+  "install": {
+    "installed": "local-t15-v2",
+    "bytes": 2052386420,
+    "activated": false
+  },
+  "upgrade": {
+    "active": "local-t15-v2",
+    "previous": "local-t15-v1"
+  },
+  "rollback": {
+    "active": "local-t15-v1",
+    "previous": "local-t15-v2"
+  }
+}

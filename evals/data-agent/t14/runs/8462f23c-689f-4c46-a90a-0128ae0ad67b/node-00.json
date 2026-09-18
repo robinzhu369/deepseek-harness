@@ -1,0 +1,67 @@
+{
+  "samples": [
+    {
+      "elapsed_seconds": 0.729551124968566,
+      "memory.peak": "1133801472\n",
+      "memory.current": "1134063616\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 1124257\nuser_usec 481538\nsystem_usec 642718\nnice_usec 0\nnr_periods 5\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 0
+    },
+    {
+      "elapsed_seconds": 1.311591999954544,
+      "memory.peak": "1774821376\n",
+      "memory.current": "1758846976\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 2013990\nuser_usec 981457\nsystem_usec 1032533\nnice_usec 0\nnr_periods 11\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 4296704
+    },
+    {
+      "elapsed_seconds": 1.9048872919520363,
+      "memory.peak": "1801388032\n",
+      "memory.current": "407379968\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 2745411\nuser_usec 1633029\nsystem_usec 1112382\nnice_usec 0\nnr_periods 16\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 20733952
+    },
+    {
+      "elapsed_seconds": 2.1610967919696122,
+      "memory.peak": "1801388032\n",
+      "memory.current": "407830528\n",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "cpu.stat": "usage_usec 2801771\nuser_usec 1659340\nsystem_usec 1142430\nnice_usec 0\nnr_periods 19\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "/tmp": 0,
+      "/output": 20733952
+    }
+  ],
+  "container": "data-agent-a8bc50b6d7564666a94df7a8bcc8fff9",
+  "operator": "import",
+  "node_id": "import",
+  "compute_seconds": 1.7885434589115903,
+  "docker_state": {
+    "Status": "running",
+    "Running": true,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 59612,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-09-16T05:58:43.086423044Z",
+    "FinishedAt": "0001-01-01T00:00:00Z"
+  },
+  "result": {
+    "run_id": "a2aec671-7126-4a6d-adf0-76f12ab49c05",
+    "job_id": "dafa5c69-c8a9-4e8d-9736-484627e69d53",
+    "manifest_digest": "77c848be1d70bb4fca9a6d0120762a6d709c4e73b8342734684e6bac17654508",
+    "status": "published"
+  },
+  "wall_seconds": 2.3772573330206797,
+  "memory_peak_bytes": 1801388032,
+  "observed_tmp_peak_bytes": 0,
+  "observed_output_peak_bytes": 20733952
+}

@@ -1,0 +1,16 @@
+{
+  "memory": {
+    "run": "07ce8d46-4976-4bad-9199-d4973cec24fb",
+    "expected": "MEMORY_LIMIT",
+    "confirmed": true,
+    "status": "failed",
+    "export_count": 0
+  },
+  "cardinality": {
+    "run": "8462f23c-689f-4c46-a90a-0128ae0ad67b",
+    "expected": "DIMENSION_LIMIT",
+    "confirmed": true,
+    "status": "failed",
+    "export_count": 0
+  }
+}

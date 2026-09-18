@@ -1,0 +1,24 @@
+{
+  "worker_tests": {
+    "passed": 40,
+    "skipped": 0
+  },
+  "domain_tests": {
+    "passed": 62,
+    "skipped": 0
+  },
+  "delivery_tests": {
+    "passed": 4
+  },
+  "offline_browser": "passed",
+  "restore_browser": "passed",
+  "upgrade_browser": "passed",
+  "rollback_browser": "passed",
+  "extension_typecheck": "passed",
+  "lint": "passed",
+  "documentation_quick_gates": 16,
+  "documentation_sync_gates": 34,
+  "diff_whitespace": "passed",
+  "modified_files_secret_pattern_scan": "passed",
+  "release_ready": false
+}
