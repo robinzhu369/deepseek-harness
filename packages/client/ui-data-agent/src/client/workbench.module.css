@@ -96,7 +96,7 @@
 }
 .conversation > header {
   padding: 18px 24px;
-  border-bottom: 00.5px solid var(--dsw-alias-border-l4);
+  border-bottom: 0.5px solid var(--dsw-alias-border-l4);
   flex-wrap: wrap;
 }
 .conversation h2 {
@@ -117,7 +117,7 @@
   display: flex;
   flex-direction: column;
   gap: 9px;
-  border: 00.5px solid var(--dsw-alias-border-l4);
+  border: 0.5px solid var(--dsw-alias-border-l4);
   border-radius: 12px;
   padding: 14px;
   margin-bottom: 12px;
@@ -126,7 +126,7 @@
 }
 .event {
   padding: 12px 0;
-  border-bottom: 00.5px solid var(--dsw-alias-border-l4);
+  border-bottom: 0.5px solid var(--dsw-alias-border-l4);
 }
 .event p {
   white-space: pre-wrap;
@@ -138,7 +138,7 @@
   align-items: flex-end;
   gap: 12px;
   padding: 18px 24px;
-  border-top: 00.5px solid var(--dsw-alias-border-l4);
+  border-top: 0.5px solid var(--dsw-alias-border-l4);
 }
 .composer textarea {
   min-height: 80px;
@@ -175,7 +175,7 @@
   top: 0;
   bottom: 0;
   background: var(--dsw-alias-bg-layer-2);
-  border-left: 00.5px solid var(--dsw-alias-border-l4);
+  border-left: 0.5px solid var(--dsw-alias-border-l4);
   overflow: hidden;
 }
 .rightbar header {
@@ -244,13 +244,13 @@
   height: 380px;
   min-height: 280px;
   background: var(--dsw-alias-bg-layer-1);
-  border: 00.5px solid var(--dsw-alias-border-l4);
+  border: 0.5px solid var(--dsw-alias-border-l4);
   border-radius: 12px;
   flex-shrink: 0;
 }
 .flowNode {
   padding: 15px;
-  border: 00.5px solid var(--dsw-alias-border-l4);
+  border: 0.5px solid var(--dsw-alias-border-l4);
   border-radius: 10px;
   background: var(--dsw-alias-bg-layer-1);
   min-width: 180px;
@@ -302,7 +302,7 @@
 .managerContent select {
   background: var(--dsw-alias-bg-layer-1);
   color: inherit;
-  border: 00.5px solid var(--dsw-alias-border-l4);
+  border: 0.5px solid var(--dsw-alias-border-l4);
   border-radius: 7px;
   padding: 8px;
   max-width: 100%;
@@ -321,7 +321,7 @@
   box-sizing: border-box;
   background: var(--dsw-alias-bg-layer-1);
   color: inherit;
-  border: 00.5px solid var(--dsw-alias-border-l4);
+  border: 0.5px solid var(--dsw-alias-border-l4);
   border-radius: 8px;
   padding: 10px;
   min-height: 92px;
@@ -361,7 +361,7 @@
 .tableScroll td {
   padding: 8px 12px;
   text-align: left;
-  border-bottom: 00.5px solid var(--dsw-alias-border-l4);
+  border-bottom: 0.5px solid var(--dsw-alias-border-l4);
   white-space: nowrap;
 }
 
@@ -392,7 +392,7 @@
   padding-top: 0;
 }
 .sidebar footer {
-  border-top: 00.5px solid var(--dsw-alias-border-l4);
+  border-top: 0.5px solid var(--dsw-alias-border-l4);
   padding-top: 12px;
 }
 .newSession {
@@ -419,7 +419,7 @@
 .steps li {
   flex: 1;
   padding: 12px 6px;
-  border-bottom: 00.5px solid var(--dsw-alias-border-l4);
+  border-bottom: 0.5px solid var(--dsw-alias-border-l4);
   color: var(--dsw-alias-label-secondary);
   font-size: 12px;
 }
@@ -435,7 +435,7 @@
   border-radius: 16px;
 }
 .advanced {
-  border-top: 00.5px solid var(--dsw-alias-border-l4);
+  border-top: 0.5px solid var(--dsw-alias-border-l4);
   padding: 14px 0;
 }
 .advanced summary {
@@ -453,7 +453,7 @@
   margin-top: 12px;
 }
 .nextStep {
-  border: 00.5px solid var(--dsw-alias-border-l4);
+  border: 0.5px solid var(--dsw-alias-border-l4);
   border-radius: 12px;
   padding: 16px;
   background: var(--dsw-alias-bg-layer-1);
@@ -520,7 +520,7 @@
   text-align: left;
   padding: 14px;
   border-radius: 0;
-  border-bottom: 00.5px solid var(--dsw-alias-border-l4);
+  border-bottom: 0.5px solid var(--dsw-alias-border-l4);
   background: transparent;
   font-size: 13px;
 }
@@ -573,7 +573,7 @@
 .qualityReport th {
   padding: 6px 4px;
   text-align: left;
-  border-bottom: 00.5px solid var(--dsw-alias-border-l4);
+  border-bottom: 0.5px solid var(--dsw-alias-border-l4);
   overflow-wrap: anywhere;
 }
 
@@ -689,7 +689,7 @@
 .modelPicker { display: flex; align-items: flex-end; gap: 12px; }
 .modelPicker > label { flex: 1; min-width: 0; }
 .modelActions { grid-column: 1 / -1; display: flex; gap: 8px; flex-wrap: wrap; position: sticky; bottom: 0; background: var(--dsw-alias-bg-layer-1); padding: 12px 0; }
-.modelDeleteConfirm { grid-column: 1 / -1; border: 00.5px solid var(--dsw-alias-border-l4); border-radius: 8px; padding: 12px; }
+.modelDeleteConfirm { grid-column: 1 / -1; border: 0.5px solid var(--dsw-alias-border-l4); border-radius: 8px; padding: 12px; }
 
 /* Modeling workbench: calm surfaces, precise controls and one semantic action accent. */
 .sidebar, .conversation, .rightbar, .managerContent {
@@ -775,7 +775,7 @@
   padding: 4px;
   border-radius: 12px;
   background: var(--dsw-alias-bg-layer-1);
-  border: 00.5px solid var(--dsw-alias-border-l4);
+  border: 0.5px solid var(--dsw-alias-border-l4);
 }
 .rightbar .monitorTab { gap: 6px; padding-inline: 8px; }
 .rightbar .monitorTab[aria-pressed='true'] {
@@ -935,3 +935,8 @@
   .mountFooter { flex-wrap: wrap; }
   .mountFooter > span { flex-basis: 100%; }
 }
+.mountModal .managerContent { max-height: none; overflow: hidden; }
+.mountBrowser { max-height: 64vh; }
+.mountToolbar, .mountBreadcrumb, .mountPagination, .mountFooter { flex-shrink: 0; }
+.mountGrid { min-height: 120px; flex: 1; }
+.mountBrowser > .stack { overflow: auto; min-height: 0; }
