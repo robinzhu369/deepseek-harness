@@ -13,15 +13,16 @@ import { DataAgentService } from './service.ts'
 import { Skills } from './skills.ts'
 import { HarnessSessions } from './harness.ts'
 export type UserAccount={actor_id:string;credential_sha256:string;can_create_projects:boolean}
-export type DomainHttpConfig={accounts:UserAccount[];allowed_origins:string[];max_body_bytes:number}
+export type DomainHttpConfig={accounts:UserAccount[];allowed_origins:string[];max_body_bytes:number;credential_min_length?:number}
 export function createDomainHandler(catalog:Catalog,service:DataAgentService,config:DomainHttpConfig,skills?:Skills,harness?:HarnessSessions) {
+  const credentialMinLength=z.number().int().min(6).max(200).default(20).parse(config.credential_min_length)
   const accounts=structuredClone(config.accounts),workbench=new Workbench(service.pool)
   return async(req:IncomingMessage,res:ServerResponse)=>{
     const send=(status:number,body:unknown)=>{res.writeHead(status,{'content-type':'application/json','cache-control':'no-store','x-content-type-options':'nosniff'});res.end(JSON.stringify(body))}
     try {
       if(req.headers.origin && !config.allowed_origins.includes(req.headers.origin)) throw new DomainError('FORBIDDEN')
-      const token=req.headers.authorization?.match(/^Bearer ([A-Za-z0-9_-]{20,200})$/)?.[1]
-      if(!token) throw new DomainError('FORBIDDEN')
+      const token=req.headers.authorization?.match(/^Bearer ([A-Za-z0-9_-]{1,200})$/)?.[1]
+      if(!token || token.length<credentialMinLength) throw new DomainError('FORBIDDEN')
       const hash=createHash('sha256').update(token).digest()
       const account=accounts.find(a=>timingSafeEqual(hash,Buffer.from(a.credential_sha256,'hex')))
       if(!account) throw new DomainError('FORBIDDEN')
@@ -61,11 +62,19 @@ export function createDomainHandler(catalog:Catalog,service:DataAgentService,con
         if(req.method==='GET'){send(200,await workbench.workflow(actor,id,url.searchParams.has('revision')?Number(url.searchParams.get('revision')):undefined));return}
         if(req.method==='POST'){const value=z.object({expected_revision:z.number().int().nonnegative(),workflow:z.unknown()}).strict().parse(body);send(200,await service.saveWorkflow(actor,id,value.expected_revision,value.workflow));return}
       }
+      if(parts[1]==='models' && parts.length===2 && req.method==='GET' && harness){send(200,await harness.models());return}
+      if(parts[1]==='goals' && parts.length===2 && req.method==='POST' && harness){
+        const abort=new AbortController(),cancel=()=>abort.abort()
+        res.once('close',cancel)
+        try {send(200,await harness.goal(actor,body,abort.signal))}finally{res.off('close',cancel)}
+        return
+      }
       if(parts[1]==='sessions'){
         if(req.method==='GET'&&parts.length===2){send(200,await workbench.sessions(actor,page));return}
         const id=parts[2]===undefined?'':Id.parse(parts[2])
         if(req.method==='GET'&&parts[3]==='navigation'){send(200,await workbench.navigation(actor,id));return}
         if(req.method==='GET'&&parts[3]==='history'&&harness){send(200,await harness.history(actor,id,Number(url.searchParams.get('after')??-1),page.limit));return}
+        if(req.method==='POST'&&parts.length===4&&parts[3]==='delete'&&harness){z.object({}).strict().parse(body);send(200,await harness.remove(actor,id));return}
         if(req.method==='POST'&&parts[3]==='rename'){send(200,await workbench.rename(actor,id,body));return}
       }
       if(parts[1]==='tasks') {
@@ -112,7 +121,7 @@ export function createDomainHandler(catalog:Catalog,service:DataAgentService,con
       if(parts[1]==='sessions' && harness && req.method==='POST') {
         if(parts.length===2){send(201,await harness.create(actor,body));return}
         const id=Id.parse(parts[2])
-        if(parts[3]==='messages'){const value=z.object({text:z.string()}).strict().parse(body);send(200,await harness.message(actor,id,value.text));return}
+        if(parts[3]==='messages'){const value=z.object({text:z.string(),wait_for_idle:z.boolean().default(true)}).strict().parse(body);send(value.wait_for_idle?200:202,await harness.message(actor,id,value.text,value.wait_for_idle));return}
         if(parts[3]==='resume'){send(200,await harness.resume(actor,id));return}
         if(parts[3]==='cancel'){await harness.cancel(actor,id);send(200,{status:'cancel_requested'});return}
       }

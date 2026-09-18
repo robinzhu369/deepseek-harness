@@ -100,10 +100,10 @@ export class Skills extends Repository {
       return (await db.query('SELECT id,session_id FROM data_agent.skill_invocations WHERE project_id=$1 AND skill_id=$2 AND version=$3',[actor.project_id,id,v])).rows
     })
   }
-  async invoke(actor:Actor,id:string,v:string|null,sessionId:string,raw:unknown) {
+  async invoke(actor:Actor,id:string,v:string|null,sessionId:string,raw:unknown,runtime:SkillRuntime|null=this.runtime) {
     const input=SkillInput.parse(raw)
     if(input.project_id!==actor.project_id || input.dataset.project_id!==actor.project_id) throw new DomainError('FORBIDDEN')
-    if(!this.runtime) throw new DomainError('RUNTIME_UNCONFIGURED')
+    if(!runtime) throw new DomainError('RUNTIME_UNCONFIGURED')
     return this.tx(async db=>{
       await this.mutation(db,actor)
       const selected=v??(await db.query('SELECT default_version FROM data_agent.skill_definitions WHERE project_id=$1 AND id=$2',[actor.project_id,id])).rows[0]?.default_version
@@ -111,7 +111,7 @@ export class Skills extends Repository {
       if(!row) throw new DomainError('VERSION_UNAVAILABLE')
       if(!(await db.query('SELECT 1 FROM data_agent.artifacts WHERE project_id=$1 AND id=$2 AND digest=$3 AND kind=$4 AND deleted_at IS NULL',[actor.project_id,input.dataset.artifact_id,input.dataset.digest,input.dataset.kind])).rowCount) throw new DomainError('INPUT_NOT_READY')
       const invocationId=randomUUID()
-      await db.query('INSERT INTO data_agent.skill_invocations(id,project_id,skill_id,version,digest,actor_id,session_id,input,runtime) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)',[invocationId,actor.project_id,id,selected,row.digest,actor.actor_id,sessionId,input,this.runtime])
+      await db.query('INSERT INTO data_agent.skill_invocations(id,project_id,skill_id,version,digest,actor_id,session_id,input,runtime) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)',[invocationId,actor.project_id,id,selected,row.digest,actor.actor_id,sessionId,input,runtime])
       await this.audit(db,actor,'skill.invoke',{invocation_id:invocationId,id,version:selected})
       return {invocation_id:invocationId,lock:{id,version:selected,digest:row.digest,project_id:actor.project_id},snapshot:row.snapshot}
     })

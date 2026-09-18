@@ -6,6 +6,17 @@ export const name = 'data-agent-scripted-model'
 export const inject = ['llm']
 class Scripted extends LlmAdapter {
   async *stream(options: GenerateOptions): AsyncIterable<StreamChunk> {
+    if (JSON.stringify(options.messages).includes('Draft one concise, practical data modeling preparation goal')) {
+      assert.equal(options.tools?.length ?? 0, 0)
+      const block=options.messages.filter(message=>message.role==='user').at(-1)?.content.find(block=>block.type==='text')
+      assert.ok(block && block.type==='text')
+      const request=JSON.parse(block.text)
+      if(request.keywords==='simulate failure')throw new Error('Synthetic generation failure')
+      yield {type:'block-start',index:0,blockType:'text'}
+      yield {type:'text-delta',index:0,text:request.keywords?`Prepare training data for ${request.keywords}; confirm cleaning and feature proposals before execution.`:'Inspect data quality and prepare training data after confirming the processing proposal.'}
+      yield {type:'finish',reason:{kind:'stop'}}
+      return
+    }
     if (options.tools?.some((tool) => tool.name === 'submit_skill_result')) {
       assert.deepEqual(
         options.tools.map((tool) => tool.name),
@@ -86,6 +97,10 @@ class Scripted extends LlmAdapter {
       JSON.stringify(options.messages).includes('domain_schemas'),
       'Workflow and proposal schemas must be visible in logged context',
     )
+    assert.ok(
+      JSON.stringify(options.messages).includes('Always write every user-visible response in Simplified Chinese'),
+      'Domain sessions must instruct the model to answer users in Simplified Chinese',
+    )
     const task = options.tools?.some((tool) => tool.name === 'get_task_snapshot')
     assert.deepEqual(
       options.tools?.map((tool) => tool.name).sort(),
@@ -104,12 +119,19 @@ class Scripted extends LlmAdapter {
       yield {
         type: 'text-delta',
         index: 0,
-        text: 'The tool result is recorded; queued work is not yet completed.',
+        text: '工具结果已记录；排队中的任务尚未完成。',
       }
       yield { type: 'finish', reason: { kind: 'stop' } }
       return
     }
     const text = JSON.stringify(options.messages.filter((m) => m.role === 'user').at(-1))
+    if (text.includes('TEST_ASYNC')) {
+      await new Promise(resolve => setTimeout(resolve,500))
+      yield {type:'block-start',index:0,blockType:'text'}
+      yield {type:'text-delta',index:0,text:'ASYNC_COMPLETE'}
+      yield {type:'finish',reason:{kind:'stop'}}
+      return
+    }
     const proposal = {
       schema_version: '1',
       project_id: 'p',

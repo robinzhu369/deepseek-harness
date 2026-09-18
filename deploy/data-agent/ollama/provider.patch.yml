@@ -1,0 +1,11 @@
+- id: llm-deepseek
+  config:
+    apiKeyEnv: OLLAMA_API_KEY
+    baseURL: http://127.0.0.1:11434/v1
+    thinking: disabled
+    maxTokens: 4096
+    defaultContextWindow: 32768
+    models:
+      - id: qwen3.5:9b-harness
+        name: Qwen 3.5 9B (Local Ollama)
+        contextWindow: 32768

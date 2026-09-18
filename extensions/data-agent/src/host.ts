@@ -37,6 +37,7 @@ export const Config = z.object({
   quality_evaluation:QualityConfig.nullable().default(null),
   skill_allowed_tools:z.array(z.enum(['inspect_dataset','propose_workflow_patch'])),
   allowed_origins:z.array(z.string().url()),
+  user_credential_min_length:z.number().int().min(6).max(200).default(20),
   user_accounts:z.array(z.object({actor_id:z.string().min(1),credential_sha256:z.string().regex(/^[a-f0-9]{64}$/),can_create_projects:z.boolean()}).strict()),
   accounts: z.array(z.object({
     owner: z.string().min(1), projects: z.array(z.string().min(1)).min(1),
@@ -80,7 +81,7 @@ export async function apply(ctx: Context, raw: z.infer<typeof Config>) {
     if(config.harness && ['agents','tools','skills','sessions'].some(name=>!ctx.get(name)))throw new Error('DATA_AGENT_HARNESS_SERVICES')
     const harness=config.harness?new HarnessSessions(ctx,catalog,skills,service,config.harness):undefined
     if(harness)yield ()=>harness.dispose()
-    const domainHandler=createDomainHandler(catalog,service,{accounts:config.user_accounts,allowed_origins:config.allowed_origins,max_body_bytes:config.max_body_bytes},skills,harness)
+    const domainHandler=createDomainHandler(catalog,service,{accounts:config.user_accounts,credential_min_length:config.user_credential_min_length,allowed_origins:config.allowed_origins,max_body_bytes:config.max_body_bytes},skills,harness)
     const active = new Set<Promise<void>>()
     const server = createServer({connectionsCheckingInterval:config.request_timeout_ms},(req, res) => {
       if (!config.trusted_hosts.includes(req.headers.host ?? '')) {

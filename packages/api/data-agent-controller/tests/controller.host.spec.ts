@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import Controller from '../src/index.ts'
 const credential = 'synthetic-workbench-credential'
 const signal = () => new AbortController().signal
-async function setup() {
+async function setup(credentialMinLength?: number) {
   const ctx = new Context()
   let binary: ((request: Request) => Promise<Response>) | undefined
   ctx.reflect.provide('typert', {})
@@ -16,6 +16,7 @@ async function setup() {
     },
   })
   const fiber = ctx.plugin(Controller, {
+    ...(credentialMinLength === undefined ? {} : { credentialMinLength }),
     endpoint: 'http://127.0.0.1:12345',
     timeoutMs: 10000,
     maxBodyBytes: 64,
@@ -126,4 +127,19 @@ describe('data workbench domain carrier', () => {
       await ctx.fiber.dispose()
     }
   })
+})
+
+it('keeps short credentials disabled by default and enables them only in configured deployments', async () => {
+  const fetcher = vi.fn().mockResolvedValue(new Response('{}'))
+  vi.stubGlobal('fetch', fetcher)
+  const normal = await setup()
+  try {
+    await expect(normal.service.request('123456', 'GET', '/v1/data/account', '', signal())).rejects.toThrow('DATA_AGENT_CREDENTIAL')
+    expect(fetcher).not.toHaveBeenCalled()
+  } finally { await normal.ctx.fiber.dispose() }
+  const local = await setup(6)
+  try {
+    await local.service.request('123456', 'GET', '/v1/data/account', '', signal())
+    expect(fetcher).toHaveBeenCalledOnce()
+  } finally { await local.ctx.fiber.dispose() }
 })

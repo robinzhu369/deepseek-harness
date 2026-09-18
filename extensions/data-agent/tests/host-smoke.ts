@@ -342,11 +342,40 @@ export async function hostSmoke(databaseUrl: string, startupError?: string, harn
         fit_scope: 'undefined',
         policy_version: 'policy1',
       }
+      if(!process.env.DATA_AGENT_REAL_MODEL){
+        const selected=await call('sessions',{input,skills:[],model:{provider:'data-agent-scripted',model:'selected-fixture'}})
+        const record=(await harnessPool.query('SELECT provider,runtime FROM data_agent.harness_sessions WHERE id=$1',[selected.session_id])).rows[0]
+        assert.equal(record.provider,'data-agent-scripted');assert.equal(record.runtime.model_id,'selected-fixture')
+        const invalid=await fetch(`http://127.0.0.1:${port}/v1/data/p/sessions`,{method:'POST',headers:{authorization:'Bearer '+userToken,'content-type':'application/json'},body:JSON.stringify({input,skills:[],model:{provider:'nonexistent',model:'x'}})})
+        assert.equal(invalid.ok,false)
+      }
       const created = await call('sessions', { input, skills: [] })
       const prompt = process.env.DATA_AGENT_REAL_MODEL
         ? 'Call inspect_dataset exactly once with dataset_id input, then report that the returned run is submitted and not yet complete. Do not poll.'
         : 'TEST_INSPECT'
       const response = await call(`sessions/${created.session_id}/messages`, { text: prompt })
+      if (!process.env.DATA_AGENT_REAL_MODEL) {
+        const background = await call('sessions', { input, skills: [] })
+        const accepted = await fetch(`http://127.0.0.1:${port}/v1/data/p/sessions/${background.session_id}/messages`, {
+          method:'POST', headers:{authorization:'Bearer '+userToken,'content-type':'application/json'},
+          body:JSON.stringify({text:'TEST_ASYNC',wait_for_idle:false}),
+        })
+        assert.equal(accepted.status,202)
+        assert.equal((await accepted.json()).status,'accepted')
+        const busy = await fetch(`http://127.0.0.1:${port}/v1/data/p/sessions/${background.session_id}/messages`, {
+          method:'POST', headers:{authorization:'Bearer '+userToken,'content-type':'application/json'},
+          body:JSON.stringify({text:'TEST_ASYNC',wait_for_idle:false}),
+        })
+        assert.equal((await busy.json()).error,'SESSION_BUSY')
+        let history
+        for(let i=0;i<80;i++){
+          history=await (await fetch(`http://127.0.0.1:${port}/v1/data/p/sessions/${background.session_id}/history`,{headers:{authorization:'Bearer '+userToken}})).json()
+          if(history.activity==='idle')break
+          await delay(50)
+        }
+        assert.equal(history.activity,'idle')
+        assert.ok(JSON.stringify(history.events).includes('ASYNC_COMPLETE'))
+      }
       const firstPage = (await (
         await fetch(
           `http://127.0.0.1:${port}/v1/data/p/sessions/${created.session_id}/history?after=-1&limit=1`,

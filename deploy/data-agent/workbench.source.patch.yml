@@ -4,7 +4,7 @@
 - insert:
     - id: data-agent-host
       name: '../../extensions/data-agent/src/host.ts'
-      inject: [agents, sessions, tools, skills]
+      inject: [agents, sessions, tools, skills, llm]
       config: !!js JSON.parse(process.env.DATA_AGENT_HOST_CONFIG ?? 'null')
     - id: data-agent-controller
       name: '../../packages/api/data-agent-controller/src/index.ts'

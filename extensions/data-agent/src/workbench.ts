@@ -8,12 +8,23 @@ export class Workbench extends Repository {
   /** List only the caller's sessions, with stable ordering and bounded pages. */
   async sessions(actor:Actor,raw:unknown){
     const page=Page.parse(raw)
-    return this.tx(async db=>{await this.authorize(db,actor);return (await db.query(`SELECT id,title,input,business_task_id,status,created_at,updated_at FROM data_agent.harness_sessions WHERE project_id=$1 AND actor_id=$2 AND ($3='' OR strpos(lower(title),lower($3))>0) ORDER BY updated_at DESC,id LIMIT $4 OFFSET $5`,[actor.project_id,actor.actor_id,page.search,page.limit,page.offset])).rows})
+    return this.tx(async db=>{await this.authorize(db,actor);return (await db.query(`SELECT id,title,input,business_task_id,status,created_at,updated_at,provider,runtime->>'model_id' AS model_id FROM data_agent.harness_sessions WHERE project_id=$1 AND actor_id=$2 AND ($3='' OR strpos(lower(title),lower($3))>0 OR strpos(lower(input->>'goal'),lower($3))>0) ORDER BY updated_at DESC,id LIMIT $4 OFFSET $5`,[actor.project_id,actor.actor_id,page.search,page.limit,page.offset])).rows})
   }
   /** Rename session metadata without modifying its conversation history. */
   async rename(actor:Actor,id:string,raw:unknown){
     const {title}=z.object({title:z.string().trim().min(1).max(256)}).strict().parse(raw)
     return this.tx(async db=>{await this.authorize(db,actor,'write');const result=await db.query('UPDATE data_agent.harness_sessions SET title=$4,updated_at=clock_timestamp() WHERE project_id=$1 AND actor_id=$2 AND id=$3 RETURNING id,title',[actor.project_id,actor.actor_id,id,title]);if(!result.rowCount)throw new DomainError('SESSION_FORBIDDEN');return result.rows[0]})
+  }
+  /** Remove an owned history binding while retaining artifacts and audit logs. */
+  async removeSession(actor:Actor,id:string){
+    return this.tx(async db=>{
+      await this.authorize(db,actor,'write')
+      const row=(await db.query('SELECT status FROM data_agent.harness_sessions WHERE project_id=$1 AND actor_id=$2 AND id=$3 FOR UPDATE',[actor.project_id,actor.actor_id,id])).rows[0]
+      if(!row)throw new DomainError('SESSION_FORBIDDEN')
+      if(row.status==='preparing' || (await db.query("SELECT 1 FROM data_agent.runs WHERE project_id=$1 AND session_id=$2 AND status NOT IN ('succeeded','failed','cancelled') LIMIT 1",[actor.project_id,id])).rowCount)throw new DomainError('SESSION_BUSY')
+      await db.query('DELETE FROM data_agent.harness_sessions WHERE project_id=$1 AND actor_id=$2 AND id=$3',[actor.project_id,actor.actor_id,id])
+      return {session_id:id,deleted:true}
+    })
   }
   /** Read current workflow or a retained immutable revision. */
   async workflow(actor:Actor,id:string,revision?:number){

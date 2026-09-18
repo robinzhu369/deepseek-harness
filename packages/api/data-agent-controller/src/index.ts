@@ -1,4 +1,7 @@
 /** Optional Web Remote adapter for the authenticated Data Agent domain host. */
+import { z } from 'zod'
+import { probeModel } from './model-probe.ts'
+import type { ModelProbeResult } from './types.ts'
 import type { Context } from '@deepseek-ai/cordis'
 import Schema from '@deepseek-ai/schemastery'
 import { Remote, TypertRemoteService } from '@deepseek-ai/dsh-typert-protocol'
@@ -16,6 +19,7 @@ interface Config {
   /** Maximum bytes of a JSON command body. */
   maxBodyBytes: number
   /** Maximum bytes of a JSON response. */
+  credentialMinLength: number
   maxResultBytes: number
 }
 import type { DomainResponse } from './types.ts'
@@ -33,8 +37,11 @@ export class DataAgentController extends TypertRemoteService {
     endpoint: Schema.string().required(),
     timeoutMs: Schema.number().min(1).required(),
     maxBodyBytes: Schema.number().min(1).required(),
+    credentialMinLength: Schema.number().min(6).max(200).default(20),
     maxResultBytes: Schema.number().min(1).required(),
   })
+  private probing = false
+  private readonly probes = new Set<Promise<ModelProbeResult>>()
   private readonly endpoint: URL
   private readonly lifecycle = new AbortController()
   /** @param ctx - Host services. @param config - Explicit domain routing and resource limits. */
@@ -44,8 +51,9 @@ export class DataAgentController extends TypertRemoteService {
   ) {
     super(ctx, 'dataAgentController', { namespace: 'dataAgent' })
     ctx.effect(
-      () => () => {
+      () => async () => {
         this.lifecycle.abort()
+        await Promise.allSettled(this.probes)
       },
       'data-agent: outbound lifetime',
     )
@@ -73,6 +81,34 @@ export class DataAgentController extends TypertRemoteService {
       maxUploadBytes: this.config.maxUploadBytes,
     })
   }
+  /** Test a saved provider using a synthetic message through the Harness loop.
+   * @param provider - Registered provider identifier.
+   * @param model - Configured model identifier.
+   * @param signal - Browser cancellation.
+   * @returns Redacted result and retained audit session identifier.
+   */
+  @Remote
+  async testModel(provider: string, model: string, signal: AbortSignal): Promise<ModelProbeResult> {
+    z.object({ provider: z.string().min(1).max(200), model: z.string().min(1).max(200) }).parse({
+      provider,
+      model,
+    })
+    if (this.probing) throw new Error('MODEL_TEST_BUSY')
+    this.probing = true
+    const work = probeModel(
+      this.ctx,
+      provider,
+      model,
+      AbortSignal.any([signal, this.lifecycle.signal, AbortSignal.timeout(this.config.timeoutMs)]),
+    )
+    this.probes.add(work)
+    try {
+      return await work
+    } finally {
+      this.probing = false
+      this.probes.delete(work)
+    }
+  }
   private url(path: string) {
     if (!path.startsWith('/v1/data/') || path.includes('#') || path.includes('\\'))
       throw new Error('DATA_AGENT_PATH')
@@ -82,7 +118,7 @@ export class DataAgentController extends TypertRemoteService {
     return url
   }
   private credential(value: string) {
-    if (!/^[A-Za-z0-9_-]{20,200}$/.test(value)) throw new Error('DATA_AGENT_CREDENTIAL')
+    if (!/^[A-Za-z0-9_-]{1,200}$/.test(value) || value.length < this.config.credentialMinLength) throw new Error('DATA_AGENT_CREDENTIAL')
     return 'Bearer ' + value
   }
   /** Forward one bounded JSON domain operation through the existing Remote carrier.
