@@ -1,7 +1,7 @@
 {
   "id": "feature-engineering",
-  "version": "0.1.1",
-  "description": "特征工程",
+  "version": "0.2.0",
+  "description": "特征工程：预测时点与泄漏审查、缺失语义、训练集拟合及可复现编码（融合AI-SKILLS）",
   "input_schema": "contracts/input.schema.json",
   "output_schema": "contracts/output.schema.json",
   "required_tools": [
@@ -9,7 +9,15 @@
     "propose_workflow_patch"
   ],
   "operator_dependencies": {
-    "inspect": "1"
+    "inspect": "1",
+    "replace_missing": "1",
+    "cast_numeric": "1",
+    "split": "1",
+    "fit": "1",
+    "transform": "1",
+    "derive": "1",
+    "quality": "1",
+    "export": "1"
   },
   "evaluation_suite": "feature-engineering-core-v1"
 }

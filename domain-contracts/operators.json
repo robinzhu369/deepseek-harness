@@ -237,6 +237,81 @@
       "additionalProperties": false
     }
   },
+  "replace_missing": {
+    "inputs": {
+      "data": "DatasetRef"
+    },
+    "outputs": {
+      "data": "DatasetRef",
+      "report": "ReportRef"
+    },
+    "params": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "columns": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
+        },
+        "tokens": {
+          "minItems": 1,
+          "maxItems": 100,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "columns",
+        "tokens"
+      ],
+      "additionalProperties": false
+    },
+    "approval": true
+  },
+  "cast_numeric": {
+    "inputs": {
+      "data": "DatasetRef"
+    },
+    "outputs": {
+      "data": "DatasetRef",
+      "report": "ReportRef"
+    },
+    "params": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "columns": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
+        },
+        "dtype": {
+          "type": "string",
+          "enum": [
+            "Int64",
+            "Float64"
+          ]
+        }
+      },
+      "required": [
+        "columns",
+        "dtype"
+      ],
+      "additionalProperties": false
+    },
+    "approval": true
+  },
   "fill_constant": {
     "inputs": {
       "data": "DatasetRef"

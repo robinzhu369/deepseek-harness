@@ -19,10 +19,17 @@ import time
 import uuid
 from pathlib import Path
 from urllib.parse import urlsplit
+from failure_codes import FAILURE_CODES
 
 
 class WorkerError(Exception):
     """Stable public error code, without driver output or credentials."""
+
+
+class AttemptFailure(WorkerError):
+    """Confirmed attempt failure; its stable code survives supervisor recovery."""
+    def __init__(self, code):
+        super().__init__(code if code in FAILURE_CODES else 'INVALID_WORKER_RESPONSE')
 
 
 class Client:
@@ -57,7 +64,7 @@ class Client:
                 with destination.open('xb') as output:
                     while chunk := response.read(65536):
                         check();size += len(chunk)
-                        if size > self.config['input_bytes']: raise WorkerError('INPUT_LIMIT')
+                        if size > self.config['input_bytes']: raise AttemptFailure('INPUT_LIMIT')
                         digest.update(chunk);output.write(chunk)
                 return size, digest.hexdigest()
             raw = response.read(self.config['manifest_bytes']+1)
@@ -71,6 +78,7 @@ class DockerAttempt:
     def __init__(self, config, name):
         if not re.fullmatch(r'data-agent-[a-f0-9]{32}',name): raise WorkerError('CONTAINER_NAME')
         self.config, self.name, self.process = config, name, None
+        self.readers = []
 
     def command(self, *args, check=True):
         result = subprocess.run([self.config['docker'], *args], stdin=subprocess.DEVNULL,
@@ -105,27 +113,44 @@ class DockerAttempt:
             while chunk := self.process.stderr.read(4096):
                 size += len(chunk)
                 if size>limit: overflow.set();return
-        readers = [threading.Thread(target=read_stdout,daemon=True), threading.Thread(target=read_stderr,daemon=True)]
-        for thread in readers: thread.start()
+        self.readers = [threading.Thread(target=read_stdout,daemon=True), threading.Thread(target=read_stderr,daemon=True)]
+        for thread in self.readers: thread.start()
         self.process.stdin.write(json.dumps(request).encode()+b'\n');self.process.stdin.flush()
         deadline = time.monotonic()+self.config['execution_seconds']
         while True:
             check()
-            if overflow.is_set(): raise WorkerError('OUTPUT_LIMIT')
-            if time.monotonic()>deadline: raise WorkerError('EXECUTION_TIMEOUT')
+            if overflow.is_set(): raise AttemptFailure('OUTPUT_LIMIT')
+            if time.monotonic()>deadline: raise AttemptFailure('EXECUTION_TIMEOUT')
             try:
                 raw = messages.get(timeout=.05)
-                if not raw: raise WorkerError('COMPUTE_FAILED')
-                return json.loads(raw)
+                if not raw:
+                    state = self.command('inspect', '--format', '{{json .State}}', self.name, check=False)
+                    if state.returncode == 0:
+                        observed = json.loads(state.stdout)
+                        if observed.get('OOMKilled') is True: raise AttemptFailure('MEMORY_LIMIT')
+                        if observed.get('ExitCode') == 128 + signal.SIGALRM: raise AttemptFailure('EXECUTION_TIMEOUT')
+                    raise AttemptFailure('COMPUTE_FAILED')
+                try:
+                    result = json.loads(raw)
+                except (ValueError, UnicodeError):
+                    raise AttemptFailure('INVALID_WORKER_RESPONSE') from None
+                if not isinstance(result, dict): raise AttemptFailure('INVALID_WORKER_RESPONSE')
+                if 'failure' in result:
+                    failure = result['failure']
+                    if set(result) != {'failure'} or not isinstance(failure, dict) or set(failure) != {'code'}:
+                        raise AttemptFailure('INVALID_WORKER_RESPONSE')
+                    code = failure['code']
+                    raise AttemptFailure(code if isinstance(code, str) else 'INVALID_WORKER_RESPONSE')
+                return result
             except queue.Empty:
                 continue
 
     def copy(self, manifest, output, check):
         if sum(a['bytes'] for a in manifest['outputs'].values())>self.config['output_bytes']:
-            raise WorkerError('OUTPUT_LIMIT')
+            raise AttemptFailure('OUTPUT_LIMIT')
         for artifact in manifest['outputs'].values():
             filename=artifact['object_key'].rsplit('/',1)[-1]
-            if not re.fullmatch(r'[a-z_]+\.(json|parquet|zip)',filename): raise WorkerError('OUTPUT_PATH')
+            if not re.fullmatch(r'[a-z_]+\.(json|parquet|zip)',filename): raise AttemptFailure('OUTPUT_PATH')
             process=subprocess.Popen([self.config['docker'],'exec',self.name,'cat','/output/result/'+filename],
                 stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,env={'PATH':'/usr/bin:/bin','HOME':self.config['docker_home']})
             size=0;deadline=time.monotonic()+self.config['docker_timeout_seconds']
@@ -133,15 +158,15 @@ class DockerAttempt:
                 with (output/filename).open('xb') as file:
                     while True:
                         check()
-                        if time.monotonic()>deadline: raise WorkerError('OUTPUT_TRANSFER_TIMEOUT')
+                        if time.monotonic()>deadline: raise AttemptFailure('OUTPUT_TRANSFER_TIMEOUT')
                         if not select.select([process.stdout],[],[],.05)[0]: continue
                         chunk=os.read(process.stdout.fileno(),65536)
                         if not chunk: break
                         size+=len(chunk)
-                        if size>artifact['bytes']: raise WorkerError('OUTPUT_SIZE')
+                        if size>artifact['bytes']: raise AttemptFailure('OUTPUT_SIZE')
                         file.write(chunk)
                 if process.wait(timeout=self.config['docker_timeout_seconds']) or size!=artifact['bytes']:
-                    raise WorkerError('OUTPUT_TRANSFER_FAILED')
+                    raise AttemptFailure('OUTPUT_TRANSFER_FAILED')
             finally:
                 if process.poll() is None: process.kill();process.wait()
                 process.stdout.close()
@@ -152,15 +177,19 @@ class DockerAttempt:
             # Only a confirmed absent container allows cancellation acknowledgement.
             ids = self.command('ps', '-aq', '--filter', 'name=^/'+self.name+'$').stdout.strip()
             if ids: raise WorkerError('CONTAINER_STATE_UNKNOWN')
-            return
+            self.finish_process();return
         if state.stdout.strip() == b'true': self.command('kill', self.name)
         self.command('wait', self.name)
+        self.finish_process()
+        self.command('rm', self.name)
+
+    def finish_process(self):
         if self.process:
             try: self.process.wait(timeout=self.config['docker_timeout_seconds'])
             except subprocess.TimeoutExpired:
                 self.process.kill();self.process.wait()
+            for thread in self.readers: thread.join()
             for pipe in [self.process.stdin,self.process.stdout,self.process.stderr]: pipe.close()
-        self.command('rm', self.name)
 
 
 def validate_config(config):
@@ -205,7 +234,10 @@ class RemoteWorker:
                 if value.get('manifest'):
                     result=self.client.request('submit',value['token'],value['manifest'])
                 else:
-                    self.client.request('failure',value['token'],{'code':'WORKER_RESTARTED'})
+                    code=value.get('failure','WORKER_RESTARTED')
+                    if code!='WORKER_RESTARTED' and code not in FAILURE_CODES: raise WorkerError('JOURNAL_CONFIG')
+                    self.client.request('failure',value['token'],{'code':code})
+                    result={'status':'failed','error':code}
         except WorkerError as error:
             if str(error) != 'STALE_ATTEMPT': raise
         self.journal.unlink();self.cleanup();return result
@@ -244,8 +276,8 @@ class RemoteWorker:
                 path=inputs/str(index)
                 count,digest=self.client.request('input',token,{'port':port},destination=path,check=check)
                 total+=count
-                if total>self.config['input_bytes']: raise WorkerError('INPUT_LIMIT')
-                if digest!=ref['digest']: raise WorkerError('INPUT_CHECKSUM')
+                if total>self.config['input_bytes']: raise AttemptFailure('INPUT_LIMIT')
+                if digest!=ref['digest']: raise AttemptFailure('INPUT_CHECKSUM')
                 path.chmod(0o444);resolved[port]={**ref,'path':'/input/'+str(index)}
             prefix='/'.join(str(claim[k]) for k in ['project_id','run_id','job_id','attempt_no'])
             check();docker.create(inputs)
@@ -257,12 +289,12 @@ class RemoteWorker:
             docker.stop();stopped=True
             for artifact in manifest['outputs'].values():
                 key=artifact['object_key'];filename=key.removeprefix(prefix+'/')
-                if key != prefix+'/'+filename or not re.fullmatch(r'[a-z_]+\.(json|parquet|zip)',filename): raise WorkerError('OUTPUT_PATH')
+                if key != prefix+'/'+filename or not re.fullmatch(r'[a-z_]+\.(json|parquet|zip)',filename): raise AttemptFailure('OUTPUT_PATH')
                 path=output/filename
-                if path.is_symlink() or not path.is_file() or path.stat().st_size!=artifact['bytes']: raise WorkerError('OUTPUT_CHECKSUM')
+                if path.is_symlink() or not path.is_file() or path.stat().st_size!=artifact['bytes']: raise AttemptFailure('OUTPUT_CHECKSUM')
                 with path.open('rb') as file:
                     digest=hashlib.file_digest(file,'sha256').hexdigest() if hasattr(hashlib,'file_digest') else self.checksum(file)
-                if digest!=artifact['digest']: raise WorkerError('OUTPUT_CHECKSUM')
+                if digest!=artifact['digest']: raise AttemptFailure('OUTPUT_CHECKSUM')
                 check()
                 with path.open('rb') as file:
                     self.client.request('output?name='+filename,token,file,headers={'Content-Type':'application/octet-stream',
@@ -276,6 +308,8 @@ class RemoteWorker:
             result=self.client.request('submit',token,manifest)
             self.journal.unlink();return result
         except Exception as error:
+            if isinstance(error,AttemptFailure):
+                self.save({'container':name,'token':token,'failure':str(error)})
             if not stopped: docker.stop();stopped=True
             if state['cancel']:
                 self.client.request('cancelled',token,{});self.journal.unlink();return {'status':'cancelled'}

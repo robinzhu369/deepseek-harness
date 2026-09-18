@@ -20,7 +20,25 @@ def output_name(dataset: Dataset, name: str):
 def apply_operation(dataset: Dataset, operation: str, params: dict[str, Any]) -> tuple[Dataset, dict]:
     frame, roles = dataset.frame, dataset.roles.copy()
     report = {'scope':'full_exact','operation':operation,'input_rows':frame.height,'removed_rows':0}
-    if operation == 'fill_constant':
+    if operation == 'replace_missing':
+        for name in params['columns']:
+            feature(dataset, name)
+            if frame.schema[name] != pl.String: raise DataError('STRING_TYPE')
+            frame = frame.with_columns(pl.when(pl.col(name).is_in(params['tokens'])).then(None).otherwise(pl.col(name)).alias(name))
+    elif operation == 'cast_numeric':
+        dtype = {'Int64': pl.Int64, 'Float64': pl.Float64}[params['dtype']]
+        for name in params['columns']:
+            feature(dataset, name)
+            source = frame[name]
+            if source.dtype != pl.String and not source.dtype.is_numeric(): raise DataError('NUMERIC_TYPE')
+            if source.dtype.is_float() and dtype == pl.Int64 and (source.drop_nulls() != source.drop_nulls().floor()).any(): raise DataError('LOSSY_CAST')
+            try:
+                converted = source.cast(dtype, strict=True)
+            except (pl.exceptions.InvalidOperationError, pl.exceptions.ComputeError, pl.exceptions.SchemaError) as error:
+                raise DataError('TYPE_CONVERSION') from error
+            if dtype == pl.Float64 and converted.drop_nulls().is_finite().not_().any(): raise DataError('NON_FINITE')
+            frame = frame.with_columns(converted.alias(name))
+    elif operation == 'fill_constant':
         value = params['value']
         for name in params['columns']:
             feature(dataset,name)

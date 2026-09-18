@@ -1,5 +1,17 @@
 import json,os,socket,sys,time
 request=json.loads(sys.stdin.readline())
+mode=request.get('failure_mode')
+if mode=='memory':
+    blocks=[]
+    while True:blocks.append(bytearray(16*1024*1024))
+if mode=='timeout':time.sleep(600)
+if mode=='malformed':
+    print('{bad-json',flush=True);sys.exit(2)
+if mode=='untrusted-code':
+    print(json.dumps({'failure':{'code':'SECRET_SHOULD_NOT_LEAK'}}),flush=True);sys.exit(2)
+if mode=='dimension':
+    print(json.dumps({'failure':{'code':'DIMENSION_LIMIT'}}),flush=True);sys.exit(2)
+
 if request.get('sleep') or request.get('spec'):
     time.sleep(600)
 result={}

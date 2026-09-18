@@ -151,3 +151,21 @@ def test_csv_empty_fields_follow_explicit_null_policy_before_numeric_conversion(
     assert declared.frame['id'].to_list()==['00001','00002','00003']
     assert declared.frame['target'].to_list()==[1,0,1]
     assert declared.source!=preserved.source
+
+
+def test_replace_missing_and_numeric_cast_preserve_rows_and_protected_fields():
+    source = Dataset(pl.DataFrame({ROW_ID:['s:0','s:1','s:2'], 'value':[' 12.5 ','0',None], 'category':['?', 'ok', None], 'target':['1','0','1']}), {'value':'feature','category':'feature','target':'target'}, 's')
+    normalized,_ = apply_operation(source,'normalize',{'columns':['value'],'trim':True,'case':'preserve'})
+    missing,_ = apply_operation(normalized,'replace_missing',{'columns':['category'],'tokens':['?']})
+    converted,report = apply_operation(missing,'cast_numeric',{'columns':['value'],'dtype':'Float64'})
+    assert converted.frame['value'].to_list()==[12.5,0.,None]
+    assert converted.frame['category'].to_list()==[None,'ok',None]
+    assert converted.frame[ROW_ID].to_list()==source.frame[ROW_ID].to_list()
+    assert source.frame['category'].to_list()==['?','ok',None]
+    assert report['removed_rows']==0
+    for operator,params in [('replace_missing',{'columns':['target'],'tokens':['1']}),('cast_numeric',{'columns':['target'],'dtype':'Int64'})]:
+        with pytest.raises(DataError,match='PROTECTED_FIELD'):apply_operation(source,operator,params)
+    with pytest.raises(DataError,match='LOSSY_CAST'):apply_operation(converted,'cast_numeric',{'columns':['value'],'dtype':'Int64'})
+    with pytest.raises(DataError,match='TYPE_CONVERSION'):apply_operation(source,'cast_numeric',{'columns':['category'],'dtype':'Float64'})
+    bad = source.derive(source.frame.with_columns(pl.lit('inf').alias('value')))
+    with pytest.raises(DataError,match='NON_FINITE'):apply_operation(bad,'cast_numeric',{'columns':['value'],'dtype':'Float64'})

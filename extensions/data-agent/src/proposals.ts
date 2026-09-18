@@ -29,7 +29,7 @@ export function validateProposalRoles(workflow:z.infer<typeof Workflow>,order:st
     const requireFeature=(column:string,allowTime=false)=>{
       if(Object.hasOwn(roles,column)&&roles[column]!=='feature'&&!(allowTime&&['event_time','prediction_time'].includes(roles[column])))throw new DomainError('PROTECTED_FIELD')
     }
-    if(['fill_constant','normalize','fit'].includes(node.operator))for(const column of node.params.columns as string[])requireFeature(column)
+    if(['replace_missing','cast_numeric','fill_constant','normalize','fit'].includes(node.operator))for(const column of node.params.columns as string[])requireFeature(column)
     if(['map_categories','bounds'].includes(node.operator))requireFeature(node.params.column as string)
     if(node.operator==='derive'){
       requireFeature(node.params.left as string,['year','month','day','weekday','days_since'].includes(node.params.method as string))

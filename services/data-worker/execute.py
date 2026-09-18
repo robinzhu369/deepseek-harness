@@ -42,7 +42,7 @@ def execute(request: dict, output: Path) -> dict:
     elif operator == 'preview':
         dataset=inputs['data']; frame=dataset.frame.select(params['columns']).slice(params['offset'],params['limit'])
         results={'report':('ReportRef',{'offset':params['offset'],'total':dataset.frame.height,'columns':frame.columns,'rows':frame.to_dicts()})}
-    elif operator in {'fill_constant','normalize','map_categories','deduplicate','filter_rows','bounds','derive'}:
+    elif operator in {'replace_missing','cast_numeric','fill_constant','normalize','map_categories','deduplicate','filter_rows','bounds','derive'}:
         dataset,report=apply_operation(inputs['data'],operator,params)
         if dataset.frame.width > request['max_columns']: raise DataError('DIMENSION_LIMIT')
         removed_fraction=report['removed_fraction']

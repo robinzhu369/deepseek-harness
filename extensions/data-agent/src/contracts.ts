@@ -61,6 +61,8 @@ export const operators: Record<string, Operator> = {
     params:z.object({options:ImportOptions.refine(o=>o.format!=='csv' || o.bad_rows!=='quarantine','Quarantine requires a separate confirmed import'),roles:z.record(Column,z.enum(['feature','target','entity_id','record_id','event_time','prediction_time','ignore'])),max_bytes:z.number().int().positive()}).strict()},
   preview: {inputs:{data:'DatasetRef'},outputs:{report:'ReportRef'},approval:false,
     params:z.object({offset:z.number().int().nonnegative(),limit:z.number().int().min(1).max(200),columns:z.array(Column).min(1).max(100)}).strict()},
+  replace_missing: stateless(z.object({columns,tokens:z.array(z.string()).min(1).max(100)}).strict()),
+  cast_numeric: stateless(z.object({columns,dtype:z.enum(['Int64','Float64'])}).strict()),
   fill_constant: stateless(z.object({ columns, value: scalar }).strict()),
   normalize: stateless(z.object({ columns, trim: z.boolean(), case: z.enum(['preserve','lower','upper']) }).strict()),
   map_categories: stateless(z.object({ column: Column, mapping: z.record(z.string(),z.string()), unmatched:z.enum(['preserve','unknown']),unknown_value:z.string() }).strict()),
