@@ -2,7 +2,7 @@ import { randomUUID } from '@deepseek-ai/dsh-util-crypto'
 /** Three persistent layout surfaces; all business state arrives through injected model hooks. */
 import { useState, useRef, useEffect, type ReactNode } from 'react'
 import { z } from 'zod'
-import { Button, Input, Modal, MarkdownText, IconDatabaseOutline16, IconEnhanceOutline16, IconBranchOutline16, IconSettingsOutline16, IconPlusOutline16, IconSearchOutline16, IconEditOutline16, IconTrashOutline16, IconSendOutline16, IconCloseOutline16, IconPanelLeftOutline16, IconDataOutline16, IconContextInjectionOutline16, IconLoadingOutline16 } from '@deepseek-ai/dsh-client-ui-primitives'
+import { Button, Input, Modal, MarkdownText, IconDatabaseOutline16, IconEnhanceOutline16, IconBranchOutline16, IconSettingsOutline16, IconPlusOutline16, IconSearchOutline16, IconEditOutline16, IconTrashOutline16, IconSendOutline14, IconCloseOutline16, IconPanelLeftOutline16, IconDataOutline16, IconContextInjectionOutline16, IconLoadingOutline16 } from '@deepseek-ai/dsh-client-ui-primitives'
 import type { SidebarOwnerProps, RightbarOwnerProps } from '@deepseek-ai/dsh-client-ui-layout/client'
 import type { Surface } from './face.ts'
 import type { Session, Navigation, Run, Task, Registry, History, Proposal } from './types.ts'
@@ -522,7 +522,7 @@ function Composer(p: Surface) {
       <Action
         t={p.t}
         primary
-        icon={<IconSendOutline16 />}
+        icon={<IconSendOutline14 />}
         label={p.t('send')}
         disabled={!text.trim() || working}
         run={async () => {
@@ -585,7 +585,9 @@ function NewSession(p: Surface) {
         status: z.string(),
       }),
     )
-    .parse(domain.cache[base + '/datasets'] ?? [])
+    .parse(Object.entries(domain.cache)
+      .filter(([path]) => path === base + '/datasets' || path.startsWith(base + '/datasets?'))
+      .flatMap(([, value]) => z.array(z.unknown()).parse(value)))
   const dataset = view.dataset || ''
   const goalInput = useRef<HTMLTextAreaElement>(null)
   return (
@@ -617,7 +619,7 @@ function NewSession(p: Surface) {
           <Action
             t={p.t}
             primary
-            icon={<IconSendOutline16 />}
+            icon={<IconSendOutline14 />}
             label={p.t('startTask')}
             disabled={
               !rows.some(row => row.dataset_id === dataset && row.status === 'ready') ||

@@ -18,8 +18,9 @@ interface Config {
   timeoutMs: number
   /** Maximum bytes of a JSON command body. */
   maxBodyBytes: number
-  /** Maximum bytes of a JSON response. */
+  /** Minimum accepted domain credential length. */
   credentialMinLength: number
+  /** Maximum bytes of a JSON response. */
   maxResultBytes: number
 }
 import type { DomainResponse } from './types.ts'
