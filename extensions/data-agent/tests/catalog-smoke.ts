@@ -84,5 +84,9 @@ export async function catalogSmoke(pool:Pool,image:string) {
     await assert.rejects(stat(join(root,'objects','p','uploads',expired.id)),{code:'ENOENT'})
     assert.ok(await stat(await store.path(`${'p'}/uploads/${uploaded.id}/original`)))
     const changed=await catalog.import({project_id:'p',actor_id:'alice'},uploaded.id,{...parse,options:{...parse.options,null_values:['NULL']}});assert.notEqual(changed.run_id,imported.run_id)
+    const failedClaim=await service.acquire({owner:'catalog-worker',projects:['p']});assert.ok(failedClaim);assert.equal(failedClaim.run_id,changed.run_id)
+    await service.fail(failedClaim,'DIMENSION_LIMIT')
+    const failedRow=(await catalog.list({project_id:'p',actor_id:'alice'},'',0,20)).find(row=>row.run_id===changed.run_id)
+    assert.equal(failedRow.status,'failed');assert.equal(failedRow.error_code,'DIMENSION_LIMIT')
   }finally{server.closeAllConnections();await new Promise<void>(resolve=>server.close(()=>resolve()));await rm(root,{recursive:true,force:true})}
 }

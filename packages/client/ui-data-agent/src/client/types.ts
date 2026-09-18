@@ -36,6 +36,8 @@ export const Sessions = z.array(
   z.object({
     id: z.string(),
     title: z.string(),
+    provider: z.string().optional(),
+    model_id: z.string().optional(),
     input: z.object({ dataset: Ref, goal: z.string() }).loose(),
     business_task_id: z.string().nullable(),
     status: z.string(),

@@ -28,9 +28,11 @@
 
 ## 远程 Worker
 
-使用 `docker build --pull=false -f deploy/data-agent/Worker.Dockerfile -t data-agent-worker:dev .` 构建计算镜像。Dockerfile 固定 Python 基础镜像摘要和运行依赖版本；此开发构建需要下载包，不构成离线交付证据。将 `docker image inspect data-agent-worker:dev --format '{{.Id}}'` 返回的不可变镜像 ID 配入 [remote.config.example.json](../../deploy/data-agent/remote.config.example.json)。显式配置 Docker 可执行文件及其 home 目录的绝对路径、私有持久化监督目录、字节/时间/CPU/内存/PID 预算，以及保存服务凭据的环境变量名。运行 `python3 services/data-worker/remote.py --config /absolute/remote.json`；`--once` 最多处理一个新尝试。
+使用 `docker build --pull=false -f deploy/data-agent/Worker.Dockerfile -t data-agent-worker:dev .` 构建计算镜像。Dockerfile 固定 Python 基础镜像摘要和运行依赖版本；此开发构建需要下载包，不构成离线交付证据。将 `docker image inspect data-agent-worker:dev --format '{{.Id}}'` 返回的不可变镜像 ID 配入 [remote.config.example.json](../../deploy/data-agent/remote.config.example.json)。显式配置 Docker 可执行文件及其 home 目录的绝对路径、私有持久化监督目录、字节/时间/CPU/内存/PID 预算，以及保存服务凭据的环境变量名。运行 `python3 -B services/data-worker/remote.py --config /absolute/remote.json`；`--once` 最多处理一个新尝试。
 
 只有监督进程接收服务和尝试凭据。每个计算容器禁网、根文件系统只读、无 capabilities、禁止提权，以 UID 65532 运行，只读挂载下载输入，临时和输出挂载设定容量配额。监督进程校验输入/输出 SHA-256 与精确字节数。心跳覆盖传输与计算。确认容器实际退出后才确认取消；重启恢复先停止日志记录的容器，再重放回执或报告中断。持久化私有日志含尝试凭据，必须与监督目录一起保护。容器内计算时限也约束监督进程故障后的运行。此 Docker 后端要求 Linux 容器和具备 `fcntl` 的 POSIX 监督环境。
+
+监督器在清理前持久化白名单失败码，重启后重放。OOM、超时及无效响应分别产生 `MEMORY_LIMIT`、`EXECUTION_TIMEOUT` 和 `INVALID_WORKER_RESPONSE`；领域失败保留 `DIMENSION_LIMIT` 等代码。取消和过期尝试隔离优先处理。异常详情与容器原始 stderr 不进入公开错误。
 
 将 `DATA_AGENT_TEST_IMAGE` 设置为计算镜像 ID，启用真实 HTTP/Docker 集成用例。使用 `--build-arg WORKER_IMAGE=data-agent-worker:dev` 构建 `services/data-worker/tests/fixtures/Dockerfile`，将 `DATA_AGENT_ISOLATION_IMAGE` 设置为测试镜像 ID，以执行内核隔离、取消与重启测试。缺少镜像变量时明确跳过对应测试；记录的验证提供了两个变量。
 
@@ -44,9 +46,11 @@ Skill 草稿使用乐观修订号，候选冻结完整包摘要。服务端评�
 
 应用迁移 001–008。按 [harness.config.example.json](../../deploy/data-agent/harness.config.example.json) 设置宿主的 `harness` 字段，并将 `DATA_AGENT_SESSION_ROOT` 指向私有持久化目录。在同一 `dsh --profile data-agent-worker-host` 启动命令的 Worker 宿主源码覆盖层后添加 `--patch deploy/data-agent/harness.source.patch.yml`。覆盖层组合已有 Agent loop、JSONL 持久化、工具注册表、Skill 注册表和官方 DeepSeek 适配器。显式设置 `DEEPSEEK_BASE_URL`，通过进程环境提供 `DEEPSEEK_API_KEY`。已测公网端点为 `https://api.deepseek.com`，使用 `deepseek-v4-flash`；连接探针返回服务端模型标识 `deepseek-flash`。公网测试仅发送合成数据。
 
+使用本地已安装的 `qwen3.5:9b` 权重测试时，在仓库根目录运行 `ollama create qwen3.5:9b-harness -f deploy/data-agent/ollama/Modelfile`。[Modelfile](../../deploy/data-agent/ollama/Modelfile) 为别名设置 32K 上下文，不覆盖原模型。在工作台覆盖层之后加载[模型适配器补丁](../../deploy/data-agent/ollama/provider.patch.yml)，设置 `OLLAMA_API_KEY=ollama-local`，并在创建会话前将领域 Harness 的 `runtime.model_id` 设置为 `qwen3.5:9b-harness`。已有会话保留冻结的运行配置。本地集成链路正常，但实测 9B 报告总结包含事实错误，批准前须对照已发布报告核对建议。
+
 经过认证的 `POST /v1/data/:project/sessions` 接收 `{input, skills: [{id, version}]}`；`input` 遵循共享 Skill 输入 Schema，version 为 null 时选择当前已发布默认版本。服务端生成会话 ID，在 PostgreSQL 冻结经过认证的用户、项目、数据集、策略、运行环境和调用 ID。Agent 可见前完成作用域配置。输入上下文、冻结流程默认值、完整提案/算子 Schema 及工具调用/结果进入普通 Harness 会话日志。模型不能通过工具参数选择会话所有者。每次调用均校验 PostgreSQL 成员权限和会话归属。
 
-`POST .../sessions/:id/messages` 接收 `{text}`，等待真实轮次空闲后返回；并发消息以 `SESSION_BUSY` 拒绝。HTTP 超时需匹配预期模型响应时长。`POST .../:id/cancel` 取消对话，数据 Run 保留独立取消协议。进程重启后，`POST .../:id/resume` 加载 JSONL 历史和原调用锁，包括会话创建后已停用的版本。销毁时拒绝新请求、取消运行轮次、等待处理器结束，并在连接池关闭前刷新及销毁 Agent 句柄。
+`POST .../sessions/:id/messages` 接收 `{text, wait_for_idle?}`，默认等待独占请求区间空闲后返回。设置 `wait_for_idle: false` 时以 HTTP 202 确认接收，历史接口提供活动状态与结果；完成前仍以 `SESSION_BUSY` 拒绝并发消息。Web 工作台使用接收模式，避免模型耗时导致 HTTP 超时。`POST .../:id/cancel` 取消对话，数据 Run 保留独立取消协议。进程重启后，`POST .../:id/resume` 加载 JSONL 历史和原调用锁，包括会话创建后已停用的版本。销毁时拒绝新请求、取消运行轮次、等待处理器结束，并在连接池关闭前刷新及销毁 Agent 句柄。
 
 作用域工具包括 `skill`、`read_skill_resource`、`inspect_dataset`、`propose_workflow_patch`、`get_run_snapshot` 和 `read_report`。前两者只加载锁定包及资源。诊断返回已提交 Run，报告仅在 Worker 发布后可读取。提案工具接收 `proposal_json`，包含共享提案字段，会话身份由服务端补充；保存不能批准或执行。Run/报告读取要求会话归属，包括该会话复用的已发布输出。全局 shell 和无关工具被排除，没有工具能授予审批或发布 Skill。初始上下文和结果具备可配置字节限制。真实模型诊断提交测试不构成完整任务链、审批界面或模型驱动的完整 Skill 评测。
 
@@ -82,10 +86,24 @@ Worker 支持 UTF-8/GB18030/UTF-16 CSV 和 Parquet 导入、显式表头/空值�
 
 构建 Host 和 Client 库，应用尚未执行的迁移直到 008，并准备启用 Harness 运行环境的既有宿主配置。使用 `pnpm dsh --profile web --patch deploy/data-agent/workbench.source.patch.yml` 启动真实 Web profile。`DATA_AGENT_DOMAIN_ENDPOINT` 必须与领域监听器的源一致，例如 `http://127.0.0.1:55440`。覆盖层默认每 2 秒轮询，浏览器上传缓冲上限为 64 MiB；宿主仍执行自身的上传和正文限制。打开 dsh 输出的认证地址，再输入独立的领域用户凭证。凭证保留在内存中，不写入 localStorage。
 
-左栏负责项目/会话导航及数据、Skill 和模板弹窗。中列渲染实际 Harness 消息、工具结果和摘要绑定的提案决策。右列在权威 Run 状态与可编辑 React Flow 草稿之间切换；查看历史不会改变冻结流程。复制操作创建独立流程身份。受保护变更必须提供证据 JSON，且仍须通过后端验证。Skill 阶段入口使用选定的不可变版本创建新会话，再请求生成提案；未发布或停用的候选不能绕过生命周期检查。领域会话使用自身作用域的数据提示词及原生领域工具，排除通用 Web 编码工具和运行时上下文。
+左栏负责项目/会话导航及数据、Skill 和模板弹窗。中列渲染实际 Harness 消息、工具结果和摘要绑定的提案决策。右列在权威 Run 状态与可编辑 React Flow 草稿之间切换；查看历史不会改变冻结流程。复制操作创建独立流程身份。受保护变更必须提供证据 JSON，且仍须通过后端验证。Skill 阶段入口使用选定的不可变版本创建新会话，再请求生成提案；未发布或停用的候选不能绕过生命周期检查。领域会话使用自身作用域的数据提示词及原生领域工具，排除通用 Web 编码工具和运行时上下文，并要求模型以简体中文生成面向用户的回复，同时保留精确的代码与数据标识符。
 
 迁移 008 增加会话名称和版本化模板。读取路由提供账号身份、算子 Schema、归属当前用户的会话导航/历史、不可变流程/Skill 版本及有界 JSON 报告。模板写入使用乐观版本校验。Host Remote 通过既有认证 Web 通道转发有界 JSON 和精确的二进制路由；卸载时中止尚未完成的转发。
 
 本地浏览器回归：将 `DATA_AGENT_TEST_DATABASE_URL` 指向库名以 `_test` 结尾的可丢弃数据库，使用已安装 Edge 时设置 `DATA_AGENT_BROWSER_CHANNEL=msedge`（否则使用 Playwright Chromium），运行 `DSH_SNAPSHOT=replay pnpm exec vitest run --config vitest.web.config.ts extensions/data-agent/tests/workbench-browser.e2e.ts`。测试夹具会清空该测试库。只有外部模型使用确定性适配器；Loader、Agent、循环、工具、Remote、浏览器和 PostgreSQL 均为真实实现。此测试不代表 Skill 业务质量、大数据容量或离线部署验收通过。
 
 [全链路容量报告](../../implementation/t14-capacity.md)记录了固定百万行场景通过实际 Web Profile、远程 Worker 和训练导出的结果。可选 `DATA_AGENT_CAPACITY_CONFIG` 测试入口记录资源限制、节点测量及独立全量逐行对账。本地 4 GiB 结果不能证明宽表、高基数编码、多用户并发或目标部署容量。
+
+## 离线交付与恢复
+
+[本地交付操作说明](../../deploy/data-agent/offline/operations.md) 覆盖匹配平台的交付包、完整性校验、停服激活、兼容回退和空库恢复。[T15 证据](../../implementation/t15-operations.md) 记录本地 TLS 浏览器执行和恢复产物校验。目标基础设施与人工业务签收仍待完成。
+
+会话创建可携带可选 model 对象，指定已注册的 provider 和模型 ID。Host 在持久化前通过既有 LLM 服务解析模型，将选中的身份写入会话运行时，并把相同运行时传给 Skill 调用锁。恢复会话保留该身份。鉴权后的 models 查询返回当前 Harness 模型目录，响应不包含地址与凭据值。供应商设置对后续请求仍然实时生效，因此模型身份锁不是不可变的供应商配置快照。
+
+本地凭证配置：领域服务的 `user_credential_min_length` 与控制器的 `credentialMinLength` 均默认20位（可配置范围6–200）。仅在明确需要六位用户凭证的本地测试部署中将两者设为6；Worker认证不受影响。
+
+任务历史支持直接重命名和确认删除。删除仅移除所属用户的历史入口，保留数据集、执行产物和审计日志；运行中的会话或处理任务禁止删除。新任务目标支持示例填入、AI直接生成和按关键词生成，使用当前选择的模型。生成过程通过禁用工具并保留日志的Harness会话完成，不创建业务任务、不读取数据行；生成失败保留已有草稿。
+
+`replace_missing` 将明确列出的字符串标记转为null；`cast_numeric` 将特征严格转换为Int64或Float64，拒绝非法、有损或非有限数值。两者保留受保护角色与原始数据。`get_run_snapshot` 默认省略产物元数据；按需传入 `include_metadata: true` 获取精确字段及变换器链路。独立 `inspect_dataset` 不推进业务任务；任务流程需按顺序提交已审批的分析、处理、特征运行。
+
+特征工程包0.2.0融合Amey-Thakur/AI-SKILLS提交c8c84206e1a05825d8b9dac12a31b3c6c345c649。独立入口覆盖预测时点、泄漏、缺失语义、仅训练集拟合与可复现变换；不支持的方法保留为待复核事项。来源及MIT声明位于references目录，导入包必须携带这些资源。源代码包和候选版本不等于已发布Skill；仍需业务评测与发布。

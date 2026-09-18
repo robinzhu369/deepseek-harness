@@ -338,3 +338,11 @@ body[data-ds-dark-theme] {
   --dsw-specific-sidebar-nav-item-hover: var(--dsw-static-neutral-bluish-850);
   --dsw-specific-tip: var(--dsw-static-neutral-bluish-800);
 }
+
+/* Workbench brand remains consistent across light and dark appearances. */
+body {
+  --dsw-alias-workbench-brand: #0F4C9E;
+  --dsw-alias-workbench-brand-hover: color-mix(in srgb, #0F4C9E 88%, black);
+  --dsw-alias-workbench-on-brand: #ffffff;
+  --dsw-alias-workbench-selected: color-mix(in srgb, #0F4C9E 12%, var(--dsw-alias-bg-layer-1));
+}

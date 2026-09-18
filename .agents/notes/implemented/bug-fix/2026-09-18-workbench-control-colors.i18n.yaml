@@ -1,0 +1,6 @@
+# Bilingual-pair consistency record (docs/i18n/README.md): the git blob hash of each
+# side as of the last confirmed-consistent state. Both languages carry equal authority;
+# after editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write .agents/notes/implemented/bug-fix/2026-09-18-workbench-control-colors.md
+2026-09-18-workbench-control-colors.md: 4914979a181cb2c14bc2078cde30ba195be33cf1
+2026-09-18-workbench-control-colors.zh.md: 2dd59bd2ecdedc872ce665631324e445027f2828

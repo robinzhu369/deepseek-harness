@@ -7,6 +7,7 @@ import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
 import type {} from '@deepseek-ai/dsh-client-ui-layout/client'
 import type { MainPanelId } from '@deepseek-ai/dsh-client-ui-layout/client'
 import { z } from 'zod'
+import { createModelSettingsOperations } from './model-settings.ts'
 import { DataModel } from './model.ts'
 import { createDataViewStore } from './view-store.ts'
 import { Sessions, Registry, Navigation, Run, Task } from './types.ts'
@@ -20,7 +21,16 @@ declare module '@deepseek-ai/dsh-client-ui-slots' {
     dataAgent: DataKey
   }
 }
-export const inject = ['slots', 'locale', 'layout', 'remote', 'remote.dataAgent']
+export const inject = [
+  'slots',
+  'locale',
+  'layout',
+  'remote',
+  'remote.dataAgent',
+  'remote.settings',
+  'remote.credentials',
+  'remote.llm',
+]
 /** Mount one account-scoped model and shared view store; dispose polling and credentials together. */
 export async function apply(ctx: Context): Promise<void> {
   const response = await ctx.remote.dataAgent.configuration()
@@ -72,6 +82,8 @@ export async function apply(ctx: Context): Promise<void> {
           model.query(base + '/workbench', Registry),
           model.query(base + '/sessions', Sessions),
           read(base + '/skills'),
+          read(base + '/datasets'),
+          ...(view.manager === 'data' ? [read(base + '/datasets?search=&offset=0&limit=20')] : []),
         ]
         if (view.session) {
           requests.push(
@@ -96,6 +108,16 @@ export async function apply(ctx: Context): Promise<void> {
       return refreshing
     }
     const face: Face = {
+      toggleSidebar: () =>{  ctx.layout.toggleSidebar() },
+      monitor: (open) => {
+        instance.actions.monitor(open)
+        if (open) ctx.layout.openRightbar(
+          window.innerWidth >= 800, window.innerWidth < 800,
+          instance.getSnapshot().savedColumns ?? { sidebar: 260, rightbar: 360 },
+        )
+        else ctx.layout.closeRightbar()
+      },
+      models: createModelSettingsOperations(ctx),
       hooks: { domain: model },
       saveColumns: (width) => {
         instance.actions.saveColumns(width)
@@ -200,7 +222,9 @@ export async function apply(ctx: Context): Promise<void> {
     )
     ctx.layout.selectPanel('data-agent' as MainPanelId)
     const savedColumns = instance.getSnapshot().savedColumns
-    ctx.layout.openRightbar(true, false, savedColumns ?? undefined)
+    instance.actions.monitor(false)
+    ctx.layout.openRightbar(true, false, savedColumns ?? { sidebar: 260, rightbar: 360 })
+    ctx.layout.closeRightbar()
     let timer: ReturnType<typeof setTimeout>
     const poll = async () => {
       try {

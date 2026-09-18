@@ -9,22 +9,26 @@ type Draft = {
   selectedNode: string | null
 }
 type View = {
+  monitorOpen: boolean
   sidebarWidth: number
   savedColumns: { sidebar: number; rightbar: number } | null
   actor: string
   project: string
   session: string
+  dataset: string
   canvasModes: Record<string, 'draft' | 'run'>
   selectedRuns: Record<string, string>
   drafts: Record<string, Draft>
-  tab: 'status' | 'flow'
-  manager: 'data' | 'skills' | 'templates' | null
+  tab: 'status' | 'flow' | 'context'
+  manager: 'attach' | 'data' | 'skills' | 'templates' | 'models' | null
 }
 type Actions = {
+  monitor: (d: View, open: boolean) => void
   sidebarWidth: (d: View, width: number) => void
   saveColumns: (d: View, rightbar: number) => void
   actor: (d: View, actor: string) => void
   project: (d: View, id: string) => void
+  dataset: (d: View, id: string) => void
   session: (d: View, id: string) => void
   run: (d: View, session: string, id: string) => void
   tab: (d: View, tab: View['tab']) => void
@@ -38,11 +42,13 @@ type Actions = {
 export function createDataViewStore(): EngineStoreHandle<View, Actions> {
   return defineStore({
     init: (): View => ({
+      monitorOpen: false,
       sidebarWidth: 280,
       savedColumns: null,
       actor: '',
       project: '',
       session: '',
+      dataset: '',
       canvasModes: {},
       selectedRuns: {},
       drafts: {},
@@ -51,6 +57,7 @@ export function createDataViewStore(): EngineStoreHandle<View, Actions> {
     }),
     persist: 'dsh.data-agent.view.v1',
     actions: {
+      monitor: (d, open: boolean) => { d.monitorOpen = open },
       sidebarWidth: (d, width: number) => {
         d.sidebarWidth = width
       },
@@ -60,6 +67,7 @@ export function createDataViewStore(): EngineStoreHandle<View, Actions> {
       actor: (d, actor: string) => {
         if (d.actor !== actor) {
           d.project = ''
+          d.dataset = ''
           d.session = ''
           d.canvasModes = {}
           d.selectedRuns = {}
@@ -70,7 +78,12 @@ export function createDataViewStore(): EngineStoreHandle<View, Actions> {
       },
       project: (d, id: string) => {
         d.project = id
+        d.manager = null
+        d.dataset = ''
         d.session = ''
+      },
+      dataset: (d, id: string) => {
+        d.dataset = id
       },
       session: (d, id: string) => {
         d.session = id
@@ -92,6 +105,7 @@ export function createDataViewStore(): EngineStoreHandle<View, Actions> {
       },
       clear: (d) => {
         d.project = ''
+        d.dataset = ''
         d.session = ''
         d.canvasModes = {}
         d.selectedRuns = {}

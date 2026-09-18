@@ -14,6 +14,7 @@ import type { Workflow, ArtifactRef } from '../src/contracts.ts'
  * @param root - Repository root.
  * @param port - Disposable domain listener.
  * @param token - Synthetic user credential.
+ * @param evidenceRoot - Output root for this run; defaults to the repository.
  */
 export async function workbenchExecution(
   page: Page,
@@ -21,6 +22,7 @@ export async function workbenchExecution(
   root: string,
   port: number,
   token: string,
+  evidenceRoot = root,
 ) {
   const endpoint = `http://127.0.0.1:${port}`,
     base = endpoint + '/v1/data/workbench-test'
@@ -69,7 +71,7 @@ export async function workbenchExecution(
   const worker = async () => {
     const result = await promisify(execFile)(
       process.env.DATA_AGENT_TEST_PYTHON ?? 'python3',
-      [join(root, 'services/data-worker/remote.py'), '--config', configPath, '--once'],
+      ['-B', join(root, 'services/data-worker/remote.py'), '--config', configPath, '--once'],
       {
         timeout: 60000,
         maxBuffer: 100000,
@@ -88,11 +90,9 @@ export async function workbenchExecution(
   await dialog
     .getByLabel('Upload file', { exact: true })
     .setInputFiles({ name: 't13-training.csv', mimeType: 'text/csv', buffer: Buffer.from(csv) })
-  await dialog
-    .locator('button')
-    .filter({ hasText: /^Upload file$/ })
-    .click()
-  await expect.poll(() => dialog.getByLabel('Upload ID (resume)', { exact: true }).inputValue()).not.toBe('')
+  await dialog.getByText('Advanced parsing and resume', {exact:true}).click()
+  await dialog.getByLabel('Target column (optional)',{exact:true}).fill('target')
+  await dialog.getByLabel('Identifier column (optional)',{exact:true}).fill('id')
   await dialog.getByRole('textbox', { name: 'Parsing options and field roles', exact: true }).fill(
     JSON.stringify({
       options: {
@@ -103,16 +103,16 @@ export async function workbenchExecution(
         null_values: [''],
         types: { income: 'float64', target: 'int64' },
       },
-      roles: { id: 'entity_id', income: 'feature', target: 'target' },
+      roles: {},
     }),
   )
-  await dialog.getByRole('button', { name: 'Submit import', exact: true }).click()
+  await dialog.getByRole('button', { name: 'Upload and parse', exact: true }).click()
   await expect
     .poll(async () => (await api('/datasets')).some((row: { status: string }) => row.status === 'importing'))
     .toBe(true)
   await worker()
   await dialog.getByRole('button', { name: 'Refresh', exact: true }).click()
-  await dialog.getByText('ready', { exact: true }).waitFor()
+  await expect.poll(() => dialog.getByRole('status').innerText()).toBe('Ready for analysis')
   const dataset = (await api('/datasets')).find(
     (row: { filename: string }) => row.filename === 't13-training.csv',
   )
@@ -122,18 +122,19 @@ export async function workbenchExecution(
     artifact_id: dataset.dataset_id,
     digest: dataset.dataset_digest,
   }
+  await dialog.locator('summary').filter({hasText:/^Preview$/}).click()
   await dialog.getByLabel('Preview columns (comma separated)', { exact: true }).fill('id,income,target')
   await dialog.getByRole('button', { name: 'Preview', exact: true }).click()
   await dialog.getByText(/Preview run ID:/).waitFor()
   await worker()
   await dialog.getByRole('button', { name: 'Refresh', exact: true }).last().click()
   await dialog.getByRole('cell', { name: '00000', exact: true }).waitFor()
-  await dialog.getByRole('button', { name: 'Close', exact: true }).click()
+  await dialog.getByRole('button', { name: 'Create a task with this data', exact: true }).click()
   await page.getByRole('button', { name: 'New session', exact: true }).click()
   await page.getByRole('main').getByRole('button', { name: 'Refresh', exact: true }).last().click()
-  await page.getByRole('combobox', { name: 'Dataset', exact: true }).selectOption(dataset.dataset_id)
+  await expect.poll(() => page.getByRole('combobox', { name: 'Dataset', exact: true }).inputValue()).toBe(dataset.dataset_id)
   await page.getByRole('textbox', { name: 'Task purpose', exact: true }).fill('T13 training contract')
-  await page.getByRole('main').getByRole('button', { name: 'Create', exact: true }).click()
+  await page.getByRole('main').getByRole('button', { name: 'Create analysis task', exact: true }).click()
   await page.getByLabel('Message this session').waitFor()
   const session = (await api('/sessions')).find(
     (item: { input: { goal: string } }) => item.input.goal === 'T13 training contract',
@@ -294,7 +295,7 @@ export async function workbenchExecution(
   expect(publication.status).toBe(409)
   expect((await publication.json()).error).toBe('BUSINESS_EVALUATION_REQUIRED')
   await writeFile(
-    join(root, 'evals/data-agent/t13-browser-result.json'),
+    join(evidenceRoot, 'evals/data-agent/t13-browser-result.json'),
     JSON.stringify(
       {
         model: 'scripted',
@@ -313,9 +314,9 @@ export async function workbenchExecution(
       2,
     ) + '\n',
   )
-  await page.getByRole('main').getByRole('button',{name:'Refresh',exact:true}).click()
-  await page.getByText('ExportRef',{exact:true}).waitFor()
+  await page.getByRole('main').getByRole('button', { name: 'Refresh', exact: true }).click()
+  await page.getByText('ExportRef', { exact: true }).waitFor()
   await page.getByText(/Task revision: 4 · completed/).waitFor()
-  await page.screenshot({ path: join(root, 'implementation/t13-workbench.png'), fullPage: true })
+  await page.screenshot({ path: join(evidenceRoot, 'implementation/t13-workbench.png'), fullPage: true })
   expect((await readFile(bundlePath)).length).toBeGreaterThan(100)
 }

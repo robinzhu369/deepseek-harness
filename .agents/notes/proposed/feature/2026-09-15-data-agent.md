@@ -38,6 +38,12 @@ Capacity evidence binds generated input digests to explicit container budgets an
 
 The Web integration packages follow the ordinary workspace release metadata and restrict packed Client files to bundled entrypoints and declarations. The domain extension remains private. Frozen requirement and command-log files retain original whitespace for digest and measurement provenance; executable source retains the normal whitespace checks.
 
+Attempt failures use an allowlisted structured envelope and a durable journal entry before container teardown. Recovery preserves the original classification while cancellation and attempt fencing retain precedence. Platform-specific offline bundles contain runtime dependencies and fixed image exports; immutable release directories and explicit compatibility checks support stopped-service rollback. Quiescent snapshots bind PostgreSQL, object bytes and Harness history, excluding named credential files. Local synthetic recovery does not establish target RPO/RTO, enterprise network policy or business approval.
+
+The guided workbench prioritizes upload, goal and proposal review, folding technical controls and displaying published quality reports. CSV header discovery fills the complete feature-role map while keeping label and identifier choices explicit. Import snapshots expose bounded Worker failure codes. Web message submission acknowledges acceptance; the existing Harness interval remains tracked through idle, persistence and disposal, with concurrent submissions rejected. Local Ollama validation uses the existing configurable compatibility endpoint and a 32K context alias of the installed Qwen 9B weights; it does not establish Skill business acceptance.
+
+Shared workbench model profiles reuse llm-pi-ai, settings revision checks and write-only credentials rather than introduce a parallel LLM client. Task creation resolves and locks the selected provider/model identity, including Skill invocation metadata; endpoint and key updates remain live. Connectivity uses a tool-free logged synthetic agent session and a non-human message source to avoid automatic title requests. The initial configuration button remains protected by the Harness carrier; phase one intentionally adds no separate administrator role. Protocol tests use a local synthetic server and never transmit the fraud dataset to public endpoints.
+
 ## Alternatives considered
 
 **Conversation state as the job database.** Conversation cancellation and data computation have different lifetimes; data state requires its own transactions and artifact references.
@@ -52,4 +58,16 @@ All six P0 requirements and 54 acceptance scenarios remain in the [ledger](../..
 
 ## Risks
 
-The source extension uses the root pnpm lockfile but remains outside the upstream release build closure. Container tests establish local kernel isolation, not target infrastructure acceptance. Business-labelled Skill evaluation, enterprise authentication, storage ingress, offline artifacts and restoration environment remain unconfigured. The active-note supersession search found no existing data-agent decision to replace.
+The source extension uses the root pnpm lockfile but remains outside the upstream release build closure. Container tests establish local kernel isolation, not target infrastructure acceptance. Business-labelled Skill evaluation, enterprise authentication and target storage/network/recovery configuration remain unavailable. Local offline and recovery evidence is recorded in the T15 report. The active-note supersession search found no existing data-agent decision to replace.
+
+## Conversation-first workbench
+
+The optional workbench keeps data attachment in the main task flow and opens monitoring only on demand. Code, artifacts and context separate technical evidence from conversation; approval cards remain visible because hiding required decisions would block safe execution. Search includes the original goal so renaming does not remove discoverability. Real Web regression covers monitor visibility, immutable history, approvals and layout restoration.
+
+History management now exposes owner-scoped rename and deletion in the sidebar. Deletion retains execution artifacts and audit files and refuses active work. Goal drafting uses a separate tool-free Harness session with logged keyword/language input and the selected model; generated text remains editable and never submits work automatically.
+
+Model setup now provides confirmed profile deletion, generated IDs, collapsed advanced fields and save-and-test. Deletion uses the existing Settings revision check and does not revoke API keys; a deployment-owned profile cannot be removed by deleting a user override. Browser regression covers save/test, cancel/delete, and persistence after reopening.
+
+Modeling acceptance adds strict numeric casting and explicit missing-token replacement because CSV imports may retain string types. Protected roles remain immutable. Run tools omit large metadata by default and expose it on request; this bounds routine polling output without discarding persisted evidence. The real DeepSeek trial required manual corrections to transform nodes and stage lineage; context overflow prevented autonomous export planning. The reviewed export was completed locally. See [acceptance results](../../../../implementation/modeling-acceptance-2026-09-18.md).
+
+Feature-engineering 0.2.0 incorporates the pinned MIT-licensed AI-SKILLS method into the existing Skill ID rather than creating a second feature planner. The main instructions remain self-contained, and upstream text plus attribution travel as locked resources. Declared operator dependencies reject incompatible runtimes. Package validation exercises all references, immutable snapshots and missing dependencies; it does not establish model planning quality or business release eligibility.

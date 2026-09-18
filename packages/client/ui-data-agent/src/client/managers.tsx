@@ -8,13 +8,17 @@ import { Workflow, type Run } from './types.ts'
 import { Action } from './surfaces.tsx'
 import { exportJson } from './Canvas.tsx'
 import css from './workbench.module.css'
+import { csvColumns } from './import-columns.ts'
 /** Data imports retain their original parse options and field-role mappings. */
-export function DataManager(p: Surface) {
+export function DataManager(p: Surface & { uploadOnly?: boolean }) {
   const view = p.useStore(value => value),
     domain = p.useDomain(value => value),
     base = '/v1/data/' + view.project
   const [file, setFile] = useState<File>(),
     [id, setId] = useState(''),
+    [target, setTarget] = useState(''),
+    [identifier, setIdentifier] = useState(''),
+    [queued, setQueued] = useState(''),
     [bytes, setBytes] = useState(0),
     [options, setOptions] = useState(
       '{"options":{"format":"csv","encoding":"utf-8","delimiter":",","has_header":true},"roles":{}}',
@@ -35,6 +39,7 @@ export function DataManager(p: Surface) {
           filename: z.string(),
           status: z.string(),
           dataset_id: z.string().nullable(),
+          error_code: z.string().nullable().optional(),
           metadata: z.json().nullable(),
         })
         .loose(),
@@ -48,171 +53,280 @@ export function DataManager(p: Surface) {
           type="file"
           aria-label={p.t('upload')}
           onChange={(event) => {
-            setFile(event.target.files?.[0])
+            const selected = event.target.files?.[0]
+            setFile(selected)
+            setId('')
+            setBytes(0)
+            setQueued('')
+            setTarget('')
+            setIdentifier('')
+            setOptions(
+              JSON.stringify({
+                options: selected?.name.toLowerCase().endsWith('.parquet')
+                  ? { format: 'parquet' }
+                  : { format: 'csv', encoding: 'utf-8', delimiter: ',', has_header: true },
+                roles: {},
+              }),
+            )
           }}
         />
-        <Input
-          aria-label={p.t('uploadId')}
-          placeholder={p.t('uploadId')}
-          value={id}
-          onChange={(event) => {
-            setId(event.target.value)
-          }}
-        />
-        <small>{p.t('uploadHint')}</small>
+        <small>{p.t('importHint')}</small>
+        <div className={css.twoColumns}>
+          <label>
+            {p.t('targetColumn')}
+            <Input value={target} onChange={(event) =>{  setTarget(event.target.value) }} />
+          </label>
+          <label>
+            {p.t('idColumn')}
+            <Input value={identifier} onChange={(event) =>{  setIdentifier(event.target.value) }} />
+          </label>
+        </div>
         <Action
+          primary
           t={p.t}
-          disabled={!file}
+          disabled={!file || !!queued || (!!target.trim() && target.trim() === identifier.trim())}
           run={async () => {
-            if (file) setId(await p.upload(file, id, setBytes))
-          }}
-        >
-          {p.t('upload')}
-        </Action>
-        <small>
-          {p.t('uploadProgress')}: {bytes}
-          {file ? ' / ' + String(file.size) : ''}
-        </small>
-        {file && <progress value={bytes} max={file.size} />}
-        <label>
-          {p.t('importOptions')}
-          <textarea
-            value={options}
-            onChange={(event) => {
-              setOptions(event.target.value)
-            }}
-          />
-        </label>
-        <Action
-          t={p.t}
-          disabled={!id}
-          run={async () => {
-            await p.command(base + '/uploads/' + id + '/import', JSON.parse(options))
+            if (!file) return
+            const parsed = z
+              .object({ options: z.record(z.string(), z.json()), roles: z.record(z.string(), z.string()) })
+              .parse(JSON.parse(options))
+            let roles = { ...parsed.roles }
+            if (parsed.options.format === 'csv' && parsed.options.has_header === true) {
+              const prefix = await file.slice(0, 65536).arrayBuffer()
+              const headers = csvColumns(
+                new TextDecoder(z.string().parse(parsed.options.encoding ?? 'utf-8'), { fatal: true }).decode(prefix, { stream:file.size > 65536 }),
+                z.string().parse(parsed.options.delimiter ?? ','),
+                file.size <= 65536,
+              )
+              if (
+                [target.trim(), identifier.trim(), ...Object.keys(roles)].some(
+                  column => column && !headers.includes(column),
+                )
+              )
+                throw new Error(p.t('unknownColumn'))
+              roles = { ...Object.fromEntries(headers.map(column => [column, 'feature'])), ...roles }
+            }
+            if (!Object.keys(roles).length) throw new Error(p.t('rolesRequired'))
+            roles = {
+              ...roles,
+              ...(target.trim() ? { [target.trim()]: 'target' } : {}),
+              ...(identifier.trim() ? { [identifier.trim()]: 'entity_id' } : {}),
+            }
+            const upload = await p.upload(file, id, setBytes)
+            setId(upload)
+            const imported = z
+              .object({ id: z.string() })
+              .parse(await p.command(base + '/uploads/' + upload + '/import', { ...parsed, roles }))
+            setQueued(imported.id)
             await p.read(path)
+            await p.read(base + '/datasets')
           }}
         >
-          {p.t('importData')}
+          {p.t('uploadAndImport')}
         </Action>
-      </section>
-      <div className={css.row}>
-        <Input
-          aria-label={p.t('searchData')}
-          placeholder={p.t('searchData')}
-          value={search}
-          onChange={(event) => {
-            setSearch(event.target.value)
-            setPage(0)
-          }}
-        />
-        <Action t={p.t} run={() => p.read(path)}>
-          {p.t('refresh')}
-        </Action>
-        <Button
-          disabled={!page}
-          onClick={() => {
-            setPage(page - 1)
-          }}
-        >
-          {p.t('previous')}
-        </Button>
-        <Button
-          disabled={rows.length < 20}
-          onClick={() => {
-            setPage(page + 1)
-          }}
-        >
-          {p.t('more')}
-        </Button>
-      </div>
-      <div className={css.row}>
-        <Input
-          aria-label={p.t('columns')}
-          placeholder={p.t('columns')}
-          value={columns}
-          onChange={(event) => {
-            setColumns(event.target.value)
-          }}
-        />
-        <label>
-          {p.t('offset')}
+        {file && bytes > 0 && <progress aria-label={p.t('uploadProgress')} value={bytes} max={file.size} />}
+        {queued && (
+          <p role="status" className={css.statusNote}>
+            {p.t(
+              rows.find(row => row.id === queued)?.status === 'ready'
+                ? 'dataReady'
+                : rows.find(row => row.id === queued)?.status === 'failed'
+                  ? 'dataFailed'
+                  : 'importQueued',
+            )}
+          </p>
+        )}
+        <details className={css.advanced}>
+          <summary>{p.t('advancedUpload')}</summary>
           <Input
-            type="number"
-            min={0}
-            value={offset}
+            aria-label={p.t('uploadId')}
+            placeholder={p.t('uploadId')}
+            value={id}
             onChange={(event) => {
-              setOffset(Number(event.target.value))
+              setId(event.target.value)
             }}
           />
-        </label>
-      </div>
-      <small>{p.t('previewLimit')}</small>
-      {rows.map(row => (
-        <section className={css.card} key={row.id}>
-          <strong>{row.filename}</strong>
-          <span>{row.status}</span>
-          <details>
-            <summary>{p.t('raw')}</summary>
-            <pre>{JSON.stringify(row, null, 2)}</pre>
-          </details>
-          {row.dataset_id && (
-            <div className={css.row}>
-              <Action
-                t={p.t}
-                disabled={!columns.trim()}
-                run={async () => {
-                  const result = z.object({ run_id: z.string() }).parse(
-                    await p.command(base + '/artifacts/' + String(row.dataset_id) + '/preview', {
-                      offset,
-                      limit: 200,
-                      columns: columns
-                        .split(',')
-                        .map(value => value.trim())
-                        .filter(Boolean),
-                    }),
-                  )
-                  setPreviewRun(result.run_id)
-                  setPreview(undefined)
-                }}
-              >
-                {p.t('preview')}
-              </Action>
-              <Action
-                t={p.t}
-                run={() =>
-                  p.download(base + '/artifacts/' + String(row.dataset_id) + '/download', row.filename)
-                }
-              >
-                {p.t('download')}
-              </Action>
-              <Action
-                t={p.t}
-                run={() => p.command(base + '/artifacts/' + String(row.dataset_id) + '/archive', {})}
-              >
-                {p.t('archive')}
-              </Action>
-            </div>
-          )}
-        </section>
-      ))}
-      {previewRun && (
-        <section className={css.card}>
-          <span>
-            {p.t('previewRun')}: {previewRun}
-          </span>
+          <small>{p.t('uploadHint')}</small>
           <Action
             t={p.t}
+            disabled={!file}
             run={async () => {
-              const run = (await p.read(base + '/runs/' + previewRun)) as Run
-              const report = run.artifacts.find(value => value.kind === 'ReportRef')
-              setPreview(report ? await p.read(base + '/artifacts/' + report.id + '/report') : run)
+              if (file) setId(await p.upload(file, id, setBytes))
             }}
           >
+            {p.t('upload')}
+          </Action>
+          <small>
+            {p.t('uploadProgress')}: {bytes}
+            {file ? ' / ' + String(file.size) : ''}
+          </small>
+          {file && <progress value={bytes} max={file.size} />}
+          <label>
+            {p.t('importOptions')}
+            <textarea
+              value={options}
+              onChange={(event) => {
+                setOptions(event.target.value)
+              }}
+            />
+          </label>
+          <Action
+            t={p.t}
+            disabled={!id}
+            run={async () => {
+              await p.command(base + '/uploads/' + id + '/import', JSON.parse(options))
+              await p.read(path)
+            }}
+          >
+            {p.t('importData')}
+          </Action>
+        </details>
+      </section>
+      {!p.uploadOnly && <>
+        <div className={css.row}>
+          <Input
+            aria-label={p.t('searchData')}
+            placeholder={p.t('searchData')}
+            value={search}
+            onChange={(event) => {
+              setSearch(event.target.value)
+              setPage(0)
+            }}
+          />
+          <Action t={p.t} run={() => p.read(path)}>
             {p.t('refresh')}
           </Action>
-          <PreviewTable value={preview} />
-          {preview !== undefined && <small>{p.t('previewResult')}</small>}
-        </section>
-      )}
+          <Button
+            disabled={!page}
+            onClick={() => {
+              setPage(page - 1)
+            }}
+          >
+            {p.t('previous')}
+          </Button>
+          <Button
+            disabled={rows.length < 20}
+            onClick={() => {
+              setPage(page + 1)
+            }}
+          >
+            {p.t('more')}
+          </Button>
+        </div>
+        <details className={css.advanced}>
+          <summary>{p.t('preview')}</summary>
+          <div className={css.row}>
+            <Input
+              aria-label={p.t('columns')}
+              placeholder={p.t('columns')}
+              value={columns}
+              onChange={(event) => {
+                setColumns(event.target.value)
+              }}
+            />
+            <label>
+              {p.t('offset')}
+              <Input
+                type="number"
+                min={0}
+                value={offset}
+                onChange={(event) => {
+                  setOffset(Number(event.target.value))
+                }}
+              />
+            </label>
+          </div>
+          <small>{p.t('previewLimit')}</small>
+        </details>
+        {!rows.length && <p className={css.empty}>{p.t('dataEmpty')}</p>}
+        {rows.map(row => (
+          <section className={css.card} key={row.id}>
+            <strong>{row.filename}</strong>
+            <span className={css.badge}>
+              {p.t(
+                row.status === 'ready' ? 'dataReady' : row.status === 'failed' ? 'dataFailed' : 'dataImporting',
+              )}
+            </span>
+            {row.status === 'failed' && (
+              <p role="alert" className={css.error}>
+                {row.error_code ?? p.t('dataFailed')}
+              </p>
+            )}
+            {row.status === 'ready' && row.dataset_id && (
+              <Button
+                onClick={() => {
+                  if (row.dataset_id) p.actions.dataset(row.dataset_id)
+                  p.actions.session('')
+                  void p.refresh()
+                }}
+              >
+                {p.t('useDataset')}
+              </Button>
+            )}
+            <details>
+              <summary>{p.t('raw')}</summary>
+              <pre>{JSON.stringify(row, null, 2)}</pre>
+            </details>
+            {row.dataset_id && (
+              <div className={css.row}>
+                <Action
+                  t={p.t}
+                  disabled={!columns.trim()}
+                  run={async () => {
+                    const result = z.object({ run_id: z.string() }).parse(
+                      await p.command(base + '/artifacts/' + String(row.dataset_id) + '/preview', {
+                        offset,
+                        limit: 200,
+                        columns: columns
+                          .split(',')
+                          .map(value => value.trim())
+                          .filter(Boolean),
+                      }),
+                    )
+                    setPreviewRun(result.run_id)
+                    setPreview(undefined)
+                  }}
+                >
+                  {p.t('preview')}
+                </Action>
+                <Action
+                  t={p.t}
+                  run={() =>
+                    p.download(base + '/artifacts/' + String(row.dataset_id) + '/download', row.filename)
+                  }
+                >
+                  {p.t('download')}
+                </Action>
+                <Action
+                  t={p.t}
+                  run={() => p.command(base + '/artifacts/' + String(row.dataset_id) + '/archive', {})}
+                >
+                  {p.t('archive')}
+                </Action>
+              </div>
+            )}
+          </section>
+        ))}
+        {previewRun && (
+          <section className={css.card}>
+            <span>
+              {p.t('previewRun')}: {previewRun}
+            </span>
+            <Action
+              t={p.t}
+              run={async () => {
+                const run = (await p.read(base + '/runs/' + previewRun)) as Run
+                const report = run.artifacts.find(value => value.kind === 'ReportRef')
+                setPreview(report ? await p.read(base + '/artifacts/' + report.id + '/report') : run)
+              }}
+            >
+              {p.t('refresh')}
+            </Action>
+            <PreviewTable value={preview} />
+            {preview !== undefined && <small>{p.t('previewResult')}</small>}
+          </section>
+        )}
+      </>}
     </div>
   )
 }

@@ -1,0 +1,49 @@
+- dialog "Model configuration":
+  - heading "Model configuration" [level=2]
+  - button "Close":
+    - img
+  - paragraph: Closing preserves session, run and draft
+  - paragraph: Choose or create a configuration, enter the endpoint, model ID and key, then save and test.
+  - text: Saved models
+  - combobox "Saved models":
+    - option "New configuration"
+    - option "API Relay · synthetic-model · Key configured" [selected]
+  - button "New configuration"
+  - group:
+    - text: Display name
+    - textbox "Display name": API Relay
+    - text: Base URL
+    - textbox "Base URL": <endpoint>
+    - text: Model ID
+    - textbox "Model ID": synthetic-model
+    - text: API Key
+    - textbox "API Key":
+      - /placeholder: Required for new profiles; leave blank to keep the saved key
+    - text: Required for new profiles; leave blank to keep the saved key
+    - group:
+      - text: Model parameters Configuration ID (workbench- prefix)
+      - textbox "Configuration ID (workbench- prefix)" [disabled]: workbench-wire-test
+      - text: Generated automatically; usually no change is needed. Reasoning protocol
+      - combobox "Reasoning protocol":
+        - option "OpenAI / Ollama (reasoning_effort)" [selected]
+        - option "DeepSeek (thinking + reasoning_effort)"
+      - text: Reasoning effort
+      - combobox "Reasoning effort":
+        - option "Server default" [selected]
+        - option "Off"
+        - option "Low"
+        - option "Medium"
+        - option "High"
+        - option "Maximum (requires model support)"
+      - text: Context window (tokens)
+      - spinbutton "Context window (tokens)": "131072"
+      - text: Maximum output (tokens)
+      - spinbutton "Maximum output (tokens)": "4096"
+      - text: Request timeout (milliseconds)
+      - spinbutton "Request timeout (milliseconds)": "120000"
+    - button "Save and test"
+    - button "Save configuration"
+    - button "Test connection"
+    - button "Delete configuration"
+  - text: Save first, then test. Sends only a short test message and records a test session, without business data. Connectivity does not establish modeling quality.
+  - status: Model connected · MODEL_RESPONSE_RECEIVED · <duration> ms

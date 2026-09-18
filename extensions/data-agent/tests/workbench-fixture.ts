@@ -3,7 +3,7 @@ import { Pool } from 'pg'
 import { createHash } from 'node:crypto'
 import { readFile } from 'node:fs/promises'
 /** Seed only the disposable test database and return configuration for its domain plugin. */
-export async function workbenchFixture(root: string, port: number) {
+export async function workbenchFixture(root: string, port: number, seed = true) {
   const url =
     process.env.DATA_AGENT_TEST_DATABASE_URL ??
     'postgres://postgres:local-test-only@127.0.0.1:55439/data_agent_test'
@@ -11,8 +11,10 @@ export async function workbenchFixture(root: string, port: number) {
   const pool = new Pool({ connectionString: url }),
     actor = { project_id: 'workbench-test', actor_id: 'workbench-user' }
   try {
-    const exists=(await pool.query("SELECT to_regclass('data_agent.schema_versions') AS name")).rows[0].name
-    const current=exists?(await pool.query('SELECT max(version) AS version FROM data_agent.schema_versions')).rows[0].version:0
+    const exists = (await pool.query("SELECT to_regclass('data_agent.schema_versions') AS name")).rows[0].name
+    const current = exists
+      ? (await pool.query('SELECT max(version) AS version FROM data_agent.schema_versions')).rows[0].version
+      : 0
     for (const name of [
       '001_data_agent.sql',
       '002_attempt_credentials.sql',
@@ -23,22 +25,25 @@ export async function workbenchFixture(root: string, port: number) {
       '007_business_tasks.sql',
       '008_workbench.sql',
     ])
-      if(Number(name.slice(0,3))>current)await pool.query(
-        await readFile(new URL('../../../database/migrations/' + name, import.meta.url), 'utf8'),
+      if (Number(name.slice(0, 3)) > current)
+        await pool.query(
+          await readFile(new URL('../../../database/migrations/' + name, import.meta.url), 'utf8'),
+        )
+    if (seed) {
+      await pool.query('TRUNCATE data_agent.projects CASCADE')
+      await pool.query(
+        "INSERT INTO data_agent.projects VALUES($1,'Workbench fixture') ON CONFLICT DO NOTHING",
+        [actor.project_id],
       )
-    await pool.query('TRUNCATE data_agent.projects CASCADE')
-    await pool.query(
-      "INSERT INTO data_agent.projects VALUES($1,'Workbench fixture') ON CONFLICT DO NOTHING",
-      [actor.project_id],
-    )
-    await pool.query("INSERT INTO data_agent.members VALUES($1,$2,'owner') ON CONFLICT DO NOTHING", [
-      actor.project_id,
-      actor.actor_id,
-    ])
-    await pool.query(
-      "INSERT INTO data_agent.artifacts(id,project_id,kind,digest,object_key,bytes,metadata) VALUES('workbench-input',$1,'DatasetRef',$2,'synthetic',1,'{}') ON CONFLICT DO NOTHING",
-      [actor.project_id, 'b'.repeat(64)],
-    )
+      await pool.query("INSERT INTO data_agent.members VALUES($1,$2,'owner') ON CONFLICT DO NOTHING", [
+        actor.project_id,
+        actor.actor_id,
+      ])
+      await pool.query(
+        "INSERT INTO data_agent.artifacts(id,project_id,kind,digest,object_key,bytes,metadata) VALUES('workbench-input',$1,'DatasetRef',$2,'synthetic',1,'{}') ON CONFLICT DO NOTHING",
+        [actor.project_id, 'b'.repeat(64)],
+      )
+    }
     const input = {
       project_id: actor.project_id,
       dataset: {
