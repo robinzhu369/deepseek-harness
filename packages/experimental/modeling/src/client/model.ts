@@ -216,7 +216,7 @@ export class ModelingClientModel {
   private snapshot: ModelingClientSnapshot = { ...EMPTY, phase: 'loading', mode: 'live', confirming: false, skillBusy: false }
   private readonly listeners = new Set<() => void>()
   private request: AbortController | undefined
-  private timer: number | undefined
+  private timer: ReturnType<typeof globalThis.setTimeout> | undefined
   private disposed = false
   private active = false
   private hidden = typeof document !== 'undefined' && document.hidden

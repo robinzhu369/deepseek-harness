@@ -129,7 +129,7 @@ T10 — 有界流程编辑与重跑：PASS。表单从 `/v1/capabilities` 生成
 
 ```text
 日期/任务 ID：2026-09-20 / T08
-修改文件：services/modeling-api/app/{api.py,database.py}、services/modeling-api/tests/test_run_lifecycle.py、packages/experimental/modeling/src/{index.ts,types.ts,client/**}、packages/experimental/modeling/tests/client-model.spec.ts、相关 README 中英文与配对记录、docs/modeling-demo/{progress.md,tasks.json,evidence/2026-09-20/t08.json}
+修改文件：services/modeling-api/app/{api.py,database.py}、services/modeling-api/tests/test_run_lifecycle.py、packages/experimental/modeling/src/{index.ts,types.ts,client/**}、packages/experimental/modeling/tests/client-model.client.spec.ts、相关 README 中英文与配对记录、docs/modeling-demo/{progress.md,tasks.json,evidence/2026-09-20/t08.json}
 实际命令：真实 DeepSeek Session 的 skill/profile/propose/status/result；UI 双击确认与刷新；artifact 下载；sqlite 幂等核验；verify_g1_artifacts.py；pytest；vitest；tsc；oxlint；git diff --check；README 配对检查；pnpm run test:docs
 退出码/输出摘要：新 Session、真实 Agent 与 UI/Worker E2E 通过；确认前 Run 数 0，双击确认后且刷新后 Run 数始终 1；最终 succeeded revision 5，13 个完成产物；Python 26 PASS，Harness 37 PASS，TypeScript/lint/G1 复验 PASS；docs 保持 19 PASS / 1 FAIL
 业务或界面模式：live DeepSeek LLM / live Harness Session / live browser UI / live Modeling API / live independent worker
@@ -153,7 +153,7 @@ T10 — 有界流程编辑与重跑：PASS。表单从 `/v1/capabilities` 生成
 
 ```text
 日期/任务 ID：2026-09-20 / T10
-修改文件：services/modeling-api/app/{contracts.py,database.py,api.py}、services/modeling-api/tests/{test_plan_validation.py,test_skill_and_rerun.py}、packages/experimental/modeling/src/{index.ts,types.ts,client/**}、packages/experimental/modeling/tests/client-model.spec.ts、相关 README 中英文与配对记录、docs/modeling-demo/{progress.md,tasks.json,evidence/2026-09-20/t10.json}
+修改文件：services/modeling-api/app/{contracts.py,database.py,api.py}、services/modeling-api/tests/{test_plan_validation.py,test_skill_and_rerun.py}、packages/experimental/modeling/src/{index.ts,types.ts,client/**}、packages/experimental/modeling/tests/client-model.client.spec.ts、相关 README 中英文与配对记录、docs/modeling-demo/{progress.md,tasks.json,evidence/2026-09-20/t10.json}
 实际命令：真实受控表单把逻辑回归 C 从 1.0 改为 0.5；双击确认并重跑；SQLite revision/run/幂等核验；python3 services/modeling-api/verify_g1_artifacts.py .artifacts/modeling-demo/g2-live-20260920/service/runs/run_9f109e3bf18549018845d7f8ffa1b3a1；pytest；vitest；tsc；oxlint；文档门禁
 退出码/输出摘要：r2 hash d07da343…；显式失效 Train/Evaluate/Result，当前无安全缓存所以完整重算；只创建新 run_9f109e3bf18549018845d7f8ffa1b3a1，旧 Run 保留；新 Run succeeded revision 5，13 个完成产物；12 个核心产物通过模型重载、切分隔离与测试指标复算；Python 32 PASS，Harness 聚焦测试 38 PASS，TypeScript/lint PASS，docs 19 PASS / 1 FAIL
 业务或界面模式：live browser UI / live Modeling API / live independent Python worker

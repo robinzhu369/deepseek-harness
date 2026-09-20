@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 import type { SessionId } from '@deepseek-ai/dsh-session/types'
+import type { ApproveAndRunRequest, RerunRequest } from '../src/types.ts'
 import { ModelingClientModel, parseWorkspace, type ModelingRemote } from '../src/client/model.ts'
 
 const sessionId = 'session-ui' as SessionId
@@ -67,7 +68,9 @@ describe('ModelingClientModel', () => {
 
   it('coalesces a double confirmation into one idempotent approval', async () => {
     let resolveApproval: (() => void) | undefined
-    const approve = vi.fn(() => new Promise<{ run_id: string; created: boolean }>((resolve) => {
+    const approve = vi.fn((
+      _sessionId: SessionId, _request: ApproveAndRunRequest, _signal: AbortSignal,
+    ) => new Promise<{ run_id: string; created: boolean }>((resolve) => {
       resolveApproval = () => { resolve({ run_id: 'run-1', created: true }) }
     }))
     const model = new ModelingClientModel(sessionId, remote({ workspace: vi.fn(async () => workspace(1)), approveAndRun: approve }))
@@ -84,7 +87,9 @@ describe('ModelingClientModel', () => {
 
   it('coalesces a double rerun confirmation and preserves the source run identity', async () => {
     let resolveRerun: (() => void) | undefined
-    const rerun = vi.fn(() => new Promise<{ run_id: string; created: boolean }>((resolve) => {
+    const rerun = vi.fn((
+      _sessionId: SessionId, _request: RerunRequest, _signal: AbortSignal,
+    ) => new Promise<{ run_id: string; created: boolean }>((resolve) => {
       resolveRerun = () => { resolve({ run_id: 'run-2', created: true }) }
     }))
     const approveAndRun = vi.fn(async () => ({ run_id: 'unexpected', created: true }))
