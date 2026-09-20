@@ -119,6 +119,8 @@ preset、运行时 Skill 字节与工具 schema 不变时，前缀保持稳定�
 - 结果解释需要已配置的真实模型提供方；后续解释失败时，确定性产物仍然可用。
 - 随附 preset 中的运行时 Skill 路径指向此源码 checkout，不是安装包数据路径。
 
+本包不发布运行时 invariant companion；它直接从 Modeling API 投影每个实时 Session，不保留可用于比对的第二个可变状态源。
+
 <a id="dev-note"></a>
 ### 开发备注
 

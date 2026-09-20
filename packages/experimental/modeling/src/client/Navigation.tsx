@@ -73,7 +73,7 @@ export function SkillsPanel(props: PropsRuntime<'main'> & PropsLocale<'modeling'
     <div className={css.skillGrid}>{state.skills.map(skill => <article className={css.skillCard} key={skill.name}>
       <div className={css.cardHead}><IconSkillOutline16 /><strong>{props.t(`skill.${skill.name}` as ModelingKey)}</strong><Tag tone={skill.draft_hash === null ? 'success' : 'warning'}>{skill.draft_status}</Tag></div>
       <code>{skill.name}</code><p>{skill.description}</p>
-      <dl><div><dt>{props.t('skills.version')}</dt><dd>{skill.published_version}</dd></div><div><dt>SHA-256</dt><dd>{skill.published_hash.slice(0, 16)}…</dd></div><div><dt>{props.t('skills.updated')}</dt><dd>{skill.updated_at}</dd></div></dl>
+      <dl><div><dt>{props.t('skills.version')}</dt><dd>{skill.published_version}</dd></div><div><dt>{props.t('skills.hash')}</dt><dd>{skill.published_hash.slice(0, 16)}…</dd></div><div><dt>{props.t('skills.updated')}</dt><dd>{skill.updated_at}</dd></div></dl>
       <div className={css.actions}><Button size="sm" variant="ghost" icon={<IconDataOutline16 />} onClick={() => { void model.selectSkill(skill.name) }}>{props.t('skills.view')}</Button><Button size="sm" variant="outline" icon={<IconEditOutline16 />} onClick={() => { void model.selectSkill(skill.name) }}>{props.t('skills.edit')}</Button></div>
     </article>)}</div>
     {detail !== null && detail !== undefined && <section className={css.editorPanel}>
@@ -96,8 +96,8 @@ export function RunsPanel(props: PropsRuntime<'main'> & PropsLocale<'modeling'> 
       <dl>
         <div><dt>{props.t('plan.revision')}</dt><dd>{run.plan_revision}</dd></div>
         <div><dt>{props.t('skills.updated')}</dt><dd>{run.created_at}</dd></div>
-        <div><dt>ROC-AUC</dt><dd>{metricText(run.metrics, 'roc_auc')}</dd></div>
-        <div><dt>F1</dt><dd>{metricText(run.metrics, 'f1')}</dd></div>
+        <div><dt>{props.t('result.auc')}</dt><dd>{metricText(run.metrics, 'roc_auc')}</dd></div>
+        <div><dt>{props.t('result.f1')}</dt><dd>{metricText(run.metrics, 'f1')}</dd></div>
       </dl>
     </article>)}</div>
   </main>

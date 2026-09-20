@@ -119,6 +119,8 @@ These limits define the current source-local demo boundary.
 - Result explanations require a configured real model provider; deterministic artifacts remain available if a later explanation fails.
 - The runtime Skill path in the included preset targets this source checkout and is not an installed-package data path.
 
+No runtime invariant companion is published; the package projects each live Session directly from the Modeling API and retains no second mutable state source to compare.
+
 <a id="dev-note"></a>
 ### Dev Note
 
