@@ -1,0 +1,3 @@
+name: 智模工作台
+description: 仅提供数据概览、计划提案、运行状态和结果读取的建模 Agent。
+order: 10

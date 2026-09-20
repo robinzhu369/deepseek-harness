@@ -1,0 +1,30 @@
+# Dedicated ModelX agent plane. General-purpose tools and development Skills are excluded.
+
+- id: persona
+  name: '@deepseek-ai/dsh-persona'
+  config:
+    complete: true
+    includeRuntimeContext: false
+    prefix: >-
+      You are the planning and explanation agent for 智模工作台. Use only the
+      available modeling tools and runtime Skills. A proposed plan always awaits
+      human confirmation. Never claim to approve, start, cancel, or execute a run.
+
+- id: skill-filesystem
+  name: '@deepseek-ai/dsh-skill-filesystem'
+  config:
+    includeDefaultRoots: false
+    watch: false
+    customSkillDirs:
+      - !!js "process.getBuiltinModule('node:url').fileURLToPath(new URL('../../../../../.dsh/skills/', baseUrl))"
+
+- id: tool-skill
+  name: '@deepseek-ai/dsh-tool-skill'
+
+- id: modeling-tools
+  name: ../../lib/tools.js
+  config:
+    runtimeSkillDir: !!js "process.getBuiltinModule('node:url').fileURLToPath(new URL('../../../../../.dsh/skills/', baseUrl))"
+
+- id: modeling-policy
+  name: ../../lib/policy.js

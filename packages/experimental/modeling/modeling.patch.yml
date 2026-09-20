@@ -1,0 +1,16 @@
+# Host adapter plus the dedicated modeling preset. Apply after the Web bundle.
+
+- insert:
+    - id: modeling
+      name: ./lib/index.js
+      config:
+        baseUrl: !!js process.env.MODELING_API_URL
+        requestTimeoutMs: 30000
+        maxToolResultBytes: 12288
+
+- id: agent-presets
+  config:
+    default: modeling
+    roots:
+      - path: !!js "process.getBuiltinModule('node:path').resolve(process.cwd(), 'packages/experimental/modeling/presets')"
+        trust: system

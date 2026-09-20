@@ -1,0 +1,34 @@
+.panel { height: 100%; overflow: auto; display: grid; place-items: center; padding: 24px; box-sizing: border-box; background: var(--dsw-alias-bg-base); color: var(--dsw-alias-label-primary); }
+.panelCard { width: min(520px, 100%); padding: 28px; border: 1px solid var(--dsw-alias-border-l2); border-radius: 12px; background: var(--dsw-alias-bg-layer-1); box-shadow: var(--dsw-elevation-panel); text-align: center; }
+.panelCard svg { color: var(--dsw-alias-brand-primary); }
+.panelCard h2 { margin: 12px 0 6px; font-size: 18px; }
+.panelCard p { margin: 0; color: var(--dsw-alias-label-secondary); font-size: 13px; }
+.management { height: 100%; overflow: auto; box-sizing: border-box; padding: 22px; color: var(--dsw-alias-label-primary); background: var(--dsw-alias-bg-base); }
+.header { margin-bottom: 18px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.header h2 { margin: 0; font-size: 20px; }
+.header p { margin: 4px 0 0; color: var(--dsw-alias-label-secondary); font-size: 12px; }
+.skillGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.skillCard, .editorPanel, .runCard { border: 1px solid var(--dsw-alias-border-l2); border-radius: 12px; padding: 16px; background: var(--dsw-alias-bg-layer-1); box-shadow: var(--dsw-elevation-panel); }
+.cardHead, .editorHead { display: flex; align-items: center; gap: 8px; }
+.cardHead svg { color: var(--dsw-alias-brand-primary); }
+.cardHead > span:last-child, .editorHead > span:last-child { margin-left: auto; }
+.skillCard > code { margin-top: 8px; display: block; color: var(--dsw-alias-brand-primary); font-size: 11px; }
+.skillCard p { min-height: 38px; color: var(--dsw-alias-label-secondary); font-size: 12px; line-height: 18px; }
+.skillCard dl, .runCard dl { margin: 12px 0 0; display: grid; gap: 6px; }
+.skillCard dl div, .runCard dl div { display: flex; justify-content: space-between; gap: 12px; font-size: 11px; }
+.skillCard dt, .runCard dt { color: var(--dsw-alias-label-secondary); }
+.skillCard dd, .runCard dd { margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.actions { margin-top: 14px; display: flex; justify-content: flex-end; gap: 8px; }
+.editorPanel { margin-top: 16px; }
+.editorHead { justify-content: space-between; }
+.editorHead h3 { margin: 0; }
+.editorHead span { color: var(--dsw-alias-label-secondary); font-size: 11px; }
+.editorPanel textarea { width: 100%; min-height: 360px; margin-top: 14px; box-sizing: border-box; resize: vertical; border: 1px solid var(--dsw-alias-border-l2); border-radius: 8px; padding: 12px; color: var(--dsw-alias-label-primary); background: var(--dsw-alias-bg-layer-2); font: 12px/18px var(--ds-font-family-code); }
+.validation { margin-top: 12px; padding: 10px; border-radius: 8px; background: var(--dsw-alias-bg-layer-2); font-size: 12px; }
+.validation pre { max-height: 160px; overflow: auto; margin: 8px 0 0; white-space: pre-wrap; }
+.runList { display: grid; gap: 12px; }
+.runCard { display: grid; grid-template-columns: 1fr auto; gap: 12px; }
+.runCard code { margin-top: 5px; display: block; font-size: 11px; }
+.runCard dl { grid-column: 1 / -1; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.runCard dl div { display: grid; gap: 4px; }
+@media (max-width: 800px) { .skillGrid { grid-template-columns: 1fr; } .management { padding: 14px; } .runCard dl { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

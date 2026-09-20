@@ -61,6 +61,8 @@ import * as ToolSessionQuery from '@deepseek-ai/dsh-tool-session-query'
 import * as ToolJobs from '@deepseek-ai/dsh-tool-jobs'
 import BrowserUseRegistry from '@deepseek-ai/dsh-browser-use'
 import * as StagehandBrowserTools from '@deepseek-ai/dsh-experimental-browser-use-stagehand-native'
+import ModelingGateway from '@deepseek-ai/dsh-experimental-modeling'
+import * as ModelingTools from '@deepseek-ai/dsh-experimental-modeling/tools'
 import type TeamService from '@deepseek-ai/dsh-experimental-agent-team'
 import * as ToolTeam from '@deepseek-ai/dsh-experimental-tool-agent-team'
 import * as ToolTodo from '@deepseek-ai/dsh-tool-todo'
@@ -241,6 +243,23 @@ const TOOL_PACKAGES: ToolPackage[] = [
         mode: 'launch', model: { modelName: 'openai/gpt-5.4-mini', apiKey: 'catalog-placeholder' },
       })
     },
+  },
+  {
+    pkg: '@deepseek-ai/dsh-experimental-modeling',
+    dir: 'modeling',
+    source: 'packages/experimental/modeling/src/tools.ts',
+    requires: ['ctx.modeling', 'ctx.tools', 'an exact live Agent'],
+    writes: ['tool/call', 'tool/result', 'a draft plan through the private modeling API'],
+    async mount(ctx) {
+      await ctx.plugin(ModelingGateway, {
+        baseUrl: 'http://127.0.0.1:1',
+        requestTimeoutMs: 1,
+        maxToolResultBytes: 12_288,
+      })
+      await ctx.plugin(ModelingTools, { runtimeSkillDir: resolve(root, '.dsh/skills') })
+    },
+    note:
+      'The four tools derive Session identity from the calling Agent and never expose approval. The application invokes approveAndRun through the private Remote adapter after explicit human confirmation.',
   },
   {
     pkg: '@deepseek-ai/dsh-tool-ask-user',
