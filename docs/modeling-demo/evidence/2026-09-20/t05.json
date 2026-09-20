@@ -1,0 +1,84 @@
+{
+  "task": "T05",
+  "status": "PASS",
+  "mode": "live local HTTP lifecycle and independent compute subprocess",
+  "commands": [
+    {
+      "command": "python3 -m pytest services/modeling-api/tests/test_run_lifecycle.py -q",
+      "exit_code": 0,
+      "result": "4 passed"
+    },
+    {
+      "command": "python3 -m pytest services/modeling-api/tests -q",
+      "exit_code": 0,
+      "result": "23 passed"
+    },
+    {
+      "command": "pnpm exec tsc --project services/modeling-api/tsconfig.json",
+      "exit_code": 0,
+      "result": "TypeScript contract compilation passed"
+    },
+    {
+      "command": "pnpm exec oxlint services/modeling-api/contracts --deny-warnings",
+      "exit_code": 0,
+      "result": "TypeScript contract lint passed"
+    },
+    {
+      "command": "python3 services/modeling-api/verify_g1_artifacts.py .artifacts/modeling-demo/g1-20260920/run",
+      "exit_code": 0,
+      "result": "12 artifacts, split isolation, model reload, and metric recomputation passed"
+    },
+    {
+      "command": "pnpm run test:docs",
+      "exit_code": 1,
+      "result": "19 passed, 1 failed: 23 Kit Markdown files still lack English counterparts"
+    },
+    {
+      "command": "python3 services/modeling-api/run_t05_demo.py --output-root .artifacts/modeling-demo/t05-20260920-final --rows 1200 --seed 20260920",
+      "exit_code": 0,
+      "result": "run_5ce51a4a8f994341abb70a1fc8c9e0ab succeeded with 13 indexed artifacts"
+    }
+  ],
+  "run": {
+    "id": "run_5ce51a4a8f994341abb70a1fc8c9e0ab",
+    "plan_id": "plan_f96c273220a94483abc4ee863dabacd6",
+    "plan_revision": 1,
+    "plan_hash": "98ab9332048e9db2e11c5e3d13b38fe07b17b7c83c61e0bcbb0d4de86280876f",
+    "status": "succeeded",
+    "split_counts": {
+      "train": 720,
+      "validation": 240,
+      "test": 240
+    }
+  },
+  "test_metrics": {
+    "dataset": "test",
+    "positive_label": 1,
+    "threshold": 0.5,
+    "samples": 240,
+    "roc_auc": 0.7010219612959339,
+    "average_precision": 0.18165134065705776,
+    "f1": 0.0
+  },
+  "artifacts": {
+    "summary": ".artifacts/modeling-demo/t05-20260920-final/t05-summary.json",
+    "manifest": ".artifacts/modeling-demo/t05-20260920-final/service/runs/run_5ce51a4a8f994341abb70a1fc8c9e0ab/manifest.json",
+    "metrics": ".artifacts/modeling-demo/t05-20260920-final/service/runs/run_5ce51a4a8f994341abb70a1fc8c9e0ab/metrics.json",
+    "model": ".artifacts/modeling-demo/t05-20260920-final/service/runs/run_5ce51a4a8f994341abb70a1fc8c9e0ab/pipeline.joblib"
+  },
+  "covered": [
+    "SQLite datasets, immutable plan revisions, runs, node events, idempotency records, and completed artifacts",
+    "same-key replay and conflicting-key rejection",
+    "revision and plan hash approval checks",
+    "single compute concurrency",
+    "independent worker process, timeout, process-group cancellation, and startup interruption",
+    "complete artifact verification and session-scoped artifact download",
+    "polling without execution retrigger"
+  ],
+  "not_run": [
+    "real LLM invocation",
+    "Playwright Chromium browser flow",
+    "million-row capacity measurement",
+    "operating-system CPU and memory quota enforcement"
+  ]
+}

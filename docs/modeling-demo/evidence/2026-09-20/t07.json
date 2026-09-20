@@ -1,0 +1,48 @@
+{
+  "task": "T07",
+  "status": "PASS",
+  "mode": "live Harness Web plus explicitly marked UI fixture",
+  "implementation": {
+    "theme_primary": "#0F4C9E",
+    "layout": "existing Harness sidebar + workbench main column + 320px task/artifact column",
+    "navigation": ["建模工作区", "数据中心", "技能中心", "运行记录"],
+    "business_buttons_use_icons": true,
+    "fixture_query": "?modeling-fixture=1",
+    "fixture_badge": "UI PREVIEW / FIXTURE",
+    "react_application_reused": true
+  },
+  "responsive_review": [
+    {
+      "viewport": "1440x900",
+      "mode": "fixture",
+      "result": "PASS",
+      "evidence": "Codex in-app browser inline capture; fixture badge, three columns, cards, timeline, and independent content scrolling visible"
+    },
+    {
+      "viewport": "1366x768",
+      "mode": "live",
+      "result": "PASS",
+      "evidence": "Codex in-app browser inline captures before and after the real run; no horizontal overflow or clipped controls"
+    }
+  ],
+  "visual_checks": {
+    "dataset_card": "PASS",
+    "plan_card": "PASS",
+    "result_card": "PASS",
+    "task_timeline": "PASS",
+    "artifact_column": "PASS",
+    "focus_and_button_labels": "PASS",
+    "existing_composer_preserved": "PASS"
+  },
+  "files": [
+    "packages/experimental/modeling/src/client/ModelingWorkspace.tsx",
+    "packages/experimental/modeling/src/client/ModelingWorkspace.module.css",
+    "packages/experimental/modeling/src/client/Navigation.tsx",
+    "packages/experimental/modeling/src/client/Navigation.module.css",
+    "packages/experimental/modeling/src/client/fixtures.ts",
+    "packages/experimental/modeling/src/client/locales.ts"
+  ],
+  "not_run": [
+    "repository Playwright Chromium run because Chromium is not installed and the user prohibited downloading it"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "gate": "G2",
+  "status": "PASS",
+  "session_id": "session-8bc8aaf9-3ef1-49fb-91a8-3909e5c030b0",
+  "provider": "deepseek-official",
+  "model_id": "deepseek-flash",
+  "dataset_id": "ds_160e8c643897ecb7f38444cc",
+  "plan_id": "plan_fe202e9ab4ec4bd9851ad9aed3f736b3",
+  "plan_revision": 1,
+  "plan_hash": "b4ec86bf9f225ff7eea91b4d5d4a200066383829b11faf3f06c47831c9bb9fb6",
+  "run_id": "run_19b21fa9ea464ef09b47c78cf78181dc",
+  "run_status": "succeeded",
+  "criteria": [
+    {"id": 1, "status": "PASS", "result": "Real DeepSeek LLM request completed."},
+    {"id": 2, "status": "PASS", "result": "A new Harness Session completed."},
+    {"id": 3, "status": "PASS", "result": "The Agent loaded all four runtime Skills."},
+    {"id": 4, "status": "PASS", "result": "The Agent called modeling_get_dataset_profile."},
+    {"id": 5, "status": "PASS", "result": "The Agent called modeling_propose_plan."},
+    {"id": 6, "status": "PASS", "result": "The proposed plan had zero runs before confirmation."},
+    {"id": 7, "status": "PASS", "result": "The Host created the run only after explicit user confirmation."},
+    {"id": 8, "status": "PASS", "result": "The independent Python worker completed real computation."},
+    {"id": 9, "status": "PASS", "result": "The Agent called modeling_get_run_status."},
+    {"id": 10, "status": "PASS", "result": "modeling_get_run_result returned the new run's real result."},
+    {"id": 11, "status": "PASS", "result": "The Agent explained the real metrics without changing them."},
+    {"id": 12, "status": "PASS", "result": "The Agent could not see approval, shell, Python, SQL, or arbitrary-network tools."}
+  ]
+}

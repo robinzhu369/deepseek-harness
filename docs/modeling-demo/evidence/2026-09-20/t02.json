@@ -1,0 +1,20 @@
+{
+  "task": "T02",
+  "contracts": {
+    "json_schema": "docs/modeling-demo/contracts/modeling-plan.schema.json",
+    "pydantic": "services/modeling-api/app/contracts.py",
+    "typescript": "services/modeling-api/contracts/modeling.ts"
+  },
+  "checks": [
+    {
+      "command": "python3 -m pytest services/modeling-api/tests/test_plan_validation.py -q",
+      "result": "11 passed"
+    },
+    {
+      "command": "pnpm exec tsc --project services/modeling-api/tsconfig.json",
+      "result": "exit 0"
+    }
+  ],
+  "scope_limit": "Approval and state validation are pure contract functions; persistence and execution remain deferred to T05.",
+  "status": "PASS"
+}

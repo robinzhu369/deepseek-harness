@@ -1,0 +1,81 @@
+{
+  "task": "T10",
+  "status": "PASS",
+  "mode": "live browser UI, live Modeling API, independent Python worker, SQLite persistence",
+  "identities": {
+    "session_id": "session-80fdaa24-3ab1-4c7b-bbb8-fec0bb4a8659",
+    "dataset_id": "ds_773aaf1ef8353140bb77b70f",
+    "plan_id": "plan_092841e584e542b68f5a12b01eceb818",
+    "source_run_id": "run_0dc0d8b8375d484da518dd1623a066dd",
+    "rerun_id": "run_9f109e3bf18549018845d7f8ffa1b3a1"
+  },
+  "revision_1": {
+    "state": "approved",
+    "plan_hash": "8e1369b319de7199da5d8f3ab39759c85ea491b334665abc929db2619aa2a107",
+    "logistic_regression_C": 1.0
+  },
+  "revision_2": {
+    "state_before_confirmation": "proposed",
+    "state_after_confirmation": "approved",
+    "plan_hash": "d07da343df013cef9650621b7a98f1c07fb9a66057cccc233130bc1db2dcd683",
+    "logistic_regression_C": 0.5,
+    "invalidation_reason": "model_parameters",
+    "invalidated_stages": ["Train", "Evaluate", "Result"],
+    "cache_reused": false,
+    "execution_stages": ["Validate", "Split", "Preprocess", "Feature", "Train", "Evaluate", "Result"],
+    "note": "The current worker has no safe stage cache and recomputes the full pipeline."
+  },
+  "rerun": {
+    "double_click_created_runs": 1,
+    "idempotency_operation": "rerun:run_0dc0d8b8375d484da518dd1623a066dd",
+    "source_preserved": true,
+    "new_id_created": true,
+    "final_status": "succeeded",
+    "status_revision": 5,
+    "split_counts": {"train": 720, "validation": 240, "test": 240},
+    "completed_artifacts": 13
+  },
+  "metrics": {
+    "evaluation_split": "test",
+    "samples": 240,
+    "positive_label": 1,
+    "threshold": 0.5,
+    "roc_auc": 0.700152207001522,
+    "average_precision": 0.17687589862852446,
+    "f1": 0.0,
+    "confusion_matrix": [[219, 0], [21, 0]]
+  },
+  "ui": {
+    "capabilities_driven_form": true,
+    "arbitrary_json_or_dag_editor": false,
+    "target_excluded_from_feature_controls": true,
+    "run_history_labels": ["Run #1", "Run #2"],
+    "result_adjust_and_rerun_action": true,
+    "screenshots": "Codex in-app browser inline capture of the controlled plan editor; final refresh capture was NOT_RUN because browser security auto-review rejected localhost access"
+  },
+  "security": {
+    "agent_rerun_tool": false,
+    "agent_approval_tool": false,
+    "model_visible_domain_tools": 4
+  },
+  "artifact_verifier": {
+    "artifacts_verified": 12,
+    "model_reload": "PASS",
+    "split_isolation": "PASS",
+    "test_metrics_recomputed": "PASS"
+  },
+  "verification": {
+    "python_tests": "32 passed, 0 failed",
+    "focused_harness_tests": "38 passed, 0 failed",
+    "typescript_host_client_contracts": "PASS",
+    "lint": "PASS",
+    "scoped_readme_pairs": "2 named pairs consistent",
+    "docs_gate": "19 passed, 1 failed: existing 23 modeling Demo Markdown files lack English counterparts"
+  },
+  "paths": {
+    "run_root": ".artifacts/modeling-demo/g2-live-20260920/service/runs/run_9f109e3bf18549018845d7f8ffa1b3a1",
+    "model": ".artifacts/modeling-demo/g2-live-20260920/service/runs/run_9f109e3bf18549018845d7f8ffa1b3a1/pipeline.joblib",
+    "metrics": ".artifacts/modeling-demo/g2-live-20260920/service/runs/run_9f109e3bf18549018845d7f8ffa1b3a1/metrics.json",
+    "manifest": ".artifacts/modeling-demo/g2-live-20260920/service/runs/run_9f109e3bf18549018845d7f8ffa1b3a1/manifest.json"
+  }
+}

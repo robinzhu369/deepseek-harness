@@ -1,0 +1,48 @@
+{
+  "gate": "G1",
+  "dataset": {
+    "path": "/Users/robinzhu/project/dsh/deepseek-harness/.artifacts/modeling-demo/g1-20260920/synthetic_binary.csv",
+    "sha256": "7f550c4f104f14f7b4d3d75527d69e270f9407ce559360de570d9cbf7f2fe314",
+    "seed": 20260920,
+    "rows": 1200,
+    "columns": 8
+  },
+  "splits": {
+    "train": 720,
+    "validation": 240,
+    "test": 240
+  },
+  "test_metrics": {
+    "dataset": "test",
+    "samples": 240,
+    "positive_label": 1,
+    "threshold": 0.5,
+    "roc_auc": 0.7893020221787346,
+    "average_precision": 0.31153459662535177,
+    "f1": 0.09090909090909091,
+    "confusion_matrix": [[219, 0], [20, 1]],
+    "labels": [0, 1]
+  },
+  "artifacts": {
+    "model": "/Users/robinzhu/project/dsh/deepseek-harness/.artifacts/modeling-demo/g1-20260920/run/pipeline.joblib",
+    "preprocessor": "/Users/robinzhu/project/dsh/deepseek-harness/.artifacts/modeling-demo/g1-20260920/run/preprocessor.joblib",
+    "metrics": "/Users/robinzhu/project/dsh/deepseek-harness/.artifacts/modeling-demo/g1-20260920/run/metrics.json",
+    "manifest": "/Users/robinzhu/project/dsh/deepseek-harness/.artifacts/modeling-demo/g1-20260920/run/manifest.json"
+  },
+  "checks": [
+    {
+      "command": "python3 -m pytest services/modeling-api/tests/test_plan_validation.py services/modeling-api/tests/test_pipeline.py -q",
+      "result": "14 passed"
+    },
+    {
+      "command": "python3 services/modeling-api/verify_g1_artifacts.py .artifacts/modeling-demo/g1-20260920/run",
+      "result": "12 artifact hashes, split isolation, model reload, and test metric recomputation passed"
+    }
+  ],
+  "documentation_gate": {
+    "passed": 19,
+    "failed": 1,
+    "failure": "23 ModelX Kit Markdown files do not yet have English counterparts; no exclusions were added."
+  },
+  "status": "PASS"
+}

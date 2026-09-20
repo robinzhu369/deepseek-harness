@@ -1,0 +1,62 @@
+{
+  "task": "T09",
+  "status": "PASS",
+  "mode": "live browser UI, live Modeling API, SQLite persistence, focused automated regression",
+  "session_id": "session-80fdaa24-3ab1-4c7b-bbb8-fec0bb4a8659",
+  "skill_catalog": [
+    "data-analysis",
+    "data-cleaning",
+    "feature-engineering",
+    "model-training"
+  ],
+  "published": {
+    "name": "data-analysis",
+    "previous_version": "0.1.0-demo",
+    "previous_hash": "8f93ba327da313fe368f9cc3c0f3065651376c60d5a8634ff5ce57576d5fa877",
+    "active_version": "0.2.0-demo",
+    "active_hash": "06bddc6e10d88a65c8dc8d2f064357a60fb1fe4e341aaa2d928cf8e26bb21d61",
+    "draft_hash_before_publish": "718a313b35e5209723cf09827e1e2640313ce4a88b7c263182cee68f05dea9c6",
+    "validation": {
+      "valid": true,
+      "errors": [],
+      "warnings": []
+    }
+  },
+  "isolation": {
+    "drafts_are_session_private": true,
+    "published_versions_are_immutable": true,
+    "existing_plan_kept_previous_snapshots": true,
+    "new_plan_uses_active_snapshots": "PASS in focused API regression",
+    "arbitrary_skill_path_rejected": true
+  },
+  "validation_rules": [
+    "fixed Skill name",
+    "YAML frontmatter",
+    "description",
+    "bounded UTF-8 size",
+    "allowed modeling tools",
+    "forbidden approval, shell, Python, SQL, HTTP, arbitrary network, and filesystem requests",
+    "unsupported models and operators reported as warnings"
+  ],
+  "plan_snapshot_evidence": {
+    "plan_id": "plan_092841e584e542b68f5a12b01eceb818",
+    "revision_1_data_analysis_version": "0.1.0-demo",
+    "revision_1_data_analysis_hash": "8f93ba327da313fe368f9cc3c0f3065651376c60d5a8634ff5ce57576d5fa877"
+  },
+  "ui": {
+    "four_cards": true,
+    "version_and_status": true,
+    "markdown_editor": true,
+    "save_validate_publish_actions": true,
+    "screenshots": "Codex in-app browser inline captures of the four-card Skill center and published 0.2.0-demo editor"
+  },
+  "verification": {
+    "python_suite": "32 passed, 0 failed",
+    "harness_focused": "38 passed, 0 failed",
+    "typescript": "PASS",
+    "lint": "PASS",
+    "scoped_readme_pairs": "2 named pairs consistent",
+    "docs_gate": "19 passed, 1 failed: existing 23 modeling Demo Markdown files lack English counterparts"
+  },
+  "credential_recorded": false
+}

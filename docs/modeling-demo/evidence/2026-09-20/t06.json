@@ -1,0 +1,151 @@
+{
+  "task": "T06",
+  "status": "PASS",
+  "gate": {
+    "name": "G2",
+    "status": "PASS",
+    "evidence": "docs/modeling-demo/evidence/2026-09-20/g2.json"
+  },
+  "mode": "live DeepSeek LLM, live Harness Session, live Modeling API, and independent Python worker",
+  "provider": {
+    "provider": "deepseek-official",
+    "model_id": "deepseek-flash",
+    "display_model": "DeepSeek-V41-Flash",
+    "credential_source": "isolated ignored Harness home",
+    "credential_recorded": false
+  },
+  "identities": {
+    "session_id": "session-8bc8aaf9-3ef1-49fb-91a8-3909e5c030b0",
+    "dataset_id": "ds_160e8c643897ecb7f38444cc",
+    "dataset_sha256": "7f550c4f104f14f7b4d3d75527d69e270f9407ce559360de570d9cbf7f2fe314",
+    "plan_id": "plan_fe202e9ab4ec4bd9851ad9aed3f736b3",
+    "plan_revision": 1,
+    "plan_hash": "b4ec86bf9f225ff7eea91b4d5d4a200066383829b11faf3f06c47831c9bb9fb6",
+    "run_id": "run_19b21fa9ea464ef09b47c78cf78181dc"
+  },
+  "runtime_skills_loaded": [
+    "data-analysis",
+    "data-cleaning",
+    "feature-engineering",
+    "model-training"
+  ],
+  "tool_call_order": [
+    "skill(data-analysis)",
+    "skill(data-cleaning)",
+    "skill(feature-engineering)",
+    "skill(model-training)",
+    "modeling_get_dataset_profile",
+    "modeling_propose_plan",
+    "modeling_get_run_status",
+    "modeling_get_run_result"
+  ],
+  "authorization": {
+    "plan_status_before_confirmation": "proposed",
+    "needs_confirmation": true,
+    "run_count_before_confirmation": 0,
+    "approval_actor": "confirmed user through Host Remote approveAndRun path",
+    "approve_exposed_as_agent_tool": false,
+    "same_idempotency_key_same_request": "same run_id, created=false",
+    "same_idempotency_key_different_request": "409 IDEMPOTENCY_CONFLICT"
+  },
+  "worker": {
+    "final_status": "succeeded",
+    "status_revision": 5,
+    "event_sequence": [
+      "run.queued",
+      "run.started",
+      "node.started:pipeline",
+      "node.completed:pipeline",
+      "artifact.created x13",
+      "run.completed"
+    ],
+    "split_counts": {
+      "train": 720,
+      "validation": 240,
+      "test": 240
+    },
+    "completed_artifacts": 13
+  },
+  "metrics": {
+    "evaluation_split": "test",
+    "positive_label": 1,
+    "threshold": 0.5,
+    "test": {
+      "roc_auc": 0.7010219612959339,
+      "average_precision": 0.18165134065705776,
+      "f1": 0.0,
+      "confusion_matrix": [[219, 0], [21, 0]]
+    },
+    "validation": {
+      "roc_auc": 0.8086540552293977,
+      "average_precision": 0.33040471518347436,
+      "f1": 0.09090909090909091,
+      "confusion_matrix": [[219, 0], [20, 1]]
+    },
+    "warnings": []
+  },
+  "agent_final_explanation": {
+    "status": "PASS",
+    "summary": "The Agent distinguished ranking quality from fixed-threshold classification, reported that threshold 0.5 predicted no positive test samples and caused F1=0 with 21 false negatives, did not tune on the test set, and suggested validation-set threshold selection or class-imbalance study as later work."
+  },
+  "security": {
+    "model_visible_tools": [
+      "modeling_get_dataset_profile",
+      "modeling_get_run_result",
+      "modeling_get_run_status",
+      "modeling_propose_plan",
+      "skill"
+    ],
+    "forbidden_tools_absent": [
+      "approve-and-run",
+      "shell",
+      "python",
+      "sql",
+      "arbitrary network"
+    ]
+  },
+  "commands": [
+    {
+      "command": "python3 -m pytest services/modeling-api/tests -q",
+      "exit_code": 0,
+      "result": "26 passed"
+    },
+    {
+      "command": "CI=true ./node_modules/.bin/vitest run packages/core/tools/tests/scoped.spec.ts packages/experimental/modeling/tests/modeling.spec.ts",
+      "exit_code": 0,
+      "result": "33 passed"
+    },
+    {
+      "command": "./node_modules/.bin/tsc -p packages/experimental/modeling/tsconfig.json --noEmit",
+      "exit_code": 0,
+      "result": "passed"
+    },
+    {
+      "command": "./node_modules/.bin/oxlint packages/experimental/modeling/src packages/experimental/modeling/tests --deny-warnings",
+      "exit_code": 0,
+      "result": "passed"
+    },
+    {
+      "command": "python3 services/modeling-api/verify_g1_artifacts.py .artifacts/modeling-demo/g2-live-20260920/service/runs/run_19b21fa9ea464ef09b47c78cf78181dc",
+      "exit_code": 0,
+      "result": "12 artifacts, model reload, split isolation, and exact metric recomputation passed"
+    },
+    {
+      "command": "CI=true pnpm run test:docs",
+      "exit_code": 1,
+      "result": "19 passed, 1 failed: the existing translation-pairing gate still reports 23 modeling Demo Markdown files without English counterparts"
+    }
+  ],
+  "paths": {
+    "session_log": ".artifacts/modeling-demo/t06-harness-home/sessions/--Users-robinzhu-project-dsh-deepseek-harness--/session-8bc8aaf9-3ef1-49fb-91a8-3909e5c030b0/session.v3.jsonl.zstd",
+    "approval_script": ".artifacts/modeling-demo/g2-live-20260920/approve-host-path.mts",
+    "model": ".artifacts/modeling-demo/g2-live-20260920/service/runs/run_19b21fa9ea464ef09b47c78cf78181dc/pipeline.joblib",
+    "metrics": ".artifacts/modeling-demo/g2-live-20260920/service/runs/run_19b21fa9ea464ef09b47c78cf78181dc/metrics.json",
+    "manifest": ".artifacts/modeling-demo/g2-live-20260920/service/runs/run_19b21fa9ea464ef09b47c78cf78181dc/manifest.json"
+  },
+  "not_run": [
+    "Playwright Chromium browser flow",
+    "million-row capacity measurement",
+    "operating-system CPU and memory hard quota enforcement"
+  ]
+}

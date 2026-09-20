@@ -1,0 +1,224 @@
+{
+  "schema_version": "1.0",
+  "estimated_total_minutes": 975,
+  "buffer_minutes": 125,
+  "tasks": [
+    {
+      "id": "T00",
+      "title": "仓库与环境探测",
+      "estimate_minutes": 60,
+      "depends_on": [],
+      "skill": "modelx-harness-extension",
+      "status": "completed",
+      "definition_of_done": "确认上游提交、真实扩展点、模型/构建/测试能力；工具 smoke 成功",
+      "evidence": [
+        "docs/modeling-demo/REPO_DISCOVERY.md",
+        "pnpm run build: exit 0",
+        "ToolRuntime modelx_t00_probe: exit 0",
+        "web profile reached ready on 127.0.0.1:3080"
+      ]
+    },
+    {
+      "id": "T01",
+      "title": "开发 Skills 与浏览器工具准备",
+      "estimate_minutes": 30,
+      "depends_on": [
+        "T00"
+      ],
+      "skill": "modelx-demo-orchestrator",
+      "status": "completed",
+      "definition_of_done": "项目 Skills 可发现；浏览器能力可用或明确阻塞",
+      "evidence": [
+        "docs/modeling-demo/evidence/2026-09-20/t01.json",
+        "six modelx-* skills discovered",
+        "local preview HTTP 200 and edit-plan modal interaction"
+      ]
+    },
+    {
+      "id": "T02",
+      "title": "协议、类型与状态模型",
+      "estimate_minutes": 60,
+      "depends_on": [
+        "T00"
+      ],
+      "skill": "modelx-data-pipeline",
+      "status": "completed",
+      "definition_of_done": "计划/事件 schema、Pydantic 和 TS 契约一致；非法计划测试通过",
+      "evidence": [
+        "docs/modeling-demo/evidence/2026-09-20/t02.json",
+        "11 plan and state tests passed",
+        "TypeScript contract compilation exit 0"
+      ]
+    },
+    {
+      "id": "T03",
+      "title": "固定 Python Pipeline",
+      "estimate_minutes": 150,
+      "depends_on": [
+        "T02"
+      ],
+      "skill": "modelx-data-pipeline",
+      "status": "completed",
+      "definition_of_done": "不依赖 LLM 完成真实清洗、特征、逻辑回归及产物",
+      "evidence": [
+        "docs/modeling-demo/evidence/2026-09-20/g1-summary.json",
+        "14 Python tests passed",
+        "G1 artifact verifier exit 0"
+      ]
+    },
+    {
+      "id": "T04",
+      "title": "上传与 Profile",
+      "estimate_minutes": 60,
+      "depends_on": [
+        "T02"
+      ],
+      "skill": "modelx-data-pipeline",
+      "status": "completed",
+      "definition_of_done": "流式上传、hash、数据概览、预览、非法 CSV 拒绝",
+      "evidence": [
+        "docs/modeling-demo/evidence/2026-09-20/t04.json",
+        "5 upload/profile tests passed",
+        "live local profile: 1200 rows, 8 columns"
+      ]
+    },
+    {
+      "id": "T05",
+      "title": "任务执行、审批与持久化",
+      "estimate_minutes": 90,
+      "depends_on": [
+        "T03",
+        "T04"
+      ],
+      "skill": "modelx-data-pipeline",
+      "status": "completed",
+      "definition_of_done": "确认幂等、子进程、超时取消、刷新恢复、产物索引",
+      "evidence": [
+        "docs/modeling-demo/evidence/2026-09-20/t05.json",
+        "4 lifecycle tests passed; 23 modeling-api tests passed",
+        ".artifacts/modeling-demo/t05-20260920-final/t05-summary.json"
+      ]
+    },
+    {
+      "id": "T06",
+      "title": "Harness 领域工具与 Agent 计划",
+      "estimate_minutes": 75,
+      "depends_on": [
+        "T05"
+      ],
+      "skill": "modelx-harness-extension",
+      "status": "completed",
+      "definition_of_done": "四个工具、Skill 快照、真实 LLM 候选计划和人工确认闭环",
+      "evidence": [
+        "docs/modeling-demo/evidence/2026-09-20/t06.json",
+        "26 Python tests and 33 focused Harness tests passed",
+        "docs/modeling-demo/evidence/2026-09-20/g2.json",
+        "live deepseek-official/deepseek-flash Session completed the proposed-plan, confirmed-run, worker, result, and explanation flow"
+      ]
+    },
+    {
+      "id": "T07",
+      "title": "主题与三栏骨架",
+      "estimate_minutes": 75,
+      "depends_on": [
+        "T01",
+        "T02"
+      ],
+      "skill": "modelx-frontend-design",
+      "status": "completed",
+      "definition_of_done": "#0F4C9E、icon 导航/按钮、独立滚动、组件状态演示",
+      "evidence": [
+        "docs/modeling-demo/evidence/2026-09-20/t07.json",
+        "Codex in-app browser inline captures at 1440x900 and 1366x768",
+        "fixture is centralized and visibly marked UI PREVIEW / FIXTURE"
+      ]
+    },
+    {
+      "id": "T08",
+      "title": "业务卡片与任务面板联调",
+      "estimate_minutes": 105,
+      "depends_on": [
+        "T06",
+        "T07"
+      ],
+      "skill": "modelx-frontend-design",
+      "status": "completed",
+      "definition_of_done": "上传、计划、确认、运行、真实结果/下载在三栏联动",
+      "evidence": [
+        "docs/modeling-demo/evidence/2026-09-20/t08.json",
+        "live Session session-80fdaa24-3ab1-4c7b-bbb8-fec0bb4a8659",
+        "live run run_0dc0d8b8375d484da518dd1623a066dd succeeded with 13 completed artifacts"
+      ]
+    },
+    {
+      "id": "T09",
+      "title": "业务 Skill 轻量管理",
+      "estimate_minutes": 45,
+      "depends_on": [
+        "T06",
+        "T08"
+      ],
+      "skill": "modelx-skill-authoring",
+      "status": "completed",
+      "definition_of_done": "4 个 Skill 可编辑草稿、校验、发布快照；新旧版本隔离",
+      "evidence": [
+        "docs/modeling-demo/evidence/2026-09-20/t09.json",
+        "live Skill center published data-analysis 0.2.0-demo",
+        "focused immutable version and plan snapshot regression passed"
+      ]
+    },
+    {
+      "id": "T10",
+      "title": "有界流程编辑与重跑",
+      "estimate_minutes": 60,
+      "depends_on": [
+        "T08"
+      ],
+      "skill": "modelx-harness-extension",
+      "status": "completed",
+      "definition_of_done": "修改参数/启停可选特征，正确失效下游，创建新 run",
+      "evidence": [
+        "docs/modeling-demo/evidence/2026-09-20/t10.json",
+        "live run_9f109e3bf18549018845d7f8ffa1b3a1 succeeded from plan revision 2",
+        "G1 artifact verifier passed for the rerun"
+      ]
+    },
+    {
+      "id": "T11",
+      "title": "端到端与安全回归",
+      "estimate_minutes": 75,
+      "depends_on": [
+        "T09",
+        "T10"
+      ],
+      "skill": "modelx-demo-qa",
+      "status": "pending",
+      "definition_of_done": "核心 E2E、拒绝未确认、错误/取消/重启、未授权访问检查",
+      "evidence": []
+    },
+    {
+      "id": "T12",
+      "title": "视觉截图复核与修复",
+      "estimate_minutes": 45,
+      "depends_on": [
+        "T11"
+      ],
+      "skill": "modelx-frontend-design",
+      "status": "pending",
+      "definition_of_done": "关键分辨率/状态截图，无溢出遮挡；icon 名称和焦点通过",
+      "evidence": []
+    },
+    {
+      "id": "T13",
+      "title": "部署、复验与演示交付",
+      "estimate_minutes": 45,
+      "depends_on": [
+        "T12"
+      ],
+      "skill": "modelx-demo-qa",
+      "status": "pending",
+      "definition_of_done": "启动文档、固定依赖、真实演示记录和未完成项清单",
+      "evidence": []
+    }
+  ]
+}

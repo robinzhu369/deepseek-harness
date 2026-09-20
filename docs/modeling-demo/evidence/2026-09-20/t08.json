@@ -1,0 +1,107 @@
+{
+  "task": "T08",
+  "status": "PASS",
+  "mode": "live DeepSeek LLM, live Harness Session, live browser UI, live Modeling API, independent Python worker",
+  "provider": {
+    "provider": "deepseek-official",
+    "model_id": "deepseek-flash",
+    "display_model": "DeepSeek-V41-Flash",
+    "credential_recorded": false
+  },
+  "identities": {
+    "session_id": "session-80fdaa24-3ab1-4c7b-bbb8-fec0bb4a8659",
+    "dataset_id": "ds_773aaf1ef8353140bb77b70f",
+    "dataset_sha256": "7f550c4f104f14f7b4d3d75527d69e270f9407ce559360de570d9cbf7f2fe314",
+    "plan_id": "plan_092841e584e542b68f5a12b01eceb818",
+    "plan_revision": 1,
+    "plan_hash": "8e1369b319de7199da5d8f3ab39759c85ea491b334665abc929db2619aa2a107",
+    "run_id": "run_0dc0d8b8375d484da518dd1623a066dd"
+  },
+  "agent_trace": {
+    "runtime_skills_loaded": ["data-analysis", "data-cleaning", "feature-engineering", "model-training"],
+    "actual_order": [
+      "skill(data-analysis)",
+      "skill(data-cleaning)",
+      "skill(feature-engineering)",
+      "skill(model-training)",
+      "modeling_get_dataset_profile",
+      "modeling_propose_plan x10 (rejected by contract validation in the initial turn)",
+      "modeling_propose_plan (accepted exact contract; proposed)",
+      "human UI approveAndRun Remote",
+      "modeling_get_run_status",
+      "modeling_get_run_result"
+    ],
+    "accepted_plan_state_before_confirmation": "proposed",
+    "needs_confirmation": true,
+    "run_count_before_confirmation": 0
+  },
+  "ui_execution": {
+    "confirmation_gesture": "double click on 确认并执行",
+    "idempotency_key": "ui:session-80fdaa24-3ab1-4c7b-bbb8-fec0bb4a8659:plan_092841e584e542b68f5a12b01eceb818:1:8e1369b319de7199da5d8f3ab39759c85ea491b334665abc929db2619aa2a107",
+    "runs_created": 1,
+    "refresh_runs_created": 0,
+    "final_status": "succeeded",
+    "status_revision": 5,
+    "completed_artifacts": 13,
+    "artifact_download": {
+      "artifact_id": "art_67e4d41bd1ee4b01bc1e1e1c9f9f195a",
+      "kind": "metrics",
+      "result": "browser download event received through Host artifact route"
+    }
+  },
+  "client_model": {
+    "single_react_free_model": true,
+    "active_poll_ms": 800,
+    "hidden_poll_ms": 4000,
+    "terminal_poll_stop": true,
+    "stale_revision_ignored": true,
+    "session_scoped_instances": true,
+    "session_switch_review": "Session B had no access to Session A plan/run; returning to Session A restored its exact persisted state",
+    "refresh_is_read_only": true,
+    "artifact_path_accepted_from_browser": false,
+    "error_states_present": ["backend unavailable", "dataset profiling error", "plan/Remote error", "run failed", "run cancelled", "run interrupted"]
+  },
+  "worker": {
+    "split_counts": {"train": 720, "validation": 240, "test": 240},
+    "event_sequence": ["run.queued", "run.started", "node.started:pipeline", "node.completed:pipeline", "artifact.created x13", "run.completed"]
+  },
+  "metrics": {
+    "evaluation_split": "test",
+    "samples": 240,
+    "positive_label": 1,
+    "threshold": 0.5,
+    "roc_auc": 0.7010219612959339,
+    "average_precision": 0.18165134065705776,
+    "f1": 0.0,
+    "confusion_matrix": [[219, 0], [21, 0]],
+    "warnings": []
+  },
+  "agent_final_explanation": "PASS: the Agent distinguished ranking ability from fixed-threshold classification, reported all-negative predictions at threshold 0.5, did not tune on the test set, and suggested validation-only threshold selection or class-imbalance study.",
+  "security": {
+    "model_visible_tools": ["modeling_get_dataset_profile", "modeling_get_run_result", "modeling_get_run_status", "modeling_propose_plan", "skill"],
+    "forbidden_tools_absent": ["approve-and-run", "shell", "python", "sql", "arbitrary network"]
+  },
+  "verification": {
+    "python_tests": "26 passed, 0 failed",
+    "focused_harness_tests": "37 passed, 0 failed",
+    "typescript_host_client": "PASS",
+    "typescript_contracts": "PASS",
+    "lint": "PASS",
+    "artifact_verifier": "12 artifacts, model reload, split isolation, and exact test metric recomputation PASS",
+    "scoped_readme_pairs": "2 named pairs consistent",
+    "docs_gate": "19 passed, 1 failed: existing 23 modeling Demo Markdown files lack English counterparts"
+  },
+  "paths": {
+    "session_log": ".artifacts/modeling-demo/t06-harness-home/sessions/--Users-robinzhu-project-dsh-deepseek-harness--/session-80fdaa24-3ab1-4c7b-bbb8-fec0bb4a8659/session.v3.jsonl.zstd",
+    "run_root": ".artifacts/modeling-demo/g2-live-20260920/service/runs/run_0dc0d8b8375d484da518dd1623a066dd",
+    "model": ".artifacts/modeling-demo/g2-live-20260920/service/runs/run_0dc0d8b8375d484da518dd1623a066dd/pipeline.joblib",
+    "metrics": ".artifacts/modeling-demo/g2-live-20260920/service/runs/run_0dc0d8b8375d484da518dd1623a066dd/metrics.json",
+    "manifest": ".artifacts/modeling-demo/g2-live-20260920/service/runs/run_0dc0d8b8375d484da518dd1623a066dd/manifest.json",
+    "screenshots": "Codex in-app browser inline captures at 1440x900 and 1366x768; the browser tool did not expose a persistent screenshot file path"
+  },
+  "not_run": [
+    "repository Playwright Chromium run",
+    "million-row capacity measurement",
+    "operating-system CPU and memory hard quota enforcement"
+  ]
+}
