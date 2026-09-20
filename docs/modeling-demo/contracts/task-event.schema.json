@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:modelx-demo:task-event:1.0",
+  "title": "TaskEvent",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "seq": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "run_id": {
+      "type": "string",
+      "pattern": "^run_[A-Za-z0-9_-]+$"
+    },
+    "node_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "type": {
+      "enum": [
+        "run.queued",
+        "run.started",
+        "node.started",
+        "node.completed",
+        "node.failed",
+        "artifact.created",
+        "run.completed",
+        "run.failed",
+        "run.cancelled",
+        "run.interrupted"
+      ]
+    },
+    "occurred_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "payload": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "schema_version",
+    "seq",
+    "run_id",
+    "node_id",
+    "type",
+    "occurred_at",
+    "payload"
+  ]
+}

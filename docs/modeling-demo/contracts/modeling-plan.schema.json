@@ -1,0 +1,333 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:modelx-demo:modeling-plan:1.0",
+  "title": "ModelingPlanCandidate",
+  "description": "Candidate only. User approval and session authorization are not model-provided fields.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "dataset_id": {
+      "type": "string",
+      "pattern": "^ds_[A-Za-z0-9_-]+$"
+    },
+    "dataset_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "mode": {
+      "enum": [
+        "prepare_dataset",
+        "binary_classification"
+      ]
+    },
+    "target": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "positive_label": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "null"
+      ]
+    },
+    "excluded_columns": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "split": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "method": {
+          "enum": [
+            "random",
+            "stratified_random"
+          ]
+        },
+        "train_ratio": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "exclusiveMaximum": 1
+        },
+        "validation_ratio": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "exclusiveMaximum": 1
+        },
+        "test_ratio": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "exclusiveMaximum": 1
+        },
+        "seed": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647
+        }
+      },
+      "required": [
+        "method",
+        "train_ratio",
+        "validation_ratio",
+        "test_ratio",
+        "seed"
+      ]
+    },
+    "preprocessing": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "numeric_missing": {
+          "enum": [
+            "median",
+            "constant"
+          ]
+        },
+        "numeric_constant": {
+          "type": "number"
+        },
+        "scale_numeric": {
+          "type": "boolean"
+        },
+        "categorical_missing_value": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "categorical_encoding": {
+          "const": "onehot_limited"
+        },
+        "onehot_max_categories": {
+          "type": "integer",
+          "minimum": 2,
+          "maximum": 256
+        }
+      },
+      "required": [
+        "numeric_missing",
+        "numeric_constant",
+        "scale_numeric",
+        "categorical_missing_value",
+        "categorical_encoding",
+        "onehot_max_categories"
+      ]
+    },
+    "feature_engineering": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "date_features": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "columns": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "components": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "month",
+                  "dayofweek"
+                ]
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "enabled",
+            "columns",
+            "components"
+          ]
+        }
+      },
+      "required": [
+        "date_features"
+      ]
+    },
+    "models": {
+      "type": "array",
+      "maxItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "const": "logistic_regression"
+          },
+          "params": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "C": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 100
+              },
+              "max_iter": {
+                "type": "integer",
+                "minimum": 50,
+                "maximum": 1000
+              }
+            },
+            "required": [
+              "C",
+              "max_iter"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "params"
+        ]
+      }
+    },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "max_train_seconds": {
+          "type": "integer",
+          "minimum": 10,
+          "maximum": 300
+        },
+        "max_run_seconds": {
+          "type": "integer",
+          "minimum": 30,
+          "maximum": 1800
+        },
+        "max_output_features": {
+          "type": "integer",
+          "minimum": 10,
+          "maximum": 10000
+        }
+      },
+      "required": [
+        "max_train_seconds",
+        "max_run_seconds",
+        "max_output_features"
+      ]
+    },
+    "assumptions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "samples_independent": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "samples_independent"
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "dataset_id",
+    "dataset_sha256",
+    "mode",
+    "target",
+    "positive_label",
+    "excluded_columns",
+    "split",
+    "preprocessing",
+    "feature_engineering",
+    "models",
+    "limits",
+    "assumptions"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "mode": {
+            "const": "binary_classification"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "target": {
+            "type": "string",
+            "minLength": 1
+          },
+          "positive_label": {
+            "not": {
+              "type": "null"
+            }
+          },
+          "models": {
+            "minItems": 1
+          },
+          "split": {
+            "properties": {
+              "method": {
+                "const": "stratified_random"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "mode": {
+            "const": "prepare_dataset"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "models": {
+            "maxItems": 0
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "target": {
+            "type": "null"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "positive_label": {
+            "type": "null"
+          },
+          "split": {
+            "properties": {
+              "method": {
+                "const": "random"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

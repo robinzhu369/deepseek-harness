@@ -1,0 +1,53 @@
+.modelx {
+  --mx-primary: #0F4C9E;
+  --mx-primary-hover: #0B3D80;
+  --mx-primary-active: #083269;
+  --mx-primary-soft: #EAF1FB;
+  --mx-bg: #F5F7FB;
+  --mx-surface: #FFFFFF;
+  --mx-sidebar: #F8FAFD;
+  --mx-text: #172B4D;
+  --mx-secondary: #596B82;
+  --mx-muted: #6B7C93;
+  --mx-border: #E2E8F0;
+  --mx-success: #147D58;
+  --mx-warning: #9A6700;
+  --mx-danger: #B42318;
+  --mx-space-1: 4px;
+  --mx-space-2: 8px;
+  --mx-space-3: 12px;
+  --mx-space-4: 16px;
+  --mx-space-5: 20px;
+  --mx-space-6: 24px;
+  --mx-radius-button: 8px;
+  --mx-radius-card: 12px;
+  --mx-radius-input: 14px;
+  --mx-font: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  color: var(--mx-text);
+  font-family: var(--mx-font);
+  font-size: 14px;
+  line-height: 1.57;
+}
+.modelx button:focus-visible,
+.modelx input:focus-visible,
+.modelx textarea:focus-visible,
+.modelx select:focus-visible {
+  outline: 2px solid var(--mx-primary);
+  outline-offset: 3px;
+}
+.modelx .mx-icon {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex: 0 0 auto;
+}
+@media (prefers-reduced-motion: reduce) {
+  .modelx *, .modelx *::before, .modelx *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}

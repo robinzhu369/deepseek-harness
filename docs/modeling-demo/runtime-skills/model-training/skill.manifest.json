@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "name": "model-training",
+  "version": "0.1.0-demo",
+  "kind": "runtime-business-skill-template",
+  "allowed_tools": [
+    "modeling_get_dataset_profile",
+    "modeling_propose_plan",
+    "modeling_get_run_status",
+    "modeling_get_run_result"
+  ],
+  "policy": "candidate-plan-only; human approval required",
+  "note": "Project-defined manifest; requires application loader, not a claim of native Harness manifest support."
+}

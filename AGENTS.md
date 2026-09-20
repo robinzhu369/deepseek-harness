@@ -177,3 +177,13 @@ Docs accompany every code change: update affected README and JSDoc contracts tog
 ## Vendoring policy
 
 `vendor/` packages are pinned source copies (manifest with upstream SHAs in [vendor/README.md](vendor/README.md)). Update via the sync procedure there; re-apply or retire the logged local modifications; rerun `pnpm run test && pnpm run build`.
+
+<!-- modelx-demo-kit:start -->
+## 智模工作台 Demo 文档入口
+
+在涉及本建模 Demo 的任务中，先阅读 `docs/modeling-demo/AGENTS.addendum.md`、`docs/modeling-demo/00-execution-contract.md`、`04-tasks-and-order.md` 和 `progress.md`。
+
+按需使用 `.agents/skills/modelx-*`；遵守已有上游规则，不替换 Harness 内核或前端。
+
+主色 #0F4C9E，icon 菜单/按钮，真实执行与人工确认，阶段测试和证据优先。
+<!-- modelx-demo-kit:end -->

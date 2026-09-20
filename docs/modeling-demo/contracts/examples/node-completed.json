@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "seq": 4,
+  "run_id": "run_example",
+  "node_id": "preprocess",
+  "type": "node.completed",
+  "occurred_at": "2026-09-20T00:00:00Z",
+  "payload": {
+    "duration_ms": 1200,
+    "note": "contract example, not measured"
+  }
+}
