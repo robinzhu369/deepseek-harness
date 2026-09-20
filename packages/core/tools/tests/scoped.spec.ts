@@ -260,6 +260,20 @@ describe('restrict() over an inherited scope layer', () => {
     expect(ctx.tools.schemas(child.key).map(t => t.name)).toEqual(['bash'])
     expect(ctx.tools.schemas(parent.key).map(t => t.name)).toEqual(['bash'])
   })
+
+  it('keeps an ancestor\'s own registrations outside that ancestor\'s restriction', async () => {
+    const ctx = await mount()
+    ctx.tools.register(tool('shell'))
+    const parent = await mintAgentScope(ctx, 'parent')
+    parent.scope.ctx.tools.register(tool('modeling'))
+    parent.scope.ctx.tools.restrict({ allow: [] })
+    const child = await mintChild(ctx, parent.key, 'child')
+
+    expect(ctx.tools.schemas(parent.key).map(t => t.name)).toEqual(['modeling'])
+    expect(ctx.tools.schemas(child.key).map(t => t.name)).toEqual(['modeling'])
+    expect(await run(ctx, 'shell', child.key)).toBe('Error: unknown tool "shell"')
+    expect(await run(ctx, 'modeling', child.key)).toBe('ran:modeling')
+  })
 })
 
 describe('scoped execution dispatch', () => {

@@ -460,7 +460,7 @@ export interface ToolRuntimeScheduler {
  * Scheduler entry point omitted from the generated named service API.
  * @internal
  */
-export const TOOL_RUNTIME_SCHEDULER: unique symbol = Symbol('@deepseek-ai/dsh-tools.scheduler')
+export const TOOL_RUNTIME_SCHEDULER: unique symbol = Symbol.for('@deepseek-ai/dsh-tools.scheduler')
 
 /** Canonical error code for cancellation after a tool body was invoked. */
 export const TOOL_ABORTED = 'ABORTED'
@@ -1164,20 +1164,26 @@ export class ToolRuntime extends Service {
     const own = this.layers.peek(scope)
     // Inherited surface, nearest ancestor last: a nearer scope's same-name
     // entry shadows a farther one, and the global layer is the farthest.
-    const inherited = new Map<string, ToolDefinition>(this.layers.global.tools.entries())
+    const inherited = new Map<string, { definition: ToolDefinition; owner: ToolLayer | undefined }>()
+    for (const [name, definition] of this.layers.global.tools.entries()) {
+      inherited.set(name, { definition, owner: undefined })
+    }
     for (const layer of layers) {
       if (layer === own) continue
-      for (const [name, definition] of layer.tools.entries()) inherited.set(name, definition)
+      for (const [name, definition] of layer.tools.entries()) inherited.set(name, { definition, owner: layer })
     }
     const visible = new Map<string, ToolDefinition>()
     const knownNames = new Set<string>()
     const restrictableNames = new Set<string>()
-    for (const [name, definition] of inherited) {
+    for (const [name, { definition, owner }] of inherited) {
       knownNames.add(name)
       restrictableNames.add(name)
       // Restrictions intersect across the whole chain: any scope on it may
-      // mask an inherited name for everything nested inside it.
-      if (layers.every(layer => layer.admits(name))) visible.set(name, definition)
+      // mask an inherited name for everything nested inside it. The layer
+      // that owns a registration does not mask that registration with its
+      // own restriction; this preserves a preset's local tools for agents
+      // joined beneath its standing scope.
+      if (layers.every(layer => layer === owner || layer.admits(name))) visible.set(name, definition)
     }
     // The scope's own registrations last, shadowing an inherited name and
     // outside the filter above.
