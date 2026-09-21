@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["metrics", "threshold", "testSamples", "confusionMatrix", "diagnostics", "recommendations"],
+  "properties": {
+    "metrics": {
+      "type": "object",
+      "required": ["rocAuc", "averagePrecision", "f1", "precision", "recall"],
+      "properties": {
+        "rocAuc": {"type": "number", "minimum": 0, "maximum": 1},
+        "averagePrecision": {"type": "number", "minimum": 0, "maximum": 1},
+        "f1": {"type": "number", "minimum": 0, "maximum": 1},
+        "precision": {"type": "number", "minimum": 0, "maximum": 1},
+        "recall": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "threshold": {"type": "number", "minimum": 0, "maximum": 1},
+    "testSamples": {"type": "integer", "minimum": 1},
+    "confusionMatrix": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "integer", "minimum": 0}}
+    },
+    "diagnostics": {"type": "array", "items": {"type": "object"}},
+    "recommendations": {"type": "array", "items": {"type": "object"}}
+  }
+}

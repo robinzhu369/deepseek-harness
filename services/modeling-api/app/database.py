@@ -555,7 +555,18 @@ class ModelingStore:
                     (run_id, seq, now),
                 )
             else:
-                connection.execute("UPDATE runs SET status = 'cancelling', revision = revision + 1, updated_at = ? WHERE id = ?", (utc_now(), run_id))
+                now = utc_now()
+                connection.execute(
+                    "UPDATE runs SET status = 'cancelling', revision = revision + 1, updated_at = ? WHERE id = ?",
+                    (now, run_id),
+                )
+                seq = connection.execute(
+                    "SELECT COALESCE(MAX(seq), 0) + 1 FROM run_events WHERE run_id = ?", (run_id,),
+                ).fetchone()[0]
+                connection.execute(
+                    "INSERT INTO run_events(run_id, seq, node_id, type, payload_json, occurred_at) VALUES (?, ?, NULL, 'run.cancelling', '{}', ?)",
+                    (run_id, seq, now),
+                )
         value = self.get_run(run_id, session_id)
         assert value is not None
         return value

@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["selectedFeatures", "excludedFeatures"],
+  "properties": {
+    "selectedFeatures": {"type": "array", "items": {"type": "string"}},
+    "excludedFeatures": {"type": "array", "items": {"type": "string"}},
+    "dateFeaturesEnabled": {"type": "boolean"}
+  }
+}

@@ -2,11 +2,13 @@ from __future__ import annotations
 
 import io
 import json
+import os
 import sys
 import time
 from pathlib import Path
 from typing import Callable
 
+import pytest
 from fastapi.testclient import TestClient
 
 from app.api import ServiceConfig, create_app
@@ -81,6 +83,19 @@ def blocking_worker(tmp_path: Path, *, exit_code: int = 0) -> Callable[[str, Pat
     return lambda _run_id, _input_path: [sys.executable, str(script)]
 
 
+def node_failure_worker(tmp_path: Path) -> Callable[[str, Path], list[str]]:
+    script = tmp_path / "worker-node-failure.py"
+    script.write_text(
+        "import json, os\n"
+        "print(json.dumps({'type':'run.started','node_id':None,'payload':{'pid':os.getpid()}}), flush=True)\n"
+        "print(json.dumps({'type':'node.started','node_id':'pipeline','payload':{}}), flush=True)\n"
+        "print(json.dumps({'type':'node.failed','node_id':'pipeline','payload':{'duration_ms':1,'error':{'code':'PIPELINE_REJECTED','message':'The pipeline rejected its input.'}}}), flush=True)\n"
+        "raise SystemExit(1)\n",
+        encoding="utf-8",
+    )
+    return lambda _run_id, _input_path: [sys.executable, str(script)]
+
+
 def test_plan_revision_idempotency_real_worker_and_artifact_authorization(tmp_path: Path) -> None:
     app = create_app(ServiceConfig(root=tmp_path, worker_timeout_seconds=20))
     with TestClient(app) as client:
@@ -111,6 +126,10 @@ def test_plan_revision_idempotency_real_worker_and_artifact_authorization(tmp_pa
         result = client.get(f"/v1/runs/{first['run_id']}/result", headers=SESSION)
         assert result.status_code == 200
         assert result.json()["metrics"]["test"]["samples"] == 240
+        assert 0 <= result.json()["metrics"]["test"]["precision"] <= 1
+        assert 0 <= result.json()["metrics"]["test"]["recall"] <= 1
+        assert result.json()["diagnostics"]
+        assert result.json()["recommendations"]
         artifacts = result.json()["artifacts"]
         assert artifacts
         artifact_id = next(item["id"] for item in artifacts if item["kind"] == "metrics")
@@ -126,6 +145,8 @@ def test_plan_revision_idempotency_real_worker_and_artifact_authorization(tmp_pa
         assert restored["plan"]["id"] == plan["id"]
         assert restored["run"]["id"] == first["run_id"]
         assert restored["result"]["metrics"] == result.json()["metrics"]
+        assert restored["result"]["diagnostics"] == result.json()["diagnostics"]
+        assert restored["result"]["recommendations"] == result.json()["recommendations"]
         assert "session_id" not in json.dumps(restored)
         assert "worker_pid" not in json.dumps(restored)
         assert "storage_key" not in json.dumps(restored)
@@ -138,13 +159,46 @@ def test_cancel_terminates_the_owned_process(tmp_path: Path) -> None:
     with TestClient(app) as client:
         plan = create_plan(client, upload_ready_dataset(client, tmp_path))
         run = approve(client, plan, "cancel-key")
-        wait_for(client, f"/v1/runs/{run['run_id']}", {"running"})
+        running = wait_for(client, f"/v1/runs/{run['run_id']}", {"running"})
+        worker_pid = running["worker_pid"]
+        assert isinstance(worker_pid, int)
         cancelled = client.post(f"/v1/runs/{run['run_id']}/cancel", headers=SESSION)
         assert cancelled.status_code == 200
         assert cancelled.json()["status"] == "cancelled"
         terminal = wait_for(client, f"/v1/runs/{run['run_id']}", {"cancelled"})
         assert terminal["worker_pid"] is None
         assert all(node["status"] != "succeeded" for node in terminal["nodes"])
+        assert [event["type"] for event in terminal["events"]][-2:] == ["run.cancelling", "run.cancelled"]
+        assert terminal["artifacts"] == []
+        assert client.post(f"/v1/runs/{run['run_id']}/cancel", headers=SESSION).json()["status"] == "cancelled"
+        with pytest.raises(ProcessLookupError):
+            os.kill(worker_pid, 0)
+
+
+def test_workspace_refresh_restores_proposed_queued_and_running_without_new_runs(tmp_path: Path) -> None:
+    app = create_app(
+        ServiceConfig(root=tmp_path), worker_command_factory=blocking_worker(tmp_path), start_workers=False,
+    )
+    with TestClient(app) as client:
+        plan = create_plan(client, upload_ready_dataset(client, tmp_path))
+        proposed = client.get("/v1/workspace", headers=SESSION).json()
+        assert proposed["plan"]["state"] == "proposed"
+        assert proposed["run"] is None and proposed["runs"] == []
+
+        run = approve(client, plan, "refresh-key")
+        for _index in range(3):
+            queued = client.get("/v1/workspace", headers=SESSION).json()
+            assert queued["run"]["status"] == "queued"
+            assert queued["run"]["id"] == run["run_id"]
+            assert len(queued["runs"]) == 1
+
+        app.state.runs.schedule(run["run_id"])
+        wait_for(client, f"/v1/runs/{run['run_id']}", {"running"})
+        for _index in range(3):
+            running = client.get("/v1/workspace", headers=SESSION).json()
+            assert running["run"]["status"] == "running"
+            assert len(running["runs"]) == 1
+        client.post(f"/v1/runs/{run['run_id']}/cancel", headers=SESSION)
 
 
 def test_timeout_and_single_concurrency(tmp_path: Path) -> None:
@@ -168,6 +222,24 @@ def test_timeout_and_single_concurrency(tmp_path: Path) -> None:
         assert failed["worker_pid"] is None
 
 
+def test_worker_node_failure_is_exposed_as_the_run_error(tmp_path: Path) -> None:
+    app = create_app(
+        ServiceConfig(root=tmp_path),
+        worker_command_factory=node_failure_worker(tmp_path),
+    )
+    with TestClient(app) as client:
+        plan = create_plan(client, upload_ready_dataset(client, tmp_path))
+        created = approve(client, plan, "node-failure-key")
+        failed = wait_for(client, f"/v1/runs/{created['run_id']}", {"failed"})
+
+        assert failed["error"] == {
+            "code": "PIPELINE_REJECTED",
+            "message": "The pipeline rejected its input.",
+        }
+        workspace = client.get("/v1/workspace", headers=SESSION).json()
+        assert workspace["run"]["error"] == failed["error"]
+
+
 def test_startup_marks_orphaned_runs_interrupted(tmp_path: Path) -> None:
     first_app = create_app(ServiceConfig(root=tmp_path), start_workers=False)
     with TestClient(first_app):
@@ -185,8 +257,8 @@ def test_plan_records_host_skill_snapshots_without_starting_a_run(tmp_path: Path
     snapshots = [
         {"name": name, "version": "0.1.0-demo", "sha256": character * 64}
         for name, character in zip(
-            ["data-analysis", "data-cleaning", "feature-engineering", "model-training"],
-            "abcd",
+            ["data-analysis", "data-cleaning", "feature-engineering", "model-training", "model-evaluation"],
+            "abcde",
         )
     ]
     with TestClient(app) as client:
@@ -222,6 +294,17 @@ def test_plan_rejects_invalid_host_skill_snapshots(tmp_path: Path) -> None:
         )
         assert response.status_code == 422
         assert response.json()["error"]["code"] == "INVALID_SKILL_SNAPSHOTS"
+        too_many = [
+            {"name": f"skill-{index}", "version": "0.1.0", "sha256": "a" * 64}
+            for index in range(6)
+        ]
+        response = client.post(
+            "/v1/plans",
+            headers={**SESSION, "X-Modeling-Skill-Snapshots": json.dumps(too_many)},
+            json=payload,
+        )
+        assert response.status_code == 422
+        assert response.json()["error"]["message"] == "Skill snapshots must be a list of at most five entries."
 
 
 def test_dataset_and_run_reads_are_session_scoped(tmp_path: Path) -> None:

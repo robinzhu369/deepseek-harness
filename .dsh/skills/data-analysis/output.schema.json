@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["datasetId", "taskType", "target"],
+  "properties": {
+    "datasetId": {"type": "string"},
+    "taskType": {"type": "string", "enum": ["binary_classification"]},
+    "target": {"type": "string"},
+    "warnings": {"type": "array", "items": {"type": "string"}}
+  }
+}

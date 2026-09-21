@@ -1,0 +1,11 @@
+{
+  "name": "model-training",
+  "displayName": "模型训练",
+  "version": "0.1.0-demo",
+  "stage": "model-training",
+  "description": "规划并解释固定逻辑回归流程，执行仍需用户显式确认。",
+  "modelInvocable": true,
+  "userInvocable": true,
+  "preconditions": ["plan_validated", "human_confirmation_required"],
+  "postconditions": ["run_result_explained"]
+}

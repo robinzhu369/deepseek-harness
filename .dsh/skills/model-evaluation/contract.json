@@ -1,0 +1,11 @@
+{
+  "name": "model-evaluation",
+  "displayName": "模型评估",
+  "version": "0.1.0-demo",
+  "stage": "model-evaluation",
+  "description": "读取真实运行结果，解释二分类指标、混淆矩阵与阈值，并给出有依据的诊断和建议。",
+  "modelInvocable": true,
+  "userInvocable": true,
+  "preconditions": ["model_training_completed", "test_result_available"],
+  "postconditions": ["metrics_interpreted", "confusion_matrix_interpreted", "threshold_interpreted", "diagnostics_generated", "recommendations_generated"]
+}

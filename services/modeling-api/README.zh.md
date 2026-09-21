@@ -41,11 +41,11 @@ pnpm exec oxlint services/modeling-api/contracts --deny-warnings
 
 ## 运行保证
 
-上传以有界分块读取，按 UTF-8 CSV 校验并计算 hash，且不信任文件名或 MIME 类型。Profile 响应只含汇总统计和不超过配置上限的预览，不包含完整数据集。
+上传以有界分块读取，按 UTF-8 CSV 校验并计算 hash，且不信任文件名或 MIME 类型。Profile 响应标识数据集及其 SHA-256，使模型能提出绑定版本的计划；除此之外只含汇总统计和不超过配置上限的预览，不包含完整数据集。
 
-审批要求幂等键、当前计划 revision 和 hash。提案计划保留由 Host 计算的运行时 Skill 版本与摘要快照。SQLite 负责 run 状态及有序事件，同一时间只运行一个建模进程；取消会终止所属进程组，服务仅在 Worker 发布并校验完整输出后登记产物。结果记录包含有界的切分与特征摘要，不返回训练记录标识。
+审批要求幂等键、当前计划 revision 和 hash。提案计划保留由 Host 计算的运行时 Skill 版本与摘要快照。SQLite 负责 run 状态及有序事件，同一时间只运行一个建模进程；取消会先记录 `run.cancelling`，再终止所属进程组；服务仅在 Worker 发布并校验完整输出后登记产物。输入包含有效 `record_id` 时 Pipeline 使用该列，否则创建确定性的内部行 ID；两者均不会进入模型特征。节点失败时，其结构化错误会成为 Run 错误，不会被通用 Worker 退出消息覆盖。结果记录包含有界的切分与特征摘要，以及 ROC-AUC、平均精确率、F1、精确率、召回率、混淆矩阵、阈值和带证据的诊断与建议代码，不返回训练记录标识。
 
-Skill API 只管理四个运行时建模 Skill。草稿归属于一个 Session；校验限制 frontmatter、大小、工具名与请求的能力；发布先写入不可变版本，再将其设为活动版本。已有计划与 run 记录保留原 Skill 快照，新计划使用活动版本。
+Skill API 只管理五个运行时建模 Skill。草稿归属于一个 Session；校验限制 frontmatter、大小、工具名与请求的能力；发布先写入不可变版本，再将其设为活动版本。已有计划与 run 记录保留原 Skill 快照，新计划使用活动版本。
 
 编辑计划会创建 proposed revision，并记录该变更在语义上影响的下游阶段。当前 Worker 不复用阶段缓存，因此每次接受的重跑都会如实重新计算完整 Pipeline。重跑要求精确的 revision、hash、来源 run 和幂等键；它总是创建新的 run ID，同时保留之前的 run。
 

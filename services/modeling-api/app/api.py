@@ -34,8 +34,8 @@ def _skill_snapshots(value: str | None) -> list[dict[str, str]] | None:
         parsed = json.loads(value)
     except json.JSONDecodeError as error:
         raise ModelingContractError("INVALID_SKILL_SNAPSHOTS", "Skill snapshots must be valid JSON.") from error
-    if not isinstance(parsed, list) or len(parsed) > 4:
-        raise ModelingContractError("INVALID_SKILL_SNAPSHOTS", "Skill snapshots must be a list of at most four entries.")
+    if not isinstance(parsed, list) or len(parsed) > 5:
+        raise ModelingContractError("INVALID_SKILL_SNAPSHOTS", "Skill snapshots must be a list of at most five entries.")
     snapshots: list[dict[str, str]] = []
     for item in parsed:
         if not isinstance(item, dict) or set(item) != {"name", "version", "sha256"}:
@@ -182,7 +182,11 @@ def create_app(
         dataset = require_dataset(dataset_id, session_id)
         if dataset["state"] != "ready" or dataset["profile"] is None:
             raise ModelingContractError("DATASET_NOT_READY", "The dataset profile is not ready.")
-        return dataset["profile"]
+        return {
+            "dataset_id": dataset["id"],
+            "dataset_sha256": dataset["sha256"],
+            **dataset["profile"],
+        }
 
     @app.get("/v1/datasets/{dataset_id}/preview")
     async def get_preview(
@@ -217,6 +221,8 @@ def create_app(
         if run is not None and run["status"] == "succeeded" and run["result"] is not None:
             result = {
                 "metrics": run["result"].get("metrics"),
+                "diagnostics": run["result"].get("diagnostics", []),
+                "recommendations": run["result"].get("recommendations", []),
                 "feature_summary": run["result"].get("feature_summary"),
                 "artifacts": run["artifacts"],
                 "warnings": run["result"].get("warnings", []),
@@ -254,16 +260,13 @@ def create_app(
 
     @app.get("/v1/skills/{name}")
     async def get_skill(name: str, session_id: SessionHeader) -> dict[str, Any]:
-        skills.require_name(name)
-        value = store.get_skill(name, session_id)
-        if value is None:
-            raise ModelingContractError("SKILL_NOT_FOUND", "Skill not found.")
-        return value
+        return skills.detail(name, session_id)
 
     @app.put("/v1/skills/{name}/draft")
     async def save_skill_draft(name: str, session_id: SessionHeader, request: SkillDraftRequest) -> dict[str, Any]:
         skills.require_name(name)
-        return store.save_skill_draft(name, session_id, request.content, digest(request.content))
+        store.save_skill_draft(name, session_id, request.content, digest(request.content))
+        return skills.detail(name, session_id)
 
     @app.post("/v1/skills/{name}/validate")
     async def validate_skill(name: str, session_id: SessionHeader) -> dict[str, Any]:

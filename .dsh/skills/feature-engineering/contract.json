@@ -1,0 +1,11 @@
+{
+  "name": "feature-engineering",
+  "displayName": "特征工程",
+  "version": "0.1.0-demo",
+  "stage": "feature-engineering",
+  "description": "选择受支持的数值、类别与日期特征，同时排除目标泄漏。",
+  "modelInvocable": true,
+  "userInvocable": true,
+  "preconditions": ["dataset_profile_ready", "target_confirmed"],
+  "postconditions": ["feature_plan_proposed"]
+}

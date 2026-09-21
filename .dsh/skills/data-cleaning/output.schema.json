@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["numericMissing", "categoricalEncoding"],
+  "properties": {
+    "numericMissing": {"type": "string", "enum": ["median", "constant"]},
+    "categoricalEncoding": {"type": "string", "enum": ["onehot_limited"]},
+    "scaleNumeric": {"type": "boolean"}
+  }
+}

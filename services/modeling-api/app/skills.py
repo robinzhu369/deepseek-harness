@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import os
 import re
 import tempfile
@@ -16,11 +17,23 @@ from .contracts import ModelingContractError
 from .database import ModelingStore
 
 
-SKILL_NAMES = ("data-analysis", "data-cleaning", "feature-engineering", "model-training")
+SKILL_NAMES = ("data-analysis", "data-cleaning", "feature-engineering", "model-training", "model-evaluation")
 ALLOWED_TOOLS = frozenset({
     "modeling_get_dataset_profile", "modeling_propose_plan",
     "modeling_get_run_status", "modeling_get_run_result",
 })
+TOOL_CATALOG = {
+    "modeling_get_dataset_profile": "Read a bounded aggregate profile for one Session-owned dataset.",
+    "modeling_propose_plan": "Validate and persist a proposal without approving or starting a Run.",
+    "modeling_get_run_status": "Read bounded status and node events for one Session-owned Run.",
+    "modeling_get_run_result": "Read structured results and completed artifacts for one succeeded Run.",
+}
+EXTENSION_FILES = {
+    "contract": "contract.json",
+    "input_schema": "input.schema.json",
+    "output_schema": "output.schema.json",
+    "tools": "tools.json",
+}
 UNSUPPORTED_TERMS = {
     "xgboost": "XGBoost is not supported by the deterministic executor.",
     "random forest": "Random forest is not supported by the deterministic executor.",
@@ -37,6 +50,16 @@ NEGATIONS = ("cannot", "must not", "do not", "never", "forbid", "禁止", "不�
 def digest(content: str) -> str:
     """Return the lowercase SHA-256 digest for exact UTF-8 Skill content."""
     return hashlib.sha256(content.encode("utf-8")).hexdigest()
+
+
+def _read_json(path: Path) -> dict[str, Any] | None:
+    """Read one optional Modeling Skill extension object."""
+    if not path.is_file():
+        return None
+    value = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(value, dict):
+        raise ValueError(f"Skill extension must contain a JSON object: {path}")
+    return value
 
 
 def parse_skill(content: str, expected_name: str, max_bytes: int) -> tuple[dict[str, Any], list[str], list[str]]:
@@ -99,7 +122,7 @@ def versioned_content(content: str, version: str) -> str:
 
 
 class SkillService:
-    """Own the four configured files and coordinate Draft and Published records."""
+    """Own the five configured files and coordinate Draft and Published records."""
 
     def __init__(self, config: ServiceConfig, store: ModelingStore) -> None:
         self.config = config
@@ -126,6 +149,47 @@ class SkillService:
         """Reject names outside the fixed runtime set."""
         if name not in SKILL_NAMES:
             raise ModelingContractError("SKILL_NOT_FOUND", "Skill not found.")
+
+    def detail(self, name: str, session_id: str) -> dict[str, Any]:
+        """Return existing Skill state plus optional read-only Demo extension metadata."""
+        self.require_name(name)
+        value = self.store.get_skill(name, session_id)
+        if value is None:
+            raise ModelingContractError("SKILL_NOT_FOUND", "Skill not found.")
+        assert self.config.runtime_skill_dir is not None
+        root = self.config.runtime_skill_dir / name
+        extension = {key: _read_json(root / relative) for key, relative in EXTENSION_FILES.items()}
+        policy = extension["tools"]
+        required = policy.get("required", []) if isinstance(policy, dict) else []
+        optional = policy.get("optional", []) if isinstance(policy, dict) else []
+        declared = {
+            item.get("name") for entries in (required, optional) if isinstance(entries, list)
+            for item in entries if isinstance(item, dict) and isinstance(item.get("name"), str)
+        }
+        required_missing = sorted(
+            item["name"] for item in required
+            if isinstance(item, dict) and isinstance(item.get("name"), str) and item["name"] not in ALLOWED_TOOLS
+        ) if isinstance(required, list) else []
+        checks = [
+            {"id": "instructions", "label": "SKILL.md", "status": "pass", "message": "Harness instructions loaded."},
+            *({"id": key, "label": relative, "status": "pass" if extension[key] is not None else "not_configured",
+               "message": "Configured." if extension[key] is not None else "Not configured."}
+              for key, relative in EXTENSION_FILES.items()),
+            {"id": "tool-availability", "label": "Tool availability", "status": "fail" if required_missing else "pass",
+             "message": f"Missing required tools: {', '.join(required_missing)}" if required_missing else "All required tools are available."},
+        ]
+        return {
+            **value,
+            "extension": {
+                **extension,
+                "tool_catalog": [
+                    {"name": tool, "description": description, "available": True, "declared": tool in declared}
+                    for tool, description in TOOL_CATALOG.items()
+                ],
+                "checks": checks,
+                "scope": "governance_only",
+            },
+        }
 
     def validate(self, name: str, session_id: str) -> dict[str, Any]:
         """Validate the current Session Draft without publishing it."""
@@ -165,6 +229,4 @@ class SkillService:
         finally:
             if os.path.exists(temporary):
                 os.unlink(temporary)
-        value = self.store.get_skill(name, session_id)
-        assert value is not None
-        return value
+        return self.detail(name, session_id)

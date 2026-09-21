@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["runId", "taskType"],
+  "properties": {
+    "runId": {"type": "string", "description": "Session-owned succeeded Run identifier."},
+    "taskType": {"type": "string", "enum": ["binary_classification"]}
+  }
+}

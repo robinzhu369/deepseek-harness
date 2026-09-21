@@ -9,7 +9,7 @@ from pathlib import Path
 
 import joblib
 import pandas as pd
-from sklearn.metrics import average_precision_score, confusion_matrix, f1_score, roc_auc_score
+from sklearn.metrics import average_precision_score, confusion_matrix, f1_score, precision_score, recall_score, roc_auc_score
 
 
 def sha256(path: Path) -> str:
@@ -51,9 +51,11 @@ def main() -> int:
         "roc_auc": float(roc_auc_score(actual, scores)),
         "average_precision": float(average_precision_score(actual, scores)),
         "f1": float(f1_score(actual, predicted)),
+        "precision": float(precision_score(actual, predicted, zero_division=0)),
+        "recall": float(recall_score(actual, predicted, zero_division=0)),
         "confusion_matrix": confusion_matrix(actual, predicted, labels=recorded["labels"]).tolist(),
     }
-    for name in ("roc_auc", "average_precision", "f1"):
+    for name in ("roc_auc", "average_precision", "f1", "precision", "recall"):
         if abs(recorded[name] - recomputed[name]) > 1e-12:
             raise SystemExit(f"metric mismatch: {name}")
     if recorded["confusion_matrix"] != recomputed["confusion_matrix"]:

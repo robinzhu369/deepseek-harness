@@ -51,6 +51,8 @@ def test_streaming_upload_profiles_and_bounds_preview(tmp_path: Path) -> None:
         assert dataset["state"] == "ready"
         assert dataset["original_name"] == "untrusted.exe"
         profile = client.get(f"/v1/datasets/{uploaded['dataset_id']}/profile", headers=SESSION).json()
+        assert profile["dataset_id"] == uploaded["dataset_id"]
+        assert profile["dataset_sha256"] == uploaded["sha256"]
         assert profile["row_count"] == 40
         assert profile["column_count"] == 4
         assert profile["computation_scope"] == {"kind": "full_dataset", "rows_scanned": 40, "preview_rows": 20}

@@ -1,0 +1,11 @@
+{
+  "name": "data-cleaning",
+  "displayName": "数据清洗",
+  "version": "0.1.0-demo",
+  "stage": "data-cleaning",
+  "description": "根据数据概览规划防泄漏的缺失值与类别预处理。",
+  "modelInvocable": true,
+  "userInvocable": true,
+  "preconditions": ["dataset_profile_ready", "target_confirmed"],
+  "postconditions": ["cleaning_plan_proposed"]
+}

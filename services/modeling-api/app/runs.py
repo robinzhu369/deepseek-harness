@@ -118,12 +118,20 @@ class RunService:
                 self.store.finish_run(run_id, "cancelled")
                 return
             if return_code != 0:
-                message = "The modeling worker exited unsuccessfully."
-                if stderr_path.exists():
-                    detail = stderr_path.read_text(encoding="utf-8", errors="replace")[-4000:].strip()
-                    if detail:
-                        message = detail
-                self.store.finish_run(run_id, "failed", error={"code": "WORKER_FAILED", "message": message})
+                node_error = next(
+                    (node.get("error") for node in reversed(run["nodes"]) if isinstance(node.get("error"), dict)),
+                    None,
+                )
+                if node_error is not None:
+                    failure = node_error
+                else:
+                    message = "The modeling worker exited unsuccessfully."
+                    if stderr_path.exists():
+                        detail = stderr_path.read_text(encoding="utf-8", errors="replace")[-4000:].strip()
+                        if detail:
+                            message = detail
+                    failure = {"code": "WORKER_FAILED", "message": message}
+                self.store.finish_run(run_id, "failed", error=failure)
                 return
             manifest_path = output_dir / "manifest.json"
             metrics_path = output_dir / "metrics.json"
@@ -158,7 +166,13 @@ class RunService:
             session_id = str(worker_input["session_id"])
             created = self.store.complete_run_with_artifacts(
                 run_id, session_id, artifacts,
-                {"metrics": metrics, "manifest": manifest, "feature_summary": feature_summary},
+                {
+                    "metrics": metrics,
+                    "diagnostics": metrics.get("diagnostics", []),
+                    "recommendations": metrics.get("recommendations", []),
+                    "manifest": manifest,
+                    "feature_summary": feature_summary,
+                },
             )
             if created is None:
                 self.store.finish_run(run_id, "cancelled")

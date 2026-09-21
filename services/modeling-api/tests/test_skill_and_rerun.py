@@ -25,7 +25,7 @@ def test_skill_drafts_validate_and_are_session_scoped(tmp_path: Path) -> None:
         listed = client.get("/v1/skills", headers=SESSION)
         assert listed.status_code == 200
         assert [item["name"] for item in listed.json()["items"]] == [
-            "data-analysis", "data-cleaning", "feature-engineering", "model-training",
+            "data-analysis", "data-cleaning", "feature-engineering", "model-evaluation", "model-training",
         ]
         original = client.get("/v1/skills/data-analysis", headers=SESSION).json()
         invalid = original["published_content"].replace(
@@ -44,6 +44,49 @@ def test_skill_drafts_validate_and_are_session_scoped(tmp_path: Path) -> None:
             "/v1/skills/data-analysis/draft", headers=SESSION,
             json={"content": original["published_content"], "path": "/tmp/SKILL.md"},
         ).status_code == 422
+
+
+def test_skill_detail_projects_optional_demo_extensions_and_tool_availability(tmp_path: Path) -> None:
+    skill_root = copied_skills(tmp_path)
+    app = create_app(ServiceConfig(root=tmp_path / "service", runtime_skill_dir=skill_root), start_workers=False)
+    with TestClient(app) as client:
+        detail = client.get("/v1/skills/data-analysis", headers=SESSION).json()
+        assert detail["extension"]["scope"] == "governance_only"
+        assert detail["extension"]["contract"]["name"] == "data-analysis"
+        assert detail["extension"]["input_schema"]["required"] == ["datasetId"]
+        assert detail["extension"]["output_schema"]["properties"]["taskType"]["enum"] == ["binary_classification"]
+        required = {item["name"] for item in detail["extension"]["tools"]["required"]}
+        assert required == {"modeling_get_dataset_profile", "modeling_propose_plan"}
+        assert all(item["available"] for item in detail["extension"]["tool_catalog"])
+        assert all(item["status"] == "pass" for item in detail["extension"]["checks"])
+
+        evaluation = client.get("/v1/skills/model-evaluation", headers=SESSION).json()
+        assert evaluation["extension"]["contract"]["displayName"] == "模型评估"
+        assert evaluation["extension"]["output_schema"]["properties"]["metrics"]["required"] == [
+            "rocAuc", "averagePrecision", "f1", "precision", "recall",
+        ]
+        assert evaluation["extension"]["tools"] == {
+            "required": [{"name": "modeling_get_run_result"}],
+            "optional": [{"name": "modeling_get_run_status"}],
+        }
+        assert all(item["status"] == "pass" for item in evaluation["extension"]["checks"])
+
+
+def test_skill_detail_keeps_legacy_markdown_only_skill_working(tmp_path: Path) -> None:
+    skill_root = copied_skills(tmp_path)
+    for name in ("contract.json", "input.schema.json", "output.schema.json", "tools.json"):
+        (skill_root / "data-analysis" / name).unlink()
+    app = create_app(ServiceConfig(root=tmp_path / "service", runtime_skill_dir=skill_root), start_workers=False)
+    with TestClient(app) as client:
+        detail = client.get("/v1/skills/data-analysis", headers=SESSION)
+        assert detail.status_code == 200
+        assert detail.json()["published_content"].startswith("---")
+        extension = detail.json()["extension"]
+        assert extension["contract"] is None
+        assert extension["input_schema"] is None
+        assert extension["output_schema"] is None
+        assert extension["tools"] is None
+        assert any(item["status"] == "not_configured" for item in extension["checks"])
 
 
 def test_published_skill_version_is_immutable_and_plan_snapshots_are_isolated(tmp_path: Path) -> None:

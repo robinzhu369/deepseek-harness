@@ -8,10 +8,10 @@ from pathlib import Path
 import joblib
 import pandas as pd
 import pytest
-from sklearn.metrics import average_precision_score, confusion_matrix, f1_score, roc_auc_score
+from sklearn.metrics import average_precision_score, confusion_matrix, f1_score, precision_score, recall_score, roc_auc_score
 
 from app.contracts import ModelingContractError
-from app.pipeline import generate_synthetic_csv, run_pipeline
+from app.pipeline import _evaluation_summary, generate_synthetic_csv, run_pipeline
 
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -28,6 +28,16 @@ def plan() -> dict[str, object]:
 
 def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def test_evaluation_summary_flags_half_of_positives_missed() -> None:
+    validation = {"roc_auc": 0.82}
+    test = {"positive_rate": 0.25, "roc_auc": 0.79, "recall": 0.5, "precision": 0.62, "threshold": 0.5}
+
+    diagnostics, recommendations = _evaluation_summary(validation, test)
+
+    assert diagnostics == [{"code": "low_recall", "evidence": {"recall": 0.5, "threshold": 0.5}}]
+    assert recommendations == [{"code": "consider_lower_threshold", "evidence": {"threshold": 0.5}}]
 
 
 def test_pipeline_splits_before_fit_and_exports_reloadable_artifacts(tmp_path: Path) -> None:
@@ -81,13 +91,39 @@ def test_pipeline_splits_before_fit_and_exports_reloadable_artifacts(tmp_path: P
     assert metrics["roc_auc"] == pytest.approx(roc_auc_score(actual, probability))
     assert metrics["average_precision"] == pytest.approx(average_precision_score(actual, probability))
     assert metrics["f1"] == pytest.approx(f1_score(actual, predicted))
+    assert metrics["precision"] == pytest.approx(precision_score(actual, predicted, zero_division=0))
+    assert metrics["recall"] == pytest.approx(recall_score(actual, predicted, zero_division=0))
     assert metrics["confusion_matrix"] == confusion_matrix(actual, predicted, labels=[0, 1]).tolist()
+    document = json.loads((output / "metrics.json").read_text(encoding="utf-8"))
+    assert document["diagnostics"]
+    assert document["recommendations"]
 
     manifest = json.loads((output / "manifest.json").read_text(encoding="utf-8"))
     for artifact in manifest["artifacts"]:
         artifact_path = output / artifact["path"]
         assert artifact_path.is_file()
         assert sha256(artifact_path) == artifact["sha256"]
+
+
+def test_pipeline_generates_internal_record_ids_for_domain_identifier_columns(tmp_path: Path) -> None:
+    csv_path = tmp_path / "policy-data.csv"
+    generate_synthetic_csv(csv_path, rows=600, seed=SEED)
+    frame = pd.read_csv(csv_path).rename(columns={"record_id": "policy_id"})
+    frame.to_csv(csv_path, index=False)
+    payload = plan()
+    payload["dataset_sha256"] = sha256(csv_path)
+    payload["excluded_columns"] = ["policy_id"]
+    output = tmp_path / "run"
+
+    run_pipeline(csv_path, payload, output)
+
+    split_manifest = json.loads((output / "split_manifest.json").read_text(encoding="utf-8"))
+    record_ids = [item for values in split_manifest["record_ids"].values() for item in values]
+    assert len(record_ids) == len(set(record_ids)) == 600
+    assert all(item.startswith("row_") for item in record_ids)
+    feature_manifest = json.loads((output / "feature_manifest.json").read_text(encoding="utf-8"))
+    assert "record_id" not in feature_manifest["source_features"]
+    assert "policy_id" not in feature_manifest["source_features"]
 
 
 def test_rejects_invalid_labels(tmp_path: Path) -> None:

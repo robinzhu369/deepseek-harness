@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["datasetId", "target"],
+  "properties": {
+    "datasetId": {"type": "string"},
+    "target": {"type": "string"},
+    "excludedColumns": {"type": "array", "items": {"type": "string"}}
+  }
+}

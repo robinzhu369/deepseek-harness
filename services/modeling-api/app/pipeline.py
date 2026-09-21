@@ -22,7 +22,7 @@ from scipy import sparse
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import average_precision_score, confusion_matrix, f1_score, roc_auc_score
+from sklearn.metrics import average_precision_score, confusion_matrix, f1_score, precision_score, recall_score, roc_auc_score
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
@@ -136,6 +136,9 @@ def _metric_block(pipeline: Pipeline, frame: pd.DataFrame, features: list[str], 
         "roc_auc": float(roc_auc_score(binary_actual, probability)),
         "average_precision": float(average_precision_score(binary_actual, probability)),
         "f1": float(f1_score(binary_actual, binary_predicted)),
+        "precision": float(precision_score(binary_actual, binary_predicted, zero_division=0)),
+        "recall": float(recall_score(binary_actual, binary_predicted, zero_division=0)),
+        "positive_rate": float(binary_actual.mean()),
         "confusion_matrix": confusion_matrix(actual, predicted, labels=[negative_label, positive_label]).tolist(),
         "labels": [_json_scalar(negative_label), _json_scalar(positive_label)],
     }
@@ -146,6 +149,32 @@ def _metric_block(pipeline: Pipeline, frame: pd.DataFrame, features: list[str], 
         "positive_probability": probability,
     })
     return metrics, predictions
+
+
+def _evaluation_summary(validation: dict[str, Any], test: dict[str, Any]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """Return bounded diagnostics and conditional recommendations from actual evaluation metrics."""
+    diagnostics: list[dict[str, Any]] = []
+    recommendations: list[dict[str, Any]] = []
+    positive_rate = float(test["positive_rate"])
+    if positive_rate < 0.2 or positive_rate > 0.8:
+        diagnostics.append({"code": "class_imbalance", "evidence": {"test_positive_rate": positive_rate}})
+    roc_auc_gap = float(validation["roc_auc"]) - float(test["roc_auc"])
+    if roc_auc_gap > 0.1:
+        diagnostics.append({"code": "validation_test_gap", "evidence": {"roc_auc_gap": roc_auc_gap}})
+        recommendations.append({"code": "review_generalization", "evidence": {"roc_auc_gap": roc_auc_gap}})
+    recall = float(test["recall"])
+    if recall <= 0.5:
+        diagnostics.append({"code": "low_recall", "evidence": {"recall": recall, "threshold": test["threshold"]}})
+        recommendations.append({"code": "consider_lower_threshold", "evidence": {"threshold": test["threshold"]}})
+    precision = float(test["precision"])
+    if precision < 0.5:
+        diagnostics.append({"code": "low_precision", "evidence": {"precision": precision, "threshold": test["threshold"]}})
+        recommendations.append({"code": "consider_higher_threshold", "evidence": {"threshold": test["threshold"]}})
+    if not diagnostics:
+        diagnostics.append({"code": "no_obvious_anomaly", "evidence": {"threshold": test["threshold"]}})
+    if not recommendations:
+        recommendations.append({"code": "retain_and_monitor", "evidence": {"threshold": test["threshold"]}})
+    return diagnostics, recommendations
 
 
 def _export_transformed(
@@ -201,7 +230,9 @@ def run_pipeline(csv_path: Path, plan_payload: dict[str, Any], output_dir: Path)
     except Exception as error:
         raise ModelingContractError("INVALID_CSV", "The CSV could not be parsed.") from error
     frame = pd.DataFrame(polars_frame.to_dicts())
-    if "record_id" not in frame.columns or frame["record_id"].isna().any() or not frame["record_id"].is_unique:
+    if "record_id" not in frame.columns:
+        frame.insert(0, "record_id", [f"row_{index:012d}" for index in range(len(frame))])
+    elif frame["record_id"].isna().any() or not frame["record_id"].is_unique:
         raise ModelingContractError("INVALID_RECORD_ID", "record_id must be present, non-null, and unique.")
     target_value = plan_payload.get("target")
     label_values: set[ScalarLabel] = set()
@@ -220,10 +251,8 @@ def run_pipeline(csv_path: Path, plan_payload: dict[str, Any], output_dir: Path)
     if plan.feature_engineering.date_features.enabled:
         raise ModelingContractError("UNKNOWN_OPERATOR", "Date features are not enabled in the T03 fixed pipeline.")
     target = plan.target
-    excluded = set(plan.excluded_columns) | {target}
+    excluded = set(plan.excluded_columns) | {target, "record_id"}
     features = [column for column in frame.columns if column not in excluded]
-    if "record_id" in features:
-        raise ModelingContractError("IDENTIFIER_LEAKAGE", "record_id must be excluded from training features.")
     train, remainder = train_test_split(
         frame,
         train_size=plan.split.train_ratio,
@@ -307,6 +336,7 @@ def run_pipeline(csv_path: Path, plan_payload: dict[str, Any], output_dir: Path)
             pl.DataFrame(prediction.to_dict(orient="list")).write_parquet(staging / f"{name}_predictions.parquet")
         joblib.dump(pipeline.named_steps["preprocessor"], staging / "preprocessor.joblib")
         joblib.dump(pipeline, staging / "pipeline.joblib")
+        diagnostics, recommendations = _evaluation_summary(metrics["validation"], metrics["test"])
         metrics_document = {
             "schema_version": "1.0",
             "model": "logistic_regression",
@@ -314,6 +344,8 @@ def run_pipeline(csv_path: Path, plan_payload: dict[str, Any], output_dir: Path)
             "final_evaluation_split": "test",
             "validation": metrics["validation"],
             "test": metrics["test"],
+            "diagnostics": diagnostics,
+            "recommendations": recommendations,
         }
         _write_json(staging / "metrics.json", metrics_document)
         report = (

@@ -1,0 +1,10 @@
+{
+  "required": [
+    {"name": "modeling_propose_plan"}
+  ],
+  "optional": [
+    {"name": "modeling_get_dataset_profile"},
+    {"name": "modeling_get_run_status"},
+    {"name": "modeling_get_run_result"}
+  ]
+}

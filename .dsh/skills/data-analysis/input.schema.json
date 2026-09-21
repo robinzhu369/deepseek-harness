@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["datasetId"],
+  "properties": {
+    "datasetId": {"type": "string", "description": "Session-owned dataset identifier."},
+    "target": {"type": ["string", "null"], "description": "Optional target selected by the user."}
+  },
+  "additionalProperties": false
+}
