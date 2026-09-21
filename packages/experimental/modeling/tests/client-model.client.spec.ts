@@ -1,16 +1,21 @@
 import { describe, expect, it, vi } from 'vitest'
 import type { SessionId } from '@deepseek-ai/dsh-session/types'
 import type { ApproveAndRunRequest, RerunRequest } from '../src/types.ts'
+import { modelingFixture } from '../src/client/fixtures.ts'
 import { ModelingClientModel, parseWorkspace, type ModelingRemote } from '../src/client/model.ts'
 
 const sessionId = 'session-ui' as SessionId
 
-function workspace(revision: number, status: 'running' | 'succeeded' = 'running'): string {
+function workspace(revision: number, status: 'running' | 'succeeded' | 'interrupted' = 'running'): string {
   return JSON.stringify({
     dataset: { dataset_id: 'dataset-1', original_name: 'sample.csv', size_bytes: 128, state: 'ready', profile: { row_count: 12 }, error: null },
     plan: { id: 'plan-1', revision: 2, plan_hash: 'hash-2', state: 'proposed', plan: { target: 'label' }, invalidation: null },
     run: { id: 'run-1', revision, plan_revision: 1, created_at: '2026-09-20T00:00:00Z', status, nodes: [{}], events: [{}], error: null },
-    result: status === 'succeeded' ? { metrics: { test: { roc_auc: 0.7 } }, feature_summary: {}, artifacts: [], warnings: [] } : null,
+    result: status === 'succeeded' ? {
+      metrics: { test: { roc_auc: 0.7, precision: 0.6, recall: 0.5 } },
+      diagnostics: [{ code: 'low_recall' }], recommendations: [{ code: 'consider_lower_threshold' }],
+      feature_summary: {}, artifacts: [], warnings: [],
+    } : null,
     runs: [],
   })
 }
@@ -42,8 +47,19 @@ function remote(overrides: Partial<ModelingRemote> = {}): ModelingRemote {
 }
 
 describe('ModelingClientModel', () => {
+  it('keeps visual-review fixtures coherent and visibly isolated from live mode', () => {
+    expect(modelingFixture('empty')).toMatchObject({ mode: 'fixture', dataset: null, run: null })
+    expect(modelingFixture('proposed')).toMatchObject({ mode: 'fixture', plan: { state: 'proposed' }, run: null, result: null })
+    expect(modelingFixture('running')).toMatchObject({ mode: 'fixture', plan: { state: 'approved' }, run: { status: 'running' }, result: null })
+    expect(modelingFixture('succeeded')).toMatchObject({ mode: 'fixture', run: { status: 'succeeded' }, result: { metrics: { test: { f1: 0 } } } })
+    expect(modelingFixture('failed')).toMatchObject({ mode: 'fixture', run: { status: 'failed', error: { code: 'PIPELINE_FAILED' } }, result: null })
+  })
+
   it('validates the bounded workspace response', () => {
     expect(parseWorkspace(workspace(3)).run?.revision).toBe(3)
+    expect(parseWorkspace(workspace(3, 'succeeded')).result).toMatchObject({
+      diagnostics: [{ code: 'low_recall' }], recommendations: [{ code: 'consider_lower_threshold' }],
+    })
     expect(() => parseWorkspace(JSON.stringify({ run: { id: 'run-1', revision: 1, status: 'invented' } }))).toThrow('Unknown modeling run status')
   })
 
@@ -62,6 +78,19 @@ describe('ModelingClientModel', () => {
     expect(model.source.getSnapshot().run?.status).toBe('succeeded')
     await vi.advanceTimersByTimeAsync(5000)
     expect(calls).toHaveBeenCalledTimes(3)
+    model.dispose()
+    vi.useRealTimers()
+  })
+
+  it('restores an interrupted run as a terminal state without polling again', async () => {
+    vi.useFakeTimers()
+    const calls = vi.fn(async () => workspace(6, 'interrupted'))
+    const model = new ModelingClientModel(sessionId, remote({ workspace: calls }))
+    model.activate()
+    await vi.advanceTimersByTimeAsync(0)
+    expect(model.source.getSnapshot().run?.status).toBe('interrupted')
+    await vi.advanceTimersByTimeAsync(5000)
+    expect(calls).toHaveBeenCalledTimes(1)
     model.dispose()
     vi.useRealTimers()
   })
@@ -130,5 +159,32 @@ describe('ModelingClientModel', () => {
     model.dispose()
     vi.unstubAllGlobals()
     vi.useRealTimers()
+  })
+
+  it('preserves structured error coordinates for the failure card', async () => {
+    const failure = Object.assign(new Error('The plan revision is not current.'), {
+      code: 'PLAN_REVISION_CONFLICT', details: { request_id: 'req-t11' },
+    })
+    const model = new ModelingClientModel(sessionId, remote({ workspace: vi.fn(async () => { throw failure }) }))
+    model.activate()
+    await vi.waitFor(() => { expect(model.source.getSnapshot().phase).toBe('error') })
+    expect(model.source.getSnapshot().error).toEqual({
+      message: 'The plan revision is not current.', code: 'PLAN_REVISION_CONFLICT', requestId: 'req-t11',
+    })
+    model.dispose()
+  })
+
+  it('does not publish a late response after the Session view deactivates', async () => {
+    let resolveWorkspace: ((value: string) => void) | undefined
+    const pending = new Promise<string>((resolve) => { resolveWorkspace = resolve })
+    const model = new ModelingClientModel(sessionId, remote({ workspace: vi.fn(() => pending) }))
+    model.activate()
+    model.deactivate()
+    resolveWorkspace?.(workspace(9, 'succeeded'))
+    await pending
+    await Promise.resolve()
+    expect(model.source.getSnapshot().phase).toBe('loading')
+    expect(model.source.getSnapshot().run).toBeNull()
+    model.dispose()
   })
 })

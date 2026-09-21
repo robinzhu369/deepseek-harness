@@ -58,10 +58,37 @@ export interface ModelingSkillDetail extends ModelingSkillView {
   readonly published_content: string
   readonly draft_content: string | null
   readonly validation: Record<string, unknown> | null
+  readonly extension: ModelingSkillExtension
+}
+
+export interface ModelingSkillExtension {
+  readonly contract: Record<string, unknown> | null
+  readonly inputSchema: Record<string, unknown> | null
+  readonly outputSchema: Record<string, unknown> | null
+  readonly tools: Record<string, unknown> | null
+  readonly toolCatalog: readonly ModelingToolCatalogItem[]
+  readonly checks: readonly ModelingSkillCheck[]
+  readonly scope: 'governance_only'
+}
+
+export interface ModelingToolCatalogItem {
+  readonly name: string
+  readonly description: string
+  readonly available: boolean
+  readonly declared: boolean
+}
+
+export interface ModelingSkillCheck {
+  readonly id: string
+  readonly label: string
+  readonly status: 'pass' | 'fail' | 'not_configured'
+  readonly message: string
 }
 
 export interface ModelingResultView {
   readonly metrics: Record<string, unknown> | null
+  readonly diagnostics: readonly Record<string, unknown>[]
+  readonly recommendations: readonly Record<string, unknown>[]
   readonly feature_summary: Record<string, unknown> | null
   readonly artifacts: readonly Record<string, unknown>[]
   readonly warnings: readonly string[]
@@ -171,6 +198,8 @@ export function parseWorkspace(source: string): ModelingWorkspaceValue {
   }
   const result = resultValue === null ? null : {
     metrics: record(resultValue.metrics),
+    diagnostics: records(resultValue.diagnostics),
+    recommendations: records(resultValue.recommendations),
     feature_summary: record(resultValue.feature_summary),
     artifacts: records(resultValue.artifacts),
     warnings: Array.isArray(resultValue.warnings) ? resultValue.warnings.filter((item): item is string => typeof item === 'string') : [],
@@ -200,6 +229,18 @@ function parseSkills(source: string): readonly ModelingSkillView[] {
 function parseSkillDetail(source: string): ModelingSkillDetail {
   const item = record(JSON.parse(source))
   if (item === null) throw new Error('Skill detail response must be an object.')
+  const extension = record(item.extension)
+  if (extension === null || extension.scope !== 'governance_only') throw new Error('Skill detail response lacks extension metadata.')
+  const catalog = records(extension.tool_catalog).map(tool => ({
+    name: text(tool.name, 'Tool name'), description: text(tool.description, 'Tool description'),
+    available: tool.available === true, declared: tool.declared === true,
+  }))
+  const checks = records(extension.checks).map((check) => {
+    const status = text(check.status, 'Skill check status')
+    if (!['pass', 'fail', 'not_configured'].includes(status)) throw new Error(`Unknown Skill check status: ${status}`)
+    return { id: text(check.id, 'Skill check id'), label: text(check.label, 'Skill check label'),
+      status: status as ModelingSkillCheck['status'], message: text(check.message, 'Skill check message') }
+  })
   return {
     name: text(item.name, 'Skill name'), description: text(item.description, 'Skill description'),
     published_version: text(item.published_version, 'Skill version'), published_hash: text(item.published_hash, 'Skill hash'),
@@ -208,6 +249,11 @@ function parseSkillDetail(source: string): ModelingSkillDetail {
     published_content: text(item.published_content, 'published content'),
     draft_content: typeof item.draft_content === 'string' ? item.draft_content : null,
     validation: record(item.validation),
+    extension: {
+      contract: record(extension.contract), inputSchema: record(extension.input_schema),
+      outputSchema: record(extension.output_schema), tools: record(extension.tools),
+      toolCatalog: catalog, checks, scope: 'governance_only',
+    },
   }
 }
 
@@ -264,7 +310,7 @@ export class ModelingClientModel {
         skills: parseSkills(skills),
         skillDetail: this.snapshot.skillDetail,
       }
-      if (this.request !== request) return
+      if (request.signal.aborted || this.request !== request) return
       const currentRevision = this.snapshot.run?.revision ?? -1
       if (next.run !== null && next.run.revision < currentRevision) return
       this.publish({ ...next, phase: 'ready', mode: 'live', confirming: false, skillBusy: false })

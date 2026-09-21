@@ -9,7 +9,7 @@ English | [中文](README.zh.md)
 
 ## Summary
 
-Use this package to let a dedicated Agent read dataset profiles, propose validated plans, and inspect run status and results without gaining execution authority. The application approves an exact plan revision or requests a rerun through separate Remote methods. The included preset hides inherited general-purpose tools and loads only four runtime modeling Skills. The Host sends its live Session identity to the private modeling API and removes internal paths and process fields from model-visible results. Its Session-scoped browser model restores workspace and run history, owns one revision-aware polling loop, and downloads completed files through artifact IDs.
+Use this package to let a dedicated Agent read dataset profiles, propose validated plans, and inspect run status and results without gaining execution authority. The application approves an exact plan revision or requests a rerun through separate Remote methods. The included preset hides inherited general-purpose tools and loads only five runtime modeling Skills. The Host sends its live Session identity to the private modeling API and removes internal paths and process fields from model-visible results. Its Session-scoped browser model restores workspace and run history, owns one revision-aware polling loop, and downloads completed files through artifact IDs.
 
 ## Table of Contents
 
@@ -59,13 +59,13 @@ The tools plugin separately requires `runtimeSkillDir`. The included preset poin
 <details>
 <summary>Implementation internals — click to expand</summary>
 
-`ModelingGateway` owns the configured private HTTP origin. Tool calls derive the Session ID from the live `Agent`, while `approveAndRun` is a Typert Remote method that accepts the application caller's resolved `Agent`; no model tool exposes approval. The API validates dataset and run ownership against that Session ID.
+`ModelingGateway` owns the configured private HTTP origin. The preset-local tools plugin streams direct-user CSV attachments from `ctx.attachments` into `/v1/datasets`, waits for profiling, and adds the returned dataset ID as durable model context. Tool calls derive the Session ID from the live `Agent`, while `approveAndRun` is a Typert Remote method that accepts the application caller's resolved `Agent`; no model tool exposes approval. The API validates dataset and run ownership against that Session ID.
 
-The browser workbench uses the existing Harness conversation view and composer. It shows the dataset, editable proposed plan, real run timeline, metrics, warnings, and artifacts without starting work during refresh. The `?modeling-fixture=1` query is an explicitly marked visual-preview mode and never serves as execution evidence.
+The browser workbench uses the existing Harness conversation view and composer. It shows the dataset, editable proposed plan, real run timeline, metrics, warnings, and artifacts without starting work during refresh. Error cards preserve the service request ID or Run ID and give a retry action without creating work. The `?modeling-fixture=empty|proposed|running|succeeded|failed` queries select coherent, explicitly marked visual-review states; `1` remains an alias for `succeeded`. Fixture states never serve as execution evidence.
 
-The Skill center lists the four fixed runtime Skills, edits a Session-private Markdown Draft, validates it, and publishes an immutable version. The plan editor renders controls from `/v1/capabilities`; it does not accept arbitrary JSON or DAG nodes. Editing an approved plan creates a proposed revision, and confirmation selects the previous terminal run as the source for an idempotent rerun with a new run ID.
+The Skill center lists the five fixed runtime Skills, edits a Session-private Markdown Draft, validates it, and publishes an immutable version. Its Contract, Schema, Tools, and Skill checks tabs read optional JSON files beside each `SKILL.md`; these tabs document Modeling extension metadata and configuration checks, not a separate Skill execution or evaluation runtime. The model-evaluation Skill reads actual completed-run results through `modeling_get_run_result`; it cannot retrain, tune, approve execution, or change a threshold. The plan card appears directly below the pipeline and owns the application-side `Confirm plan and run` action; chat messages cannot approve a plan. The wide plan editor groups the bounded controls from `/v1/capabilities` into independently scrolling sections while its header and revision actions remain visible; it does not accept arbitrary JSON or DAG nodes. Editing an approved plan creates a proposed revision, and confirmation selects the previous terminal run as the source for an idempotent rerun with a new run ID.
 
-The tools plugin hashes the exact bytes of the four versioned runtime Skills before registration and sends those snapshots only when it proposes a plan. Result projection removes internal paths, Session IDs, and worker process IDs, then applies the configured byte limit. The policy plugin masks inherited tools in the modeling preset scope.
+The tools plugin hashes the exact bytes of the five versioned runtime Skills before registration and sends those snapshots only when it proposes a plan. Result projection removes internal paths, Session IDs, and worker process IDs, then applies the configured byte limit. The policy plugin masks inherited tools in the modeling preset scope.
 
 | File | Role |
 |---|---|
@@ -73,7 +73,8 @@ The tools plugin hashes the exact bytes of the four versioned runtime Skills bef
 | [`src/tools.ts`](src/tools.ts) | Four bounded model-facing tools and Skill snapshots |
 | [`src/policy.ts`](src/policy.ts) | Scoped inherited-tool restriction |
 | [`src/client/model.ts`](src/client/model.ts) | Session-scoped browser state, run history, idempotent confirmation, and polling |
-| [`src/client/ModelingWorkspace.tsx`](src/client/ModelingWorkspace.tsx) | Three-column workbench cards and task presentation |
+| [`src/client/ModelingWorkspace.tsx`](src/client/ModelingWorkspace.tsx) | Full-width workbench cards, horizontal pipeline, and task presentation |
+| [`src/client/SkillCenter.tsx`](src/client/SkillCenter.tsx) | Skill instructions plus Contract, Schema, Tools, and configuration-check tabs |
 | [`presets/modeling/agent.cordis.yml`](presets/modeling/agent.cordis.yml) | Dedicated Agent composition and runtime Skill isolation |
 | [`modeling.patch.yml`](modeling.patch.yml) | Source-checkout Host and preset wiring |
 
@@ -98,11 +99,11 @@ The tools plugin hashes the exact bytes of the four versioned runtime Skills bef
 
 #### What the model sees
 
-The model sees `modeling_get_dataset_profile`, `modeling_propose_plan`, `modeling_get_run_status`, `modeling_get_run_result`, and the standard `skill` loader; the [generated tool catalog](../../../docs/tool-catalog.md#deepseek-aidsh-experimental-modeling) records their exact schemas. It receives aggregate profiles and bounded result summaries. Plan proposals always return `needs_confirmation: true`; no approval, execution, shell, filesystem-write, SQL, Python, or arbitrary-network tool is visible.
+The model sees `modeling_get_dataset_profile`, `modeling_propose_plan`, `modeling_get_run_status`, `modeling_get_run_result`, and the standard `skill` loader; the [generated tool catalog](../../../docs/tool-catalog.md#deepseek-aidsh-experimental-modeling) records their exact schemas. A direct-user CSV attachment adds a durable application-produced dataset ID and SHA-256 to the same request; the filename remains an untrusted user label. The model receives aggregate profiles and bounded result summaries after it reads that ID. The included preset requires Simplified Chinese for user-facing replies while preserving tool, Skill, field, enum, and code identifiers. Plan proposals always return `needs_confirmation: true`; no approval, execution, shell, filesystem-write, SQL, Python, or arbitrary-network tool is visible.
 
 #### Token effect
 
-The four tool schemas and four Skill catalog entries add a fixed request prefix. Loaded Skill instructions and tool results append bounded text to Session history.
+The four tool schemas and five Skill catalog entries add a fixed request prefix. Loaded Skill instructions and tool results append bounded text to Session history.
 
 #### KV Cache effect
 
@@ -117,6 +118,7 @@ These limits define the current source-local demo boundary.
 - The current tool execution context exposes a trusted Session and workspace but no separate user identity; the Web Gateway launch-token cookie and Host/Origin checks establish the human boundary.
 - The private API has no separate service-token mechanism, so deployments must keep `baseUrl` reachable only by the Host process.
 - Result explanations require a configured real model provider; deterministic artifacts remain available if a later explanation fails.
+- Only direct-user files whose names end in `.csv` enter the modeling dataset registry automatically; other attachment formats remain ordinary Harness attachments.
 - The runtime Skill path in the included preset targets this source checkout and is not an installed-package data path.
 
 No runtime invariant companion is published; the package projects each live Session directly from the Modeling API and retains no second mutable state source to compare.

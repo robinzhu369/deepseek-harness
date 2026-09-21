@@ -11,6 +11,7 @@ import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
 import type {} from '@deepseek-ai/dsh-client-ui-sidebar/client'
 import type {} from '@deepseek-ai/dsh-client-ui-theme/client'
 import { ModelingWorkspace, type ModelingWorkspaceInjected } from './ModelingWorkspace.tsx'
+import type { ModelingFixtureName } from './fixtures.ts'
 import { DataIcon, DataPanel, RunsIcon, RunsPanel, SkillsIcon, SkillsPanel, WorkspaceIcon } from './Navigation.tsx'
 import { en, NS, zh, type ModelingKey } from './locales.ts'
 import { ModelingClientModel, type ModelingRemote } from './model.ts'
@@ -66,9 +67,12 @@ function registerUi(ctx: ClientContext): () => void {
     name: 'conversation.view', id: 'modeling', order: -10, label: () => t('view.title'), locale: NS,
     inject: (sessionId: SessionId): ModelingWorkspaceInjected => {
       const model = modelFor(sessionId)
-      const preview = new URLSearchParams(window.location.search).get('modeling-fixture') === '1'
+      const fixtureValue = new URLSearchParams(window.location.search).get('modeling-fixture')
+      const fixtureNames = new Set<ModelingFixtureName>(['empty', 'proposed', 'running', 'succeeded', 'failed'])
+      const fixture = fixtureNames.has(fixtureValue as ModelingFixtureName) ? fixtureValue as ModelingFixtureName : fixtureValue === '1' ? 'succeeded' : undefined
+      const preview = fixture !== undefined
       return {
-        preview, hooks: { modelingState: model.source },
+        preview, ...(fixture === undefined ? {} : { fixture }), hooks: { modelingState: model.source },
         activate: () => { if (!preview) model.activate() }, deactivate: () => { if (!preview) model.deactivate() },
         approve: () => model.approve(), cancel: () => model.cancel(), refresh: () => model.refresh(),
         updatePlan: plan => model.updatePlan(plan),

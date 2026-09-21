@@ -1,7 +1,10 @@
 /** Private Host adapter for the deterministic modeling service. */
+import { randomUUID } from 'node:crypto'
+import { Readable } from 'node:stream'
 import type { Context } from '@deepseek-ai/cordis'
 import z from '@deepseek-ai/schemastery'
 import type { Agent } from '@deepseek-ai/dsh-agent'
+import type { FileAttachmentRef } from '@deepseek-ai/dsh-attachment'
 import type {} from '@deepseek-ai/dsh-client-connection'
 import { Remote, TypertRemoteService } from '@deepseek-ai/dsh-typert-protocol'
 import type { ApproveAndRunRequest, ApproveAndRunResult, ModelingJson, ModelingSkillSnapshot, RerunRequest, SkillDraftRequest, UpdatePlanRequest } from './types.ts'
@@ -72,7 +75,7 @@ export class ModelingGateway extends TypertRemoteService {
     return JSON.stringify(await this.request(String(agent.id), '/v1/capabilities', { signal }))
   }
 
-  /** List the four runtime Skills with only this Session's Draft metadata. */
+  /** List the five runtime Skills with only this Session's Draft metadata. */
   @Remote('skills')
   async skills(agent: Agent, signal: AbortSignal): Promise<string> {
     return JSON.stringify(await this.request(String(agent.id), '/v1/skills', { signal }))
@@ -127,6 +130,71 @@ export class ModelingGateway extends TypertRemoteService {
   /** Read one session-owned dataset profile. */
   getDatasetProfile(sessionId: string, datasetId: string, signal?: AbortSignal): Promise<ModelingJson> {
     return this.request(sessionId, `/v1/datasets/${encodeURIComponent(datasetId)}/profile`, { ...signal === undefined ? {} : { signal } })
+  }
+
+  /** Stream one durable CSV attachment into the Session-owned dataset registry and wait for its profile. */
+  async registerDataset(
+    sessionId: string,
+    file: FileAttachmentRef,
+    data: AsyncIterable<Uint8Array>,
+    signal?: AbortSignal,
+  ): Promise<ModelingJson> {
+    const operationSignal = signal === undefined
+      ? AbortSignal.timeout(this.requestTimeoutMs)
+      : AbortSignal.any([signal, AbortSignal.timeout(this.requestTimeoutMs)])
+    const boundary = `dsh-modeling-${randomUUID()}`
+    const fallbackName = file.name.replace(/[^\x20-\x7e]/gu, '_').replace(/["\\]/gu, '_') || 'dataset.csv'
+    const disposition = `Content-Disposition: form-data; name="file"; filename="${fallbackName}"; filename*=UTF-8''${encodeURIComponent(file.name)}\r\n`
+    const prefix = Buffer.from(`--${boundary}\r\n${disposition}Content-Type: text/csv\r\n\r\n`)
+    const suffix = Buffer.from(`\r\n--${boundary}--\r\n`)
+    const body = Readable.from((async function* (): AsyncIterable<Uint8Array> {
+      yield prefix
+      for await (const chunk of data) yield chunk
+      yield suffix
+    })())
+    const uploaded = await this.send(sessionId, '/v1/datasets', {
+      method: 'POST',
+      headers: {
+        'Content-Type': `multipart/form-data; boundary=${boundary}`,
+        'Content-Length': String(prefix.byteLength + file.bytes + suffix.byteLength),
+      },
+      body: body as unknown as BodyInit,
+      duplex: 'half',
+      signal: operationSignal,
+    })
+    if (uploaded === null || Array.isArray(uploaded) || typeof uploaded !== 'object'
+      || typeof uploaded.dataset_id !== 'string' || typeof uploaded.sha256 !== 'string') {
+      throw new ModelingGatewayError('INVALID_MODELING_RESPONSE', 'Dataset registration returned an invalid response.', 502)
+    }
+    const expectedSha256 = String(file.attachmentId).replace(/^sha256:/u, '')
+    if (uploaded.sha256 !== expectedSha256) {
+      throw new ModelingGatewayError('DATASET_DIGEST_MISMATCH', 'Dataset registration returned a different digest.', 502)
+    }
+    while (uploaded.state !== 'ready') {
+      if (uploaded.state === 'failed') {
+        throw new ModelingGatewayError('DATASET_PROFILE_FAILED', 'Dataset profiling failed.', 422)
+      }
+      await new Promise<void>((resolve, reject) => {
+        const aborted = (): void => {
+          clearTimeout(timer)
+          const reason: unknown = operationSignal.reason
+          reject(reason instanceof Error ? reason : new Error('Dataset registration was aborted.'))
+        }
+        const timer = setTimeout(() => {
+          operationSignal.removeEventListener('abort', aborted)
+          resolve()
+        }, 100)
+        operationSignal.addEventListener('abort', aborted, { once: true })
+      })
+      const current = await this.request(sessionId, `/v1/datasets/${encodeURIComponent(uploaded.dataset_id)}`, {
+        signal: operationSignal,
+      })
+      if (current === null || Array.isArray(current) || typeof current !== 'object') {
+        throw new ModelingGatewayError('INVALID_MODELING_RESPONSE', 'Dataset status returned an invalid response.', 502)
+      }
+      Object.assign(uploaded, current)
+    }
+    return uploaded
   }
 
   /** Persist one validated proposal with exact runtime Skill snapshots. */
@@ -212,14 +280,28 @@ export class ModelingGateway extends TypertRemoteService {
     path: string,
     options: { method?: string; body?: ModelingJson; headers?: Record<string, string>; signal?: AbortSignal },
   ): Promise<ModelingJson> {
+    return this.send(sessionId, path, {
+      method: options.method ?? 'GET',
+      headers: { 'Content-Type': 'application/json', ...options.headers },
+      ...options.body === undefined ? {} : { body: JSON.stringify(options.body) },
+      ...options.signal === undefined ? {} : { signal: options.signal },
+    })
+  }
+
+  private async send(
+    sessionId: string,
+    path: string,
+    options: RequestInit & { duplex?: 'half' },
+  ): Promise<ModelingJson> {
     const timeout = AbortSignal.timeout(this.requestTimeoutMs)
-    const signal = options.signal === undefined ? timeout : AbortSignal.any([options.signal, timeout])
+    const signal = options.signal == null ? timeout : AbortSignal.any([options.signal, timeout])
     let response: Response
     try {
+      const headers = new Headers(options.headers)
+      headers.set('X-Session-Id', sessionId)
       response = await fetch(new URL(path, this.baseUrl), {
-        method: options.method ?? 'GET',
-        headers: { 'Content-Type': 'application/json', 'X-Session-Id': sessionId, ...options.headers },
-        ...options.body === undefined ? {} : { body: JSON.stringify(options.body) },
+        ...options,
+        headers,
         signal,
       })
     } catch (error) {
@@ -229,12 +311,18 @@ export class ModelingGateway extends TypertRemoteService {
     if (!response.ok) {
       const item = value !== null && typeof value === 'object' && 'error' in value ? value.error : undefined
       const detail = item !== null && typeof item === 'object' ? item as Record<string, unknown> : {}
+      const nested = detail.details !== null && typeof detail.details === 'object' && !Array.isArray(detail.details)
+        ? detail.details as Record<string, ModelingJson> : {}
+      const details: Record<string, ModelingJson> = {
+        ...nested,
+        ...typeof detail.request_id === 'string' ? { request_id: detail.request_id } : {},
+      }
       throw new ModelingGatewayError(
         typeof detail.code === 'string' ? detail.code : 'MODELING_API_ERROR',
         typeof detail.message === 'string' ? detail.message : `Modeling API returned HTTP ${response.status}`,
         response.status,
         detail.retryable === true,
-        'details' in detail ? detail.details as ModelingJson : undefined,
+        Object.keys(details).length === 0 ? undefined : details,
       )
     }
     return value as ModelingJson

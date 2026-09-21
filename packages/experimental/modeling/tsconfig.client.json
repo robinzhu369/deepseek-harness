@@ -14,6 +14,7 @@
     "src/client/model.ts",
     "src/client/ModelingWorkspace.tsx",
     "src/client/Navigation.tsx",
+    "src/client/SkillCenter.tsx",
     "src/types.ts"
   ],
   "references": [

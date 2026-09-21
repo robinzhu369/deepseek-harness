@@ -1,16 +1,19 @@
 /** ModelX navigation glyphs and Session-backed management panels. */
-import { useEffect, useState, useSyncExternalStore } from 'react'
+import { useEffect, useSyncExternalStore } from 'react'
 import {
-  Button, IconCheckOutline16, IconDataOutline16, IconDatabaseOutline16, IconEditOutline16,
-  IconGaugeOutline16, IconRefreshOutline16, IconSkillOutline16, IconSparkle16, Tag,
+  Button, IconDataOutline16, IconDatabaseOutline16, IconEditOutline16,
+  IconGaugeOutline16, IconRefreshOutline16, IconSkillOutline16, Tag,
 } from '@deepseek-ai/dsh-client-ui-primitives'
 import type { SessionId } from '@deepseek-ai/dsh-session/types'
 import type { InjectFace, PropsLocale, PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
 import type { ModelingClientModel, ModelingClientSnapshot } from './model.ts'
 import type { ModelingKey } from './locales.ts'
 import css from './Navigation.module.css'
+import { SkillCenter } from './SkillCenter.tsx'
 
 export type ModelingPanelKind = 'data' | 'skills' | 'runs'
+
+const SKILL_ORDER = ['data-analysis', 'data-cleaning', 'feature-engineering', 'model-training', 'model-evaluation'] as const
 
 export interface ModelingPanelInjected {
   readonly modelFor: (sessionId: SessionId) => ModelingClientModel
@@ -64,24 +67,20 @@ export function DataPanel(props: PropsRuntime<'main'> & PropsLocale<'modeling'>)
 
 export function SkillsPanel(props: PropsRuntime<'main'> & PropsLocale<'modeling'> & InjectFace<ModelingPanelInjected>) {
   const [model, state] = usePanelModel(props)
-  const [draft, setDraft] = useState('')
-  const detail = state?.skillDetail
-  useEffect(() => { if (detail !== null && detail !== undefined) setDraft(detail.draft_content ?? detail.published_content) }, [detail])
   if (model === undefined || state === undefined) return <EmptyPanel kind="skills" t={props.t} />
+  const skills = [...state.skills].sort((left, right) => (
+    SKILL_ORDER.indexOf(left.name as typeof SKILL_ORDER[number])
+    - SKILL_ORDER.indexOf(right.name as typeof SKILL_ORDER[number])
+  ))
   return <main className={css.management}>
     <header className={css.header}><div><h2>{props.t('skills.center')}</h2><p>{props.t('skills.centerDescription')}</p></div><Button size="sm" variant="outline" icon={<IconRefreshOutline16 />} onClick={() => { void model.refresh() }}>{props.t('action.refresh')}</Button></header>
-    <div className={css.skillGrid}>{state.skills.map(skill => <article className={css.skillCard} key={skill.name}>
-      <div className={css.cardHead}><IconSkillOutline16 /><strong>{props.t(`skill.${skill.name}` as ModelingKey)}</strong><Tag tone={skill.draft_hash === null ? 'success' : 'warning'}>{skill.draft_status}</Tag></div>
+    <div className={css.skillGrid}>{skills.map(skill => <article className={css.skillCard} key={skill.name}>
+      <div className={css.cardHead}><IconSkillOutline16 /><strong>{props.t(`skill.${skill.name}` as ModelingKey)}</strong><Tag tone={skill.draft_hash === null ? 'success' : 'warning'}>{skill.draft_hash === null ? props.t('skills.published') : props.t('skills.draft')}</Tag></div>
       <code>{skill.name}</code><p>{skill.description}</p>
       <dl><div><dt>{props.t('skills.version')}</dt><dd>{skill.published_version}</dd></div><div><dt>{props.t('skills.hash')}</dt><dd>{skill.published_hash.slice(0, 16)}…</dd></div><div><dt>{props.t('skills.updated')}</dt><dd>{skill.updated_at}</dd></div></dl>
       <div className={css.actions}><Button size="sm" variant="ghost" icon={<IconDataOutline16 />} onClick={() => { void model.selectSkill(skill.name) }}>{props.t('skills.view')}</Button><Button size="sm" variant="outline" icon={<IconEditOutline16 />} onClick={() => { void model.selectSkill(skill.name) }}>{props.t('skills.edit')}</Button></div>
     </article>)}</div>
-    {detail !== null && detail !== undefined && <section className={css.editorPanel}>
-      <div className={css.editorHead}><div><h3>{detail.name}</h3><span>{detail.published_version} · {detail.draft_status}</span></div><Tag tone={detail.draft_hash === null ? 'success' : 'warning'}>{detail.draft_hash === null ? props.t('skills.published') : props.t('skills.draft')}</Tag></div>
-      <textarea value={draft} aria-label={props.t('skills.markdown')} onChange={(event) => { setDraft(event.target.value) }} />
-      {detail.validation !== null && <div className={css.validation}><strong>{detail.validation.valid === true ? props.t('skills.validationPass') : props.t('skills.validationFail')}</strong><pre>{JSON.stringify(detail.validation, null, 2)}</pre></div>}
-      <div className={css.actions}><Button size="sm" variant="outline" icon={<IconEditOutline16 />} disabled={state.skillBusy} onClick={() => { void model.saveSkillDraft(detail.name, draft) }}>{props.t('skills.saveDraft')}</Button><Button size="sm" variant="outline" icon={<IconCheckOutline16 />} disabled={state.skillBusy || detail.draft_hash === null} onClick={() => { void model.validateSkill(detail.name) }}>{props.t('skills.validate')}</Button><Button size="sm" variant="primary" icon={<IconSparkle16 />} disabled={state.skillBusy || detail.validation?.valid !== true} onClick={() => { void model.publishSkill(detail.name) }}>{props.t('skills.publish')}</Button></div>
-    </section>}
+    <SkillCenter model={model} state={state} t={props.t} />
   </main>
 }
 

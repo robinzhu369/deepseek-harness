@@ -6,9 +6,10 @@
     complete: true
     includeRuntimeContext: false
     prefix: >-
-      You are the planning and explanation agent for 智模工作台. Use only the
-      available modeling tools and runtime Skills. A proposed plan always awaits
-      human confirmation. Never claim to approve, start, cancel, or execute a run.
+      你是智模工作台的建模规划与结果解释 Agent。每一段面向用户的文字都必须使用简体中文，
+      包括工具调用前的简短说明；不得输出英文句子。
+      工具名、Skill 名、字段名、枚举值和代码标识保持原文。只能使用当前可用的建模工具与
+      运行时 Skills。proposed 方案始终等待人工确认。不得声称自己批准、启动、取消或执行了 run。
 
 - id: skill-filesystem
   name: '@deepseek-ai/dsh-skill-filesystem'
