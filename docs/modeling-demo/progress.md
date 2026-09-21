@@ -1,12 +1,12 @@
 # 开发进度与证据
 
-当前状态：T00～T10 已完成，G1 与 G2 均通过。T09 已实现四个固定运行时 Skill 的 Session 私有草稿、校验、不可变发布与快照隔离；T10 已实现 capabilities 驱动的有界计划编辑、revision 冲突保护、显式失效说明、幂等重跑与 Run 历史。本轮停止，不进入 T11。
+当前状态：T00～T13 已完成，G1 与 G2 均通过。T13 已冻结版本，完成统一启动、冷启动、全新真实 Agent E2E、独立 Rerun、百万行 × 100 列容量实测、最终文档和聚焦回归。项目达到 Demo Ready；不继续新增 T14。
 
 本文件由 Codex 在目标仓库执行时更新，不能把本包自检当成业务验收。
 
 ## 当前任务
 
-等待进入 T11 的明确指令；本轮按要求停在 T10 PASS。
+T13 PASS；按要求停止。
 
 ## 已通过的 Gate
 G0 — 基座可启动、最小扩展可注册：PASS。Web 在 `127.0.0.1:3080` 输出 ready；自定义 `ToolRuntime` 工具注册与执行成功。
@@ -28,6 +28,12 @@ T08 — 业务卡片与任务面板联调：PASS。React-free Session model 恢�
 T09 — 业务 Skill 轻量管理：PASS。Skill 中心仅列出四个运行时业务 Skill；Session 私有 Draft 经 YAML、描述、大小、工具与能力规则校验后发布为不可变版本。`data-analysis` 已通过真实 UI 从 `0.1.0-demo` 发布为 `0.2.0-demo`，旧计划仍保留原版本快照，自动化回归验证新计划使用活动版本。
 
 T10 — 有界流程编辑与重跑：PASS。表单从 `/v1/capabilities` 生成，不接受任意 JSON 或 DAG；目标列不会出现在排除列以外的特征控件中，服务端也拒绝目标泄漏。修改逻辑回归 `C` 从 1.0 到 0.5 创建 r2，记录 Train/Evaluate/Result 失效且如实说明当前全量重算；双击确认只创建一个新 Run，旧 Run 与两个 revision 均保留。
+
+T11 — 端到端与安全回归：PASS。新真实 Session 完成上传、四个 Skill 加载、Agent 提案、UI revision 2/3 修改、两次人工确认运行、产物下载和 Agent 结果解释；14 项 T11 Gate 全部通过。Session 越权、恶意 Skill、revision 冲突、幂等、刷新/切换、重启中断、真实进程取消、失败 UI、产物安全与指标一致性均有可复验测试或实时证据。
+
+T12 — 视觉截图复核与修复：PASS。Codex 内置浏览器在 1440×900、1366×768、1024×768 和 390×844 下完成 Screenshot → Critique → Fix → Screenshot；16 项 T12 Gate 全部通过。工作台现在限制在标签栏以下的可视高度，主栏与右栏独立滚动并在 Composer 上方保留安全区，长 computation scope、plan ID/hash 可换行。空态、规划、proposed、编辑、running、succeeded、failed、Skill Center、Skill editor 和 Run History 均已复核；非实时生命周期状态带有 `UI PREVIEW / FIXTURE` 标识。
+
+T13 — 最终冻结、部署与交付：PASS。统一 up/down/health 脚本从停止状态在 1.03 秒内启动 API 与 Web；全新真实 Session 完成上传、四 Skill 规划、UI revision 修改、人工确认、真实 Worker、Artifact 下载、Agent 解释、参数修改、独立 Rerun 与双 Run History。1,000,000 × 100 容量实测 PASS，总耗时 24.971 秒、峰值 RSS 2,865,119,232 B。OS CPU/内存硬配额明确为 NOT_IMPLEMENTED / P1；Playwright Chromium NOT_RUN，内置浏览器 PASS。
 
 ## 阶段记录
 
@@ -163,7 +169,67 @@ T10 — 有界流程编辑与重跑：PASS。表单从 `/v1/capabilities` 生成
 下一任务：具备进入 T11 的条件，但按用户要求暂停并等待明确指令
 ```
 
+```text
+日期/任务 ID：2026-09-20 / T11
+修改文件：services/modeling-api/app/{api.py,database.py}、services/modeling-api/tests/{test_upload_profile.py,test_run_lifecycle.py,test_t11_security_regression.py}、packages/experimental/modeling/src/{index.ts,tools.ts,client/**}、packages/experimental/modeling/tests/{modeling.spec.ts,client-model.client.spec.ts}、相关 README 中英文与配对记录、docs/modeling-demo/{progress.md,tasks.json,evidence/2026-09-20/t11.json}
+实际命令：真实 DeepSeek Session 的四个 skill/profile/propose/status/result 调用；真实 UI revision 编辑、双击人工确认、重跑、刷新、API/Web 重启及 backend-unavailable 页面；artifact 下载与 SHA-256；python3 -m pytest services/modeling-api/tests -q；vitest；三个 tsc；oxlint；verify_g1_artifacts.py；README 配对写入；pnpm run test:docs
+退出码/输出摘要：真实 E2E 与 T11 14 项 Gate 通过；新旧 Run 均 succeeded 且保留；Python 41 PASS，Harness 聚焦 41 PASS，TypeScript/lint/G1/新 Run 产物复验 PASS；docs 保持 19 PASS / 1 FAIL
+业务或界面模式：live DeepSeek LLM / live Harness Session / live browser UI / live Modeling API / live independent Python worker / focused automated security regression
+截图/日志路径：docs/modeling-demo/evidence/2026-09-20/t11.json；.artifacts/modeling-demo/t06-harness-home/sessions/--Users-robinzhu-project-dsh-deepseek-harness--/session-e42f2edd-f475-400b-aad0-9886bde71d2e/session.v3.jsonl.zstd；.artifacts/modeling-demo/g2-live-20260920/service/runs/run_27424d3ccbba44a7ab05e10f348477d1；Codex 浏览器内联成功结果与失败恢复截图
+检查：T11 Gate 14 PASS / 0 FAIL / 0 NOT_RUN；仓库 docs gate 19 PASS / 1 FAIL；Playwright Chromium、百万行容量、OS CPU/内存硬配额三个本轮外项目保持 NOT_RUN
+阻塞与剩余问题：23 份 Kit 文档仍缺英文配对，按要求不扩大范围修复；三个本轮外项目保持 NOT_RUN。它们不改变 T11 结论。
+下一任务：已具备进入 T12 的条件，但按用户要求暂停，不自动进入 T12/T13
+```
+
+```text
+日期/任务 ID：2026-09-21 / T12
+修改文件：packages/experimental/modeling/src/client/{ModelingWorkspace.tsx,ModelingWorkspace.module.css,fixtures.ts,index.ts}、packages/experimental/modeling/tests/client-model.client.spec.ts、docs/modeling-demo/{progress.md,tasks.json,evidence/2026-09-21/t12.json}
+实际命令：Harness Web + Modeling patch；Codex 内置浏览器 1440×900、1366×768、1024×768、390×844 截图与交互；pnpm --filter @deepseek-ai/dsh-experimental-modeling bundle；pnpm exec tsc -p packages/experimental/modeling/tsconfig.json --noEmit；pnpm exec oxlint packages/experimental/modeling/src packages/experimental/modeling/tests --deny-warnings；pnpm exec vitest run packages/experimental/modeling/tests/client-model.client.spec.ts packages/experimental/modeling/tests/modeling.spec.ts；git diff --check；pnpm run test:docs
+退出码/输出摘要：修复前截图确认 Composer 遮挡底部内容且窄屏长代码行不可完整读取；修复后四个视口无页面水平溢出，1024 右栏按设计收起，主栏/右栏独立滚动终点在 Composer 上方；bundle、TypeScript、lint、diff check 通过，2 个测试文件 14 PASS / 0 FAIL；docs 保持 19 PASS / 1 FAIL
+业务或界面模式：live Harness Session / live browser UI / visibly marked lifecycle fixtures / focused automated UI regression
+截图/日志路径：docs/modeling-demo/evidence/2026-09-21/t12.json；Codex 内置浏览器内联修复前后截图，浏览器工具未提供持久截图文件路径
+检查：T12 Gate 16 PASS / 0 FAIL / 0 NOT_RUN；390×844 快速检查 PASS；Playwright Chromium、百万行容量、OS CPU/内存硬配额保持 NOT_RUN
+阻塞与剩余问题：23 份 Kit 文档仍缺英文配对，按要求不扩大范围修复；生命周期视觉 Fixture 仅用于无法稳定停留的 proposed/running/failed 状态且页面显式标记，不作为业务执行证据
+下一任务：已具备进入 T13 的条件，但按用户要求暂停，不自动进入 T13
+```
+
+```text
+日期/任务 ID：2026-09-21 / T13
+修改文件：scripts/modeling-demo-{up,down,health}.sh、.env.example、services/modeling-api/app/server.py、services/modeling-api/run_capacity_demo.py、docs/modeling-demo/{DEPLOYMENT.md,DEMO_GUIDE.md,CAPACITY_REPORT.md,KNOWN_LIMITATIONS.md,FINAL_REPORT.md,progress.md,tasks.json,evidence/2026-09-21/t13.json,evidence/2026-09-21/t13-capacity.json}
+实际命令：统一启动/health；Codex 内置浏览器全新 Session 真实 DeepSeek 规划与 UI 执行；artifact 下载/SHA 校验；百万行容量脚本；pytest；vitest；tsc；oxlint；G1/T13 Run artifact verification；git diff --check；pnpm run test:docs；secrets scan
+退出码/输出摘要：冷启动 1.03 秒，API 200、Web 401；两个真实 Run succeeded；容量最终命令退出码 0，1,000,000 × 100 PASS，24.971 秒，峰值 RSS 2,865,119,232 B；Python 41 PASS，Harness 聚焦 42 PASS，TypeScript/lint/diff/三个产物复验 PASS
+业务或界面模式：live DeepSeek LLM / live Harness Session / live browser UI / live Modeling API / live independent Python worker / live capacity workload
+截图/日志路径：docs/modeling-demo/evidence/2026-09-21/t13.json；docs/modeling-demo/evidence/2026-09-21/t13-capacity.json；.artifacts/modeling-demo/t13-cold-start/logs；Codex 内置浏览器内联截图
+检查：T13 PASS；内置浏览器 PASS；Playwright Chromium NOT_RUN；OS CPU/memory hard quota NOT_IMPLEMENTED / P1；docs gate 保留双语配对 FAIL
+阻塞与剩余问题：仅 P1/已知限制；不影响 Demo Ready。未提交 credential、token 或 Web 启动 token。
+下一任务：无；按要求停止，不创建 T14
+```
+
 ## 阶段记录模板
+
+```text
+日期/任务 ID：2026-09-21 / 建模工作台双栏视觉优化
+修改文件：packages/experimental/modeling/src/client/{ModelingWorkspace.tsx,ModelingWorkspace.module.css,locales.ts}、packages/experimental/modeling/{README.md,README.zh.md,README.i18n.yaml}、docs/modeling-demo/{progress.md,evidence/2026-09-21/ui-two-column.json}
+实际命令：pnpm exec tsc -p packages/experimental/modeling/tsconfig.json --noEmit；pnpm exec oxlint packages/experimental/modeling/src packages/experimental/modeling/tests --deny-warnings；pnpm --filter @deepseek-ai/dsh-experimental-modeling bundle；pnpm exec vitest run packages/experimental/modeling/tests/client-model.client.spec.ts packages/experimental/modeling/tests/modeling.spec.ts；pnpm run verify-translation-pairing packages/experimental/modeling/README.md；git diff --check；pnpm run test:docs；Codex 内置浏览器 1920×1080、1728×900、1440×900、1366×768 检查
+退出码/输出摘要：右侧独立 Skill/任务栏、320px 占位与分割线已移除；主内容全宽，流程横向展示，指标单行展示并格式化到最多四位小数；TypeScript、lint、bundle、README 配对、diff check 和 14 个聚焦测试通过；文档门禁保持 19 PASS / 1 FAIL
+业务或界面模式：visibly marked succeeded fixture / live Harness Web shell
+截图/日志路径：docs/modeling-demo/evidence/2026-09-21/ui-two-column.json；Codex 内置浏览器内联截图
+检查：四个目标桌面视口均无页面或工作台横向溢出；工作台 DOM 无 aside；对话、轨迹与建模工作台共用 Header、Tab 和 Composer；浏览器控制台无 warning/error
+阻塞与剩余问题：fixture 只作为视觉证据，不作为业务执行证据；文档总门禁仍因 modeling-demo 目录缺少既有英文配对而失败，本任务涉及的包 README 配对通过
+下一任务：无
+```
+
+```text
+日期/任务 ID：2026-09-21 / 建模方案弹窗 UI/UX 优化
+修改文件：packages/experimental/modeling/src/client/{ModelingWorkspace.tsx,ModelingWorkspace.module.css,locales.ts}、packages/experimental/modeling/{README.md,README.zh.md,README.i18n.yaml}、docs/modeling-demo/progress.md
+实际命令：pnpm exec tsc -p packages/experimental/modeling/tsconfig.client.json --noEmit；pnpm exec oxlint；pnpm run verify-client-ui-i18n；pnpm exec vitest run packages/experimental/modeling/tests/{client-model.client.spec.ts,modeling.spec.ts}；pnpm --filter @deepseek-ai/dsh-experimental-modeling run bundle；scripts/modeling-demo-down.sh && scripts/modeling-demo-up.sh；Microsoft Edge Playwright 1920×1080、1728×900、1440×900、1366×768 实页截图与尺寸检查；pnpm run verify-translation-pairing
+退出码/输出摘要：弹窗宽度 1000px；四个视口高度依次为 820、765、765、653px；内容区独立纵向滚动，底部操作栏高度 68px；三个数组字段默认显示已选 Tag 并可展开编辑；页面无横向溢出；2 个测试文件 17 PASS；TypeScript、lint、客户端国际化、bundle 和 README 配对通过；文档门禁 19 PASS / 1 个既有双语配对 FAIL
+业务或界面模式：live Harness Session / live Modeling API / live browser UI / focused automated UI regression
+截图/日志路径：.artifacts/modeling-demo/ui/modeling-plan-dialog-{1920x1080,1728x900,1440x900,1366x768}.png
+检查：头部、revision 提示和操作栏固定可见；基础配置、数据配置、切分、预处理、特征、模型和运行限制按区组织；保存仍调用原 updatePlan 并保留 revision 冲突错误
+阻塞与剩余问题：弹窗字段继续受当前 Plan schema 和 `/v1/capabilities` 约束，不新增算法、切分或执行配置
+下一任务：无
+```
 
 ```text
 日期/任务 ID：
@@ -175,4 +241,76 @@ T10 — 有界流程编辑与重跑：PASS。表单从 `/v1/capabilities` 生成
 检查：PASS / FAIL / NOT_RUN
 阻塞与剩余问题：
 下一任务：
+```
+
+```text
+日期/任务 ID：2026-09-21 / 建模 Agent 中文回复
+修改文件：packages/experimental/modeling/presets/modeling/agent.cordis.yml、packages/experimental/modeling/tests/modeling.spec.ts、packages/experimental/modeling/{README.md,README.zh.md,README.i18n.yaml}、docs/modeling-demo/progress.md
+实际命令：pnpm exec vitest run packages/experimental/modeling/tests/modeling.spec.ts packages/experimental/modeling/tests/client-model.client.spec.ts；pnpm exec tsc -p packages/experimental/modeling/tsconfig.json --noEmit；pnpm exec oxlint packages/experimental/modeling/src packages/experimental/modeling/tests --deny-warnings；pnpm run verify-cordis-config；pnpm --filter @deepseek-ai/dsh-experimental-modeling bundle；pnpm run verify-translation-pairing --write packages/experimental/modeling/README.md；pnpm run verify-translation-pairing packages/experimental/modeling/README.md；git diff --check；scripts/modeling-demo-{up,health,down}.sh；Codex 内置浏览器全新 Session 真实 DeepSeek 回复检查
+退出码/输出摘要：建模预设要求用户可见回复使用简体中文并保留工具、Skill、字段、枚举和代码标识原文；2 个测试文件 15 PASS / 0 FAIL；TypeScript、lint、Cordis 198 个配置、bundle、README 配对与 diff check 通过；真实新 Session 返回完整简体中文职责说明
+业务或界面模式：live DeepSeek LLM / live Harness Session / live browser UI / live Modeling API
+截图/日志路径：Codex 内置浏览器可访问性快照；.artifacts/modeling-demo/runtime/logs
+检查：中文回复 PASS；聊天附件自动注册为建模数据集 NOT_IMPLEMENTED
+阻塞与剩余问题：历史会话消息不会回译；聊天附件仍是 Harness 只读附件，完整建模前必须使用同一 Agent Session ID 调用 /v1/datasets 注册 CSV
+下一任务：如需无命令行上传体验，实现 Host 侧附件到 Modeling API 的流式注册桥接
+```
+
+```text
+日期/任务 ID：2026-09-21 / 对话 CSV 自动注册
+修改文件：packages/experimental/modeling/src/{index.ts,tools.ts}、packages/experimental/modeling/{package.json,presets/modeling/agent.cordis.yml,tests/modeling.spec.ts,README.md,README.zh.md,README.i18n.yaml}、pnpm-lock.yaml、docs/modeling-demo/progress.md
+实际命令：tsc -p packages/experimental/modeling/tsconfig.json --noEmit；vitest run packages/experimental/modeling/tests/modeling.spec.ts packages/experimental/modeling/tests/client-model.client.spec.ts；oxlint packages/experimental/modeling/src packages/experimental/modeling/tests --deny-warnings；verify-cordis-config；verify-translation-pairing；git diff --check；持久终端启动 Modeling API/Harness Web；Codex 内置浏览器上传 CSV 并提交真实 DeepSeek 请求；SQLite 与 Session JSONL 核对
+退出码/输出摘要：CSV 附件从 AttachmentStore 流式上传至 /v1/datasets，校验 SHA-256 并等待 profile ready；同一 Session 持久化 dataset_id 上下文；真实 Session 直接读取 ds_a399400f8e8d58191d61db39 画像并创建 plan_2fa1ed0422404575abee6efc63570113，状态 proposed / needs_confirmation；2 个测试文件 17 PASS，TypeScript、lint、Cordis 198 个配置、README 配对与 diff check 通过；docs 保持 19 PASS / 1 个既有双语配对 FAIL
+业务或界面模式：live DeepSeek LLM / live Harness Session / live browser UI / live Modeling API / SQLite persistence
+截图/日志路径：.artifacts/modeling-demo/runtime/harness-home/sessions/--Users-robinzhu-project-dsh-deepseek-harness--/session-c153f6fe-edb0-4d5f-b72e-e49adcf70d2f/session.v3.jsonl.zstd；.artifacts/modeling-demo/runtime/service/modeling.sqlite3；Codex 内置浏览器可访问性快照
+检查：上传→注册→画像→proposed 方案 PASS；Agent 未再向用户索要 dataset_id；数据集与方案 Session 归属一致
+阻塞与剩余问题：历史会话不会回溯注册旧附件；只有用户直接提交的 .csv 附件自动注册；其他格式仍作为普通附件
+下一任务：用户在建模工作台人工确认 proposed 方案后执行 Run
+```
+
+```text
+日期/任务 ID：2026-09-21 / Harness Web 启动鉴权地址修复
+修改文件：scripts/modeling-demo-up.sh、docs/modeling-demo/{DEMO_GUIDE.md,DEPLOYMENT.md,progress.md}
+实际命令：bash -n scripts/modeling-demo-{up,health,down}.sh；scripts/modeling-demo-down.sh；scripts/modeling-demo-up.sh；curl 验证裸地址与带令牌地址；scripts/modeling-demo-health.sh；scripts/modeling-demo-down.sh
+退出码/输出摘要：启动输出包含 ?token=；裸地址 HTTP 401；带令牌地址经 303 鉴权握手和 Cookie 重定向后最终 HTTP 200；API HTTP 200；bash 语法、diff check 和令牌泄漏检查通过；docs 保持 19 PASS / 1 个既有双语配对 FAIL；测试后服务已停止
+业务或界面模式：live local Harness Web authentication / live Modeling API
+截图/日志路径：.artifacts/modeling-demo/runtime/logs/{harness-web.log,modeling-api.log}
+检查：启动脚本不再输出无法鉴权的裸 Web 地址；用户打开 Harness Web 完整地址即可完成鉴权
+阻塞与剩余问题：完整 Web 地址包含本地访问令牌，不应复制到共享日志、截图或提交到仓库
+下一任务：无
+```
+
+```text
+日期/任务 ID：2026-09-21 / 方案确认入口与领域 ID 执行修复
+修改文件：services/modeling-api/app/{pipeline.py,runs.py}、services/modeling-api/tests/{test_pipeline.py,test_run_lifecycle.py}、services/modeling-api/{README.md,README.zh.md,README.i18n.yaml}、packages/experimental/modeling/src/client/{ModelingWorkspace.tsx,locales.ts}、packages/experimental/modeling/{README.md,README.zh.md,README.i18n.yaml}、docs/modeling-demo/progress.md
+实际命令：SQLite 与 Run 工作目录只读核对；uv run pytest services/modeling-api/tests/test_pipeline.py services/modeling-api/tests/test_run_lifecycle.py -q；PYTHONPATH=services/modeling-api python3 隔离重放 run_4d1a520365ac4088913681028c4c9ae5 输入；uv run pytest services/modeling-api/tests -q；pnpm exec vitest run packages/experimental/modeling/tests/client-model.client.spec.ts packages/experimental/modeling/tests/modeling.spec.ts；pnpm exec tsc -p packages/experimental/modeling/tsconfig.client.json --noEmit；pnpm exec oxlint packages/experimental/modeling/src packages/experimental/modeling/tests --deny-warnings；pnpm --filter @deepseek-ai/dsh-experimental-modeling run bundle；pnpm run verify-client-ui-i18n；pnpm run verify-translation-pairing；pnpm run test:docs；git diff --check
+退出码/输出摘要：失败 Run 的节点错误为 INVALID_RECORD_ID，原因是执行器要求输入必须包含字面量 record_id，而上传数据使用 policy_id；流水线现在仅校验已有 record_id，并在缺失时生成确定性内部行 ID，同时始终排除内部 ID 与方案声明的领域 ID；Run 汇总保留节点结构化错误，不再覆盖为 WORKER_FAILED；后端 43 PASS，前端 17 PASS，TypeScript、lint、bundle、客户端国际化、README 配对与 diff check 通过；文档总门禁 19 PASS / 1 个既有 modeling-demo 双语配对 FAIL
+业务或界面模式：persisted live Run diagnosis / isolated real dataset replay / focused automated regression
+截图/日志路径：.artifacts/modeling-demo/runtime/service/modeling.sqlite3；.artifacts/modeling-demo/runtime/service/work/run_4d1a520365ac4088913681028c4c9ae5；/private/tmp/modeling-worker-fix.BAIvnD/run
+检查：原始 700 行反欺诈数据与原方案隔离重放 PASS；切分 420/140/140；ROC-AUC 0.7919337606837608；AP 0.5045081002909791；F1 0.5538461538461539；混淆矩阵 [[93,11],[18,18]]；工作台把建模方案卡片放在流程状态下方，并将应用侧确认文案明确为“确认方案并执行”；失败提示提供“修改并创建新 revision”入口
+阻塞与剩余问题：原失败 Run 是不可变终态证据，不覆盖或静默重启；部署修复后，用户需从失败提示创建 proposed revision，并在工作台再次人工确认以创建新 Run
+下一任务：用户在工作台创建新 revision 并执行应用侧人工确认
+```
+
+```text
+日期/任务 ID：2026-09-21 / Demo 启动认证地址竞态修复
+修改文件：scripts/modeling-demo-up.sh、docs/modeling-demo/{DEPLOYMENT.md,progress.md}
+实际命令：bash -n scripts/modeling-demo-{up,health,down}.sh；scripts/modeling-demo-down.sh && scripts/modeling-demo-up.sh；scripts/modeling-demo-health.sh；带令牌地址重定向与 Cookie 鉴权检查；git diff --check
+退出码/输出摘要：启动脚本等待 Harness 日志中的认证地址后再执行健康检查；完整启动返回 ready，API HTTP 200、未鉴权 Web HTTP 401、带令牌 Web 最终 HTTP 200
+业务或界面模式：live local Harness Web authentication / live Modeling API
+截图/日志路径：.artifacts/modeling-demo/runtime/logs/{harness-web.log,modeling-api.log}
+检查：PASS；启动脚本不再因健康端点先于日志刷新而误报认证地址缺失
+阻塞与剩余问题：完整 Web 地址包含本地访问令牌，不应复制到共享日志、截图或提交到仓库
+下一任务：无
+```
+
+```text
+日期/任务 ID：2026-09-21 / 第五个运行期 Skill：model-evaluation
+修改文件：.dsh/skills/model-evaluation/{SKILL.md,contract.json,input.schema.json,output.schema.json,tools.json}、services/modeling-api/app/{api.py,pipeline.py,runs.py,skills.py}、services/modeling-api/tests/{test_pipeline.py,test_run_lifecycle.py,test_skill_and_rerun.py}、services/modeling-api/verify_g1_artifacts.py、services/modeling-api/{README.md,README.zh.md,README.i18n.yaml}、packages/experimental/modeling/src/{index.ts,tools.ts}、packages/experimental/modeling/src/client/{ModelingWorkspace.tsx,ModelingWorkspace.module.css,fixtures.ts,locales.ts,model.ts}、packages/experimental/modeling/tests/{client-model.client.spec.ts,modeling.spec.ts}、packages/experimental/modeling/{README.md,README.zh.md,README.i18n.yaml}、docs/modeling-demo/{DEMO_GUIDE.md,KNOWN_LIMITATIONS.md,progress.md}
+实际命令：uv run pytest services/modeling-api/tests/test_pipeline.py services/modeling-api/tests/test_skill_and_rerun.py services/modeling-api/tests/test_run_lifecycle.py -q；uv run pytest services/modeling-api/tests -q；pnpm exec vitest run packages/experimental/modeling/tests/modeling.spec.ts packages/experimental/modeling/tests/client-model.client.spec.ts；pnpm exec tsc -p packages/experimental/modeling/tsconfig.client.json --noEmit；pnpm exec tsc -p packages/experimental/modeling/tsconfig.json --noEmit；pnpm exec oxlint packages/experimental/modeling/src packages/experimental/modeling/tests --deny-warnings；pnpm --filter @deepseek-ai/dsh-experimental-modeling run bundle；pnpm run verify-cordis-config；pnpm run verify-client-ui-i18n；pnpm run verify-translation-pairing；scripts/modeling-demo-down.sh && scripts/modeling-demo-up.sh；Codex 内置浏览器上传真实 CSV、生成方案、人工确认、运行和评估
+退出码/输出摘要：后端 46 PASS / 1 个外部 Starlette deprecation warning；前端 17 PASS；TypeScript、lint、bundle、198 个 Cordis 配置、客户端国际化、README 配对与 diff check 通过；Skill Center 展示五张运行期 Skill 卡片，详情页将 Evals 明确命名为“技能自检”；真实运行 run_f83777dfcd1b46feb3d731047acefdaf succeeded，测试集 ROC-AUC 0.7935363248、AP 0.5072902891、F1 0.5538461538、Precision 0.6206896552、Recall 0.5、混淆矩阵 [[93,11],[18,18]]、阈值 0.5
+业务或界面模式：live DeepSeek LLM / live Harness Session / live browser UI / live Modeling API / deterministic Python worker
+截图/日志路径：Codex 内置浏览器内联截图；.artifacts/modeling-demo/runtime/logs/{harness-web.log,modeling-api.log}
+检查：五个 Skill 均可加载；model-evaluation 仅调用 modeling_get_run_status 与 modeling_get_run_result；前四个 Skill 行为保持不变；模型评估结果来自真实测试集；未重新训练、调参或修改阈值；诊断和建议携带 evidence
+阻塞与剩余问题：结果工具仍要求调用方提供明确 run_id；本次 Agent 在拿到 run_id 后按约束完成评估。Skill 的“技能自检”与模型评估业务能力已在 UI 和文档中区分
+下一任务：无
 ```

@@ -1,0 +1,90 @@
+{
+  "task": "T12",
+  "status": "PASS",
+  "date": "2026-09-21",
+  "mode": "live Harness Session, live browser UI, visibly marked lifecycle fixtures, focused automated UI regression",
+  "visual_direction": {
+    "theme": "light",
+    "primary": "#0F4C9E",
+    "reference": "docs/modeling-demo/reference/modelx-reference.png"
+  },
+  "viewports": {
+    "1440x900": "PASS",
+    "1366x768": "PASS",
+    "1024x768": "PASS; right task pane hidden by responsive rule",
+    "390x844": "PASS; basic usability quick check"
+  },
+  "states": {
+    "empty": "live new-Session landing state plus visibly marked workspace fixture",
+    "dataset_ready": "live Session session-e42f2edd-f475-400b-aad0-9886bde71d2e",
+    "agent_planning": "live DeepSeek conversation round with six recorded tool calls",
+    "plan_proposed": "visibly marked UI fixture",
+    "plan_editing": "live controlled editor opened and closed",
+    "run_running": "visibly marked UI fixture",
+    "run_succeeded": "live run_27424d3ccbba44a7ab05e10f348477d1",
+    "run_failed": "visibly marked UI fixture with code, request_id, run_id, and recovery copy",
+    "skill_center": "live four-Skill catalog",
+    "skill_editor": "live data-analysis 0.2.0-demo editor",
+    "run_history": "live revision 2 and revision 3 succeeded runs"
+  },
+  "first_screenshot_critique": [
+    {
+      "severity": "high",
+      "finding": "The floating Composer covered plan actions and the lower task/artifact content because the plugin expanded beyond the visible host slot."
+    },
+    {
+      "severity": "medium",
+      "finding": "computation_scope and plan hashes stayed on one code line at 390px and expanded the internal content width."
+    }
+  ],
+  "fixes": [
+    "Bound the workspace to the viewport below the 76px Harness tab header.",
+    "Reserved 148px below the main/right scroll regions for the floating Composer.",
+    "Kept the main and right columns as independent vertical scrollers.",
+    "Allowed metadata code values and identifiers to wrap anywhere without page-level horizontal scrolling.",
+    "Added coherent empty, proposed, running, succeeded, and failed visual-review fixtures, all isolated from live mode and visibly labeled."
+  ],
+  "after_fix": {
+    "document_horizontal_overflow": false,
+    "composer_obscures_workspace_content": false,
+    "main_and_right_independent_scroll": true,
+    "long_identifiers_wrap": true,
+    "plan_modal_within_1024x768": true,
+    "focus_outline_present": true,
+    "icon_only_accessible_names": true
+  },
+  "interaction_checks": {
+    "new_session": "PASS; live new-Session landing state opened",
+    "session_switch": "PASS; returned to the T11 live Session",
+    "plan_editor_open_close": "PASS at 1024x768",
+    "skill_editor": "PASS; live data-analysis editor uses a bounded textarea and page scrolling",
+    "run_history_switch": "PASS; two retained real runs displayed",
+    "composer_input": "PASS; text entered and cleared without sending",
+    "artifact_download": "covered by unchanged T08/T11 live regression; no new download or Run was created"
+  },
+  "gate": {
+    "passed": 16,
+    "failed": 0,
+    "not_run": 0
+  },
+  "verification": {
+    "bundle": "PASS",
+    "typescript_client": "PASS",
+    "lint": "PASS",
+    "focused_ui_and_t08_regression": "2 files, 14 passed, 0 failed",
+    "git_diff_check": "PASS",
+    "docs_gate": "19 passed, 1 failed: existing 23 modeling Demo Markdown files lack English counterparts"
+  },
+  "screenshots": {
+    "before": "Codex in-app browser inline captures at 1440x900, 1366x768, 1024x768, and 390x844",
+    "after": "Codex in-app browser inline captures at the same viewports plus lifecycle and management states",
+    "persistent_path": null,
+    "reason": "The browser tool did not expose a persistent screenshot file path."
+  },
+  "not_run": [
+    "repository Playwright Chromium run",
+    "million-row capacity measurement",
+    "operating-system CPU and memory hard quota enforcement"
+  ],
+  "secrets": "No credential or Web startup token was written to repository evidence."
+}

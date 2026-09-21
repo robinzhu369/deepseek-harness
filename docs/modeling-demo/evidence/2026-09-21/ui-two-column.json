@@ -1,0 +1,20 @@
+{
+  "date": "2026-09-21",
+  "mode": "fixture",
+  "fixture": "succeeded",
+  "browser": "Codex in-app browser",
+  "checks": [
+    { "viewport": "1920x1080", "page_horizontal_overflow": false, "workspace_horizontal_overflow": false, "aside_count": 0, "pipeline_rows": 1, "metric_rows": 1, "card_width_px": 1560 },
+    { "viewport": "1728x900", "page_horizontal_overflow": false, "workspace_horizontal_overflow": false, "aside_count": 0, "pipeline_rows": 1, "metric_rows": 1, "card_width_px": 1366 },
+    { "viewport": "1440x900", "page_horizontal_overflow": false, "workspace_horizontal_overflow": false, "aside_count": 0, "pipeline_rows": 1, "metric_rows": 1, "card_width_px": 1079 },
+    { "viewport": "1366x768", "page_horizontal_overflow": false, "workspace_horizontal_overflow": false, "aside_count": 0, "pipeline_rows": 1, "metric_rows": 1, "card_width_px": 1008 }
+  ],
+  "additional_checks": {
+    "composer_overlaps_scroll_end": false,
+    "conversation_tab_checked": true,
+    "trajectory_tab_checked": true,
+    "trajectory_background": "rgb(245, 247, 251)",
+    "console_warnings_or_errors": []
+  },
+  "screenshots": "Codex in-app browser inline captures; the browser tool did not provide persistent screenshot paths"
+}

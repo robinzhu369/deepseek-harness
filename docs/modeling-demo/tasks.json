@@ -192,9 +192,13 @@
         "T10"
       ],
       "skill": "modelx-demo-qa",
-      "status": "pending",
+      "status": "completed",
       "definition_of_done": "核心 E2E、拒绝未确认、错误/取消/重启、未授权访问检查",
-      "evidence": []
+      "evidence": [
+        "docs/modeling-demo/evidence/2026-09-20/t11.json",
+        ".artifacts/modeling-demo/t06-harness-home/sessions/--Users-robinzhu-project-dsh-deepseek-harness--/session-e42f2edd-f475-400b-aad0-9886bde71d2e/session.v3.jsonl.zstd",
+        ".artifacts/modeling-demo/g2-live-20260920/service/runs/run_27424d3ccbba44a7ab05e10f348477d1/manifest.json"
+      ]
     },
     {
       "id": "T12",
@@ -204,9 +208,13 @@
         "T11"
       ],
       "skill": "modelx-frontend-design",
-      "status": "pending",
+      "status": "completed",
       "definition_of_done": "关键分辨率/状态截图，无溢出遮挡；icon 名称和焦点通过",
-      "evidence": []
+      "evidence": [
+        "docs/modeling-demo/evidence/2026-09-21/t12.json",
+        "Codex in-app browser before/after inline captures at 1440x900, 1366x768, 1024x768, and 390x844",
+        "14 focused modeling UI assertions passed; TypeScript, lint, bundle, and diff check passed"
+      ]
     },
     {
       "id": "T13",
@@ -216,9 +224,16 @@
         "T12"
       ],
       "skill": "modelx-demo-qa",
-      "status": "pending",
+      "status": "completed",
       "definition_of_done": "启动文档、固定依赖、真实演示记录和未完成项清单",
-      "evidence": []
+      "evidence": [
+        "docs/modeling-demo/evidence/2026-09-21/t13.json",
+        "docs/modeling-demo/evidence/2026-09-21/t13-capacity.json",
+        "cold start health PASS in 1.03 seconds",
+        "live DeepSeek E2E and independent rerun succeeded",
+        "1,000,000 x 100 capacity PASS in 24.971 seconds",
+        "Python 41 PASS; Harness focused 42 PASS; TypeScript/lint/diff/artifact verification PASS"
+      ]
     }
   ]
 }

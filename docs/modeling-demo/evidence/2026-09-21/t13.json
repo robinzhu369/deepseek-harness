@@ -1,0 +1,90 @@
+{
+  "task": "T13",
+  "status": "PASS",
+  "frozen": {
+    "git_head": "unchanged from the pre-existing T13 starting HEAD; exact value is reported in the final handoff",
+    "worktree": "dirty; preserved T11/T12 and T13 changes",
+    "harness_version": "0.1.6-alpha.2",
+    "node": "26.9.0",
+    "pnpm": "11.7.0",
+    "python": "3.10.20",
+    "polars": "1.0.0",
+    "scikit_learn": "1.4.0",
+    "fastapi": "0.128.8",
+    "uvicorn": "0.51.0",
+    "provider": "deepseek-official",
+    "model_id": "deepseek-flash",
+    "modeling_api_version": "0.1.0",
+    "contract_schema_version": "1.0",
+    "sqlite_schema_version": 4
+  },
+  "skills": [
+    {"name": "data-analysis", "version": "0.2.0-demo", "sha256": "06bddc6e10d88a65c8dc8d2f064357a60fb1fe4e341aaa2d928cf8e26bb21d61"},
+    {"name": "data-cleaning", "version": "0.1.0-demo", "sha256": "68f7465a098a891f5888d6ebc7a4cab4190e7d69977a57c0e1e1b66c9faf439c"},
+    {"name": "feature-engineering", "version": "0.1.0-demo", "sha256": "e2d16c65cb8bd27b4174fb6f74ed7f39613d01108d2fd93e36be3b6a6229d5ca"},
+    {"name": "model-training", "version": "0.1.0-demo", "sha256": "61a6c2b37353e825574d7b30adecd363c5b3ed85748b1fe0e8bbabea03553e8b"}
+  ],
+  "cold_start": {
+    "elapsed_seconds": 1.03,
+    "api_http": 200,
+    "web_http": 401,
+    "api_url": "http://127.0.0.1:8000/openapi.json",
+    "web_url": "http://127.0.0.1:3080/",
+    "health": "PASS",
+    "browser_workspace": "PASS"
+  },
+  "e2e": {
+    "provider": "deepseek-official",
+    "model_id": "deepseek-flash",
+    "session_id": "session-f26ae553-a3d1-457a-9dfd-3242fe24f2bc",
+    "dataset_id": "ds_cace21337c524db45544fe15",
+    "dataset_sha256": "7f550c4f104f14f7b4d3d75527d69e270f9407ce559360de570d9cbf7f2fe314",
+    "plan_id": "plan_5ba4262d50d447c4beb3453c77b7e010",
+    "first_execution": {
+      "revision": 2,
+      "plan_hash": "14a8feb614013ef0a0f9e110b9b5f2dda924506463eb63bbda44131a078f867c",
+      "run_id": "run_f37761f8b8b14eada94fac1b6d8ceedd",
+      "status": "succeeded",
+      "test": {"samples": 240, "positive_label": 1, "threshold": 0.5, "roc_auc": 0.700152207001522, "average_precision": 0.17687589862852446, "f1": 0.0, "confusion_matrix": [[219, 0], [21, 0]]},
+      "metrics_artifact_id": "art_00b0bd1626934dc29072ee067eb1895c",
+      "metrics_sha256": "fd3598a56e2e20fa2043961da47ab45de6d3c43ff991dc153a2680acfdb783d4"
+    },
+    "rerun": {
+      "revision": 3,
+      "plan_hash": "dd39d49a500b950fee5211e169b5571be1f8bd97a15d6f2bf88ce82d1535306b",
+      "run_id": "run_5754394312ed4c9ea85508e108387642",
+      "rerun_of": "run_f37761f8b8b14eada94fac1b6d8ceedd",
+      "status": "succeeded",
+      "test": {"samples": 240, "positive_label": 1, "threshold": 0.5, "roc_auc": 0.7018917155903457, "average_precision": 0.18186034786858324, "f1": 0.0, "confusion_matrix": [[219, 0], [21, 0]]}
+    },
+    "skill_loads": ["data-analysis", "data-cleaning", "feature-engineering", "model-training"],
+    "agent_tools": ["modeling_get_dataset_profile", "modeling_propose_plan", "modeling_get_run_status", "modeling_get_run_result"],
+    "proposed_before_run": true,
+    "human_confirmation_before_run": true,
+    "artifact_download_sha_match": true,
+    "old_run_preserved": true,
+    "agent_explanation": "PASS; distinguished ranking quality from the all-negative predictions at threshold 0.5 and did not alter metrics"
+  },
+  "capacity_evidence": "docs/modeling-demo/evidence/2026-09-21/t13-capacity.json",
+  "limits": {
+    "single_worker_concurrency": "VERIFIED",
+    "max_train_seconds": "VERIFIED",
+    "max_run_seconds": "VERIFIED",
+    "max_output_features": "VERIFIED",
+    "upload_size_limit": "VERIFIED",
+    "os_cpu_memory_hard_quota": "NOT_IMPLEMENTED / P1",
+    "playwright_chromium": "NOT_RUN",
+    "built_in_browser": "PASS"
+  },
+  "regression": {
+    "python": {"pass": 41, "fail": 0},
+    "harness_focused": {"pass": 42, "fail": 0},
+    "typescript": "PASS",
+    "lint": "PASS",
+    "git_diff_check": "PASS",
+    "g1_artifact_verification": "PASS",
+    "t13_run_artifact_verification": "PASS",
+    "secrets_scan": "PASS",
+    "docs_gate": {"pass": 19, "fail": 1, "reason": "28 internal modeling-demo Markdown files lack bilingual counterparts"}
+  }
+}
