@@ -15,6 +15,13 @@ export type ModelingPanelKind = 'data' | 'skills' | 'runs'
 
 const SKILL_ORDER = ['data-analysis', 'data-cleaning', 'feature-engineering', 'model-training', 'model-evaluation'] as const
 
+function updatedTime(timestamp: string): string {
+  const date = new Date(timestamp)
+  if (Number.isNaN(date.getTime())) return '—'
+  const pad = (part: number) => String(part).padStart(2, '0')
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`
+}
+
 export interface ModelingPanelInjected {
   readonly modelFor: (sessionId: SessionId) => ModelingClientModel
 }
@@ -76,8 +83,8 @@ export function SkillsPanel(props: PropsRuntime<'main'> & PropsLocale<'modeling'
     <header className={css.header}><div><h2>{props.t('skills.center')}</h2><p>{props.t('skills.centerDescription')}</p></div><Button size="sm" variant="outline" icon={<IconRefreshOutline16 />} onClick={() => { void model.refresh() }}>{props.t('action.refresh')}</Button></header>
     <div className={css.skillGrid}>{skills.map(skill => <article className={css.skillCard} key={skill.name}>
       <div className={css.cardHead}><IconSkillOutline16 /><strong>{props.t(`skill.${skill.name}` as ModelingKey)}</strong><Tag tone={skill.draft_hash === null ? 'success' : 'warning'}>{skill.draft_hash === null ? props.t('skills.published') : props.t('skills.draft')}</Tag></div>
-      <code>{skill.name}</code><p>{skill.description}</p>
-      <dl><div><dt>{props.t('skills.version')}</dt><dd>{skill.published_version}</dd></div><div><dt>{props.t('skills.hash')}</dt><dd>{skill.published_hash.slice(0, 16)}…</dd></div><div><dt>{props.t('skills.updated')}</dt><dd>{skill.updated_at}</dd></div></dl>
+      <code>{skill.name}</code><p>{props.t(`skills.description.${skill.name}` as ModelingKey)}</p>
+      <dl><div><dt>{props.t('skills.version')}</dt><dd>{skill.published_version}</dd></div><div><dt>{props.t('skills.updated')}</dt><dd><time dateTime={skill.updated_at}>{updatedTime(skill.updated_at)}</time></dd></div></dl>
       <div className={css.actions}><Button size="sm" variant="ghost" icon={<IconDataOutline16 />} onClick={() => { void model.selectSkill(skill.name) }}>{props.t('skills.view')}</Button><Button size="sm" variant="outline" icon={<IconEditOutline16 />} onClick={() => { void model.selectSkill(skill.name) }}>{props.t('skills.edit')}</Button></div>
     </article>)}</div>
     <SkillCenter model={model} state={state} t={props.t} />

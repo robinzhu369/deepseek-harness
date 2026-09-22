@@ -39,6 +39,7 @@ function remote(overrides: Partial<ModelingRemote> = {}): ModelingRemote {
     validateSkill: vi.fn(async () => '{}'),
     publishSkill: vi.fn(async () => '{}'),
     updatePlan: vi.fn(async () => '{}'),
+    regeneratePlan: vi.fn(async () => '{"queued":true}'),
     approveAndRun: vi.fn(async () => ({ run_id: 'run-1', created: true })),
     rerun: vi.fn(async () => ({ run_id: 'run-2', created: true })),
     cancelRun: vi.fn(async () => '{}'),
@@ -47,6 +48,62 @@ function remote(overrides: Partial<ModelingRemote> = {}): ModelingRemote {
 }
 
 describe('ModelingClientModel', () => {
+  it('accepts a new run whose revision starts below the previous run', async () => {
+    let response = workspace(9, 'succeeded')
+    const model = new ModelingClientModel(sessionId, remote({ workspace: vi.fn(async () => response) }))
+    try {
+      model.activate()
+      await model.refresh()
+      response = workspace(1).replace('"id":"run-1"', '"id":"run-2"')
+      await model.refresh()
+      expect(model.source.getSnapshot().run).toMatchObject({ id: 'run-2', revision: 1 })
+    } finally { model.dispose() }
+  })
+
+  it('does not approve a revision from a stale conversation card', async () => {
+    const approveAndRun = vi.fn(async () => ({ run_id: 'run-1', created: true }))
+    const api = remote({ approveAndRun })
+    const model = new ModelingClientModel(sessionId, api)
+    try {
+      model.activate()
+      await model.refresh()
+      await model.approve({ id: 'plan-1', revision: 1, plan_hash: 'hash-1' })
+      expect(approveAndRun).not.toHaveBeenCalled()
+      await model.approve({ id: 'plan-1', revision: 2, plan_hash: 'hash-2' })
+      expect(approveAndRun).toHaveBeenCalledOnce()
+    } finally { model.dispose() }
+  })
+
+  it('keeps the shared projection active until the last card unmounts', async () => {
+    const readWorkspace = vi.fn(async () => workspace(1))
+    const api = remote({ workspace: readWorkspace })
+    const model = new ModelingClientModel(sessionId, api)
+    try {
+      model.activate()
+      model.activate()
+      await model.refresh()
+      model.deactivate()
+      const before = readWorkspace.mock.calls.length
+      await model.refresh()
+      expect(readWorkspace).toHaveBeenCalledTimes(before + 1)
+      model.deactivate()
+      await model.refresh()
+      expect(readWorkspace).toHaveBeenCalledTimes(before + 1)
+    } finally { model.dispose() }
+  })
+  it('queues Skill regeneration against the exact visible plan revision', async () => {
+    const regeneratePlan = vi.fn(async () => '{"queued":true}')
+    const model = new ModelingClientModel(sessionId, remote({ regeneratePlan }))
+    model.activate()
+    await vi.waitFor(() => { expect(model.source.getSnapshot().plan?.id).toBe('plan-1') })
+    await model.regeneratePlan({ task_context: { skillSequence: ['data-analysis', 'model-training'] } })
+    expect(regeneratePlan).toHaveBeenCalledWith(sessionId, {
+      planId: 'plan-1', baseRevision: 2,
+      plan: { task_context: { skillSequence: ['data-analysis', 'model-training'] } },
+    }, expect.any(AbortSignal))
+    model.dispose()
+  })
+
   it('keeps visual-review fixtures coherent and visibly isolated from live mode', () => {
     expect(modelingFixture('empty')).toMatchObject({ mode: 'fixture', dataset: null, run: null })
     expect(modelingFixture('proposed')).toMatchObject({ mode: 'fixture', plan: { state: 'proposed' }, run: null, result: null })

@@ -1,0 +1,48 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`modeling conversation proposals > replays immutable revisions as visible Session cards at their original call positions 1`] = `
+[
+  {
+    "anchorSeq": 3,
+    "data": {
+      "id": "plan-1",
+      "invalidation": null,
+      "plan": {
+        "target": "fraud",
+      },
+      "plan_hash": "hash-1",
+      "revision": 1,
+      "state": "proposed",
+    },
+    "id": "proposal-1",
+    "key": "13:modeling-planproposal-1",
+    "kind": "modeling-plan",
+    "location": {
+      "kind": "session",
+    },
+    "target": "chat",
+    "visibility": "visible",
+  },
+  {
+    "anchorSeq": 5,
+    "data": {
+      "id": "plan-1",
+      "invalidation": null,
+      "plan": {
+        "target": "fraud",
+      },
+      "plan_hash": "hash-2",
+      "revision": 2,
+      "state": "proposed",
+    },
+    "id": "proposal-2",
+    "key": "13:modeling-planproposal-2",
+    "kind": "modeling-plan",
+    "location": {
+      "kind": "session",
+    },
+    "target": "chat",
+    "visibility": "visible",
+  },
+]
+`;

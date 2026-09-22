@@ -1,3 +1,20 @@
+.inlineHeader { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 16px; overflow-wrap: anywhere; }
+.skillSummary { color: var(--dsw-alias-label-secondary); font-size: 12px; line-height: 1.8; }
+.historicalCard { padding: 16px; border: 1px solid var(--dsw-alias-border-l2); border-radius: 12px; margin: 12px 0; }
+.historicalCard pre { max-height: 320px; overflow: auto; font-size: 12px; }
+.workspace.inlineWorkspace { height: auto; max-height: none; overflow: visible; border: 1px solid var(--dsw-alias-border-l2); border-radius: 12px; margin: 16px 0; }
+.inlineWorkspace .topbar { display: none; }
+.inlineWorkspace .mainColumn { overflow: visible; padding: 0 12px 12px; }
+.inlineWorkspace .errorCard { margin: 12px; }
+.compactWorkspace .mainColumn > article:nth-child(1),
+.compactWorkspace .mainColumn > article:nth-child(3),
+.compactWorkspace .metaLine,
+.compactWorkspace .invalidation,
+.compactWorkspace .planGrid > div:nth-child(3),
+.compactWorkspace .planGrid > div:nth-child(4),
+.compactWorkspace .planGrid > div:nth-child(5),
+.compactWorkspace .planGrid > div:nth-child(6),
+.compactWorkspace .planGrid > div:nth-child(8) { display: none; }
 .workspace {
   --modelx-brand: var(--dsw-alias-brand-primary);
   --modelx-composer-clearance: 148px;
@@ -129,6 +146,24 @@
 .planStepper strong { min-width: 0; padding-right: 8px; overflow: hidden; color: var(--dsw-alias-label-primary); text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
 .editorSection { min-width: 0; border: 1px solid var(--dsw-alias-border-l2); border-radius: 10px; padding: 14px 16px 16px; background: var(--dsw-alias-bg-layer-1); }
 .editorSection h3 { margin: 0 0 12px; color: var(--dsw-alias-label-primary); font-size: 13px; line-height: 20px; }
+.sectionHeading { margin-bottom: 12px; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.sectionHeading h3 { margin-bottom: 2px; }
+.sectionHeading p, .skillHint { margin: 0; color: var(--dsw-alias-label-secondary); font-size: 11px; line-height: 17px; }
+.skillSequence { display: grid; gap: 7px; }
+.skillRow { min-width: 0; border: 1px solid var(--dsw-alias-border-l2); border-radius: 8px; padding: 8px 9px; display: grid; grid-template-columns: auto minmax(180px, 1fr) auto auto; align-items: center; gap: 8px; background: var(--dsw-alias-bg-layer-2); }
+.skillRow[draggable='true'] { cursor: grab; }
+.skillDisabled { opacity: .62; }
+.dragHandle { color: var(--dsw-alias-label-secondary); letter-spacing: -4px; }
+.skillToggle { min-width: 0; display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; }
+.skillToggle span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.skillRow > small { color: var(--dsw-alias-label-secondary); font-size: 10px; }
+.skillActions { display: flex; align-items: center; justify-content: flex-end; gap: 3px; }
+.skillActions > button:not([class]) { width: 26px; height: 26px; border: 0; border-radius: 6px; display: grid; place-items: center; color: var(--dsw-alias-label-secondary); background: transparent; cursor: pointer; }
+.skillActions > button:not([class]):hover:not(:disabled) { color: var(--modelx-brand); background: var(--dsw-alias-interactive-bg-hover); }
+.skillActions > button:not([class]):disabled { opacity: .35; cursor: default; }
+.skillConfig { grid-column: 2 / -1; min-width: 0; border-top: 1px solid var(--dsw-alias-border-l2); padding: 10px 4px 2px; }
+.skillConfig .featureToggle { margin-bottom: 0; }
+.skillHint { margin-top: 10px; border-left: 3px solid var(--modelx-brand); padding: 6px 9px; background: var(--dsw-alias-bg-layer-2); }
 .basicGrid, .formGrid { min-width: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; }
 .formGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .readonlyField { min-width: 0; display: grid; align-content: start; gap: 6px; color: var(--dsw-alias-label-secondary); font-size: 12px; }
@@ -180,6 +215,11 @@
   .planStepper li { min-width: 112px; flex: 0 0 112px; }
   .editorSection { padding: 12px; }
   .basicGrid, .formGrid, .featureGrid { grid-template-columns: 1fr; }
+  .sectionHeading { align-items: flex-start; flex-direction: column; }
+  .skillRow { grid-template-columns: auto minmax(0, 1fr) auto; }
+  .skillRow > small { display: none; }
+  .skillActions { grid-column: 2 / -1; justify-content: flex-start; }
+  .skillConfig { grid-column: 1 / -1; }
   .choiceDisclosure summary { align-items: flex-start; padding-block: 8px; flex-direction: column; }
   .chipRow { margin-left: 0; justify-content: flex-start; }
   .optionGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }

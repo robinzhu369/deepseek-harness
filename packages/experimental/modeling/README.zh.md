@@ -29,6 +29,8 @@ kind: "package-reference"
 
 ### 何时选择
 
+技能中心为五个内置技能展示本地化名称、功能摘要及输入／处理／输出说明。这些说明不是不可变发布版本的逐字译文。展开原始指令编辑器可查看或修改实际的 `SKILL.md`；展示本地化不会发布新的技能版本。
+
 为 `services/modeling-api` 支持的有界 ModelX Demo 工作流选择本包。agent 需要 shell、文件系统写入、任意 HTTP、SQL 或 Python 执行时，应使用普通 coding preset；此处刻意不提供这些能力。
 
 ### 最小配置
@@ -61,9 +63,9 @@ Host 服务要求显式部署值：
 
 `ModelingGateway` 持有所配置的私有 HTTP 源。preset 内的工具插件从 `ctx.attachments` 把用户直接提交的 CSV 附件流式传入 `/v1/datasets`，等待 Profile 完成，再把返回的数据集 ID 作为持久模型上下文加入请求。工具调用从实时 `Agent` 派生 Session ID，而 `approveAndRun` 是 Typert Remote 方法，接收由应用调用方解析的 `Agent`；没有模型工具暴露审批。API 根据该 Session ID 校验 dataset 与 run 的归属。
 
-浏览器工作台复用现有 Harness 对话视图与输入框。它展示数据集、可编辑的 proposed 计划、真实 run 时间线、指标、警告和产物，刷新不会启动任务。错误卡保留服务 request ID 或 Run ID，并提供不会创建任务的重试操作。`?modeling-fixture=empty|proposed|running|succeeded|failed` 查询参数选择相互一致且明确标记的视觉复核状态；`1` 仍是 `succeeded` 的别名。Fixture 状态绝不作为执行证据。
+浏览器在现有对话时间线中，按已记录的工具调用位置展示建模方案卡。历史版本保持只读；匹配当前版本的卡片通过同一个 Session 模型提供编辑、确认、运行状态、指标和下载。“查看详情”在卡片内展开完整工作台。编辑器提供五个 Skill 的顺序和执行器支持的参数；提交修改后排队一个 Agent turn，复用匹配的数据画像证据并提出新 revision。确认绑定展示的 revision 和 hash，Host 将 API 返回的 run ID 注入 Agent 的下一次请求。刷新不会启动任务。已完成轮次的工具详情折叠后，方案卡仍然可见；只有当前版本展示实时执行详情。
 
-Skill 中心列出五个固定运行时 Skill，编辑 Session 私有的 Markdown Draft，完成校验并发布不可变版本。Contract、Schema、Tools 和“技能自检”Tab 读取每个 `SKILL.md` 旁边的可选 JSON 文件；这些 Tab 展示 Modeling 扩展元数据与配置检查，不构成独立的 Skill 执行或评估运行时。model-evaluation Skill 通过 `modeling_get_run_result` 读取真实的已完成 run 结果；它不能重新训练、调参、审批执行或修改阈值。建模方案卡片紧接流程状态展示，并提供应用侧的“确认方案并执行”操作；对话消息不能审批方案。宽版计划编辑器把 `/v1/capabilities` 提供的有界控件分区放入独立滚动区，同时保持标题和 revision 操作可见；它不接受任意 JSON 或 DAG 节点。编辑 approved 计划会创建 proposed revision，确认时选择之前的终态 run 作为来源，以幂等方式重跑并创建新的 run ID。
+Skill 中心列出五个固定运行时 Skill，编辑 Session 私有的 Markdown Draft，完成校验并发布不可变版本。Contract、Schema、Tools 和“技能自检”Tab 读取每个 `SKILL.md` 旁边的可选 JSON 文件；这些 Tab 展示 Modeling 扩展元数据与配置检查，不构成独立的 Skill 执行或评估运行时。model-evaluation Skill 通过 `modeling_get_run_result` 读取真实的已完成 run 结果；它不能重新训练、调参、审批执行或修改阈值。对话中的方案卡提供应用侧的“确认方案并执行”按钮；发送对话消息不能审批方案。宽版计划编辑器把 `/v1/capabilities` 提供的有界控件分区放入独立滚动区，同时保持标题和 revision 操作可见；它不接受任意 JSON 或 DAG 节点。编辑 approved 计划会创建 proposed revision，确认时选择之前的终态 run 作为来源，以幂等方式重跑并创建新的 run ID。
 
 工具插件在注册前对五个带版本运行时 Skills 的精确字节计算哈希，仅在提出计划时发送这些快照。结果投影移除内部路径、Session ID 与 Worker 进程 ID，再应用所配置的字节上限。策略插件在建模 preset scope 中屏蔽继承工具。
 
@@ -99,7 +101,7 @@ Skill 中心列出五个固定运行时 Skill，编辑 Session 私有的 Markdow
 
 #### 模型看到什么
 
-模型看到 `modeling_get_dataset_profile`、`modeling_propose_plan`、`modeling_get_run_status`、`modeling_get_run_result` 和标准 `skill` 加载器；[生成工具目录](../../../docs/tool-catalog.zh.md#deepseek-aidsh-experimental-modeling)记录其精确 schema。用户直接提交 CSV 附件时，同一请求会加入由应用产生且持久化的数据集 ID 与 SHA-256；文件名仍是不可信的用户标签。模型读取该 ID 后会收到聚合 Profile 和有界结果摘要。随附 preset 要求面向用户的回复使用简体中文，同时保留工具名、Skill 名、字段名、枚举值和代码标识。计划提案始终返回 `needs_confirmation: true`；审批、执行、shell、文件系统写入、SQL、Python 或任意网络工具均不可见。
+模型看到 `modeling_get_dataset_profile`、`modeling_propose_plan`、`modeling_get_run_status`、`modeling_get_run_result` 和标准 `skill` 加载器；[生成工具目录](../../../docs/tool-catalog.zh.md#deepseek-aidsh-experimental-modeling)记录其精确 schema。`modeling_propose_plan` 既可接收首版提案，也可接收用于重新生成的乐观并发 `plan_id` 与 `base_revision` 组合，同时保持四工具界面不变。用户直接提交 CSV 附件时，同一请求会加入由应用产生且持久化的数据集 ID 与 SHA-256；文件名仍是不可信的用户标签。模型读取该 ID 后会收到聚合 Profile 和有界结果摘要。随附 preset 要求面向用户的回复使用简体中文，同时保留工具名、Skill 名、字段名、枚举值和代码标识。计划提案始终返回 `needs_confirmation: true`；审批、执行、shell、文件系统写入、SQL、Python 或任意网络工具均不可见。
 
 #### Token 影响
 

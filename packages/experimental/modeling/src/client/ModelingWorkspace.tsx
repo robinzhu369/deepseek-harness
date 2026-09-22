@@ -1,10 +1,11 @@
 /** Pure presentation for the Session-scoped modeling workbench. */
 import { useEffect, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
-import type { InjectFace, PropsLocale, PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
+import type { InjectFace, PropsLocale } from '@deepseek-ai/dsh-client-ui-slots'
 import {
   Button, fileSizeText, IconCheckOutline16, IconDataOutline16, IconDownloadOutline16, IconEditOutline16,
-  IconLoadingOutline16, IconPlayOutline16, IconRefreshOutline16, IconStopFill16, IconWarningOutline16,
+  IconChevronDownOutline14, IconChevronUpOutline14, IconLoadingOutline16, IconPlayOutline16, IconRefreshOutline16,
+  IconStopFill16, IconWarningOutline16,
   Modal, StateDot, Tag, Tooltip,
 } from '@deepseek-ai/dsh-client-ui-primitives'
 import type { ModelingJson } from '../types.ts'
@@ -20,13 +21,14 @@ export interface ModelingWorkspaceInjected {
   readonly cancel: () => Promise<void>
   readonly refresh: () => Promise<void>
   readonly updatePlan: (plan: ModelingJson) => Promise<void>
+  readonly regeneratePlan: (plan: ModelingJson) => Promise<void>
   readonly artifactUrl: (artifactId: string) => string
   readonly activate: () => void
   readonly deactivate: () => void
   readonly hooks: { readonly modelingState: { getSnapshot(): ModelingClientSnapshot; subscribe(listener: () => void): () => void } }
 }
 
-export type ModelingWorkspaceProps = PropsRuntime<'conversation.view'> & InjectFace<ModelingWorkspaceInjected> & PropsLocale<'modeling'>
+export type ModelingWorkspaceProps = InjectFace<ModelingWorkspaceInjected> & PropsLocale<'modeling'> & { readonly compact?: boolean }
 
 function value(source: unknown, fallback = '—'): string {
   if (source === null || source === undefined || source === '') return fallback
@@ -58,6 +60,39 @@ function first(value: unknown): unknown {
   return Array.isArray(value) ? value[0] : undefined
 }
 
+const SKILLS = ['data-analysis', 'data-cleaning', 'feature-engineering', 'model-training', 'model-evaluation'] as const
+type SkillId = typeof SKILLS[number]
+
+function defaultTaskContext(plan: Record<string, unknown>, profile: Record<string, unknown> | null | undefined): Record<string, unknown> {
+  return {
+    schemaVersion: '1.0', datasetId: value(plan.dataset_id, ''), target: plan.target ?? null,
+    taskType: value(plan.mode, 'binary_classification'), skillSequence: [...SKILLS],
+    skillConfigs: {
+      'data-cleaning': { missingStrategy: 'auto', outlierStrategy: 'auto' },
+      'feature-engineering': { featureGeneration: true, featureSelection: true, selectionMethod: 'auto', topK: 100 },
+      'model-training': { algorithm: value(object(first(plan.models)).name, 'logistic_regression') },
+      'model-evaluation': { metrics: 'auto', threshold: 0.5 },
+    },
+    profileEvidence: {
+      datasetSha256: value(plan.dataset_sha256, ''), rowCount: typeof profile?.row_count === 'number' ? profile.row_count : 0,
+      target: plan.target ?? null,
+    },
+    decisions: {},
+  }
+}
+
+function skillSequence(plan: Record<string, unknown>): SkillId[] {
+  return strings(object(plan.task_context).skillSequence).filter((name): name is SkillId => SKILLS.includes(name as SkillId))
+}
+
+function validateSkillSequence(sequence: readonly SkillId[], t: (key: ModelingKey) => string): string {
+  if (sequence[0] !== 'data-analysis') return t('plan.skills.analysisFirst')
+  if (!sequence.includes('model-training')) return t('plan.skills.trainingRequired')
+  const evaluation = sequence.indexOf('model-evaluation')
+  if (evaluation >= 0 && evaluation < sequence.indexOf('model-training')) return t('plan.skills.evaluationAfterTraining')
+  return ''
+}
+
 function FormField({ label, children }: { label: string; children: ReactNode }) {
   return <label className={css.formField}><span>{label}</span>{children}</label>
 }
@@ -87,7 +122,7 @@ function Fact({ label, children, detail }: { label: string; children: ReactNode;
 }
 
 function statusLabel(status: string, t: (key: ModelingKey) => string): string {
-  return ({ queued: t('run.pending'), running: t('run.running'), cancelling: t('run.running'), succeeded: t('run.succeeded'), failed: t('run.failed'), cancelled: t('run.cancelled'), interrupted: t('run.blocked') } as Record<string, string>)[status] ?? status
+  return ({ pending: t('run.pending'), blocked: t('run.blocked'), queued: t('run.pending'), running: t('run.running'), cancelling: t('run.running'), succeeded: t('run.succeeded'), failed: t('run.failed'), cancelled: t('run.cancelled'), interrupted: t('run.blocked') } as Record<string, string>)[status] ?? status
 }
 
 function evaluationMessage(item: Record<string, unknown>, kind: 'diagnostic' | 'recommendation', t: (key: ModelingKey) => string): string {
@@ -97,13 +132,19 @@ function evaluationMessage(item: Record<string, unknown>, kind: 'diagnostic' | '
 }
 
 export function ModelingWorkspace(props: ModelingWorkspaceProps) {
-  const { useModelingState, preview, fixture = 'succeeded', approve, cancel, refresh, updatePlan, artifactUrl, activate, deactivate, t } = props
+  const { useModelingState, preview, fixture = 'succeeded', approve, cancel, refresh, updatePlan, regeneratePlan, artifactUrl, activate, deactivate, t } = props
   const live = useModelingState(snapshot => snapshot)
   useEffect(() => { activate(); return deactivate }, [activate, deactivate])
-  const state = preview ? modelingFixture(fixture) : live
+  const loaded = preview ? modelingFixture(fixture) : live
+  const state = props.compact && loaded.run !== null && loaded.run.plan_revision !== loaded.plan?.revision
+    ? { ...loaded, run: null, result: null } : loaded
   const [editing, setEditing] = useState(false)
+  const [details, setDetails] = useState(false)
   const [draft, setDraft] = useState<Record<string, unknown> | null>(null)
   const [editError, setEditError] = useState('')
+  const [skillDirty, setSkillDirty] = useState(false)
+  const [configuredSkill, setConfiguredSkill] = useState<SkillId | null>(null)
+  const [draggedSkill, setDraggedSkill] = useState<SkillId | null>(null)
   const profile = state.dataset?.profile
   const plan = state.plan?.plan
   const preprocessing = plan !== undefined && typeof plan.preprocessing === 'object' ? plan.preprocessing as Record<string, unknown> : null
@@ -137,17 +178,68 @@ export function ModelingWorkspace(props: ModelingWorkspaceProps) {
   const logisticCapabilities = object(object(capabilities.models).logistic_regression)
   const cBounds = object(logisticCapabilities.C)
   const iterationBounds = object(logisticCapabilities.max_iter)
-  const openEditor = () => { setDraft(JSON.parse(JSON.stringify(plan ?? {})) as Record<string, unknown>); setEditError(''); setEditing(true) }
+  const modelOptions = Array.isArray(capabilities.model_options) ? capabilities.model_options.map(object) : []
+  const openEditor = () => {
+    const next = JSON.parse(JSON.stringify(plan ?? {})) as Record<string, unknown>
+    const missingContext = Object.keys(object(next.task_context)).length === 0
+    if (missingContext) next.task_context = defaultTaskContext(next, profile)
+    setDraft(next); setSkillDirty(missingContext); setConfiguredSkill(null); setEditError(''); setEditing(true)
+  }
   const mutateDraft = (change: (next: Record<string, unknown>) => void) => {
     if (draft === null) return
     const next = JSON.parse(JSON.stringify(draft)) as Record<string, unknown>
     change(next)
     setDraft(next)
   }
+  const mutateSkills = (change: (context: Record<string, unknown>) => void) => {
+    mutateDraft((next) => {
+      const context = object(next.task_context)
+      change(context)
+      context.decisions = {}
+    })
+    setSkillDirty(true)
+    setEditError('')
+  }
+  const moveSkill = (name: SkillId, offset: -1 | 1) => {
+    mutateSkills((context) => {
+      const sequence = skillSequence({ task_context: context })
+      const index = sequence.indexOf(name)
+      const destination = index + offset
+      if (index < 0 || destination < 0 || destination >= sequence.length) return
+      ;[sequence[index], sequence[destination]] = [sequence[destination] as SkillId, sequence[index] as SkillId]
+      context.skillSequence = sequence
+    })
+  }
+  const toggleSkill = (name: SkillId, enabled: boolean) => {
+    mutateSkills((context) => {
+      const current = skillSequence({ task_context: context }).filter(item => item !== name)
+      if (!enabled) { context.skillSequence = current; return }
+      const desired = SKILLS.indexOf(name)
+      const insertion = current.findIndex(item => SKILLS.indexOf(item) > desired)
+      current.splice(insertion < 0 ? current.length : insertion, 0, name)
+      context.skillSequence = current
+    })
+  }
+  const dropSkill = (target: SkillId) => {
+    if (draggedSkill === null || draggedSkill === target) return
+    mutateSkills((context) => {
+      const sequence = skillSequence({ task_context: context })
+      const from = sequence.indexOf(draggedSkill)
+      const to = sequence.indexOf(target)
+      if (from < 0 || to < 0) return
+      sequence.splice(from, 1)
+      sequence.splice(to, 0, draggedSkill)
+      context.skillSequence = sequence
+    })
+    setDraggedSkill(null)
+  }
   const save = async () => {
     try {
       if (draft === null) return
-      await updatePlan(draft as ModelingJson)
+      const sequenceError = validateSkillSequence(skillSequence(draft), t)
+      if (sequenceError !== '') { setEditError(sequenceError); return }
+      if (skillDirty) await regeneratePlan(draft as ModelingJson)
+      else await updatePlan(draft as ModelingJson)
       setEditing(false)
     } catch (error) { setEditError(error instanceof Error ? error.message : String(error)) }
   }
@@ -156,6 +248,12 @@ export function ModelingWorkspace(props: ModelingWorkspaceProps) {
     if (f1 === 0 && !preview) warnings.push(t('result.noPositive'))
     return warnings
   }, [f1, preview, state.result?.warnings, t])
+  const draftSequence = draft === null ? [] : skillSequence(draft)
+  const displayedSkills = [...draftSequence, ...SKILLS.filter(name => !draftSequence.includes(name))]
+  const draftConfigs = object(object(draft?.task_context).skillConfigs)
+  const supportedSkillConfig = object(capabilities.skill_config)
+  const dateFeaturesEnabled = object(object(draft?.feature_engineering).date_features).enabled === true
+  const dateFeaturesSupported = capabilities.date_features_supported === true
 
   if (state.phase === 'loading') return <div className={css.centerState}><IconLoadingOutline16 /><span>{t('loading')}</span></div>
   if (state.phase === 'error' && state.dataset === null) return (
@@ -164,7 +262,9 @@ export function ModelingWorkspace(props: ModelingWorkspaceProps) {
   if (state.dataset === null) return <div className={css.centerState}><IconDataOutline16 /><div><strong>{t('empty.title')}</strong><p>{t('empty.body')}</p></div></div>
 
   return (
-    <section className={css.workspace} aria-label={t('view.title')}>
+    <section className={`${css.workspace} ${props.compact ? css.inlineWorkspace : ''} ${props.compact && !details ? css.compactWorkspace : ''}`} aria-label={t('view.title')}>
+      {props.compact && <div className={css.inlineHeader}><strong>{state.dataset.original_name}</strong><Button size="sm" variant="ghost" icon={<IconChevronDownOutline14 />} onClick={() => { setDetails(!details) }}>{t(details ? 'chat.hideDetails' : 'chat.details')}</Button></div>}
+      {props.compact && state.run !== null && <div className={css.inlineHeader}><Tag tone={state.run.status === 'failed' ? 'danger' : 'info'}>{statusLabel(state.run.status, t)}</Tag><span>{state.run.nodes.map(node => `${t(node.id === 'artifacts' ? 'artifact.title' : 'chat.computation')}: ${statusLabel(value(node.status), t)}`).join(' · ')}</span></div>}
       <div className={css.topbar}>
         <div><h2>{t('view.title')}</h2><span className={css.subtitle}>{state.dataset.original_name}</span></div>
         <div className={css.topActions}><Tag tone={preview ? 'warning' : 'success'}>{t(preview ? 'preview.badge' : 'live.badge')}</Tag><Tooltip label={t('action.refresh')} side="bottom"><button className={css.iconButton} aria-label={t('action.refresh')} onClick={() => void refresh()}><IconRefreshOutline16 /></button></Tooltip></div>
@@ -179,6 +279,7 @@ export function ModelingWorkspace(props: ModelingWorkspaceProps) {
         </article>
         <article className={css.card}>
           <CardTitle icon={<IconPlayOutline16 />} title={t('plan.title')} trailing={<Tag tone={state.plan?.state === 'proposed' ? 'warning' : 'success'}>{state.plan === null ? t('unknown') : <>{state.plan.state} · {t('plan.revisionShort')}{state.plan.revision}</>}</Tag>} />
+          {props.compact && <p className={css.skillSummary}>{skillSequence(plan ?? {}).map(name => t(`skill.${name}`)).join(' → ')}</p>}
           <dl className={css.planGrid}>
             <div><dt>{t('plan.task')}</dt><dd>{value(plan?.mode ?? plan?.task_type, t('task.binary'))}</dd></div><div><dt>{t('plan.target')}</dt><dd>{value(target)}</dd></div>
             <div><dt>{t('plan.exclude')}</dt><dd>{excluded}</dd></div><div><dt>{t('plan.missing')}</dt><dd>{value(preprocessing?.numeric_missing ?? preprocessing?.numeric_strategy)}</dd></div>
@@ -236,17 +337,60 @@ export function ModelingWorkspace(props: ModelingWorkspaceProps) {
           </div>
         </article>
       </div>
-      <Modal className={css.planDialog ?? ''} contentClassName={css.planDialogContent ?? ''} open={editing} onClose={() => { setEditing(false) }} title={t('plan.dialog.title')} closeLabel={t('close')} description={t('plan.dialog.description')} footer={<><Button variant="ghost" onClick={() => { setEditing(false) }}>{t('action.cancel')}</Button><Button variant="primary" icon={<IconCheckOutline16 />} onClick={() => void save()}>{t('action.save')}</Button></>}>
+      <Modal className={css.planDialog ?? ''} contentClassName={css.planDialogContent ?? ''} open={editing} onClose={() => { setEditing(false) }} title={t('plan.dialog.title')} closeLabel={t('close')} description={t('plan.dialog.description')} footer={<><Button variant="ghost" onClick={() => { setEditing(false) }}>{t('action.cancel')}</Button><Button variant="primary" icon={<IconCheckOutline16 />} onClick={() => void save()}>{t(skillDirty || props.compact ? 'action.regenerate' : 'action.save')}</Button></>}>
         {draft !== null && <div className={css.planEditor}>
           <ol className={css.planStepper} aria-label={t('plan.dialog.pipeline')}>
             {stages.slice(0, 6).map((label, index) => <li key={label}><span>{index + 1}</span><strong>{label}</strong></li>)}
           </ol>
 
           <section className={css.editorSection}>
+            <div className={css.sectionHeading}><div><h3>{t('plan.skills.title')}</h3><p>{t('plan.skills.description')}</p></div><Tag tone={skillDirty ? 'warning' : 'success'}>{t(skillDirty ? 'plan.skills.pending' : 'plan.skills.current')}</Tag></div>
+            <div className={css.skillSequence}>
+              {displayedSkills.map((name) => {
+                const enabled = draftSequence.includes(name)
+                const required = name === 'data-analysis' || name === 'model-training'
+                const index = draftSequence.indexOf(name)
+                const configurable = name !== 'data-analysis'
+                return <div className={`${css.skillRow} ${enabled ? '' : css.skillDisabled}`} key={name} draggable={enabled} onDragStart={() => { setDraggedSkill(name) }} onDragOver={(event) => { if (enabled) event.preventDefault() }} onDrop={() => { dropSkill(name) }}>
+                  <span className={css.dragHandle} aria-hidden="true">⋮⋮</span>
+                  <label className={css.skillToggle}><input type="checkbox" checked={enabled} disabled={required} onChange={(event) => { toggleSkill(name, event.target.checked) }} /><span>{t(`skill.${name}`)}</span></label>
+                  <small>{required ? t('plan.skills.required') : t('plan.skills.optional')}</small>
+                  <div className={css.skillActions}>
+                    {enabled && <><button type="button" aria-label={t('plan.skills.moveUp')} disabled={index <= 0} onClick={() => { moveSkill(name, -1) }}><IconChevronUpOutline14 /></button><button type="button" aria-label={t('plan.skills.moveDown')} disabled={index < 0 || index >= draftSequence.length - 1} onClick={() => { moveSkill(name, 1) }}><IconChevronDownOutline14 /></button></>}
+                    {configurable && <Button size="sm" variant="ghost" onClick={() => { setConfiguredSkill(configuredSkill === name ? null : name) }}>{t('plan.skills.configure')}</Button>}
+                  </div>
+                  {configuredSkill === name && <div className={css.skillConfig}>
+                    {name === 'data-cleaning' && <div className={css.formGrid}>
+                      <FormField label={t('plan.skills.missingStrategy')}><select value={value(object(draftConfigs['data-cleaning']).missingStrategy, 'auto')} onChange={(event) => { mutateSkills((context) => { object(object(context.skillConfigs)['data-cleaning']).missingStrategy = event.target.value }) }}>{['auto', 'mean', 'median', 'mode', 'keep'].map(option => <option value={option} disabled={!strings(supportedSkillConfig.missing_strategy).includes(option)} key={option}>{t(`plan.option.${option}` as ModelingKey)}{strings(supportedSkillConfig.missing_strategy).includes(option) ? '' : ` · ${t('plan.skills.unsupported')}`}</option>)}</select></FormField>
+                      <FormField label={t('plan.skills.outlierStrategy')}><select value={value(object(draftConfigs['data-cleaning']).outlierStrategy, 'auto')} onChange={(event) => { mutateSkills((context) => { object(object(context.skillConfigs)['data-cleaning']).outlierStrategy = event.target.value }) }}>{['auto', 'keep', 'iqr', 'mad', 'winsorize'].map(option => <option value={option} disabled={!strings(supportedSkillConfig.outlier_strategy).includes(option)} key={option}>{t(`plan.option.${option}` as ModelingKey)}{strings(supportedSkillConfig.outlier_strategy).includes(option) ? '' : ` · ${t('plan.skills.unsupported')}`}</option>)}</select></FormField>
+                    </div>}
+                    {name === 'feature-engineering' && <div className={css.formGrid}>
+                      <label className={css.featureToggle}><input type="checkbox" checked={object(draftConfigs['feature-engineering']).featureGeneration === true} onChange={(event) => { mutateSkills((context) => { object(object(context.skillConfigs)['feature-engineering']).featureGeneration = event.target.checked }) }} /><span>{t('plan.skills.featureGeneration')}</span></label>
+                      <label className={css.featureToggle}><input type="checkbox" checked={object(draftConfigs['feature-engineering']).featureSelection === true} onChange={(event) => { mutateSkills((context) => { object(object(context.skillConfigs)['feature-engineering']).featureSelection = event.target.checked }) }} /><span>{t('plan.skills.featureSelection')}</span></label>
+                      <FormField label={t('plan.skills.selectionMethod')}><select value={value(object(draftConfigs['feature-engineering']).selectionMethod, 'auto')} onChange={(event) => { mutateSkills((context) => { object(object(context.skillConfigs)['feature-engineering']).selectionMethod = event.target.value }) }}>{['auto', 'mutual_information', 'variance', 'correlation'].map(option => <option key={option} value={option}>{t(`plan.option.${option}` as ModelingKey)}</option>)}</select></FormField>
+                      <FormField label={t('plan.skills.topK')}><input type="number" min="1" max="10000" value={Number(object(draftConfigs['feature-engineering']).topK)} onChange={(event) => { mutateSkills((context) => { object(object(context.skillConfigs)['feature-engineering']).topK = Number(event.target.value) }) }} /></FormField>
+                    </div>}
+                    {name === 'model-training' && <FormField label={t('plan.algorithm')}><select value={value(object(draftConfigs['model-training']).algorithm, 'logistic_regression')} onChange={(event) => { mutateSkills((context) => { object(object(context.skillConfigs)['model-training']).algorithm = event.target.value }) }}>{modelOptions.map(option => <option value={value(option.name, '')} disabled={option.supported !== true} key={value(option.name, '')}>{value(option.name)}{option.supported === true ? '' : ` · ${t('plan.skills.unsupported')}`}</option>)}</select></FormField>}
+                    {name === 'model-evaluation' && <div className={css.formGrid}><ReadonlyField label={t('plan.skills.metrics')}>{value(object(draftConfigs['model-evaluation']).metrics)}</ReadonlyField><ReadonlyField label={t('result.threshold')}>{value(object(draftConfigs['model-evaluation']).threshold)}</ReadonlyField></div>}
+                  </div>}
+                </div>
+              })}
+            </div>
+            <p className={css.skillHint}>{t('plan.skills.regenerateHint')}</p>
+          </section>
+
+          <section className={css.editorSection}>
             <h3>{t('plan.section.basic')}</h3>
             <div className={css.basicGrid}>
               <FormField label={t('plan.target')}><select value={value(draft.target, '')} onChange={(event) => {
-                mutateDraft((next) => { next.target = event.target.value })
+                mutateDraft((next) => {
+                  next.target = event.target.value
+                  const context = object(next.task_context)
+                  context.target = event.target.value
+                  object(context.profileEvidence).target = event.target.value
+                  context.decisions = {}
+                })
+                setSkillDirty(true)
               }}>{columns.map(name => <option value={name} key={name}>{name}</option>)}</select></FormField>
               <ReadonlyField label={t('plan.task')}>{value(draft.mode ?? draft.task_type, t('task.binary'))}</ReadonlyField>
               <ReadonlyField label={t('plan.dataset')}>{state.dataset.original_name}</ReadonlyField>
@@ -282,9 +426,10 @@ export function ModelingWorkspace(props: ModelingWorkspaceProps) {
 
           <section className={css.editorSection}>
             <h3>{t('plan.section.features')}</h3>
-            <label className={css.featureToggle}><input type="checkbox" checked={object(object(draft.feature_engineering).date_features).enabled === true} onChange={(event) => {
+            <label className={css.featureToggle}><input type="checkbox" checked={dateFeaturesEnabled} disabled={!dateFeaturesSupported && !dateFeaturesEnabled} onChange={(event) => {
+              if (event.target.checked && !dateFeaturesSupported) return
               mutateDraft((next) => { object(object(next.feature_engineering).date_features).enabled = event.target.checked })
-            }} /><span>{t('plan.dateEnabled')}</span></label>
+            }} /><span>{t('plan.dateEnabled')}{!dateFeaturesSupported && <> · {t('plan.dateUnsupported')}</>}</span></label>
             <div className={css.featureGrid}>
               <details className={css.choiceDisclosure}><summary><span>{t('plan.dateColumns')}</span><span className={css.chipRow}>{strings(object(object(draft.feature_engineering).date_features).columns).length === 0 ? <em>{t('plan.noneSelected')}</em> : strings(object(object(draft.feature_engineering).date_features).columns).map(name => <span className={css.chip} title={name} key={name}>{name}</span>)}</span></summary><div className={css.optionGrid}>{columns.filter(name => name !== draft.target).map(name => <label className={css.check} key={name}><input type="checkbox" checked={strings(object(object(draft.feature_engineering).date_features).columns).includes(name)} onChange={(event) => {
                 mutateDraft((next) => {

@@ -12,10 +12,24 @@ const BASE: ModelingClientSnapshot = {
   plan: {
     id: 'preview_plan', revision: 1, plan_hash: 'preview-only', state: 'approved',
     invalidation: null, plan: {
-      task_type: 'binary_classification', target: 'label', excluded_columns: ['record_id'],
+      schema_version: '1.0', dataset_id: 'ds_preview', dataset_sha256: 'a'.repeat(64), mode: 'binary_classification', target: 'label', excluded_columns: ['record_id'],
       preprocessing: { numeric_missing: 'median', categorical_missing: '__MISSING__', categorical_encoding: 'onehot_limited' },
       split: { train: 0.6, validation: 0.2, test: 0.2, random_seed: 42 },
       model: { type: 'logistic_regression', parameters: { C: 1, max_iter: 500 } },
+      task_context: {
+        schemaVersion: '1.0', datasetId: 'ds_preview', target: 'label', taskType: 'binary_classification',
+        skillSequence: ['data-analysis', 'data-cleaning', 'feature-engineering', 'model-training', 'model-evaluation'],
+        skillConfigs: {
+          'data-cleaning': { missingStrategy: 'auto', outlierStrategy: 'auto' },
+          'feature-engineering': { featureGeneration: true, featureSelection: true, selectionMethod: 'auto', topK: 100 },
+          'model-training': { algorithm: 'logistic_regression' },
+          'model-evaluation': { metrics: 'auto', threshold: 0.5 },
+        },
+        profileEvidence: { datasetSha256: 'a'.repeat(64), rowCount: 1200, target: 'label' },
+        decisions: {
+          'data-analysis': {}, 'data-cleaning': {}, 'feature-engineering': {}, 'model-training': {}, 'model-evaluation': {},
+        },
+      },
     },
   },
   run: { id: 'preview_run', status: 'succeeded', revision: 5, plan_revision: 1, created_at: '2026-09-20T00:00:00Z', nodes: [], events: [], error: null },
@@ -37,7 +51,19 @@ const BASE: ModelingClientSnapshot = {
     completed_at: '2026-09-20T00:00:02Z', rerun_of: null,
     metrics: { test: { roc_auc: 0.701, average_precision: 0.182, f1: 0 } },
   }],
-  capabilities: null, skills: [], skillDetail: null,
+  capabilities: {
+    models: { logistic_regression: { C: { min: 0.000001, max: 100 }, max_iter: { min: 50, max: 1000 } } },
+    model_options: [
+      { name: 'logistic_regression', supported: true }, { name: 'lightgbm', supported: false },
+      { name: 'xgboost', supported: false },
+    ],
+    skill_config: { missing_strategy: ['auto', 'median'], outlier_strategy: ['auto', 'keep'] },
+    categorical_encoding: ['onehot_limited'], date_features_supported: false, date_components: [],
+    limits: {
+      max_train_seconds: { min: 10, max: 300 }, max_run_seconds: { min: 30, max: 1800 },
+      max_output_features: { min: 10, max: 10000 },
+    },
+  }, skills: [], skillDetail: null,
 }
 
 /** Return one coherent UI-only lifecycle state without starting backend work. */

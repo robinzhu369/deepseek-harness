@@ -10,8 +10,8 @@ import type {} from '@deepseek-ai/dsh-client-ui-layout/client'
 import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
 import type {} from '@deepseek-ai/dsh-client-ui-sidebar/client'
 import type {} from '@deepseek-ai/dsh-client-ui-theme/client'
-import { ModelingWorkspace, type ModelingWorkspaceInjected } from './ModelingWorkspace.tsx'
-import type { ModelingFixtureName } from './fixtures.ts'
+import { ModelingChatCard, type ModelingChatInjected } from './ModelingChatCard.tsx'
+import { modelingPlanDefinition } from './plan-definition.ts'
 import { DataIcon, DataPanel, RunsIcon, RunsPanel, SkillsIcon, SkillsPanel, WorkspaceIcon } from './Navigation.tsx'
 import { en, NS, zh, type ModelingKey } from './locales.ts'
 import { ModelingClientModel, type ModelingRemote } from './model.ts'
@@ -23,7 +23,7 @@ declare module '@deepseek-ai/dsh-client-ui-slots' {
   }
 }
 
-export const inject = ['remote', 'slots', 'locale', 'theme']
+export const inject = ['remote', 'slots', 'locale', 'theme', 'uiConversation']
 
 function registerUi(ctx: ClientContext): () => void {
   const models = new Map<SessionId, ModelingClientModel>()
@@ -41,6 +41,7 @@ function registerUi(ctx: ClientContext): () => void {
     validateSkill: async (sessionId, name, signal) => unwrap(await generated.validateSkill(sessionId, name, signal)),
     publishSkill: async (sessionId, name, signal) => unwrap(await generated.publishSkill(sessionId, name, signal)),
     updatePlan: async (sessionId, request, signal) => unwrap(await generated.updatePlan(sessionId, request, signal)),
+    regeneratePlan: async (sessionId, request, signal) => unwrap(await generated.regeneratePlan(sessionId, request, signal)),
     approveAndRun: async (sessionId, request, signal) => unwrap(await generated.approveAndRun(sessionId, request, signal)),
     rerun: async (sessionId, request, signal) => unwrap(await generated.rerun(sessionId, request, signal)),
     cancelRun: async (sessionId, runId, signal) => unwrap(await generated.cancelRun(sessionId, runId, signal)),
@@ -63,23 +64,14 @@ function registerUi(ctx: ClientContext): () => void {
     '--dsw-specific-sidebar-fill': { light: '#F8FAFD', dark: '#191C22' },
   }))
   const t = ctx.locale.bind(NS)
-  disposers.push(ctx.slots.inject('conversation.view', () => ctx.slots.register({
-    name: 'conversation.view', id: 'modeling', order: -10, label: () => t('view.title'), locale: NS,
-    inject: (sessionId: SessionId): ModelingWorkspaceInjected => {
-      const model = modelFor(sessionId)
-      const fixtureValue = new URLSearchParams(window.location.search).get('modeling-fixture')
-      const fixtureNames = new Set<ModelingFixtureName>(['empty', 'proposed', 'running', 'succeeded', 'failed'])
-      const fixture = fixtureNames.has(fixtureValue as ModelingFixtureName) ? fixtureValue as ModelingFixtureName : fixtureValue === '1' ? 'succeeded' : undefined
-      const preview = fixture !== undefined
-      return {
-        preview, ...(fixture === undefined ? {} : { fixture }), hooks: { modelingState: model.source },
-        activate: () => { if (!preview) model.activate() }, deactivate: () => { if (!preview) model.deactivate() },
-        approve: () => model.approve(), cancel: () => model.cancel(), refresh: () => model.refresh(),
-        updatePlan: plan => model.updatePlan(plan),
-        artifactUrl: artifactId => `/api/modeling.artifact?sessionId=${encodeURIComponent(sessionId)}&artifactId=${encodeURIComponent(artifactId)}`,
-      }
-    },
-  }, ModelingWorkspace)))
+  ctx.uiConversation.events.register(modelingPlanDefinition)
+  disposers.push(ctx.slots.inject('conversation.chat.node', () => ctx.slots.register({
+    name: 'conversation.chat.node', key: 'modeling-plan', locale: NS,
+    inject: (sessionId: SessionId): ModelingChatInjected => ({
+      model: modelFor(sessionId),
+      artifactUrl: id => `/api/modeling.artifact?sessionId=${encodeURIComponent(sessionId)}&artifactId=${encodeURIComponent(id)}`,
+    }),
+  }, ModelingChatCard)))
   const nav = [
     ['conversation', -30, 'nav.workspace', WorkspaceIcon],
     ['modeling-data', -20, 'nav.data', DataIcon],
@@ -107,7 +99,7 @@ function registerUi(ctx: ClientContext): () => void {
 /** Mount generated Remote descriptors before activating the browser UI. */
 export async function apply(ctx: ClientContext): Promise<() => Promise<void>> {
   const disposeRemote = await ctx.remote.$mount(modelingRemote)
-  const ui = ctx.inject(['remote.modeling', 'slots', 'locale', 'theme'], registerUi)
+  const ui = ctx.inject(['remote.modeling', 'slots', 'locale', 'theme', 'uiConversation'], registerUi)
   try { await ui } catch (error) { await ui.dispose(); await disposeRemote(); throw error }
   return async () => { await ui.dispose(); await disposeRemote() }
 }

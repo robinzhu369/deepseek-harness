@@ -1,7 +1,7 @@
 /** React-free Session-scoped modeling state, commands, and polling policy. */
 import type { SessionId } from '@deepseek-ai/dsh-session/types'
 import type { ObservableSnapshot } from '@deepseek-ai/dsh-client-store'
-import type { ApproveAndRunRequest, ApproveAndRunResult, ModelingJson, RerunRequest, SkillDraftRequest, UpdatePlanRequest } from '../types.ts'
+import type { ApproveAndRunRequest, ApproveAndRunResult, ModelingJson, RegeneratePlanRequest, RerunRequest, SkillDraftRequest, UpdatePlanRequest } from '../types.ts'
 
 export type ModelingRunStatus = 'queued' | 'running' | 'succeeded' | 'failed' | 'cancelling' | 'cancelled' | 'interrupted'
 
@@ -131,6 +131,7 @@ export interface ModelingRemote {
   validateSkill(sessionId: SessionId, name: string, signal: AbortSignal): Promise<string>
   publishSkill(sessionId: SessionId, name: string, signal: AbortSignal): Promise<string>
   updatePlan(sessionId: SessionId, request: UpdatePlanRequest, signal: AbortSignal): Promise<string>
+  regeneratePlan(sessionId: SessionId, request: RegeneratePlanRequest, signal: AbortSignal): Promise<string>
   approveAndRun(sessionId: SessionId, request: ApproveAndRunRequest, signal: AbortSignal): Promise<ApproveAndRunResult>
   rerun(sessionId: SessionId, request: RerunRequest, signal: AbortSignal): Promise<ApproveAndRunResult>
   cancelRun(sessionId: SessionId, runId: string, signal: AbortSignal): Promise<string>
@@ -265,6 +266,7 @@ export class ModelingClientModel {
   private timer: ReturnType<typeof globalThis.setTimeout> | undefined
   private disposed = false
   private active = false
+  private consumers = 0
   private hidden = typeof document !== 'undefined' && document.hidden
 
   readonly source: ObservableSnapshot<ModelingClientSnapshot> = {
@@ -278,6 +280,7 @@ export class ModelingClientModel {
 
   /** Activate polling while this Session's workbench is mounted. */
   activate(): void {
+    this.consumers += 1
     if (this.active || this.disposed) return
     this.active = true
     void this.refresh()
@@ -285,6 +288,8 @@ export class ModelingClientModel {
 
   /** Abort and stop polling when another Session or View replaces this one. */
   deactivate(): void {
+    this.consumers = Math.max(0, this.consumers - 1)
+    if (this.consumers > 0) return
     this.active = false
     this.request?.abort()
     globalThis.clearTimeout(this.timer)
@@ -312,7 +317,7 @@ export class ModelingClientModel {
       }
       if (request.signal.aborted || this.request !== request) return
       const currentRevision = this.snapshot.run?.revision ?? -1
-      if (next.run !== null && next.run.revision < currentRevision) return
+      if (next.run !== null && next.run.id === this.snapshot.run?.id && next.run.revision < currentRevision) return
       this.publish({ ...next, phase: 'ready', mode: 'live', confirming: false, skillBusy: false })
       this.schedule(next.run)
     } catch (error) {
@@ -322,9 +327,11 @@ export class ModelingClientModel {
   }
 
   /** Approve the exact visible revision once; repeated gestures reuse one idempotency key. */
-  async approve(): Promise<void> {
+  async approve(expected?: Pick<ModelingPlanView, 'id' | 'revision' | 'plan_hash'>): Promise<void> {
     const plan = this.snapshot.plan
     if (plan === null || plan.state !== 'proposed' || this.snapshot.confirming) return
+    if (expected !== undefined
+      && (expected.id !== plan.id || expected.revision !== plan.revision || expected.plan_hash !== plan.plan_hash)) return
     const { error: _error, ...current } = this.snapshot
     this.publish({ ...current, confirming: true })
     const idempotencyKey = `ui:${this.sessionId}:${plan.id}:${plan.revision}:${plan.plan_hash}`
@@ -356,6 +363,16 @@ export class ModelingClientModel {
       planId: current.id, baseRevision: current.revision, plan,
     }, request.signal)
     await this.refresh()
+  }
+
+  /** Ask the Agent to regenerate decisions and propose the next revision. */
+  async regeneratePlan(plan: ModelingJson): Promise<void> {
+    const current = this.snapshot.plan
+    if (current === null || !['proposed', 'approved'].includes(current.state)) return
+    const request = new AbortController()
+    await this.remote.regeneratePlan(this.sessionId, {
+      planId: current.id, baseRevision: current.revision, plan,
+    }, request.signal)
   }
 
   /** Open one Skill detail without exposing filesystem coordinates. */
