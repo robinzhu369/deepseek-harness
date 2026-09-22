@@ -314,3 +314,62 @@ T13 — 最终冻结、部署与交付：PASS。统一 up/down/health 脚本从�
 阻塞与剩余问题：结果工具仍要求调用方提供明确 run_id；本次 Agent 在拿到 run_id 后按约束完成评估。Skill 的“技能自检”与模型评估业务能力已在 UI 和文档中区分
 下一任务：无
 ```
+
+```text
+日期/任务 ID：2026-09-21 / 轻量 TaskContext + Skill 编排
+修改文件：.dsh/skills/{data-analysis,data-cleaning,feature-engineering,model-training,model-evaluation}/SKILL.md、services/modeling-api/app/{api.py,contracts.py,pipeline.py}、services/modeling-api/tests/{test_plan_validation.py,test_skill_and_rerun.py}、services/modeling-api/{README.md,README.zh.md,README.i18n.yaml}、packages/experimental/modeling/src/{index.ts,tools.ts,types.ts}、packages/experimental/modeling/src/client/{ModelingWorkspace.tsx,ModelingWorkspace.module.css,fixtures.ts,index.ts,locales.ts,model.ts}、packages/experimental/modeling/tests/{client-model.client.spec.ts,modeling.spec.ts}、packages/experimental/modeling/{README.md,README.zh.md,README.i18n.yaml}、docs/modeling-demo/contracts/modeling-plan.schema.json、docs/tool-catalog{.md,.zh.md,.i18n.yaml}、scripts/gen-tool-catalog.ts、docs/modeling-demo/progress.md
+实际命令：uv run pytest tests -q；pnpm exec tsc -p packages/experimental/modeling/tsconfig.client.json --noEmit；pnpm exec vitest run packages/experimental/modeling/tests/{client-model.client.spec.ts,modeling.spec.ts}；pnpm exec oxlint packages/experimental/modeling/src packages/experimental/modeling/tests --deny-warnings；pnpm --filter @deepseek-ai/dsh-experimental-modeling run bundle；pnpm run verify-tool-catalog；pnpm run verify-cordis-config；pnpm run verify-client-ui-i18n；pnpm run verify-translation-pairing；pnpm run test:docs；git diff --check；隔离端口启动 Modeling API/Harness Web；Codex 内置浏览器检查真实 Session 的 Skill 编排弹窗并执行反欺诈数据方案
+退出码/输出摘要：后端 54 PASS / 1 个外部 Starlette deprecation warning；前端 19 PASS；TypeScript、lint、bundle、工具目录、198 个 Cordis 配置、客户端国际化、三个变更双语配对与 diff check 通过；文档总门禁 19 PASS / 1 个既有 modeling-demo 双语配对 FAIL；真实运行 run_bfdd81dadabb4eb1ad419a610ac17471 succeeded，测试集 ROC-AUC 0.7767094017、AP 0.4887495110、F1 0.5161290323、Precision 0.6153846154、Recall 0.4444444444、混淆矩阵 [[94,10],[20,16]]、阈值 0.5
+业务或界面模式：live Harness Session / live browser UI / live Modeling API / deterministic Python worker / focused automated regression
+截图/日志路径：Codex 内置浏览器内联截图；.artifacts/modeling-demo/task-context-live/service/{modeling.sqlite3,runs/run_bfdd81dadabb4eb1ad419a610ac17471}
+检查：TaskContext 作为可选 plan 字段保持旧方案可读；默认 5 Skill 顺序、必选/可选校验、顺序调整、配置展开和 Agent 重新决策入口可见；LightGBM/XGBoost 明确显示当前 Worker 不支持；fraud_transaction_data.csv → fraud → binary_classification → 5 Skill → logistic_regression 真实执行 PASS
+阻塞与剩余问题：首次真实方案启用日期派生时由当前固定 Worker 正确拒绝为 UNKNOWN_OPERATOR；关闭日期派生并排除两个高基数日期原字段后成功执行。文档总门禁仅保留 modeling-demo 目录既有的中英文配对债务
+下一任务：无
+```
+
+```text
+日期/任务 ID：2026-09-21 / Demo 启动遗留进程与端口诊断修复
+修改文件：scripts/modeling-demo-{up,down}.sh、docs/modeling-demo/{DEPLOYMENT.md,progress.md}
+实际命令：lsof 核对 8000/3080 监听者；ps 核对监听进程命令行；bash -n scripts/modeling-demo-{up,down,health}.sh；默认端口 down→up；隔离端口 up→health→down；模拟 PID 文件丢失后的 down；临时端口占用预检；命令行环境覆盖 .env 的隔离启动；git diff --check
+退出码/输出摘要：确认原失败由同仓库遗留 API PID 23334 与 Web PID 23369 占用默认端口导致；down 安全回收命令行、工作目录和端口均匹配的遗留 Demo 监听进程；up 在创建进程前报告冲突端口及占用 PID；命令行 Demo 目录和端口优先于 .env；隔离启动返回 API 200、未鉴权 Web 401 和完整认证 URL；正常停止后监听端口均释放
+业务或界面模式：live local Harness Web authentication / live Modeling API / shell lifecycle regression
+截图/日志路径：.artifacts/modeling-demo/runtime/logs/{harness-web.log,modeling-api.log}；/tmp/dsh-modeling-{startup-check,orphan-check,env-precedence}
+检查：正常 up→health→down PASS；PID 文件丢失后的遗留进程回收 PASS；端口冲突诊断 PASS；命令行覆盖 .env PASS
+阻塞与剩余问题：遗留进程自动回收依赖 lsof；缺少 lsof 的环境仍按 PID 文件停止，并由 up 的 Python 端口预检阻止误启动
+下一任务：无
+```
+
+```text
+日期/任务 ID：2026-09-21 / 对话内建模方案与执行卡片
+修改文件：packages/experimental/modeling/src/client/{index.ts,plan-definition.ts,ModelingChatCard.tsx,ModelingWorkspace.tsx,ModelingWorkspace.module.css,model.ts,locales.ts}、src/index.ts、tests/{client-model.client.spec.ts,plan-definition.client.spec.ts,__snapshots__/plan-definition.client.spec.ts.snap}、package.json、tsconfig.client.json、README 双语文件和配对记录、pnpm-lock.yaml
+实际命令：node_modules/.bin/vitest run packages/experimental/modeling/tests/client-model.client.spec.ts packages/experimental/modeling/tests/plan-definition.client.spec.ts --update；node_modules/.bin/tsc -p packages/experimental/modeling/tsconfig.client.json --noEmit；node_modules/.bin/tsc -p packages/experimental/modeling/tsconfig.host.json --noEmit；包目录 tsdown；oxlint 检查变更前端、Host 和测试；verify-client-ui-i18n；verify-translation-pairing.ts packages/experimental/modeling/README.md；git diff --check；真实浏览器编辑、确认、执行、结果查询
+退出码/输出摘要：定向测试 14 PASS，含对话事件回放快照；两端 TypeScript、lint、bundle、客户端国际化和 README 配对通过。另行运行 modeling.spec.ts 时既有 Skill 版本断言不接受 0.4.0-demo，保留该失败，未修改已有 Skill 版本。
+业务或界面模式：live DeepSeek LLM / live Harness Session / live browser UI / live Modeling API / deterministic Python worker
+截图/日志路径：Codex 浏览器内联截图（1440×900）；.artifacts/modeling-demo/runtime/logs/{harness-web.log,modeling-api.log}
+检查：独立建模 Tab 移除；方案卡按原工具调用位置展开，r1/r2/r3 只读；r4 在对话内编辑生成并确认，run_0e310a392d89402982fa60b91240d776 succeeded；测试集 ROC-AUC 0.7935363248、AP 0.5072902891、F1 0.5538461538；Agent 未经用户粘贴 run_id 即调用状态与结果工具并完成解读。审批仍使用精确 revision/hash 和已有幂等 API；Worker、Agent Loop、Skill Runtime 未修改。
+阻塞与剩余问题：Demo 复用原详情与编辑弹窗；历史卡保留方案快照，不单独展开旧运行结果；运行状态在当前卡内更新，不新增逐阶段消息；审批事实在下一次用户发消息时进入 Agent 上下文，不自动唤醒 Agent。
+下一任务：无
+```
+
+```text
+日期/任务 ID：2026-09-22 / 技能中心中文展示
+修改文件：modeling/src/client/{Navigation.tsx,SkillCenter.tsx,locales.ts}、tests/skill-copy.client.spec.ts 及其快照、README 双语文档与配对记录
+实际命令：tsc -p packages/experimental/modeling/tsconfig.client.json --noEmit；oxlint 检查变更组件、字典及测试；vitest run packages/experimental/modeling/tests/skill-copy.client.spec.ts --update；包目录 tsdown；verify-client-ui-i18n；verify-translation-pairing；git diff --check
+退出码/输出摘要：类型检查、lint、1 项五技能中文文案与快照测试、构建、704 个客户端文件国际化检查通过。
+业务或界面模式：live Harness Web / live Skill API；未调用模型、未发布 Skill。
+截图/日志路径：Codex 浏览器内联截图。
+检查：五个技能的名称、卡片摘要和详情说明中文展示；输入、处理、输出及执行约束可读；原始指令编辑器仍显示发布内容，不将中文功能说明伪装为对应版本译文。
+阻塞与剩余问题：本次只本地化展示，不翻译或覆盖不可变发布快照；技术标识与原始指令保持原文；全仓测试未运行。
+下一任务：无
+```
+
+```text
+日期/任务 ID：2026-09-22 / 技能卡片元信息精简
+修改文件：packages/experimental/modeling/src/client/Navigation.tsx
+实际命令：tsc -p packages/experimental/modeling/tsconfig.client.json --noEmit；oxlint Navigation.tsx；包目录 tsdown；git diff --check
+退出码/输出摘要：全部退出码 0；真实浏览器确认五张技能卡片无 SHA-256 行，更新时间按浏览器本地时区显示 YYYY-MM-DD HH:mm:ss，例如 2026-09-21 09:08:38；无效时间显示破折号。
+业务或界面模式：live；Codex 浏览器内联截图。
+检查：底层哈希、发布时间与校验流程未修改；仅调整技能卡片展示。
+阻塞与剩余问题：全仓测试未运行。
+下一任务：无
+```
