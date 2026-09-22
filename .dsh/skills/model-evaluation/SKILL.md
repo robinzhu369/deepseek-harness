@@ -2,7 +2,7 @@
 name: model-evaluation
 description: Evaluate trained model performance with task-appropriate metrics, confusion-matrix and threshold analysis, then produce interpretable diagnostics and recommendations.
 metadata:
-  version: 0.1.0-demo
+  version: 0.2.0-demo
 ---
 
 # Model evaluation
@@ -13,16 +13,16 @@ Evaluate a trained model from actual run results and provide a concise, interpre
 
 ## Workflow
 
-1. Confirm the task type is binary classification.
-2. Use `modeling_get_run_status` when completion is uncertain, then read the succeeded run with `modeling_get_run_result`.
-3. Check the reported class balance when available.
-4. Interpret ROC-AUC, average precision / PR-AUC, F1, precision, and recall for the task.
-5. Interpret the confusion matrix using the reported label order.
-6. Explain the current threshold and its false-positive and false-negative implications.
-7. Compare validation and test metrics when both are available; report a material gap as potential generalization risk.
-8. Ground diagnostics and recommendations in the returned evaluation result.
-9. State what cannot be concluded when data or metrics are missing.
-10. Self-check before the final response.
+1. Confirm the task type is binary classification and that this Skill follows `model-training` in `TaskContext.skillSequence`.
+2. During proposal, reuse `profileEvidence`, interpret `skillConfigs.model-evaluation.metrics: auto` and `threshold: 0.5`, and record the selected metric set under `decisions.model-evaluation`. Do not read a Run that does not exist.
+3. After human confirmation and execution, use `modeling_get_run_status` when completion is uncertain, then read the succeeded run with `modeling_get_run_result`.
+4. Check the reported class balance when available.
+5. Interpret ROC-AUC, average precision / PR-AUC, F1, precision, and recall for the task.
+6. Interpret the confusion matrix using the reported label order.
+7. Explain the current threshold and its false-positive and false-negative implications.
+8. Compare validation and test metrics when both are available; report a material gap as potential generalization risk.
+9. Ground diagnostics and recommendations in the returned evaluation result.
+10. State what cannot be concluded when data or metrics are missing, then self-check.
 
 ## Guardrails
 
@@ -38,4 +38,4 @@ Evaluate a trained model from actual run results and provide a concise, interpre
 
 Before responding, confirm that the task type is known, metrics match the task, class imbalance was considered, the confusion matrix and threshold were interpreted, and every conclusion is supported by the actual result.
 
-You may use only `modeling_get_run_status` and `modeling_get_run_result`.
+You may use only `modeling_propose_plan`, `modeling_get_run_status`, and `modeling_get_run_result`.

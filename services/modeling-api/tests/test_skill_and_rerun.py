@@ -195,5 +195,12 @@ def test_capabilities_are_executor_owned(tmp_path: Path) -> None:
     with TestClient(app) as client:
         value = client.get("/v1/capabilities", headers=SESSION).json()
         assert list(value["models"]) == ["logistic_regression"]
+        assert value["model_options"] == [
+            {"name": "logistic_regression", "supported": True},
+            {"name": "lightgbm", "supported": False},
+            {"name": "xgboost", "supported": False},
+        ]
         assert value["categorical_encoding"] == ["onehot_limited"]
-        assert "xgboost" not in json.dumps(value).lower()
+        assert value["date_features_supported"] is False
+        assert value["date_components"] == []
+        assert value["skill_config"]["evaluation_threshold"] == [0.5]

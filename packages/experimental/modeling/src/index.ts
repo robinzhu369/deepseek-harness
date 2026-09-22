@@ -6,8 +6,9 @@ import z from '@deepseek-ai/schemastery'
 import type { Agent } from '@deepseek-ai/dsh-agent'
 import type { FileAttachmentRef } from '@deepseek-ai/dsh-attachment'
 import type {} from '@deepseek-ai/dsh-client-connection'
+import { createUserMessage } from '@deepseek-ai/dsh-llm'
 import { Remote, TypertRemoteService } from '@deepseek-ai/dsh-typert-protocol'
-import type { ApproveAndRunRequest, ApproveAndRunResult, ModelingJson, ModelingSkillSnapshot, RerunRequest, SkillDraftRequest, UpdatePlanRequest } from './types.ts'
+import type { ApproveAndRunRequest, ApproveAndRunResult, ModelingJson, ModelingSkillSnapshot, RegeneratePlanRequest, RerunRequest, SkillDraftRequest, UpdatePlanRequest } from './types.ts'
 
 declare module '@deepseek-ai/cordis' {
   interface Context {
@@ -119,6 +120,26 @@ export class ModelingGateway extends TypertRemoteService {
     }))
   }
 
+  /** Queue an Agent turn that regenerates decisions and a new plan revision. */
+  @Remote('regeneratePlan')
+  regeneratePlan(agent: Agent, request: RegeneratePlanRequest, signal: AbortSignal): Promise<string> {
+    if (signal.aborted) throw signal.reason
+    const requestedPlan = JSON.stringify(request.plan)
+    agent.followup(createUserMessage({
+      source: { kind: 'user' },
+      content: [{ type: 'text', text: [
+        '请按我在建模方案界面提交的 Skill 顺序和偏好重新生成方案。',
+        `现有 plan_id=${request.planId}，base_revision=${request.baseRevision}。`,
+        '如果 datasetId 与 profileEvidence.datasetSha256 未变化，必须复用 TaskContext.profileEvidence，不要再次调用 modeling_get_dataset_profile。',
+        '按 skillSequence 依次应用已启用的 Skill，根据真实数据画像生成新的 decisions；skillConfigs 只是偏好，不是执行结果。',
+        '只能选择 /v1/capabilities 中 Worker 已支持的算法和操作。不要批准或执行方案。',
+        '最后调用 modeling_propose_plan，并同时传入 plan、plan_id 和 base_revision，以创建新 revision 供我确认。',
+        `界面提交的候选方案：${requestedPlan}`,
+      ].join('\n') }],
+    }))
+    return Promise.resolve(JSON.stringify({ queued: true }))
+  }
+
   /** Cancel the active Session-owned run through the application path. */
   @Remote('cancelRun')
   async cancelRun(agent: Agent, runId: string, signal: AbortSignal): Promise<string> {
@@ -210,6 +231,21 @@ export class ModelingGateway extends TypertRemoteService {
     })
   }
 
+  /** Persist an Agent-regenerated proposal as the next optimistic revision. */
+  revisePlan(
+    sessionId: string,
+    planId: string,
+    baseRevision: number,
+    plan: ModelingJson,
+    snapshots: readonly ModelingSkillSnapshot[],
+    signal?: AbortSignal,
+  ): Promise<ModelingJson> {
+    return this.request(sessionId, `/v1/plans/${encodeURIComponent(planId)}`, {
+      method: 'PUT', body: { base_revision: baseRevision, plan }, ...signal === undefined ? {} : { signal },
+      headers: { 'X-Modeling-Skill-Snapshots': JSON.stringify(snapshots) },
+    })
+  }
+
   /** Read one session-owned run without changing it. */
   getRunStatus(sessionId: string, runId: string, signal?: AbortSignal): Promise<ModelingJson> {
     return this.request(sessionId, `/v1/runs/${encodeURIComponent(runId)}`, { ...signal === undefined ? {} : { signal } })
@@ -233,6 +269,10 @@ export class ModelingGateway extends TypertRemoteService {
         || typeof value.run_id !== 'string' || typeof value.created !== 'boolean') {
         throw new ModelingGatewayError('INVALID_MODELING_RESPONSE', 'Approval returned an invalid response.', 502)
       }
+      if (value.created) agent.inject(createUserMessage({
+        source: { kind: 'plugin', plugin: 'modeling' },
+        content: [{ type: 'text', text: JSON.stringify({ event: 'modeling_run_approved', plan_id: request.planId, revision: request.revision, plan_hash: request.planHash, run_id: value.run_id }) }],
+      }))
       return { run_id: value.run_id, created: value.created }
     })
   }
@@ -248,6 +288,10 @@ export class ModelingGateway extends TypertRemoteService {
         || typeof value.run_id !== 'string' || typeof value.created !== 'boolean') {
         throw new ModelingGatewayError('INVALID_MODELING_RESPONSE', 'Rerun returned an invalid response.', 502)
       }
+      if (value.created) agent.inject(createUserMessage({
+        source: { kind: 'plugin', plugin: 'modeling' },
+        content: [{ type: 'text', text: JSON.stringify({ event: 'modeling_run_approved', plan_id: request.planId, revision: request.revision, plan_hash: request.planHash, run_id: value.run_id }) }],
+      }))
       return { run_id: value.run_id, created: value.created }
     })
   }

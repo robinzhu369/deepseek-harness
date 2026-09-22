@@ -12,6 +12,7 @@ from app.contracts import (
     ModelingContractError,
     PlanRecord,
     PlanState,
+    TaskContext,
     canonical_plan_hash,
     plan_invalidation,
     validate_approval,
@@ -31,6 +32,34 @@ def valid_payload() -> dict[str, object]:
     return payload
 
 
+def valid_task_context() -> dict[str, object]:
+    return {
+        "schemaVersion": "1.0",
+        "datasetId": "ds_example",
+        "target": "label",
+        "taskType": "binary_classification",
+        "skillSequence": [
+            "data-analysis", "data-cleaning", "feature-engineering", "model-training", "model-evaluation",
+        ],
+        "skillConfigs": {
+            "data-cleaning": {"missingStrategy": "auto", "outlierStrategy": "auto"},
+            "feature-engineering": {
+                "featureGeneration": True, "featureSelection": True, "selectionMethod": "auto", "topK": 100,
+            },
+            "model-training": {"algorithm": "logistic_regression"},
+            "model-evaluation": {"metrics": "auto", "threshold": 0.5},
+        },
+        "profileEvidence": {"datasetSha256": "a" * 64, "rowCount": 100, "target": "label"},
+        "decisions": {
+            "data-analysis": {"targetConfirmed": True},
+            "data-cleaning": {"numericMissing": "median"},
+            "feature-engineering": {"generated": []},
+            "model-training": {"algorithm": "logistic_regression"},
+            "model-evaluation": {"metrics": ["roc_auc", "f1"]},
+        },
+    }
+
+
 def assert_contract_error(code: str, payload: dict[str, object]) -> None:
     with pytest.raises(ModelingContractError) as caught:
         validate_plan_payload(
@@ -48,7 +77,76 @@ def test_json_schema_and_pydantic_require_the_same_top_level_fields() -> None:
     Draft202012Validator(schema).validate(payload)
     from app.contracts import ModelingPlan
 
-    assert set(schema["required"]) == set(ModelingPlan.model_fields)
+    required_model_fields = {name for name, field in ModelingPlan.model_fields.items() if field.is_required()}
+    assert set(schema["required"]) == required_model_fields
+
+
+def test_accepts_task_context_and_preserves_camel_case_extension_fields() -> None:
+    payload = valid_payload()
+    payload["task_context"] = valid_task_context()
+    plan = validate_plan_payload(
+        payload,
+        columns={"record_id", "age", "income", "region", "label"},
+        label_values={0, 1},
+        expected_dataset_sha256="a" * 64,
+    )
+    dumped = plan.model_dump(mode="json", by_alias=True)
+    assert dumped["task_context"]["skillSequence"][-1] == "model-evaluation"
+    assert dumped["task_context"]["skillConfigs"]["model-training"]["algorithm"] == "logistic_regression"
+
+
+def test_rejects_profile_evidence_for_a_different_target() -> None:
+    payload = valid_payload()
+    context = valid_task_context()
+    context["profileEvidence"]["target"] = "outcome"
+    payload["task_context"] = context
+    assert_contract_error("INVALID_PLAN", payload)
+
+
+@pytest.mark.parametrize(
+    ("sequence", "decisions"),
+    [
+        (["model-training", "data-analysis"], ["model-training", "data-analysis"]),
+        (["data-analysis", "model-evaluation"], ["data-analysis", "model-evaluation"]),
+        (["data-analysis", "model-evaluation", "model-training"], ["data-analysis", "model-evaluation", "model-training"]),
+        (["data-analysis", "model-training", "model-training"], ["data-analysis", "model-training"]),
+    ],
+)
+def test_rejects_invalid_skill_sequences(sequence: list[str], decisions: list[str]) -> None:
+    payload = valid_payload()
+    context = valid_task_context()
+    context["skillSequence"] = sequence
+    context["decisions"] = {name: {} for name in decisions}
+    payload["task_context"] = context
+    assert_contract_error("INVALID_PLAN", payload)
+
+
+def test_rejects_worker_unsupported_algorithm_but_keeps_future_task_types_structural() -> None:
+    context = valid_task_context()
+    context["taskType"] = "regression"
+    assert TaskContext.model_validate(context).task_type == "regression"
+
+    payload = valid_payload()
+    context = valid_task_context()
+    context["skillConfigs"]["model-training"]["algorithm"] = "lightgbm"
+    context["decisions"]["model-training"]["algorithm"] = "lightgbm"
+    payload["task_context"] = context
+    assert_contract_error("UNSUPPORTED_ALGORITHM", payload)
+
+
+def test_task_context_change_invalidates_the_full_pipeline_and_hash() -> None:
+    baseline = valid_payload()
+    baseline["task_context"] = valid_task_context()
+    changed = copy.deepcopy(baseline)
+    changed["task_context"]["skillConfigs"]["data-cleaning"]["missingStrategy"] = "median"
+    invalidation = plan_invalidation(baseline, changed)
+    assert invalidation["reason"] == "skill_orchestration"
+    assert invalidation["invalidated_stages"] == ["Validate", "Split", "Preprocess", "Feature", "Train", "Evaluate", "Result"]
+
+    first = validate_plan_payload(baseline, columns={"record_id", "age", "income", "region", "label"}, label_values={0, 1}, expected_dataset_sha256="a" * 64)
+    changed["task_context"]["decisions"]["data-cleaning"] = {"numericMissing": "median"}
+    second = validate_plan_payload(changed, columns={"record_id", "age", "income", "region", "label"}, label_values={0, 1}, expected_dataset_sha256="a" * 64)
+    assert canonical_plan_hash(first) != canonical_plan_hash(second)
 
 
 def test_rejects_unknown_top_level_field() -> None:
@@ -80,6 +178,19 @@ def test_rejects_target_as_a_date_feature() -> None:
     }
     payload["feature_engineering"] = feature_engineering
     assert_contract_error("TARGET_LEAKAGE", payload)
+
+
+def test_rejects_date_features_before_execution() -> None:
+    payload = valid_payload()
+    feature_engineering = copy.deepcopy(payload["feature_engineering"])
+    assert isinstance(feature_engineering, dict)
+    feature_engineering["date_features"] = {
+        "enabled": True,
+        "columns": ["age"],
+        "components": ["month"],
+    }
+    payload["feature_engineering"] = feature_engineering
+    assert_contract_error("UNKNOWN_OPERATOR", payload)
 
 
 def test_rejects_invalid_split_ratios() -> None:

@@ -240,6 +240,81 @@
       "required": [
         "samples_independent"
       ]
+    },
+    "task_context": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "properties": {
+        "schemaVersion": { "const": "1.0" },
+        "datasetId": { "type": "string", "pattern": "^ds_[A-Za-z0-9_-]+$" },
+        "target": { "type": ["string", "null"] },
+        "taskType": { "enum": ["prepare_dataset", "binary_classification", "regression", "time_series"] },
+        "skillSequence": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 5,
+          "uniqueItems": true,
+          "items": { "enum": ["data-analysis", "data-cleaning", "feature-engineering", "model-training", "model-evaluation"] }
+        },
+        "skillConfigs": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "data-cleaning": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "missingStrategy": { "enum": ["auto", "mean", "median", "mode", "keep"] },
+                "outlierStrategy": { "enum": ["auto", "keep", "iqr", "mad", "winsorize"] }
+              },
+              "required": ["missingStrategy", "outlierStrategy"]
+            },
+            "feature-engineering": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "featureGeneration": { "type": "boolean" },
+                "featureSelection": { "type": "boolean" },
+                "selectionMethod": { "enum": ["auto", "mutual_information", "variance", "correlation"] },
+                "topK": { "type": "integer", "minimum": 1, "maximum": 10000 }
+              },
+              "required": ["featureGeneration", "featureSelection", "selectionMethod", "topK"]
+            },
+            "model-training": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": { "algorithm": { "enum": ["logistic_regression", "lightgbm", "xgboost"] } },
+              "required": ["algorithm"]
+            },
+            "model-evaluation": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "metrics": { "const": "auto" },
+                "threshold": { "type": "number", "minimum": 0, "maximum": 1 }
+              },
+              "required": ["metrics", "threshold"]
+            }
+          },
+          "required": ["data-cleaning", "feature-engineering", "model-training", "model-evaluation"]
+        },
+        "profileEvidence": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "datasetSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+            "rowCount": { "type": "integer", "minimum": 0 },
+            "target": { "type": ["string", "null"] }
+          },
+          "required": ["datasetSha256", "rowCount", "target"]
+        },
+        "decisions": {
+          "type": "object",
+          "additionalProperties": { "type": "object" },
+          "propertyNames": { "enum": ["data-analysis", "data-cleaning", "feature-engineering", "model-training", "model-evaluation"] }
+        }
+      },
+      "required": ["schemaVersion", "datasetId", "target", "taskType", "skillSequence", "skillConfigs", "profileEvidence", "decisions"]
     }
   },
   "required": [

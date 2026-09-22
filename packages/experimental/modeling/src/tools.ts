@@ -185,12 +185,27 @@ export function createModelingTools(
     }),
     defineTool({
       name: 'modeling_propose_plan',
-      description: 'Validate and persist a plan proposal. This never approves or starts a run.',
-      parameters: { plan: { type: 'json', required: true } }, output,
+      description: 'Validate and persist a new plan or an optimistic revision. This never approves or starts a run.',
+      parameters: {
+        plan: { type: 'json', required: true },
+        plan_id: { type: 'string' },
+        base_revision: { type: 'number' },
+      }, output,
       async execute(args, exec) {
         try {
+          const hasPlanId = typeof args.plan_id === 'string'
+          const hasRevision = typeof args.base_revision === 'number' && Number.isSafeInteger(args.base_revision)
+          if (hasPlanId !== hasRevision) {
+            return result({ ok: false, error: { code: 'INVALID_PLAN_REVISION_REFERENCE', message: 'plan_id and base_revision must be provided together.', retryable: false } }, gateway.maxToolResultBytes)
+          }
           const currentSnapshots = typeof skillSnapshots === 'function' ? await skillSnapshots() : skillSnapshots
-          const plan = await gateway.proposePlan(caller(exec.agent, 'modeling_propose_plan'), args.plan, currentSnapshots, exec.signal)
+          const sessionId = caller(exec.agent, 'modeling_propose_plan')
+          const candidate = args.plan
+          const plan = hasPlanId && hasRevision
+            ? await gateway.revisePlan(
+              sessionId, args.plan_id as string, args.base_revision as number, candidate, currentSnapshots, exec.signal,
+            )
+            : await gateway.proposePlan(sessionId, candidate, currentSnapshots, exec.signal)
           return result({ ok: true, plan, needs_confirmation: true }, gateway.maxToolResultBytes)
         } catch (error) { return failure(error) }
       },

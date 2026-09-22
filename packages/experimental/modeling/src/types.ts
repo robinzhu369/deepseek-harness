@@ -37,5 +37,8 @@ export interface UpdatePlanRequest {
   readonly plan: ModelingJson
 }
 
+/** User-requested Skill orchestration change that the Agent must regenerate. */
+export interface RegeneratePlanRequest extends UpdatePlanRequest {}
+
 /** JSON values accepted by the private modeling API. */
 export type ModelingJson = null | boolean | number | string | ModelingJson[] | { [key: string]: ModelingJson }

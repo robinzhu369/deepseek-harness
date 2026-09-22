@@ -27,7 +27,91 @@ class ModelingContractError(ValueError):
 class StrictModel(BaseModel):
     """Base model that rejects fields outside the versioned JSON contract."""
 
-    model_config = ConfigDict(extra="forbid", frozen=True)
+    model_config = ConfigDict(extra="forbid", frozen=True, populate_by_name=True)
+
+
+SkillId = Literal[
+    "data-analysis",
+    "data-cleaning",
+    "feature-engineering",
+    "model-training",
+    "model-evaluation",
+]
+
+
+class DataCleaningSkillConfig(StrictModel):
+    """User preferences interpreted by the data-cleaning Skill."""
+
+    missing_strategy: Literal["auto", "mean", "median", "mode", "keep"] = Field(alias="missingStrategy")
+    outlier_strategy: Literal["auto", "keep", "iqr", "mad", "winsorize"] = Field(alias="outlierStrategy")
+
+
+class FeatureEngineeringSkillConfig(StrictModel):
+    """User preferences interpreted by the feature-engineering Skill."""
+
+    feature_generation: bool = Field(alias="featureGeneration")
+    feature_selection: bool = Field(alias="featureSelection")
+    selection_method: Literal["auto", "mutual_information", "variance", "correlation"] = Field(alias="selectionMethod")
+    top_k: int = Field(alias="topK", ge=1, le=10_000)
+
+
+class ModelTrainingSkillConfig(StrictModel):
+    """Requested training algorithm before executor capability validation."""
+
+    algorithm: Literal["logistic_regression", "lightgbm", "xgboost"]
+
+
+class ModelEvaluationSkillConfig(StrictModel):
+    """Evaluation preferences supported by the deterministic worker."""
+
+    metrics: Literal["auto"]
+    threshold: float = Field(ge=0, le=1)
+
+
+class SkillConfigs(StrictModel):
+    """Preferences for configurable runtime Skills, independent of enablement."""
+
+    data_cleaning: DataCleaningSkillConfig = Field(alias="data-cleaning")
+    feature_engineering: FeatureEngineeringSkillConfig = Field(alias="feature-engineering")
+    model_training: ModelTrainingSkillConfig = Field(alias="model-training")
+    model_evaluation: ModelEvaluationSkillConfig = Field(alias="model-evaluation")
+
+
+class ProfileEvidence(StrictModel):
+    """Identity of the dataset profile reused by downstream Skills."""
+
+    dataset_sha256: str = Field(alias="datasetSha256", pattern=r"^[a-f0-9]{64}$")
+    row_count: int = Field(alias="rowCount", ge=0)
+    target: str | None
+
+
+class TaskContext(StrictModel):
+    """Lightweight Skill orchestration state persisted with a plan revision."""
+
+    schema_version: Literal["1.0"] = Field(alias="schemaVersion")
+    dataset_id: str = Field(alias="datasetId", pattern=r"^ds_[A-Za-z0-9_-]+$")
+    target: str | None
+    task_type: Literal["prepare_dataset", "binary_classification", "regression", "time_series"] = Field(alias="taskType")
+    skill_sequence: list[SkillId] = Field(alias="skillSequence", min_length=2, max_length=5)
+    skill_configs: SkillConfigs = Field(alias="skillConfigs")
+    profile_evidence: ProfileEvidence = Field(alias="profileEvidence")
+    decisions: dict[SkillId, dict[str, Any]]
+
+    @model_validator(mode="after")
+    def validate_sequence(self) -> "TaskContext":
+        """Enforce the minimal linear ordering and decision completeness rules."""
+        sequence = self.skill_sequence
+        if len(sequence) != len(set(sequence)):
+            raise ValueError("skillSequence cannot contain duplicate Skills")
+        if sequence[0] != "data-analysis":
+            raise ValueError("data-analysis must be the first Skill")
+        if "model-training" not in sequence:
+            raise ValueError("model-training must be enabled")
+        if "model-evaluation" in sequence and sequence.index("model-evaluation") < sequence.index("model-training"):
+            raise ValueError("model-evaluation must follow model-training")
+        if set(self.decisions) != set(sequence):
+            raise ValueError("decisions must contain exactly the enabled Skills")
+        return self
 
 
 class SplitSpec(StrictModel):
@@ -109,6 +193,7 @@ class ModelingPlan(StrictModel):
     models: list[ModelSpec] = Field(max_length=1)
     limits: ResourceLimits
     assumptions: DataAssumptions
+    task_context: TaskContext | None = None
 
     @model_validator(mode="after")
     def validate_mode(self) -> "ModelingPlan":
@@ -127,6 +212,14 @@ class ModelingPlan(StrictModel):
         if self.target is None:
             if self.positive_label is not None or self.split.method != "random":
                 raise ValueError("an unlabeled plan requires a random split and null positive_label")
+        if self.task_context is not None:
+            context = self.task_context
+            if context.dataset_id != self.dataset_id or context.target != self.target or context.task_type != self.mode:
+                raise ValueError("task_context identity must match the plan")
+            if context.profile_evidence.dataset_sha256 != self.dataset_sha256:
+                raise ValueError("task_context profile evidence must match the plan dataset")
+            if context.profile_evidence.target != self.target:
+                raise ValueError("task_context profile evidence target must match the plan")
         return self
 
 
@@ -251,7 +344,10 @@ PIPELINE_STAGES = ("Validate", "Split", "Preprocess", "Feature", "Train", "Evalu
 
 def plan_invalidation(previous: dict[str, Any], current: dict[str, Any]) -> dict[str, Any]:
     """Describe semantic downstream invalidation while reporting the uncached execution scope honestly."""
-    if previous.get("dataset_id") != current.get("dataset_id") or previous.get("target") != current.get("target"):
+    if previous.get("task_context") != current.get("task_context"):
+        requested = list(PIPELINE_STAGES)
+        reason = "skill_orchestration"
+    elif previous.get("dataset_id") != current.get("dataset_id") or previous.get("target") != current.get("target"):
         requested = list(PIPELINE_STAGES)
         reason = "target_or_dataset"
     elif previous.get("split") != current.get("split"):
@@ -283,7 +379,7 @@ def plan_invalidation(previous: dict[str, Any], current: dict[str, Any]) -> dict
 
 def canonical_plan_hash(plan: ModelingPlan) -> Sha256:
     """Return the SHA-256 digest of the plan's canonical JSON representation."""
-    encoded = json.dumps(plan.model_dump(mode="json"), ensure_ascii=False, separators=(",", ":"), sort_keys=True).encode("utf-8")
+    encoded = json.dumps(plan.model_dump(mode="json", by_alias=True), ensure_ascii=False, separators=(",", ":"), sort_keys=True).encode("utf-8")
     return hashlib.sha256(encoded).hexdigest()
 
 
@@ -310,6 +406,18 @@ def validate_plan_payload(
         raise ModelingContractError(_validation_code(error), "Plan validation failed.", details={"errors": error.errors(include_url=False)}) from error
     if plan.dataset_sha256 != expected_dataset_sha256:
         raise ModelingContractError("DATASET_VERSION_CONFLICT", "The dataset hash does not match the selected dataset.")
+    if plan.task_context is not None:
+        algorithm = plan.task_context.skill_configs.model_training.algorithm
+        if algorithm != "logistic_regression":
+            raise ModelingContractError(
+                "UNSUPPORTED_ALGORITHM",
+                f"The deterministic worker does not support {algorithm}.",
+                details={"algorithm": algorithm, "supported": ["logistic_regression"]},
+            )
+        if plan.mode == "binary_classification" and plan.models[0].name != algorithm:
+            raise ModelingContractError("INVALID_TASK_CONTEXT", "The TaskContext algorithm does not match the executable plan.")
+        if plan.task_context.skill_configs.model_evaluation.threshold != 0.5:
+            raise ModelingContractError("UNSUPPORTED_EVALUATION_THRESHOLD", "The deterministic worker currently evaluates threshold 0.5 only.")
     unknown = sorted(set(plan.excluded_columns) - columns)
     if plan.target is not None and plan.target not in columns:
         unknown.append(plan.target)
@@ -321,6 +429,11 @@ def validate_plan_payload(
         or plan.target in plan.feature_engineering.date_features.columns
     ):
         raise ModelingContractError("TARGET_LEAKAGE", "The target cannot appear in excluded or feature columns.")
+    if plan.feature_engineering.date_features.enabled:
+        raise ModelingContractError(
+            "UNKNOWN_OPERATOR",
+            "The current deterministic Worker does not support date-derived features. Disable date_features and create a new plan revision.",
+        )
     if abs(plan.split.train_ratio + plan.split.validation_ratio + plan.split.test_ratio - 1.0) > 1e-9:
         raise ModelingContractError("INVALID_SPLIT", "Train, validation, and test ratios must sum to 1.")
     if not plan.assumptions.samples_independent:

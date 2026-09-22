@@ -25,6 +25,7 @@ function gateway(overrides: Partial<ModelingGateway> = {}): ModelingGateway {
     }),
     getDatasetProfile: async (sessionId: string) => ({ row_count: 12, session_id: sessionId, storage_key: '/private/data.csv' }),
     proposePlan: async (_sessionId: string, _plan: ModelingJson, skillSnapshots: readonly ModelingSkillSnapshot[]) => ({ id: 'plan_1', revision: 1, plan_hash: 'hash', skill_snapshots: skillSnapshots as never }),
+    revisePlan: async (_sessionId: string, _planId: string, baseRevision: number, _plan: ModelingJson, skillSnapshots: readonly ModelingSkillSnapshot[]) => ({ id: 'plan_1', revision: baseRevision + 1, plan_hash: 'hash', skill_snapshots: skillSnapshots as never }),
     getRunStatus: async () => ({ id: 'run_1', status: 'running', worker_pid: 123 }),
     getRunResult: async () => ({ metrics: { roc_auc: 0.75 }, storage_key: '/private/result' }),
     ...overrides,
@@ -70,7 +71,7 @@ describe('ModelX bounded tools', () => {
     expect(entries).toEqual(['data-analysis', 'data-cleaning', 'feature-engineering', 'model-evaluation', 'model-training'])
     for (const name of entries) {
       const content = await readFile(new URL(`${name}/SKILL.md`, root), 'utf8')
-      expect(content).toMatch(/version: 0\.[12]\.0-demo/)
+      expect(content).toMatch(/version: 0\.[1-4]\.0-demo/)
       expect(content).not.toContain('modelx-demo-orchestrator')
     }
   })
@@ -174,6 +175,24 @@ describe('ModelX bounded tools', () => {
     expect(value.needs_confirmation).toBe(true)
     expect(observedSnapshots).toHaveLength(5)
     expect(runStarts).toBe(0)
+  })
+
+  it('creates an optimistic revision through the same proposal tool', async () => {
+    let observed: unknown[] = []
+    const fake = gateway({
+      revisePlan: async (sessionId, planId, baseRevision, plan, received) => {
+        observed = [sessionId, planId, baseRevision, plan, received.length]
+        return { id: planId, revision: baseRevision + 1, state: 'proposed' }
+      },
+    })
+    const { ctx, agent } = await mount(createModelingTools(fake, snapshots))
+    const value = await call(ctx, agent, 'modeling_propose_plan', {
+      plan: { dataset_id: 'dataset_1' }, plan_id: 'plan_1', base_revision: 2,
+    })
+    expect(observed).toEqual(['session-a', 'plan_1', 2, { dataset_id: 'dataset_1' }, 5])
+    expect(value).toMatchObject({ ok: true, needs_confirmation: true, plan: { revision: 3 } })
+    const invalid = await call(ctx, agent, 'modeling_propose_plan', { plan: {}, plan_id: 'plan_1' })
+    expect(invalid).toMatchObject({ ok: false, error: { code: 'INVALID_PLAN_REVISION_REFERENCE' } })
   })
 
   it('returns structured validation errors and enforces the UTF-8 result cap', async () => {

@@ -61,7 +61,7 @@ import * as ToolSessionQuery from '@deepseek-ai/dsh-tool-session-query'
 import * as ToolJobs from '@deepseek-ai/dsh-tool-jobs'
 import BrowserUseRegistry from '@deepseek-ai/dsh-browser-use'
 import * as StagehandBrowserTools from '@deepseek-ai/dsh-experimental-browser-use-stagehand-native'
-import ModelingGateway from '@deepseek-ai/dsh-experimental-modeling'
+import type ModelingGateway from '@deepseek-ai/dsh-experimental-modeling'
 import * as ModelingTools from '@deepseek-ai/dsh-experimental-modeling/tools'
 import type TeamService from '@deepseek-ai/dsh-experimental-agent-team'
 import * as ToolTeam from '@deepseek-ai/dsh-experimental-tool-agent-team'
@@ -248,14 +248,12 @@ const TOOL_PACKAGES: ToolPackage[] = [
     pkg: '@deepseek-ai/dsh-experimental-modeling',
     dir: 'modeling',
     source: 'packages/experimental/modeling/src/tools.ts',
-    requires: ['ctx.modeling', 'ctx.tools', 'an exact live Agent'],
+    requires: ['ctx.agents', 'ctx.attachments', 'ctx.modeling', 'ctx.tools', 'an exact live Agent'],
     writes: ['tool/call', 'tool/result', 'a draft plan through the private modeling API'],
     async mount(ctx) {
-      await ctx.plugin(ModelingGateway, {
-        baseUrl: 'http://127.0.0.1:1',
-        requestTimeoutMs: 1,
-        maxToolResultBytes: 12_288,
-      })
+      await ctx.plugin(AgentRegistry)
+      await ctx.plugin(CatalogAttachmentStore)
+      ctx.provide('modeling', { maxToolResultBytes: 12_288 } as ModelingGateway)
       await ctx.plugin(ModelingTools, { runtimeSkillDir: resolve(root, '.dsh/skills') })
     },
     note:

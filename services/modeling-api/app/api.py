@@ -242,9 +242,23 @@ def create_app(
         """Return the executor-owned plan choices used by the controlled form."""
         return {
             "models": {"logistic_regression": {"C": {"min": 0.000001, "max": 100}, "max_iter": {"min": 50, "max": 1000}}},
+            "model_options": [
+                {"name": "logistic_regression", "supported": True},
+                {"name": "lightgbm", "supported": False},
+                {"name": "xgboost", "supported": False},
+            ],
+            "skill_config": {
+                "missing_strategy": ["auto", "median"],
+                "outlier_strategy": ["auto", "keep"],
+                "feature_generation": [True, False],
+                "feature_selection": [True, False],
+                "evaluation_metrics": ["auto"],
+                "evaluation_threshold": [0.5],
+            },
             "numeric_missing": ["median", "constant"],
             "categorical_encoding": ["onehot_limited"],
-            "date_components": ["month", "dayofweek"],
+            "date_features_supported": False,
+            "date_components": [],
             "split_methods": ["stratified_random"],
             "limits": {
                 "max_train_seconds": {"min": 10, "max": 300},
@@ -284,7 +298,7 @@ def create_app(
     ) -> dict[str, Any]:
         plan = validated_plan(payload, session_id)
         return store.create_plan(
-            session_id, plan.dataset_id, plan.dataset_sha256, plan.model_dump(mode="json"),
+            session_id, plan.dataset_id, plan.dataset_sha256, plan.model_dump(mode="json", by_alias=True),
             canonical_plan_hash(plan), _skill_snapshots(skill_snapshots) or store.active_skill_snapshots(),
         )
 
@@ -298,7 +312,7 @@ def create_app(
         plan = validated_plan(request.plan, session_id)
         return store.update_plan(
             plan_id, session_id, request.base_revision, plan.dataset_id, plan.dataset_sha256,
-            plan.model_dump(mode="json"), canonical_plan_hash(plan), _skill_snapshots(skill_snapshots),
+            plan.model_dump(mode="json", by_alias=True), canonical_plan_hash(plan), _skill_snapshots(skill_snapshots),
         )
 
     @app.get("/v1/plans/{plan_id}")

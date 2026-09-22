@@ -249,7 +249,10 @@ def run_pipeline(csv_path: Path, plan_payload: dict[str, Any], output_dir: Path)
     if plan.mode != "binary_classification" or plan.target is None or plan.positive_label is None:
         raise ModelingContractError("UNSUPPORTED_MODE", "T03 runs the binary_classification pipeline.")
     if plan.feature_engineering.date_features.enabled:
-        raise ModelingContractError("UNKNOWN_OPERATOR", "Date features are not enabled in the T03 fixed pipeline.")
+        raise ModelingContractError(
+            "UNKNOWN_OPERATOR",
+            "The current deterministic Worker does not support date-derived features. Disable date_features and create a new plan revision.",
+        )
     target = plan.target
     excluded = set(plan.excluded_columns) | {target, "record_id"}
     features = [column for column in frame.columns if column not in excluded]
@@ -304,7 +307,7 @@ def run_pipeline(csv_path: Path, plan_payload: dict[str, Any], output_dir: Path)
     staging = output_dir.parent / f".{output_dir.name}.partial-{uuid.uuid4().hex}"
     staging.mkdir(parents=True, exist_ok=False)
     try:
-        _write_json(staging / "plan.json", plan.model_dump(mode="json"))
+        _write_json(staging / "plan.json", plan.model_dump(mode="json", by_alias=True))
         split_manifest = {
             "schema_version": "1.0",
             "seed": plan.split.seed,
