@@ -1,17 +1,19 @@
-# 五分钟演示脚本
+# Five-Minute Demo Script
 
-开场：“这是一套对话式数据建模 Demo。模型负责计划，Python 负责真实计算，关键执行由用户确认。”
+English | [中文](demo-script.zh.md)
 
-第 1 分钟：新建会话、上传固定种子的合成 CSV，展示数据概览与预览，明确目标列。
+Opening: "This is a conversational data modeling demo. The model handles planning, Python performs the actual computation, and key execution steps require user confirmation."
 
-第 2 分钟：输入“分析这份数据，制定清洗、特征工程和二分类建模计划，先让我确认。”展示工具执行和计划卡；修改一个排除字段或编码上限。
+Minute 1: Create a new session, upload synthetic CSV files with fixed seeds, display data overview and preview, and identify target columns.
 
-第 3 分钟：点击确认，右侧显示真实执行节点。解释预处理只在训练集拟合。期间切换“上下文”，查看绑定数据/计划版本。
+Minute 2: Enter the command "Analyze this dataset, create plans for cleaning, feature engineering, and binary classification modeling; let me confirm first." Display tool execution results and plan cards; modify an excluded field or encoding limit.
 
-第 4 分钟：查看真实指标与警告，下载 prepared 数据与报告。指标高低不是 Demo 是否成功的标准。
+Minute 3: Click Confirm to display actual execution nodes on the right side. Explain that preprocessing is fitted only on the training set. Switch "context" during this time to view bound data/plan versions.
 
-第 5 分钟：修改模型参数创建新 run，展示旧结果保留；或打开 Skill 中心展示草稿/发布版本。展示失败/取消截图时明确是已验证场景，不伪装当前运行。
+Minute 4: Review actual metrics and warnings, download prepared data and reports. High or low metric values are not criteria for demo success.
 
-演示前复验：模型连通、依赖已装、合成文件、磁盘空间、服务状态、浏览器放大比例 100%、无敏感日志/密钥。演示页不是默认显示伪造历史记录。
+Minute 5: Modify model parameters to create a new run, demonstrating that previous results are preserved; or open the Skill Center to show draft/published versions. When displaying failure/cancellation screenshots, explicitly state these are verified scenarios and do not fake current runs.
 
-备用模式：LLM 不可用时明确切换“手动配置”，展示计算链路，但告知 Agent 规划未在本场实时执行；禁止无标记回放。
+Pre-Demo Verification: Model connectivity, installed dependencies, synthetic files, disk space, service status, browser zoom at 100%, no sensitive logs/keys in display. The demo page does not default to showing fabricated history.
+
+Fallback Mode: If the LLM is unavailable, explicitly switch to "Manual Configuration," demonstrate the computation pipeline, but inform that Agent planning was not executed live during this session; prohibit unmarked replays.

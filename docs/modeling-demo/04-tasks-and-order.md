@@ -1,6 +1,8 @@
-# 04｜开发任务、依赖与执行顺序
+# 04 | Development Tasks, Dependencies, and Execution Order
 
-## 4.1 唯一主线
+English | [中文](04-tasks-and-order.zh.md)
+
+## 4.1 Single Delivery Path
 
 ```text
 T00 → T01 → T02 → T03 → T04 → T05 → T06   第一天：真实计算与 Agent 连接
@@ -8,105 +10,105 @@ T00 → T01 → T02 → T03 → T04 → T05 → T06   第一天：真实计算�
 T07 → T08 → T09 → T10 → T11 → T12 → T13   第二天：工作台、验收与交付
 ```
 
-图中的 T07 可以在 T02 后、接口冻结时与后端并行，但单人默认按表顺序执行。不要把多个 Codex 会话同时指向同一工作树写同一组件/锁文件。
+T07 may run in parallel with backend work after T02 freezes the API, but one developer follows the table order by default. Do not point multiple Codex Sessions at the same worktree to edit the same component or lockfile.
 
-## 4.2 任务表
+## 4.2 Task Table
 
-以下时间为实施估算，累计约 18 小时，另预留约 2 小时缓冲。依赖安装、源码构建或模型不可用会改变工期。
+The times below are implementation estimates: approximately 18 hours plus roughly two hours of buffer. Dependency installation, source builds, or unavailable models can change the duration.
 
-| ID | 任务 | 分钟 | 前置 | 验收门槛 |
+| ID | Task | Minutes | Prerequisites | Acceptance threshold |
 |---|---|---:|---|---|
-| T00 | 仓库与环境探测 | 60 | 无 | 确认上游提交、真实扩展点、模型/构建/测试能力；工具 smoke 成功 |
-| T01 | 开发 Skills 与浏览器工具准备 | 30 | T00 | 项目 Skills 可发现；浏览器能力可用或明确阻塞 |
-| T02 | 协议、类型与状态模型 | 60 | T00 | 计划/事件 schema、Pydantic 和 TS 契约一致；非法计划测试通过 |
-| T03 | 固定 Python Pipeline | 150 | T02 | 不依赖 LLM 完成真实清洗、特征、逻辑回归及产物 |
-| T04 | 上传与 Profile | 60 | T02 | 流式上传、hash、数据概览、预览、非法 CSV 拒绝 |
-| T05 | 任务执行、审批与持久化 | 90 | T03, T04 | 确认幂等、子进程、超时取消、刷新恢复、产物索引 |
-| T06 | Harness 领域工具与 Agent 计划 | 75 | T05 | 四个工具、Skill 快照、真实 LLM 候选计划和人工确认闭环 |
-| T07 | 主题与三栏骨架 | 75 | T01, T02 | #0F4C9E、icon 导航/按钮、独立滚动、组件状态演示 |
-| T08 | 业务卡片与任务面板联调 | 105 | T06, T07 | 上传、计划、确认、运行、真实结果/下载在三栏联动 |
-| T09 | 业务 Skill 轻量管理 | 45 | T06, T08 | 4 个 Skill 可编辑草稿、校验、发布快照；新旧版本隔离 |
-| T10 | 有界流程编辑与重跑 | 60 | T08 | 修改参数/启停可选特征，正确失效下游，创建新 run |
-| T11 | 端到端与安全回归 | 75 | T09, T10 | 核心 E2E、拒绝未确认、错误/取消/重启、未授权访问检查 |
-| T12 | 视觉截图复核与修复 | 45 | T11 | 关键分辨率/状态截图，无溢出遮挡；icon 名称和焦点通过 |
-| T13 | 部署、复验与演示交付 | 45 | T12 | 启动文档、固定依赖、真实演示记录和未完成项清单 |
+| T00 | Repository and environment discovery | 60 | None | Confirm upstream commit, real extension points, model/build/test capability; tool smoke succeeds |
+| T01 | Development Skills and browser tooling | 30 | T00 | Project Skills are discoverable; browser capability works or has an explicit blocker |
+| T02 | Protocol, types, and state model | 60 | T00 | Plan/event schemas, Pydantic, and TS contracts agree; invalid-plan tests pass |
+| T03 | Fixed Python Pipeline | 150 | T02 | Real cleaning, features, logistic regression, and artifacts complete without an LLM |
+| T04 | Upload and Profile | 60 | T02 | Streaming upload, hash, data overview, preview, and invalid-CSV rejection |
+| T05 | Task execution, approval, and persistence | 90 | T03, T04 | Idempotent confirmation, subprocess, timeout cancellation, refresh recovery, artifact index |
+| T06 | Harness domain tools and Agent plan | 75 | T05 | Four tools, Skill snapshots, real LLM candidate plan, and human-confirmation loop |
+| T07 | Theme and three-column skeleton | 75 | T01, T02 | #0F4C9E, icon navigation/buttons, independent scrolling, component-state demo |
+| T08 | Business cards and task-panel integration | 105 | T06, T07 | Upload, plan, confirmation, run, real results/download coordinate across three columns |
+| T09 | Lightweight business Skill management | 45 | T06, T08 | Four Skills support draft editing, validation, and snapshot publishing; versions remain isolated |
+| T10 | Bounded workflow editing and rerun | 60 | T08 | Change parameters/optional features, invalidate downstream work correctly, create a new run |
+| T11 | End-to-end and security regression | 75 | T09, T10 | Core E2E, unapproved-write rejection, error/cancel/restart, unauthorized-access checks |
+| T12 | Screenshot review and fixes | 45 | T11 | Key resolutions/states have screenshots without clipping; icon names and focus pass |
+| T13 | Deployment, re-verification, and demo delivery | 45 | T12 | Startup docs, pinned dependencies, real demo record, and unsupported-feature list |
 
-## 4.3 每个任务的交付与停靠点
+## 4.3 Deliverables and Stop Points for Each Task
 
-### T00：不跳过的接手检查
+### T00: Mandatory Handoff Inspection
 
-运行 `git status --short`、`git rev-parse HEAD`；读取适用的 AGENTS/override、package.json、lockfile、上游架构和相关插件。确认真实的构建、启动、类型检查与测试命令。
+Run `git status --short` and `git rev-parse HEAD`; read applicable AGENTS/override files, package.json, the lockfile, upstream architecture, and relevant plugins. Confirm the real build, startup, typecheck, and test commands.
 
-输出 `REPO_DISCOVERY.md`：主/子包目录、工具注册示例、session 上下文字段、Slot/聊天节点示例、业务 Remote/上传下载方式、图标系统、Python/浏览器/模型连通性。首次探测用最小工具调用，不直接改 UI。
+Produce `REPO_DISCOVERY.md`: main/subpackage directories, a tool-registration example, Session-context fields, Slot/chat-node examples, business Remote/upload/download mechanisms, icon system, and Python/browser/model connectivity. Use a minimal tool call for initial discovery and do not immediately edit the UI.
 
-存在用户未提交改动必须保留；仅记录影响范围，不 reset/clean。需要升级依赖、换框架、改变数据库或网络策略时不得自行决定。
+Preserve existing user changes; record only their impact and do not reset or clean them. Do not independently upgrade dependencies, replace frameworks, change databases, or alter network policy.
 
-### T01：只安装最少开发辅助
+### T01: Install Only Essential Development Aids
 
-启用本包 6 个项目 Skill。优先现有浏览器能力或 Playwright CLI；外部 frontend-design / React review 按需调用。未授权网络不可自动下载。安装源码与依赖分开审查，不执行未知 curl | sh。
+Enable the six project Skills in this kit. Prefer existing browser capability or Playwright CLI; invoke external frontend-design or React review only when needed. Do not download over an unauthorized network. Review source and dependency installation separately; do not execute an unknown `curl | sh` command.
 
-### T02：先做失败用例
+### T02: Write Failure Cases First
 
-从 contracts 建立类型，写字段不存在、目标泄漏、比例错误、未知算子、未确认写任务和版本冲突测试。冻结接口后才分配 UI 任务。确认并执行不是 LLM tool。
+Build types from contracts and test missing fields, target leakage, invalid ratios, unknown operators, unapproved write tasks, and version conflicts. Freeze the API before assigning UI work. Confirm-and-run is not an LLM tool.
 
-### T03：先拿到真实文件
+### T03: Produce Real Files First
 
-使用固定种子生成一份小型合成二分类 CSV（代码生成，不联网找数据），包含数值、类别、少量缺失、唯一记录 ID。实现预处理与逻辑回归 Pipeline，输出 metrics 和数据/模型。测试预测可读、feature names 对齐、fit 只看到训练集。
+Generate a small synthetic binary-classification CSV with a fixed seed and no network access. Include numeric and categorical fields, limited missing values, and a unique record ID. Implement the preprocessing and logistic-regression Pipeline and emit metrics plus data/model artifacts. Test that predictions load, feature names align, and fit observes training data only.
 
-### T04：上传不是读到内存
+### T04: Upload Without Loading the File Into Memory
 
-分块保存并校验路径，生成 dataset id/checksum；分析任务由 Worker 处理。支持空文件、重复列名、格式错误的清晰反馈。Profile 不能把百万行变成 LLM 上下文。
+Save chunks, validate paths, and create a dataset ID/checksum; a Worker performs profiling. Report empty files, duplicate column names, and malformed formats clearly. A Profile must not turn one million rows into LLM context.
 
-### T05：让状态可追溯
+### T05: Make State Traceable
 
-业务数据库记录排队/运行/终态；Worker 输出事件；取消终止进程组，产物原子完成；服务重启标记 interrupted。加入幂等键、计划版本和 session 授权检查。不要做只有内存变量的伪任务系统。
+Record queued, running, and terminal states in the business database. Workers emit events; cancellation terminates the process group; artifacts complete atomically; restart marks interrupted work. Add idempotency keys, plan versions, and Session-authorization checks. Do not build a fake task system that exists only in memory.
 
-### T06：只接已验证计算服务
+### T06: Connect Only to a Verified Compute Service
 
-添加 4 个领域工具及工具结果解析；加载 4 个运行时业务 Skill；输出候选 plan 卡。使用真实模型验证一条 tool→plan→用户确认→run 链路；模型失败时展示失败，不静默使用固定计划冒充。
+Add the four domain tools and result parsing, load four runtime business Skills, and render a candidate plan card. Verify one real model path from tool → plan → user confirmation → run. If the model fails, show the failure instead of silently substituting a fixed plan.
 
-### T07：先做可审阅的界面
+### T07: Build a Reviewable Interface First
 
-使用 UI 文档和参考 HTML，先 tokens、导航、三栏、Composer、空状态。fixture 分离且显示“界面演示数据”。复用上游组件系统，禁止另建应用。截图检查 1440 与 1366。
+Use the UI document and reference HTML to implement tokens, navigation, three columns, Composer, and the empty state first. Keep fixtures separate and label them "UI demo data." Reuse the upstream component system and do not create another application. Capture 1440 and 1366 screenshots.
 
-### T08：一次接通完整纵向流程
+### T08: Connect One Complete Vertical Flow
 
-依次替换 fixture 为真实 API；数据卡、计划卡、任务状态、结果都读同一个 ModelingClientModel。确认双击、切换会话、刷新和轮询乱序不产生双任务/错会话。结果数值来自 metrics.json。
+Replace fixtures with the real API in sequence. Dataset cards, plan cards, task state, and results all read one ModelingClientModel. Confirm that double-clicking, switching Sessions, refreshing, and out-of-order polling do not create duplicate tasks or cross-Session state. Result values come from metrics.json.
 
-### T09：自定义 Skill 的最小可见交付
+### T09: Deliver the Minimum Visible Custom-Skill Path
 
-列表与 textarea 编辑器、保存草稿、校验、发布版本。发布运行一次 schema smoke；不要把完整 Skill 评测平台放进这 45 分钟。实际实现超时可保留文件编辑 + 发布按钮最小路径，但必须在交付清单列出界面不足。
+Provide a list and textarea editor, draft saving, validation, and version publishing. Run one schema smoke when publishing; do not build a complete Skill-evaluation platform in these 45 minutes. If implementation time expires, retain the minimal file-editing and publish-button path and list the missing UI in delivery notes.
 
-### T10：参数编辑不是任意 DAG
+### T10: Parameter Editing Is Not an Arbitrary DAG
 
-UI 只暴露能力列表中的合法参数；约束切分必须在拟合之前。模型参数变更创建新 run，复用对象以 hash 确认；清洗/特征变更使其下游重新执行。没有有效缓存则重新计算，不冒充复用。
+Expose only valid parameters from the capability list and require splitting before fitting. Model-parameter changes create a new run and confirm reused objects by hash. Cleaning or feature changes rerun their downstream work. Recompute when no valid cache exists; do not claim reuse.
 
-### T11：证据先于“完成”
+### T11: Evidence Precedes "Complete"
 
-运行核心测试；在真实服务上从上传到下载一次。取消、错误、重启、未授权访问独立测试。对改动范围执行上游规定检查；全仓检查未跑写明，不擅自修改上游规范来通过。
+Run core tests and complete one real upload-to-download flow. Test cancellation, errors, restart, and unauthorized access separately. Run upstream-required checks for the changed scope. State when repository-wide checks were not run; do not weaken upstream rules to pass.
 
-### T12：截图→问题→修复→新截图
+### T12: Screenshot → Problem → Fix → New Screenshot
 
-先修遮挡/溢出/布局，再修 icon/文案/间距。保留修复后的截图与视口；对照参考结构与蓝色主题，不要求像素复制原品牌。
+Fix clipping, overflow, and layout before icons, copy, and spacing. Preserve the post-fix screenshot and viewport. Compare the reference structure and blue theme without pixel-copying the original brand.
 
-### T13：最后只修阻塞项
+### T13: Fix Only Blocking Issues at the End
 
-记录可复现启动命令、模型配置入口、演示数据种子、软件版本、实际测试、未支持能力。运行容量测试须单独留耗时/内存报告；未跑则 NOT_RUN。禁止最后一小时新增完整 DAG、Notebook 或多 Agent。
+Record reproducible startup commands, the model configuration entry point, demo-data seed, software versions, tests actually run, and unsupported capabilities. A capacity test records its own duration and memory report; use NOT_RUN when it was not run. Do not add a full DAG, Notebook, or Multi-Agent implementation in the final hour.
 
-## 4.4 阶段 Gate
+## 4.4 Stage Gates
 
-G0：上游能启动 + 自定义工具 smoke 成功。未过不得开始大规模 UI 改造。
+G0: Upstream starts and the custom-tool smoke succeeds. Do not begin large UI changes before it passes.
 
-G1：不依赖 LLM 的计算链路真实完成并导出文件。未过不得用硬编码结果填页面。
+G1: The compute path completes and exports real files without an LLM. Do not fill the UI with hardcoded results before it passes.
 
-G2：真实 Agent 候选计划 + 人工确认 + 独立执行。未过不得称为 Agent 闭环。
+G2: A real Agent candidate plan, human confirmation, and isolated execution succeed. Do not call the feature an Agent loop before it passes.
 
-G3：三栏 UI 全流程、刷新恢复、关键异常、至少两种桌面视口截图通过。
+G3: The full three-column UI flow, refresh recovery, important failures, and screenshots at two desktop viewports pass.
 
-G4：可复验交付；已实现、仅界面、未实现明确区分。
+G4: The delivery is reproducible and distinguishes implemented behavior, UI-only behavior, and unimplemented behavior.
 
-## 4.5 可删与不可删
+## 4.5 Removable and Required Scope
 
-优先删：第二模型、复杂图表、SHAP、任意 DAG、在线 Notebook、Skill 商店、动画。
+Remove first: second model, complex charts, SHAP, arbitrary DAG, online Notebook, Skill store, and animation.
 
-不可删：真实计算、目标/切分正确性、确认权限、计划版本、任务真实状态、文件下载、#0F4C9E 主题、可用三栏界面、最低测试证据。
+Do not remove: real computation, target/split correctness, confirmation authority, plan versions, real task state, file downloads, the #0F4C9E theme, a usable three-column interface, and minimum test evidence.

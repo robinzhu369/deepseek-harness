@@ -1,60 +1,62 @@
-# 08｜内网部署、执行安全与可复现性
+# 08 | Private-Network Deployment, Execution Security, and Reproducibility
 
-## 8.1 两个边界分别验证
+English | [中文](08-deployment-and-security.zh.md)
 
-Codex、外部设计 Skill、浏览器工具属于开发环境；Harness + Python + 业务 Skill 属于交付运行环境。运行系统内网可用，不等于把源代码/银行数据发送到云端 Codex 已获批准。开发只用允许共享的代码和合成数据，遵守单位的数据与代码使用授权。
+## 8.1 Verify Two Boundaries Separately
 
-运行时模型选择既有批准的内网 Provider，不写死某个公网型号。配置键、API 协议、tool calling 参数以固定 Harness 版本为准。必须真实测试工具调用和结构化候选计划，不仅测试一句“你好”。
+Codex, external design Skills, and browser tools belong to the development environment. Harness, Python, and business Skills belong to the delivered runtime. A system that can run on a private network does not imply permission to send source code or banking data to cloud-hosted Codex. Development uses only approved code and synthetic data and follows the organization's authorization for data and code use.
 
-## 8.2 推荐部署入口
+The runtime selects an existing approved private-network Provider rather than hardcoding a public model. Configuration keys, API protocol, and tool-calling parameters follow the pinned Harness version. Test a real tool call and structured candidate plan, not only a "hello" response.
 
-优先单 Linux 主机/专用 VM：现有 Nginx 作为浏览器入口，Harness 与 Python API 监听受控地址，计算子进程本地执行。只有浏览器入口对目标网段开放；Python API 不直接对用户开放。
+## 8.2 Recommended Deployment Entry Point
 
-需要 Docker Compose 时，保留相同信任边界，分别构建固定版本镜像。查阅时 Harness Web 对监听/Host/Origin 有安全约束，不能照抄一般服务的 `--host 0.0.0.0`；由 T00 在实际版本确认。[S16]
+Prefer one Linux host or dedicated VM. Existing Nginx is the browser entry point, Harness and the Python API listen on controlled addresses, and compute subprocesses run locally. Only the browser entry point is exposed to the target network; users cannot access the Python API directly.
 
-可落地选项：Harness 与反向代理共享网络命名空间，使代理访问 Harness 的 loopback；或者在同一专用 VM 运行两个进程，由已有 Nginx 代理。不要假设普通 Docker bridge 能直接访问另一个容器的 127.0.0.1。
+When Docker Compose is required, preserve the same trust boundaries and build separately pinned images. The reviewed Harness Web version constrains listening addresses, Host, and Origin; do not copy a generic service's `--host 0.0.0.0`. T00 confirms the actual behavior for the pinned version. [S16]
 
-网关配置保留上游认证、Host/Origin 校验、WebSocket 升级、正确代理头；只添加明确的受信入口。代理可以增加外层认证，但不能用“加了 Basic Auth”替代 Harness 自己的访问控制。没有验证代理/认证前不得把服务直接暴露到公网。
+One deployable option gives Harness and the reverse proxy a shared network namespace so the proxy can reach Harness loopback. Another runs both processes on one dedicated VM behind existing Nginx. Do not assume an ordinary Docker bridge can reach another container's 127.0.0.1.
 
-P0 部署脚本由 Codex 在实际环境验证后生成；本资料不提供未经验证的完整 Compose 作为“开箱即用系统”。
+The gateway preserves upstream authentication, Host/Origin validation, WebSocket upgrades, and correct proxy headers and adds only an explicit trusted entry point. An outer authentication layer may supplement access control, but Basic Auth does not replace Harness access control. Do not expose the service publicly before validating the proxy and authentication.
 
-## 8.3 离线交付材料
+Codex generates the P0 deployment script only after validating it in the actual environment. This kit does not present an unverified complete Compose file as an out-of-box system.
 
-固定源码 commit、Node/pnpm、Python 与依赖锁文件、前端构建产物、必要 native 依赖、镜像 digest、业务 Skill 发布快照和浏览器测试依赖（开发用途）。先联网构建/审查，再按单位流程导入内网。运行时不在线 pip/npm install。
+## 8.3 Offline Delivery Materials
 
-API Key 从服务端环境/受控凭证存储提供，不进前端 bundle、不进 Git。版本清单不能把文件 blob SHA 当成仓库 commit SHA。
+Pin the source commit, Node/pnpm, Python and dependency lockfiles, frontend build artifacts, required native dependencies, image digests, published business-Skill snapshots, and development-only browser test dependencies. Build and review while connected, then import through the organization's private-network process. Runtime never installs from pip/npm online.
 
-离线验证阻断公网访问，保留批准内网模型/服务；运行完整演示并检查请求日志。关闭外发 telemetry/自动插件更新/自动搜索及外部 MCP。记录仍需联网的能力，不宣称仅设置一个环境变量就完成离线部署。
+Provide API keys through server-side environment or controlled credential storage, never the frontend bundle or Git. A version inventory must not present a file blob SHA as a repository commit SHA.
 
-## 8.4 Worker 权限和限制
+Offline validation blocks public-network access while retaining approved private-network models/services. Run the complete demo and inspect request logs. Disable outbound telemetry, automatic plugin updates, automatic search, and external MCP. Record any remaining network dependency; one environment variable alone does not establish offline deployment.
 
-使用非 root 用户；数据目录最小读写权限；不挂载宿主 home、SSH keys、Docker socket 或整个企业共享盘。Worker 不持有 LLM/provider key；禁止任意代码执行、任意网络工具和动态导入不可信插件。
+## 8.4 Worker Authority and Limits
 
-子进程参数使用列表，shell=False；仅运行代码仓库中经过审查的入口。运行前验证路径位于受控根目录，并防御 symlink/traversal。默认一个计算任务并发，限制输入大小、输出大小、特征数量、线程数和单步/总时长。
+Use a non-root user and minimal data-directory read/write permissions. Do not mount the Host home, SSH keys, Docker socket, or an entire enterprise share. A Worker holds no LLM/provider credential and provides no arbitrary code execution, arbitrary network tool, or dynamic untrusted-plugin import.
 
-超时使用父进程计时并终止进程组，等待退出后释放资源。容器/系统级内存限制由部署落实，不要把 JSON 中 memory_limit 字段当成真正硬限制。普通容器不是对任意恶意代码的完整安全沙箱；本 Demo 从设计上不接受任意模型代码执行。
+Pass subprocess arguments as a list with `shell=False` and run only reviewed repository entry points. Before execution, verify that paths remain under controlled roots and defend against symlinks and traversal. Default to one concurrent compute task and limit input size, output size, feature count, thread count, and per-step/total duration.
 
-## 8.5 建议默认值（均可配置，不是测量结果）
+The parent process measures timeouts, terminates the process group, waits for exit, and then releases resources. Deployment enforces container/system memory limits; a `memory_limit` JSON field is not a hard limit by itself. An ordinary container is not a complete sandbox for arbitrary hostile code, so the Demo does not accept model-generated arbitrary code.
 
-| 项目 | Demo 默认 | 说明 |
+## 8.5 Suggested Defaults (Configurable, Not Measurements)
+
+| Item | Demo default | Meaning |
 |---|---|---|
-| 并发计算 | 1 | Web 不受训练阻塞 |
-| 常规上传 | 100 MiB | 容量测试显式提高，网关/API 同步 |
-| 数据预览 | 20 行 | 服务端硬上限 100 |
-| 模型摘要 | ≤12 KiB 工具结果 | 全量数据不进上下文 |
-| 单次 LLM 请求 | 总时长 120 秒，最多一次有限重试 | 实际网关/思考模式需验证 |
-| 基线训练 | 120 秒 | 超时报告失败，不伪造指标 |
-| 运行总时长 | 600 秒 | 可按演示机器调整 |
-| One-Hot 类别上限 | 每列 32 | 与 schema 一致，可受限调整 |
-| 最终特征上限 | 10,000 | 超限明确拒绝或用户调整 |
-| 轮询 | 活动页约 1 秒 | 页面隐藏减速，终态停止 |
+| Concurrent computation | 1 | Training does not block Web |
+| Regular upload | 100 MiB | Capacity tests increase it explicitly; gateway/API stay aligned |
+| Data preview | 20 rows | Server hard limit is 100 |
+| Model summary | ≤12 KiB tool result | Full data never enters context |
+| One LLM request | 120 seconds total, at most one bounded retry | Validate the actual gateway/reasoning mode |
+| Baseline training | 120 seconds | Timeout reports failure and never fabricates metrics |
+| Total run | 600 seconds | Adjustable for the demo machine |
+| One-Hot category limit | 32 per column | Matches schema; bounded adjustment allowed |
+| Final feature limit | 10,000 | Reject explicitly or require user adjustment above the limit |
+| Polling | About 1 second on active pages | Slow when hidden and stop at terminal state |
 
-## 8.6 恢复与审计
+## 8.6 Recovery and Audit
 
-启动时处理残留 active run：没有可信活跃 Worker 的运行标记 interrupted；queued 可重新入队。不要根据临时文件存在推断成功。停止后残留 `.partial` 可延后清理，产物读取必须检查完成状态和 hash。
+At startup, reconcile leftover active runs: when no trusted Worker remains active, mark the run interrupted; queued work may be restored to the queue. Do not infer success from a temporary file. Cleanup of leftover `.partial` files may be deferred, but artifact reads verify completion state and hash.
 
-审计用户确认、计划版本、数据 hash、Skill hash、工具调用、执行结果和下载，不记录隐藏推理或敏感完整行。保留 request_id/run_id 便于定位。
+Audit user confirmation, plan versions, data hashes, Skill hashes, tool calls, execution results, and downloads. Do not record hidden reasoning or complete sensitive rows. Retain request_id/run_id for diagnosis.
 
-## 8.7 发布前最低安全检查
+## 8.7 Minimum Security Checks Before Release
 
-未确认计划无法执行；LLM 没有审批工具；运行时看不到开发 Skill；Python API 无公网端口；下载不能越权/越路径；页面没有外链脚本/CDN；真实密钥不出现在日志/截图/静态文件；异常/取消/重启不产生假成功。
+An unconfirmed plan cannot execute; the LLM has no approval tool; runtime cannot see development Skills; the Python API has no public port; downloads cannot cross authorization or path boundaries; pages contain no external scripts/CDNs; real credentials do not appear in logs, screenshots, or static files; errors, cancellation, and restart cannot produce false success.

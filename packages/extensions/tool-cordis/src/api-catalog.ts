@@ -1412,6 +1412,126 @@ export const SERVICE_API: readonly ServiceApiEntry[] = [
     ],
   },
   {
+    key: 'modeling',
+    summary: 'Host-only HTTP client.',
+    description: 'Host-only HTTP client. Session identity always comes from the live Agent.',
+    methods: [
+      {
+        signature: 'readonly maxToolResultBytes: number',
+        description: 'Maximum UTF-8 bytes returned by one model-facing modeling tool call.',
+        parameters: [],
+      },
+      {
+        signature: '@Remote(\'workspace\') async workspace(agent: Agent, signal: AbortSignal): Promise<string>',
+        description: 'Restore the latest bounded Dataset, Plan, Run, and Result for the live Session.',
+        parameters: [{ name: 'agent', description: 'Live Agent whose Session owns the workspace.' }, { name: 'signal', description: 'Cancels the private API request.' }],
+        returns: 'Serialized workspace state for the Remote client.',
+      },
+      {
+        signature: '@Remote(\'capabilities\') async capabilities(agent: Agent, signal: AbortSignal): Promise<string>',
+        description: 'Read executor-owned choices used by the controlled plan form.',
+        parameters: [{ name: 'agent', description: 'Live Agent whose Session scopes the request.' }, { name: 'signal', description: 'Cancels the private API request.' }],
+        returns: 'Serialized executor capabilities for the Remote client.',
+      },
+      {
+        signature: '@Remote(\'skills\') async skills(agent: Agent, signal: AbortSignal): Promise<string>',
+        description: 'List the five runtime Skills with only this Session\'s Draft metadata.',
+        parameters: [{ name: 'agent', description: 'Live Agent whose Session owns any Draft metadata.' }, { name: 'signal', description: 'Cancels the private API request.' }],
+        returns: 'Serialized runtime Skill summaries for the Remote client.',
+      },
+      {
+        signature: '@Remote(\'skill\') async skill(agent: Agent, name: string, signal: AbortSignal): Promise<string>',
+        description: 'Read one published runtime Skill and this Session\'s optional Draft.',
+        parameters: [{ name: 'agent', description: 'Live Agent whose Session owns the optional Draft.' }, { name: 'name', description: 'Runtime Skill name.' }, { name: 'signal', description: 'Cancels the private API request.' }],
+        returns: 'Serialized runtime Skill detail for the Remote client.',
+      },
+      {
+        signature: '@Remote(\'saveSkillDraft\') async saveSkillDraft(agent: Agent, request: SkillDraftRequest, signal: AbortSignal): Promise<string>',
+        description: 'Save one Session-private runtime Skill Draft.',
+        parameters: [{ name: 'agent', description: 'Live Agent whose Session owns the Draft.' }, { name: 'request', description: 'Runtime Skill name and complete Draft content.' }, { name: 'signal', description: 'Cancels the private API request.' }],
+        returns: 'Serialized saved Draft metadata.',
+      },
+      {
+        signature: '@Remote(\'validateSkill\') async validateSkill(agent: Agent, name: string, signal: AbortSignal): Promise<string>',
+        description: 'Validate one Session-private runtime Skill Draft.',
+        parameters: [{ name: 'agent', description: 'Live Agent whose Session owns the Draft.' }, { name: 'name', description: 'Runtime Skill name.' }, { name: 'signal', description: 'Cancels the private API request.' }],
+        returns: 'Serialized validation result.',
+      },
+      {
+        signature: '@Remote(\'publishSkill\') async publishSkill(agent: Agent, name: string, signal: AbortSignal): Promise<string>',
+        description: 'Publish one validated immutable runtime Skill version from the application path.',
+        parameters: [{ name: 'agent', description: 'Live Agent whose Session owns the validated Draft.' }, { name: 'name', description: 'Runtime Skill name.' }, { name: 'signal', description: 'Cancels the private API request.' }],
+        returns: 'Serialized immutable version metadata.',
+      },
+      {
+        signature: '@Remote(\'updatePlan\') async updatePlan(agent: Agent, request: UpdatePlanRequest, signal: AbortSignal): Promise<string>',
+        description: 'Update a proposed plan through optimistic revision control.',
+        parameters: [{ name: 'agent', description: 'Live Agent whose Session owns the plan.' }, { name: 'request', description: 'Exact base revision and replacement plan.' }, { name: 'signal', description: 'Cancels the private API request.' }],
+        returns: 'Serialized proposed revision.',
+      },
+      {
+        signature: '@Remote(\'regeneratePlan\') regeneratePlan(agent: Agent, request: RegeneratePlanRequest, signal: AbortSignal): Promise<string>',
+        description: 'Queue an Agent turn that regenerates decisions and a new plan revision.',
+        parameters: [{ name: 'agent', description: 'Live Agent that receives the follow-up input.' }, { name: 'request', description: 'Exact base revision and user-edited Skill preferences.' }, { name: 'signal', description: 'Rejects an already-cancelled request before queueing input.' }],
+        returns: 'Serialized acknowledgement after the follow-up is queued.',
+      },
+      {
+        signature: '@Remote(\'cancelRun\') async cancelRun(agent: Agent, runId: string, signal: AbortSignal): Promise<string>',
+        description: 'Cancel the active Session-owned run through the application path.',
+        parameters: [{ name: 'agent', description: 'Live Agent whose Session owns the Run.' }, { name: 'runId', description: 'Run identifier returned by the Modeling API.' }, { name: 'signal', description: 'Cancels the private API request.' }],
+        returns: 'Serialized cancellation state.',
+      },
+      {
+        signature: 'getDatasetProfile(sessionId: string, datasetId: string, signal?: AbortSignal): Promise<ModelingJson>',
+        description: 'Read one Session-owned dataset profile.',
+        parameters: [{ name: 'sessionId', description: 'Trusted Session identity.' }, { name: 'datasetId', description: 'Dataset identifier returned by registration.' }, { name: 'signal', description: 'Optional request cancellation signal.' }],
+        returns: 'Bounded aggregate profile from the Modeling API.',
+      },
+      {
+        signature: 'async registerDataset( sessionId: string, file: FileAttachmentRef, data: AsyncIterable<Uint8Array>, signal?: AbortSignal, ): Promise<ModelingJson>',
+        description: 'Stream one durable CSV attachment into the Session-owned dataset registry and wait for its profile.',
+        parameters: [{ name: 'sessionId', description: 'Trusted Session identity.' }, { name: 'file', description: 'Durable attachment metadata, including the expected digest and byte count.' }, { name: 'data', description: 'Attachment byte stream consumed once by the upload.' }, { name: 'signal', description: 'Optional cancellation signal combined with the request timeout.' }],
+        returns: 'Ready dataset metadata after digest verification and profiling.',
+      },
+      {
+        signature: 'proposePlan( sessionId: string, plan: ModelingJson, snapshots: readonly ModelingSkillSnapshot[], signal?: AbortSignal, ): Promise<ModelingJson>',
+        description: 'Persist one validated proposal with exact runtime Skill snapshots.',
+        parameters: [{ name: 'sessionId', description: 'Trusted Session identity.' }, { name: 'plan', description: 'Candidate plan validated by the Modeling API.' }, { name: 'snapshots', description: 'Immutable runtime Skill identities attached to the proposal.' }, { name: 'signal', description: 'Optional request cancellation signal.' }],
+        returns: 'Persisted proposed plan.',
+      },
+      {
+        signature: 'revisePlan( sessionId: string, planId: string, baseRevision: number, plan: ModelingJson, snapshots: readonly ModelingSkillSnapshot[], signal?: AbortSignal, ): Promise<ModelingJson>',
+        description: 'Persist an Agent-regenerated proposal as the next optimistic revision.',
+        parameters: [{ name: 'sessionId', description: 'Trusted Session identity.' }, { name: 'planId', description: 'Existing plan identifier.' }, { name: 'baseRevision', description: 'Exact revision that the Agent regenerated.' }, { name: 'plan', description: 'Replacement candidate plan.' }, { name: 'snapshots', description: 'Immutable runtime Skill identities attached to the revision.' }, { name: 'signal', description: 'Optional request cancellation signal.' }],
+        returns: 'Persisted proposed revision.',
+      },
+      {
+        signature: 'getRunStatus(sessionId: string, runId: string, signal?: AbortSignal): Promise<ModelingJson>',
+        description: 'Read one Session-owned Run without changing it.',
+        parameters: [{ name: 'sessionId', description: 'Trusted Session identity.' }, { name: 'runId', description: 'Run identifier returned by approval.' }, { name: 'signal', description: 'Optional request cancellation signal.' }],
+        returns: 'Current Run state and bounded node events.',
+      },
+      {
+        signature: 'getRunResult(sessionId: string, runId: string, signal?: AbortSignal): Promise<ModelingJson>',
+        description: 'Read one completed Session-owned Run result.',
+        parameters: [{ name: 'sessionId', description: 'Trusted Session identity.' }, { name: 'runId', description: 'Succeeded Run identifier.' }, { name: 'signal', description: 'Optional request cancellation signal.' }],
+        returns: 'Metrics, diagnostics, and completed artifact metadata.',
+      },
+      {
+        signature: '@Remote(\'approveAndRun\') approveAndRun(agent: Agent, request: ApproveAndRunRequest, signal: AbortSignal): Promise<ApproveAndRunResult>',
+        description: 'Approve an exact plan revision from the application Remote path; this is not a model tool.',
+        parameters: [{ name: 'agent', description: 'Live Agent whose Session owns the plan and receives the new Run identity.' }, { name: 'request', description: 'Exact revision, hash, and idempotency key approved by the user.' }, { name: 'signal', description: 'Cancels the private API request.' }],
+        returns: 'Created or replayed Run identity.',
+      },
+      {
+        signature: '@Remote(\'rerun\') rerun(agent: Agent, request: RerunRequest, signal: AbortSignal): Promise<ApproveAndRunResult>',
+        description: 'Approve a newer revision and create a distinct Run from a terminal source; this is not a model tool.',
+        parameters: [{ name: 'agent', description: 'Live Agent whose Session owns both Runs and receives the new Run identity.' }, { name: 'request', description: 'Source Run, exact revision, hash, and idempotency key approved by the user.' }, { name: 'signal', description: 'Cancels the private API request.' }],
+        returns: 'Created or replayed Run identity.',
+      },
+    ],
+  },
+  {
     key: 'officeToPdf',
     summary: 'A provider lifetime owns all converters, queued calls, and temporary files.',
     description: 'A provider lifetime owns all converters, queued calls, and temporary files.',
@@ -4089,6 +4209,14 @@ export const TYPE_API: readonly TypeApiEntry[] = [
     declaration: 'export interface ApprovalRequestEvent {\n    readonly agent: Agent;\n    readonly toolName: string;\n    readonly callId?: ToolCallId;\n    readonly reason?: string;\n    readonly signal?: AbortSignal;\n}',
   },
   {
+    name: 'ApproveAndRunRequest',
+    declaration: 'export interface ApproveAndRunRequest {\n    readonly planId: string;\n    readonly revision: number;\n    readonly planHash: string;\n    readonly idempotencyKey: string;\n}',
+  },
+  {
+    name: 'ApproveAndRunResult',
+    declaration: 'export interface ApproveAndRunResult {\n    readonly run_id: string;\n    readonly created: boolean;\n}',
+  },
+  {
     name: 'AskUserQuestionAnswer',
     declaration: 'export interface AskUserQuestionAnswer {\n    answers: AskUserQuestionAnswerItem[];\n}',
   },
@@ -5201,6 +5329,14 @@ export const TYPE_API: readonly TypeApiEntry[] = [
     declaration: 'export interface ModelCatalogModel {\n    readonly id: string;\n    readonly name: string;\n    readonly description?: string;\n    readonly reasoning?: ModelReasoning;\n}',
   },
   {
+    name: 'ModelingJson',
+    declaration: 'export type ModelingJson = null | boolean | number | string | ModelingJson[] | {\n    [key: string]: ModelingJson;\n};',
+  },
+  {
+    name: 'ModelingSkillSnapshot',
+    declaration: 'export interface ModelingSkillSnapshot {\n    readonly name: string;\n    readonly version: string;\n    readonly sha256: string;\n}',
+  },
+  {
     name: 'ModelMessageSource',
     declaration: 'export interface ModelMessageSource extends AssistantProviderMetadata {\n    kind: \'model\';\n}',
   },
@@ -5497,6 +5633,10 @@ export const TYPE_API: readonly TypeApiEntry[] = [
     declaration: 'export interface RedactedSecret {\n    path: string[];\n    set: boolean;\n}',
   },
   {
+    name: 'RegeneratePlanRequest',
+    declaration: 'export interface RegeneratePlanRequest extends UpdatePlanRequest {\n}',
+  },
+  {
     name: 'Reload',
     declaration: 'export interface Reload {\n    filename: string;\n    runtime?: Plugin.Runtime | undefined;\n}',
   },
@@ -5543,6 +5683,10 @@ export const TYPE_API: readonly TypeApiEntry[] = [
   {
     name: 'RequestRunOutcome',
     declaration: 'export type RequestRunOutcome = \'approved\' | \'completed\' | \'rejected\' | \'cancelled\' | \'failed\';',
+  },
+  {
+    name: 'RerunRequest',
+    declaration: 'export interface RerunRequest extends ApproveAndRunRequest {\n    readonly sourceRunId: string;\n}',
   },
   {
     name: 'ResolvedAlwaysRetryPolicy',
@@ -6253,6 +6397,10 @@ export const TYPE_API: readonly TypeApiEntry[] = [
     declaration: 'export interface SkillDefinition extends SkillSummary {\n    readonly content: string;\n    readonly metadata?: Readonly<Record<string, unknown>>;\n}',
   },
   {
+    name: 'SkillDraftRequest',
+    declaration: 'export interface SkillDraftRequest {\n    readonly name: string;\n    readonly content: string;\n}',
+  },
+  {
     name: 'SkillEntry',
     declaration: 'export interface SkillEntry {\n    readonly path?: string;\n    readonly name: string;\n    readonly description: string;\n    readonly whenToUse?: string;\n    readonly modelInvocable: boolean;\n}',
   },
@@ -6919,6 +7067,10 @@ export const TYPE_API: readonly TypeApiEntry[] = [
   {
     name: 'TypertTypeModel',
     declaration: 'export interface TypertTypeModel {\n    readonly name: string;\n    readonly declaration: string;\n}',
+  },
+  {
+    name: 'UpdatePlanRequest',
+    declaration: 'export interface UpdatePlanRequest {\n    readonly planId: string;\n    readonly baseRevision: number;\n    readonly plan: ModelingJson;\n}',
   },
   {
     name: 'UpdateTeamTaskRequest',

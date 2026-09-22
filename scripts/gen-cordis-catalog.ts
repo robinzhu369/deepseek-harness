@@ -91,6 +91,7 @@ export const SERVICE_PAGE: Record<string, string> = {
   invariants: 'invariants.md',
   llm: 'llm-streaming.md',
   lsp: 'lsp.md',
+  modeling: 'modeling.md',
   messageFeedback: 'feedback.md',
   sessionFeedback: 'feedback.md',
   permissionPresets: 'permission-presets.md',
@@ -261,6 +262,14 @@ export const EVENT_WALK_EXEMPTIONS: Record<string, string> = {
  * appear on more than one page.
  */
 export const LINK_MAP: Readonly<Record<string, string>> = {
+  ModelingJson: 'modeling.md',
+  ModelingSkillSnapshot: 'modeling.md',
+  SkillDraftRequest: 'modeling.md',
+  UpdatePlanRequest: 'modeling.md',
+  RegeneratePlanRequest: 'modeling.md',
+  ApproveAndRunRequest: 'modeling.md',
+  ApproveAndRunResult: 'modeling.md',
+  RerunRequest: 'modeling.md',
   WorkspaceChangesSummary: 'deliverables.md',
   WorkspaceFileDiff: 'deliverables.md',
   Reload: 'boot.md',

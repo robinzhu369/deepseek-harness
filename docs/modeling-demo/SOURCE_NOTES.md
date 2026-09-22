@@ -1,31 +1,33 @@
-# 来源与核验边界
+# Source and Verification Scope
 
-核验日期：2026-09-20。来源均为官方文档或原作者仓库。链接的分支可能变化，实施以本地固定提交为准。本文的架构、范围、UI 数值、API 和任务工时是针对用户需求的设计，不是对 Model X 私有实现的断言。
+English | [中文](SOURCE_NOTES.zh.md)
 
-| 编号 | 来源 | URL | 支持内容 |
+Verification Date: 2026-09-20. Sources are official documentation or original author repositories. Branches may change; implementation relies on locally pinned commits. The architecture, scope, UI values, APIs, and task hours in this document are designed for user requirements and do not assert the private implementation of Model X.
+
+| ID | Source | URL | Supported Content |
 |---|---|---|---|
-| [S01] | Harness README 与架构 | `https://github.com/deepseek-ai/deepseek-harness/blob/master/README.md` | 插件型底座；开发预览，不保证 API 稳定。 |
-| [S02] | Harness Web Client architecture | `https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/subsystems/web-client.md` | Host→Remote→Client Model→UI→Slots→React；不跨 feature 直接导入组件。 |
-| [S03] | Harness package.json | `https://github.com/deepseek-ai/deepseek-harness/blob/master/package.json` | 查阅快照 0.1.6-alpha.2 / pnpm11.7.0 / Node 范围；不是用户实装版本。 |
-| [S04] | Harness Skills | `https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/subsystems/skills.md` | 运行期 Skills 及项目目录发现；实施须核对固定版本。 |
-| [S05] | OpenAI Build skills | `https://developers.openai.com/codex/skills` | 项目 .agents/skills、SKILL.md、显式 $ 调用。官方站点可能重定向至 ChatGPT Learn。 |
-| [S06] | OpenAI skills README | `https://github.com/openai/skills/blob/main/README.md` | 已标记 deprecated，指向 openai/plugins。 |
-| [S07] | OpenAI plugins README | `https://github.com/openai/plugins/blob/main/README.md` | 当前插件样例与 manifest 组织。 |
-| [S08] | OpenAI build-web-apps skills | `https://github.com/openai/plugins/tree/main/plugins/build-web-apps/skills` | 前端开发、调试、React 等 Skill；按实际能力选用。 |
-| [S09] | Microsoft Playwright CLI / MCP | `https://github.com/microsoft/playwright-cli` | CLI 安装和浏览器操作；MCP 另见 https://github.com/microsoft/playwright-mcp 。 |
-| [S10] | OpenAI Codex MCP | `https://developers.openai.com/codex/mcp` | MCP 配置和命令，不默认授权外部服务。 |
-| [S11] | scikit-learn Common pitfalls | `https://scikit-learn.org/stable/common_pitfalls.html` | 先切分；只在训练集拟合预处理，Pipeline 避免泄漏。 |
-| [S12] | Polars Streaming | `https://docs.pola.rs/user-guide/concepts/streaming/` | 流式支持有算子限制，不能由此保证所有大数据任务内存。 |
-| [S13] | W3C Button Pattern | `https://www.w3.org/WAI/ARIA/apg/patterns/button/` | 可访问名称、键盘交互和状态语义。 |
-| [S14] | W3C Contrast Minimum | `https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html` | 普通文字对比度等检查。 |
-| [S15] | OpenAI CLI reference | `https://developers.openai.com/codex/cli/reference` | plugin marketplace/list/add 等当前命令；先核对本机帮助。 |
-| [S16] | Harness Web App README | `https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/bundle/web-app/README.md` | Web 启动、信任/监听与网络访问限制。 |
-| [S17] | Anthropic frontend-design | `https://github.com/anthropics/skills/blob/main/skills/frontend-design/SKILL.md` | 前端视觉设计辅助；未复制第三方 Skill 正文。 |
-| [S18] | Vercel web-design-guidelines | `https://github.com/vercel-labs/agent-skills/blob/main/skills/web-design-guidelines/SKILL.md` | UI 审核，原工作流需要在线抓取指南；内网应使用批准快照。 |
-| [S19] | OpenAI AGENTS.md | `https://developers.openai.com/codex/guides/agents-md` | 持久化项目指令和层级；不要覆盖上游规则。 |
+| [S01] | Harness README & Architecture | `https://github.com/deepseek-ai/deepseek-harness/blob/master/README.md` | Plugin-based foundation; development preview, API stability not guaranteed. |
+| [S02] | Harness Web Client architecture | `https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/subsystems/web-client.md` | Host→Remote→Client Model→UI→Slots→React; components are not directly imported across features. |
+| [S03] | Harness package.json | `https://github.com/deepseek-ai/deepseek-harness/blob/master/package.json` | Snapshot 0.1.6-alpha.2 / pnpm11.7.0 / Node range; not the user implementation version. |
+| [S04] | Harness Skills | `https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/subsystems/skills.md` | Runtime skills and project directory discovery; implementation must verify fixed versions. |
+| [S05] | OpenAI Build skills | `https://developers.openai.com/codex/skills` | Project `.agents/skills`, SKILL.md, explicit $ calls. Official site may redirect to ChatGPT Learn. |
+| [S06] | OpenAI skills README | `https://github.com/openai/skills/blob/main/README.md` | Marked deprecated; points to openai/plugins. |
+| [S07] | OpenAI plugins README | `https://github.com/openai/plugins/blob/main/README.md` | Current plugin samples and manifest organization. |
+| [S08] | OpenAI build-web-apps skills | `https://github.com/openai/plugins/tree/main/plugins/build-web-apps/skills` | Frontend development, debugging, React, etc.; select based on actual capabilities. |
+| [S09] | Microsoft Playwright CLI / MCP | `https://github.com/microsoft/playwright-cli` | CLI installation and browser operations; see https://github.com/microsoft/playwright-mcp for MCP. |
+| [S10] | OpenAI Codex MCP | `https://developers.openai.com/codex/mcp` | MCP configuration and commands; external services are not authorized by default. |
+| [S11] | scikit-learn Common pitfalls | `https://scikit-learn.org/stable/common_pitfalls.html` | Split first; fit preprocessing only on training set, use Pipeline to avoid leakage. |
+| [S12] | Polars Streaming | `https://docs.pola.rs/user-guide/concepts/streaming/` | Stream support has operator restrictions and cannot guarantee memory for all big data tasks. |
+| [S13] | W3C Button Pattern | `https://www.w3.org/WAI/ARIA/apg/patterns/button/` | Accessible names, keyboard interaction, and state semantics. |
+| [S14] | W3C Contrast Minimum | `https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html` | Checks for normal text contrast ratios, etc. |
+| [S15] | OpenAI CLI reference | `https://developers.openai.com/codex/cli/reference` | Current commands such as plugin marketplace/list/add; verify local help first. |
+| [S16] | Harness Web App README | `https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/bundle/web-app/README.md` | Web startup, trust/listening and network access restrictions. |
+| [S17] | Anthropic frontend-design | `https://github.com/anthropics/skills/blob/main/skills/frontend-design/SKILL.md` | Frontend visual design assistance; third-party skill body not copied. |
+| [S18] | Vercel web-design-guidelines | `https://github.com/vercel-labs/agent-skills/blob/main/skills/web-design-guidelines/SKILL.md` | UI review; original workflow requires online guide scraping; intranet should use approved snapshots. |
+| [S19] | OpenAI AGENTS.md | `https://developers.openai.com/codex/guides/agents-md` | Persistent project instructions and hierarchy; do not override upstream rules. |
 
-用户截图：随包 reference/modelx-reference.png，只作可见页面参考。未登录检查点金 Model X 私有应用，也未获取其后端实现。
+User screenshots: Included in the package as reference/modelx-reference.png for visible page references only. No login checkpoints or private Model X application access, nor backend implementation details were obtained.
 
-本包 6 个项目开发 Skill 与 4 个业务 Skill 模板为本次编写；未转发第三方 Skill 完整正文、字体文件或外部插件代码。安装第三方能力时请保留其许可证并检查全部引用资源。
+This package includes 6 development skill projects and 4 business skill templates used for this documentation; complete bodies of third-party skills, font files, or external plugin code are not forwarded. When installing third-party capabilities, retain their licenses and verify all referenced resources.
 
-这是开发文档/规范/原型包，不是已经完成的系统源码。文档生成环境完成的检查见包根 QA_REPORT.md；Harness 编译、模型调用、业务 E2E 与百万行性能仍需在用户目标仓库执行。
+This is a development document/specification/prototype package, not completed system source code. Verification checks performed in the generation environment are documented at QA_REPORT.md in the package root; Harness compilation, model invocation, business E2E tests, and million-line performance must be executed within the user's target repository.

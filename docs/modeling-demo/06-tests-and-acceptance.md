@@ -1,55 +1,57 @@
-# 06｜测试与验收
+# 06 | Testing and Acceptance
 
-## 6.1 最低业务用例
+English | [中文](06-tests-and-acceptance.zh.md)
 
-| ID | 用例 | 预期 |
+## 6.1 Minimum Business Scenarios
+
+| ID | Scenario | Expected result |
 |---|---|---|
-| E01 | 上传合法合成 CSV | 文件落盘，hash 稳定，Profile 与实际数据一致 |
-| E02 | 空 CSV / 无表头 / 重复列名 / 非支持编码 | 明确拒绝，不产生可用假数据集 |
-| E03 | 对话提出完整建模请求 | 真实调用领域工具，产生 schema 合法候选计划 |
-| E04 | 没有选择目标列 | 停在待补充，训练不可启动 |
-| E05 | 模型直接请求执行或夹带 approve 字段 | 被白名单/schema/权限拒绝 |
-| E06 | 用户确认计划两次/网络重试 | 同一幂等请求只创建一个 run |
-| E07 | 计划 revision 或数据 hash 已变化 | 409，用户需重新确认 |
-| E08 | 正常运行 | 节点状态真实推进，输出真实文件和指标 |
-| E09 | 切换会话与刷新 | 正确恢复当前会话，不重新执行、不串状态 |
-| E10 | 取消运行/强制 Worker 失败 | cancelled/failed；下游 blocked，未完成文件不可下载 |
-| E11 | 服务重启 | 原运行标记 interrupted，不假称续训/成功 |
-| E12 | 修改模型参数重跑 | 新 run_id，旧结果保留，合法复用有证据 |
-| E13 | 修改清洗/特征规则重跑 | 相关下游失效，不复用错误的预处理结果 |
-| E14 | 发布 Skill 新版本 | 新计划使用新快照，旧计划不变化 |
-| E15 | 手工配置模式/LLM 失败 | 明确标记，不被算作 Agent 实时闭环 |
-| E16 | 访问另一会话 artifact / path traversal | 拒绝，无文件或 token 泄露 |
+| E01 | Upload a valid synthetic CSV | File is stored, hash is stable, Profile matches actual data |
+| E02 | Empty CSV / no header / duplicate columns / unsupported encoding | Explicit rejection with no usable fake dataset |
+| E03 | Request a complete modeling task in Chat | Real domain tools run and produce a schema-valid candidate plan |
+| E04 | No target column selected | Flow waits for input and training cannot start |
+| E05 | Model requests execution directly or includes an approve field | Allowlist/schema/authorization rejects it |
+| E06 | User confirms twice or the network retries | One idempotent request creates only one run |
+| E07 | Plan revision or data hash changed | Return 409 and require confirmation again |
+| E08 | Normal run | Node states advance truthfully and emit real files and metrics |
+| E09 | Switch Session and refresh | Restore the correct Session without rerun or state leakage |
+| E10 | Cancel run or force Worker failure | cancelled/failed; downstream blocked; incomplete files unavailable |
+| E11 | Restart service | Previous run becomes interrupted, never falsely resumed or successful |
+| E12 | Change model parameters and rerun | New run_id, old result retained, valid reuse has evidence |
+| E13 | Change cleaning/feature rules and rerun | Related downstream work invalidates; stale preprocessing is not reused |
+| E14 | Publish a new Skill version | New plans use the new snapshot; old plans do not change |
+| E15 | Manual mode or LLM failure | Explicitly labeled and not counted as a real-time Agent loop |
+| E16 | Access another Session's artifact / path traversal | Reject without file or token disclosure |
 
-## 6.2 数据科学正确性用例
+## 6.2 Data-Science Correctness Scenarios
 
-构造训练集与验证/测试集具有不同缺失统计值的可控数据，验证填充值来自训练集。Spy/Mock 或显式拟合行记录验证 fit 从未看到验证/测试行。目标和记录 ID 不进入特征。
+Construct controlled data whose training and validation/test sets have different missing-value statistics and verify that imputation values come from training data. Use a Spy/Mock or explicit fitted-row record to prove that fit never observes validation/test rows. The target and record ID do not enter features.
 
-测试 One-Hot 未知类别、高基数、全空列、数值 NaN/Inf、少数类不足、标签类型/positive_label 不匹配。Split manifest 中各集合不重叠且覆盖合法样本。报告中的指标能够由保存的预测/模型与测试数据重新计算一致。
+Test unknown One-Hot categories, high cardinality, entirely empty columns, numeric NaN/Inf, insufficient minority classes, and mismatched label type/positive_label. Sets in the split manifest do not overlap and cover all valid samples. Metrics in the report can be recomputed consistently from saved predictions/models and test data.
 
-对 prepare_dataset 路径同样检查拟合边界；禁止因为“暂不训练”就全量拟合后再把文件标记为训练/验证/测试。
+Apply the same fit-boundary checks to `prepare_dataset`; not training yet does not permit fitting on all data before labeling files as train/validation/test.
 
-## 6.3 前端验收
+## 6.3 Frontend Acceptance
 
-| 检查 | 标准 |
+| Check | Standard |
 |---|---|
-| 主色 | 主要操作、选中项均为 #0F4C9E 系列，非默认紫色 |
-| 菜单 | 展开态每项 icon + 中文标签；选中态明确 |
-| 按钮 | 业务按钮带 icon；主要操作保留文字；icon-only 有名称/提示 |
-| 三栏 | 1440/1366 可用，右侧收起不影响中间 |
-| 滚动 | 消息/侧栏分别滚动，无全页水平溢出 |
-| 输入框 | 不覆盖最后消息，IME Enter 不误发 |
-| 信息口径 | 总列/特征/目标分开；采样统计标识可见 |
-| 状态 | 空、载入、确认、运行、失败、取消、完成均有下一步 |
-| 键盘 | Tab/Shift+Tab 可达，焦点可见，弹窗可 Esc 退出并恢复焦点 |
-| 性能 | 大表只预览和分页，不把百万行 JSON 传到浏览器 |
-| 真值 | 不从 LLM 文案推断完成，指标来自后端 |
+| Primary color | Primary actions and selections use the #0F4C9E family, not default purple |
+| Menu | Every expanded item has an icon and Chinese label; selection is clear |
+| Buttons | Business buttons have icons; primary actions retain text; icon-only controls have names/tooltips |
+| Three columns | Usable at 1440/1366; collapsing the right side does not impair the middle |
+| Scrolling | Messages and sidebars scroll independently; no page-wide horizontal overflow |
+| Composer | Does not cover the last message; IME Enter does not submit accidentally |
+| Metrics | Total columns/features/target remain distinct; sampled statistics are labeled |
+| States | Empty, loading, confirmation, running, failed, canceled, and completed states show a next step |
+| Keyboard | Tab/Shift+Tab reaches controls, focus is visible, Esc closes dialogs and restores focus |
+| Performance | Large tables use previews and pagination; one million rows are not sent to the browser as JSON |
+| Truth | Completion is not inferred from LLM text; metrics come from the backend |
 
-最少保存：workspace-empty、dataset-ready、plan-review、run-running、run-failed、run-succeeded 六类截图。桌面两种视口必测；1024/390 响应式验证优先级低于真实链路，但未验证需列出。
+Save at least six screenshot categories: workspace-empty, dataset-ready, plan-review, run-running, run-failed, and run-succeeded. Test two desktop viewports. Responsive checks at 1024/390 are lower priority than the live path, but list them when unverified.
 
-截图目录 `docs/modeling-demo/evidence/<date>/`。每张记录浏览器、视口、数据模式（fixture/live）、run_id（如有），不得让含密钥的 URL 或原始敏感记录进入截图。
+Store screenshots under `docs/modeling-demo/evidence/<date>/`. Record browser, viewport, data mode (fixture/live), and run_id when applicable. Do not include credential-bearing URLs or raw sensitive records.
 
-## 6.4 建议测试结构
+## 6.4 Suggested Test Layout
 
 ```text
 services/modeling-api/tests/
@@ -60,7 +62,7 @@ services/modeling-api/tests/
   test_run_lifecycle.py
   test_artifact_security.py
   test_skill_versions.py
-packages/modeling/.../tests/       # 实際路径由 T00 确认
+packages/experimental/modeling/tests/ # 实际路径由 T00 确认
   client-state.spec.ts
   modeling-tools.spec.ts
   modeling-ui.spec.tsx
@@ -70,15 +72,15 @@ tests/modeling-demo/
   visual-smoke.spec.ts
 ```
 
-遵循上游测试与构建命令，不用猜出的 npm test。将实际命令写入 REPO_DISCOVERY；命令不存在就是失败，不静默跳过。
+Follow upstream test and build commands instead of guessing `npm test`. Record actual commands in REPO_DISCOVERY. A missing command is a failure, not a reason to skip silently.
 
-## 6.5 独立性能测试
+## 6.5 Independent Performance Test
 
-百万行 × 百列测试记录硬件、数据类型/字符串基数、磁盘、文件字节、软件版本、每步 elapsed 和 peak RSS、是否全量、产物大小。Streaming 不表示所有算子都流式，部分操作可能回退到内存；大矩阵转换同样受内存限制。[S12]
+For a one-million-row by one-hundred-column test, record hardware, data types/string cardinality, disk, file bytes, software versions, elapsed time and peak RSS for each step, whether the data is complete, and artifact sizes. Streaming does not mean every operator streams; some operations may fall back to memory. Large-matrix conversion is also memory-limited. [S12]
 
-默认不承诺“百万行几秒完成”或“8GB 一定够”。只报告实际测量。未做测试使用 `SCALE_NOT_RUN`；不能用 Profile 读完文件推断所有清洗/特征/训练已支持。
+Do not promise that one million rows finish in seconds or that 8 GB is always sufficient. Report only measured results. Use `SCALE_NOT_RUN` when untested. Reading a complete Profile does not prove that all cleaning, feature, and training paths support the scale.
 
-## 6.6 完成报告模板
+## 6.6 Completion Report Template
 
 ```text
 实现：F01/F02/…
@@ -91,4 +93,4 @@ tests/modeling-demo/
 启动方式与演示步骤：可复制命令
 ```
 
-最终不要求模型指标“好看”，要求结果真实、可解释、可复验；不将软件 Demo 说成生产级风控平台。
+Final acceptance does not require attractive model metrics. It requires real, explainable, reproducible results and must not describe a software Demo as a production risk-control platform.

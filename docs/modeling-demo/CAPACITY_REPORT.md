@@ -1,22 +1,24 @@
-# 百万行 × 100 列容量报告
+# Million Rows × 100 Columns Capacity Report
 
-## 结论
+English | [中文](CAPACITY_REPORT.zh.md)
 
-T13 容量验证为 **PASS**。固定种子 `20260921` 以 5,000 行批次生成 1,000,000 行、100 列 CSV，没有先构造整表 DataFrame。文件为 403,872,329 字节，SHA-256 为 `c88fbab70bb6061edf17962d60bac084291e8105041783ad9f424b936b737bfc`。
+## Conclusion
 
-## 环境与方法
+T13 capacity validation is **PASS**. Using a fixed seed `20260921`, the system generated a CSV with 1,000,000 rows and 100 columns in batches of 5,000 without constructing an initial full DataFrame. The file size is 403,872,329 bytes, and the SHA-256 hash is `c88fbab70bb6061edf17962d60bac084291e8105041783ad9f424b936b737bfc`.
 
-环境为 macOS 26.6.2 arm64、10 CPU、24 GiB RAM、Python 3.10.20、Polars 1.0.0。峰值 RSS 使用 `resource.getrusage(RUSAGE_SELF).ru_maxrss` 测量；macOS 返回字节。服务使用正式 `DatasetService` 的分块写入、CSV 校验、SQLite 登记和后台完整 Profile。清洗/特征步骤仅用训练分片拟合中位数与类别词表，再流式导出 train/validation/test Parquet。
+## Environment and Methodology
 
-## 结果
+The environment is macOS 26.6.2 arm64, with 10 CPUs, 24 GiB RAM, Python 3.10.20, and Polars 1.0.0. Peak RSS was measured using `resource.getrusage(RUSAGE_SELF).ru_maxrss`; on macOS, this returns bytes in value. The service utilized the official `DatasetService` for chunked writing, CSV validation, SQLite registration, and a background full Profile. Cleaning/feature steps fitted medians and category vocabularies only to training shards before streaming export of train/validation/test Parquet files.
 
-| 阶段 | 耗时 | 阶段结束时进程峰值 RSS |
+## Results
+
+| Stage | Duration | Peak Process RSS at End of Stage |
 |---|---:|---:|
-| 批量生成 CSV | 0.779 秒 | 100,352,000 B |
-| 分块上传、登记、完整 Profile | 20.541 秒 | 556,580,864 B |
-| 清洗、类别编码、prepared/manifest 导出 | 3.651 秒 | 2,865,119,232 B |
-| 总计 | 24.971 秒 | 2,865,119,232 B（约 2.67 GiB） |
+| Batch CSV Generation | 0.779 s | 100,352,000 B |
+| Chunked Upload, Registration, Full Profile | 20.541 s | 556,580,864 B |
+| Cleaning, Category Encoding, prepared/manifest Export | 3.651 s | 2,865,119,232 B |
+| Total | 24.971 s | 2,865,119,232 B (~2.67 GiB) |
 
-Profile 返回 1,000,000 行、100 列，`computation_scope = {kind: full_dataset, rows_scanned: 1000000, preview_rows: 20}`。prepared 切分为 train 800,000、validation 100,000、test 100,000；105 个输出特征。三个 Parquet 合计 189,683,020 字节，均记录 SHA-256。完整逻辑回归训练为 `NOT_RUN`，因为本容量 Gate 不强制训练。
+The Profile returned 1,000,000 rows and 100 columns with `computation_scope = {kind: full_dataset, rows_scanned: 1000000, preview_rows: 20}`. The prepared dataset was split into train (800,000), validation (100,000), and test (100,000) with 105 output features. All three Parquet files totaled 189,683,020 bytes, each recording a SHA-256 hash. Full logistic regression training is marked `NOT_RUN` as this capacity gate does not mandate model training.
 
-初次 prepared 尝试真实暴露了 Polars 1.0 投影/行索引组合的列偏移；改用稳定的 `record_id` 派生分片后，同规格最终命令退出码 0。最终结构化证据位于 `evidence/2026-09-21/t13-capacity.json`，失败尝试未被冒充为最终结果。
+The initial prepared attempt exposed column offset issues with Polars 1.0 when combining projections and row indices; switching to stable `record_id` derived shards resulted in the final command exiting with code 0 for the same specification. Final structured evidence is located at `evidence/2026-09-21/t13-capacity.json`; failed attempts were not masqueraded as final results.

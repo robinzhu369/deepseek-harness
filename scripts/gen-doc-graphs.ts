@@ -672,6 +672,14 @@ const SERVICE_ROLES: ServiceRole[] = [
     note: 'Owns the Worker-hosted CDP target and the transport-independent Host and Client observation and Cordis-tree query API.',
   },
   {
+    key: 'modeling',
+    pkg: 'experimental-modeling',
+    title: 'Private Modeling API gateway',
+    mode: 'core',
+    consumers: ['experimental-modeling'],
+    note: 'Owns Session-bound requests to the private Modeling API; bounded model tools can inspect and propose, while application-only Remote methods retain approval authority.',
+  },
+  {
     key: 'jobs',
     pkg: 'jobs',
     title: 'Background job registry',

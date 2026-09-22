@@ -1,41 +1,44 @@
-# 开发进度与证据
+# Development Progress and Evidence
 
-当前状态：T00～T13 已完成，G1 与 G2 均通过。T13 已冻结版本，完成统一启动、冷启动、全新真实 Agent E2E、独立 Rerun、百万行 × 100 列容量实测、最终文档和聚焦回归。项目达到 Demo Ready；不继续新增 T14。
+English | [中文](progress.zh.md)
 
-本文件由 Codex 在目标仓库执行时更新，不能把本包自检当成业务验收。
+Current status: T00–T13 are complete, and G1 and G2 pass. T13 froze the version after unified startup, cold startup, a new live Agent E2E, an independent rerun, a measured one-million-row by one-hundred-column capacity run, final documentation, and focused regression. The project is Demo Ready; do not add T14.
 
-## 当前任务
+Codex updates this file while working in the target repository. Passing this kit's own checks is not business acceptance.
 
-T13 PASS；按要求停止。
+## Current Task
 
-## 已通过的 Gate
-G0 — 基座可启动、最小扩展可注册：PASS。Web 在 `127.0.0.1:3080` 输出 ready；自定义 `ToolRuntime` 工具注册与执行成功。
+T13 PASS; stopped as requested.
 
-G1 — 不依赖 LLM 的计算链路真实完成并导出文件：PASS。合成数据、三份切分数据、预处理器、逻辑回归模型、预测、指标和 manifest 已生成并独立复验。
+## Passed Gates
 
-T04 — 上传与数据 Profile：PASS。上传使用有界分块读取，稳定 hash 对应不可覆盖的原始文件；后台 Profile、受限预览和异常 CSV 拒绝均有测试。
+G0 — Base application starts and the minimal extension registers: PASS. Web reported ready at `127.0.0.1:3080`; custom `ToolRuntime` tool registration and execution succeeded.
 
-T05 — 任务、审批与持久化：PASS。SQLite 保存计划 revision/hash、运行状态、节点事件和完成产物；真实 Pipeline 由独立进程运行，幂等、单并发、超时、取消、重启中断和会话授权均有测试。
+G1 — The compute path completes and exports real files without an LLM: PASS. Synthetic data, three split datasets, a preprocessor, logistic-regression model, predictions, metrics, and manifest were generated and independently reverified.
 
-T06 — Harness 领域工具与 Agent 计划：PASS。新的真实 Session `session-8bc8aaf9-3ef1-49fb-91a8-3909e5c030b0` 加载四个运行时 Skill，并依次调用数据 Profile、候选计划、运行状态和运行结果工具；模型可见工具中不含审批、Shell、Python、SQL 或任意网络工具。
+T04 — Upload and data Profile: PASS. Upload uses bounded chunked reads, a stable hash identifies an immutable original file, and tests cover background Profile generation, bounded preview, and invalid-CSV rejection.
 
-G2 — 真实 Agent 候选计划、人工确认、独立执行与结果解释：PASS。计划在确认前保持 `proposed` 且没有 Run；用户确认后 Host Remote 审批路径创建 `run_19b21fa9ea464ef09b47c78cf78181dc`，独立 Worker 成功执行，Agent 读取该 Run 的真实状态与结果并如实解释阈值 0.5 下测试集 F1 为 0。
+T05 — Tasks, approval, and persistence: PASS. SQLite stores plan revision/hash, run state, node events, and completed artifacts. A separate process executes the real Pipeline. Tests cover idempotency, single concurrency, timeout, cancellation, restart interruption, and Session authorization.
 
-T07 — 主题与三栏骨架：PASS。现有 Harness 侧栏、建模主栏和 320px 任务/产物栏在 1440×900 与 1366×768 下通过浏览器复核；`#0F4C9E` 主题、icon+中文菜单、业务按钮、独立滚动与显式 `UI PREVIEW / FIXTURE` 模式已落实。
+T06 — Harness domain tools and Agent planning: PASS. A new live Session `session-8bc8aaf9-3ef1-49fb-91a8-3909e5c030b0` loaded four runtime Skills and called the data Profile, candidate plan, run status, and run result tools in order. Model-visible tools did not include approval, Shell, Python, SQL, or arbitrary network access.
 
-T08 — 业务卡片与任务面板联调：PASS。React-free Session model 恢复真实 dataset/plan/run/result，双击确认只创建一个 Run，刷新不重跑，终态停止轮询；真实 `run_0dc0d8b8375d484da518dd1623a066dd` 成功并生成 13 个完成产物，metrics artifact 通过仅含 artifact ID 的 Host 路由下载。
+G2 — Real Agent candidate plan, human confirmation, isolated execution, and result interpretation: PASS. Before confirmation, the plan remained `proposed` and no Run existed. After confirmation, the Host Remote approval path created `run_19b21fa9ea464ef09b47c78cf78181dc`; the independent Worker succeeded, and the Agent read the real state and result and accurately reported a test-set F1 of 0 at threshold 0.5.
 
-T09 — 业务 Skill 轻量管理：PASS。Skill 中心仅列出四个运行时业务 Skill；Session 私有 Draft 经 YAML、描述、大小、工具与能力规则校验后发布为不可变版本。`data-analysis` 已通过真实 UI 从 `0.1.0-demo` 发布为 `0.2.0-demo`，旧计划仍保留原版本快照，自动化回归验证新计划使用活动版本。
+T07 — Theme and three-column skeleton: PASS. The existing Harness sidebar, modeling main column, and 320px task/artifact column passed browser review at 1440×900 and 1366×768. The `#0F4C9E` theme, icon-plus-Chinese menus, business buttons, independent scrolling, and explicit `UI PREVIEW / FIXTURE` mode are implemented.
 
-T10 — 有界流程编辑与重跑：PASS。表单从 `/v1/capabilities` 生成，不接受任意 JSON 或 DAG；目标列不会出现在排除列以外的特征控件中，服务端也拒绝目标泄漏。修改逻辑回归 `C` 从 1.0 到 0.5 创建 r2，记录 Train/Evaluate/Result 失效且如实说明当前全量重算；双击确认只创建一个新 Run，旧 Run 与两个 revision 均保留。
+T08 — Business-card and task-panel integration: PASS. The React-free Session model restores real dataset/plan/run/result state. Double confirmation creates one Run, refresh does not rerun, and polling stops at terminal state. Real `run_0dc0d8b8375d484da518dd1623a066dd` succeeded with 13 completed artifacts; the metrics artifact downloaded through a Host route that exposes only an artifact ID.
 
-T11 — 端到端与安全回归：PASS。新真实 Session 完成上传、四个 Skill 加载、Agent 提案、UI revision 2/3 修改、两次人工确认运行、产物下载和 Agent 结果解释；14 项 T11 Gate 全部通过。Session 越权、恶意 Skill、revision 冲突、幂等、刷新/切换、重启中断、真实进程取消、失败 UI、产物安全与指标一致性均有可复验测试或实时证据。
+T09 — Lightweight business Skill management: PASS. The Skill center lists only four runtime business Skills. A Session-private Draft passes YAML, description, size, tool, and capability checks before publishing an immutable version. The real UI published `data-analysis` from `0.1.0-demo` to `0.2.0-demo`; old plans retain their original snapshot, and regression coverage proves new plans use the active version.
 
-T12 — 视觉截图复核与修复：PASS。Codex 内置浏览器在 1440×900、1366×768、1024×768 和 390×844 下完成 Screenshot → Critique → Fix → Screenshot；16 项 T12 Gate 全部通过。工作台现在限制在标签栏以下的可视高度，主栏与右栏独立滚动并在 Composer 上方保留安全区，长 computation scope、plan ID/hash 可换行。空态、规划、proposed、编辑、running、succeeded、failed、Skill Center、Skill editor 和 Run History 均已复核；非实时生命周期状态带有 `UI PREVIEW / FIXTURE` 标识。
+T10 — Bounded workflow editing and rerun: PASS. The form is generated from `/v1/capabilities` and accepts neither arbitrary JSON nor a DAG. The target cannot enter feature controls except as an excluded column, and the server also rejects target leakage. Changing logistic-regression `C` from 1.0 to 0.5 created r2, recorded Train/Evaluate/Result invalidation, and accurately described the current full recomputation. Double confirmation created one new Run while retaining the old Run and both revisions.
 
-T13 — 最终冻结、部署与交付：PASS。统一 up/down/health 脚本从停止状态在 1.03 秒内启动 API 与 Web；全新真实 Session 完成上传、四 Skill 规划、UI revision 修改、人工确认、真实 Worker、Artifact 下载、Agent 解释、参数修改、独立 Rerun 与双 Run History。1,000,000 × 100 容量实测 PASS，总耗时 24.971 秒、峰值 RSS 2,865,119,232 B。OS CPU/内存硬配额明确为 NOT_IMPLEMENTED / P1；Playwright Chromium NOT_RUN，内置浏览器 PASS。
+T11 — End-to-end and security regression: PASS. A new live Session completed upload, four-Skill loading, Agent proposal, UI revision 2/3 edits, two human-confirmed runs, artifact download, and Agent result interpretation. All 14 T11 gates passed. Reproducible tests or live evidence cover cross-Session access, malicious Skills, revision conflicts, idempotency, refresh/switching, restart interruption, real-process cancellation, failure UI, artifact security, and metric consistency.
 
-## 阶段记录
+T12 — Screenshot review and fixes: PASS. The built-in Codex browser completed Screenshot → Critique → Fix → Screenshot at 1440×900, 1366×768, 1024×768, and 390×844; all 16 T12 gates passed. The workbench is constrained below the tab bar, the main and right columns scroll independently with safe space above the Composer, and long computation scope, plan ID, and hash values wrap. Empty, planning, proposed, editing, running, succeeded, failed, Skill Center, Skill editor, and Run History states were reviewed. Non-live lifecycle states carry `UI PREVIEW / FIXTURE`.
+
+T13 — Final freeze, deployment, and delivery: PASS. Unified up/down/health scripts started API and Web from a stopped state in 1.03 seconds. A new live Session completed upload, four-Skill planning, UI revision editing, human confirmation, real Worker execution, artifact download, Agent interpretation, parameter editing, an independent rerun, and two-entry Run History. The 1,000,000 × 100 capacity measurement passed in 24.971 seconds with peak RSS 2,865,119,232 B. OS CPU/memory hard quotas are NOT_IMPLEMENTED / P1; Playwright Chromium is NOT_RUN; the built-in browser passed.
+
+## Stage Records
 
 ```text
 日期/任务 ID：2026-09-20 / T00
@@ -205,8 +208,6 @@ T13 — 最终冻结、部署与交付：PASS。统一 up/down/health 脚本从�
 下一任务：无；按要求停止，不创建 T14
 ```
 
-## 阶段记录模板
-
 ```text
 日期/任务 ID：2026-09-21 / 建模工作台双栏视觉优化
 修改文件：packages/experimental/modeling/src/client/{ModelingWorkspace.tsx,ModelingWorkspace.module.css,locales.ts}、packages/experimental/modeling/{README.md,README.zh.md,README.i18n.yaml}、docs/modeling-demo/{progress.md,evidence/2026-09-21/ui-two-column.json}
@@ -229,18 +230,6 @@ T13 — 最终冻结、部署与交付：PASS。统一 up/down/health 脚本从�
 检查：头部、revision 提示和操作栏固定可见；基础配置、数据配置、切分、预处理、特征、模型和运行限制按区组织；保存仍调用原 updatePlan 并保留 revision 冲突错误
 阻塞与剩余问题：弹窗字段继续受当前 Plan schema 和 `/v1/capabilities` 约束，不新增算法、切分或执行配置
 下一任务：无
-```
-
-```text
-日期/任务 ID：
-修改文件：
-实际命令：
-退出码/输出摘要：
-业务或界面模式：live / fixture / manual
-截图/日志路径：
-检查：PASS / FAIL / NOT_RUN
-阻塞与剩余问题：
-下一任务：
 ```
 
 ```text
@@ -372,4 +361,30 @@ T13 — 最终冻结、部署与交付：PASS。统一 up/down/health 脚本从�
 检查：底层哈希、发布时间与校验流程未修改；仅调整技能卡片展示。
 阻塞与剩余问题：全仓测试未运行。
 下一任务：无
+```
+
+```text
+日期/任务 ID：2026-09-22 / 结果产物目录清晰化
+修改文件：services/modeling-api/app/database.py、services/modeling-api/tests/test_run_lifecycle.py、packages/experimental/modeling/src/client/{ModelingWorkspace.tsx,ModelingWorkspace.module.css,fixtures.ts,locales.ts,model.ts}、packages/experimental/modeling/tests/client-model.client.spec.ts、双语 README 与配对记录、docs/modeling-demo/progress.md
+实际命令：python3 -m pytest services/modeling-api/tests/test_run_lifecycle.py -q；pnpm exec tsc -p packages/experimental/modeling/tsconfig.client.json --noEmit；pnpm exec vitest run packages/experimental/modeling/tests/{client-model.client.spec.ts,modeling.spec.ts}；pnpm exec oxlint packages/experimental/modeling/src packages/experimental/modeling/tests --deny-warnings；pnpm run verify-client-ui-i18n；pnpm --filter @deepseek-ai/dsh-experimental-modeling run bundle；双语 README 配对检查；改动文件范围 git diff --check；更新后的 Modeling API 与 Harness Web 实页检查
+退出码/输出摘要：Python 9 PASS；前端 22 PASS；TypeScript、lint、客户端国际化、bundle、双语 README 配对与本任务文件范围 diff check 通过。全工作树 diff check 仍命中用户已有 DEMO_GUIDE.md 行尾空格。
+业务或界面模式：live Harness Session / live Modeling API / live browser UI
+截图/日志路径：Codex 内置浏览器内联截图；.artifacts/modeling-demo/runtime/logs/{harness-web.log,modeling-api.log}
+检查：结果区显示服务内相对目录 runs/<run_id>/；13 个产物按实际文件名、中文用途与文件大小展示，test/train/validation 及其 predictions 文件不再全部显示为 prepared_data；下载仍使用不透明 artifact ID，工作台响应不含 storage_key。
+阻塞与剩余问题：目录是服务内相对坐标，不代表浏览器本地下载目录；页面已明确提示点击文件下载到本地。用户已有 DEMO_GUIDE.md 行尾空格未修改；全仓测试未运行。
+下一任务：无
+```
+
+## Stage Record Template
+
+```text
+日期/任务 ID：
+修改文件：
+实际命令：
+退出码/输出摘要：
+业务或界面模式：live / fixture / manual
+截图/日志路径：
+检查：PASS / FAIL / NOT_RUN
+阻塞与剩余问题：
+下一任务：
 ```

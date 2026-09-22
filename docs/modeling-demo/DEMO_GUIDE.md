@@ -1,41 +1,43 @@
-# 智模工作台 8～10 分钟演示指南
+# Harness Modeling Workbench 8–10 Minute Demo Guide
 
-## 1. 启动环境（约 1 分钟）
+English | [中文](DEMO_GUIDE.zh.md)
 
-操作：从仓库根目录运行 `scripts/modeling-demo-up.sh` 与 `scripts/modeling-demo-health.sh`，打开启动脚本输出的 `Harness Web:` 完整地址，保留 `?token=...` 查询参数。预期：API 200、Web 在鉴权前为 401 且 PID 存活，带令牌地址打开后 Harness 显示“智模工作台”。失败时检查 `.env`、DeepSeek credential 和 `${MODELING_DEMO_ROOT}/logs/`。
+## 1. Start Environment (~1 minute)
 
-## 2. 上传 Demo Dataset（约 30 秒）
+**Action:** Run `scripts/modeling-demo-up.sh` and `scripts/modeling-demo-health.sh` from the repository root. Open the full address output by the startup scripts for **Harness Web**, retaining the `?token=...` query parameter. **Expected Result:** API returns 200; web access is 401 before authentication but PID remains alive; opening with the token displays "智模工作台" (Modeling Workbench). **Troubleshooting:** If failed, check `.env`, DeepSeek credentials, and `${MODELING_DEMO_ROOT}/logs/`.
 
-操作：创建新 Session，在数据中心上传受支持的合成 CSV。预期：状态 `uploaded → profiling → ready`，显示有限 Preview。失败时检查 CSV UTF-8、表头、重复列、上传上限及 Session ID 是否一致。
+## 2. Upload Demo Dataset (~30 seconds)
 
-## 3. 输入精确 Prompt（约 1 分钟）
+**Action:** Create a new Session and upload supported synthetic CSV to the data center. **Expected Result:** Status transitions `uploaded → profiling → ready` with limited preview displayed. **Troubleshooting:** If failed, check CSV UTF-8 encoding, headers, duplicate columns, upload limits, and ensure consistency of the Session ID.
 
-操作：粘贴：`请分析数据集 <dataset_id>，针对 label 生成二分类建模方案。依次加载 data-analysis、data-cleaning、feature-engineering、model-training；只提出方案，不自动执行；明确排除字段、缺失值处理、类别编码、60/20/20 切分和逻辑回归；等我确认并完成运行后，再加载 model-evaluation，基于真实结果解释指标、混淆矩阵和阈值。` 预期：规划阶段加载前四个 Skill 并调用 `modeling_get_dataset_profile` 与 `modeling_propose_plan`；运行成功后加载 model-evaluation 并调用 `modeling_get_run_result`。失败时检查 Provider、credential、Dataset Session 归属与 Profile 状态。
+## 3. Input Precise Prompt (~1 minute)
 
-## 4. 查看 Profile 与 proposed Plan（约 1 分钟）
+**Action:** Paste: `Please analyze dataset <dataset_id> and generate a binary classification modeling scheme for label. Sequentially load data-analysis, data-cleaning, feature-engineering, model-training; propose only without auto-execution; explicitly exclude fields handling, missing value processing, category encoding, 60/20/20 split, and logistic regression; wait until I confirm and complete execution before loading model-evaluation to interpret metrics, confusion matrix, and thresholds based on real results.` **Expected Result:** In the planning phase, load the first four Skills and call `modeling_get_dataset_profile` and `modeling_propose_plan`; upon successful run, load model-evaluation and call `modeling_get_run_result`. **Troubleshooting:** If failed, check Provider, credentials, Dataset Session ownership, and Profile status.
 
-操作：切换到建模工作台。预期：真实样本/列数、缺失摘要、计算范围、Plan revision/hash、`proposed` 与待确认状态；此时没有 Run。失败时点击刷新并检查 Modeling API。
+## 4. View Profile & Proposed Plan (~1 minute)
 
-## 5. 修改一个参数（约 30 秒）
+**Action:** Switch to the Modeling Workbench. **Expected Result:** Display real sample/column counts, missing summary, computation scope, plan revision/hash, `proposed` state with pending confirmation; no Run exists yet. **Troubleshooting:** If failed, click refresh and check the Modeling API.
 
-操作：点击“修改方案”，把逻辑回归 `C` 从 1 改为 0.5，保存新 revision。预期：revision/hash 改变，页面列出 Train → Evaluate → Result 失效；当前实现如实说明会完整重算。失败时检查 revision 冲突并刷新后重试。
+## 5. Modify One Parameter (~30 seconds)
 
-## 6. 人工确认并观察时间线（约 1 分钟）
+**Action:** Click "Modify Plan", change logistic regression `C` from 1 to 0.5, and save as a new revision. **Expected Result:** Revision/hash changes; page lists Train → Evaluate → Result as invalid (current implementation notes full recalculation will occur). **Troubleshooting:** If failed, check for revision conflicts and retry after refresh.
 
-操作：点击“确认并执行”。预期：只有此时创建 Run，状态经过 queued/running/succeeded，节点事件来自真实 Worker。失败时检查单并发、timeout、Worker 日志和 Plan 是否仍为 proposed。
+## 6. Confirm Manually & Observe Timeline (~1 minute)
 
-## 7. 查看结果（约 1 分钟）
+**Action:** Click "Confirm and Execute". **Expected Result:** Only then is a Run created; status progresses through `queued/running/succeeded` with node events from real workers. **Troubleshooting:** If failed, check single concurrency limits, timeouts, worker logs, and ensure the Plan remains in `proposed` state if applicable.
 
-操作：查看 ROC-AUC、AP、F1、阈值、混淆矩阵与样本数；让 Agent 依次调用 run status/result 解释。预期：Agent 区分排序能力与阈值 0.5 的分类表现，不美化 F1=0。失败时确认 Run 已 succeeded。
+## 7. View Results (~1 minute)
 
-## 8. 下载 Artifact（约 30 秒）
+**Action:** Inspect ROC-AUC, AP, F1, threshold, confusion matrix, and sample counts; let the Agent sequentially call run status/result to explain. **Expected Result:** The Agent distinguishes ranking ability from classification performance at a 0.5 threshold without embellishing `F1=0`. **Troubleshooting:** If failed, confirm the Run has succeeded.
 
-操作：通过 Artifact ID 下载 `metrics.json` 或模型产物。预期：只下载 completed 产物，下载文件 SHA-256 与 manifest 一致。失败时检查 Artifact 是否属于当前 Session；客户端路径不是合法下载参数。
+## 8. Download Artifact (~30 seconds)
 
-## 9. 修改模型参数并 Rerun（约 1 分钟）
+**Action:** Download `metrics.json` or model artifacts via Artifact ID. **Expected Result:** Only download completed artifacts; downloaded file SHA-256 matches manifest. **Troubleshooting:** If failed, verify artifact belongs to the current Session and that client paths are valid download parameters.
 
-操作：选择“调整方案并重跑”，把 `C` 改为 1.5，保存并再次人工确认。预期：创建新的 revision 与独立 Run，旧 Run 保留，`rerun_of` 指向旧 Run。失败时检查幂等键、revision 与当前 Run 状态。
+## 9. Modify Model Parameters & Rerun (~1 minute)
 
-## 10. Run History 与 Skill Center（约 1 分钟）
+**Action:** Select "Adjust Plan and Re-run", change `C` to 1.5, save, and manually confirm again. **Expected Result:** Creates a new revision with an independent Run; old Run is preserved; `rerun_of` points to the previous Run. **Troubleshooting:** If failed, check idempotency keys, revisions, and current Run status.
 
-操作：打开运行记录与技能中心。预期：历史页同时显示两个 succeeded Run；技能中心仅显示五个建模 Skill 及其发布版本，“技能自检”与模型评估 Skill 含义不同。失败时确认仍处于同一 Session，点击刷新。
+## 10. Run History & Skill Center (~1 minute)
+
+**Action:** Open run records and the skill center. **Expected Result:** History page shows both succeeded Runs; skill center displays only five modeling skills with their release versions; "Skill Self-Check" differs in meaning from model evaluation skills. **Troubleshooting:** If failed, confirm you are still within the same Session and click refresh.

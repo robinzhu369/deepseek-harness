@@ -1,22 +1,24 @@
-# 决策记录
+# Decision Record
 
-## ADR-001：沿用 Harness，而非重建 Agent / 前端
-状态：设计确定；具体提交与扩展 API 等待 T00 验证。
+English | [中文](DECISIONS.zh.md)
 
-## ADR-002：受控 JSON 计划 + Python 白名单执行
-状态：设计确定。模型无审批/任意代码工具。
+## ADR-001: Retain Harness, Do Not Rebuild Agent/Frontend
+Status: Design finalized; specific submission and extended API pending T00 validation.
 
-## ADR-003：单并发子进程 + SQLite
-状态：两天 Demo 默认。已有已验证基础设施可以复用，但不增加关键路径。
+## ADR-002: Controlled JSON Plan + Python Whitelist Execution
+Status: Design finalized. No model approval or arbitrary code tools allowed.
 
-## ADR-004：固定流程骨架 + 可选特征与参数编辑
-状态：Demo 范围。不是任意 DAG/完整编排平台；后续可升级。
+## ADR-003: Single Concurrent Subprocess + SQLite
+Status: Default for two-day demos. Existing verified infrastructure can be reused without impacting the critical path.
 
-## ADR-005：开发 Skill 与业务 Skill 隔离
-状态：必须实现。仅分两个目录不足，运行 preset / workspace 需实测可见列表。
+## ADR-004: Fixed Process Skeleton + Optional Feature and Parameter Editing
+Status: Demo scope only; not an arbitrary DAG or full orchestration platform; upgradeable later.
 
-## ADR-006：蓝色三栏工作台
-状态：视觉约束确定。#0F4C9E；图标与文字规范见 02 章。
+## ADR-005: Isolation of Development Skills from Business Skills
+Status: Mandatory implementation. Merely separating into two directories is insufficient; running presets/workspaces must be verified to show the actual list.
 
-## 新决策记录格式
-日期 / 触发问题 / 备选与取舍 / 实际代码证据 / 是否影响范围 / 用户需确认项。
+## ADR-006: Blue Three-Column Workspace
+Status: Visual constraints finalized. Color #0F4C9E; icon and text specifications are in Chapter 02.
+
+## New Decision Record Format
+Date / Triggering Issue / Alternatives & Trade-offs / Actual Code Evidence / Scope Impact / User Confirmation Items.

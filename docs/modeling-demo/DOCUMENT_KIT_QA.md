@@ -1,45 +1,43 @@
-# 资料包质量检查报告
+# Package Quality Check Report
 
-日期：2026-09-20。范围：本次生成的 Markdown、Schema、原创项目 Skills、安全复制脚本与静态 HTML 设计参考。
+English | [中文](DOCUMENT_KIT_QA.zh.md)
 
-**本报告不证明目标 Harness 应用已完成。真实系统编译、模型调用、建模计算、内网部署与性能测试仍待 Codex 在用户仓库执行。**
+Date: 2026-09-20. Scope: Generated Markdown, Schema, original project Skills, secure copy scripts, and static HTML design references in this package.
 
-## 已执行
+**This report does not certify that the target Harness application is complete. Real system compilation, model invocation, modeling calculations, intranet deployment, and performance testing remain to be executed by Codex within the user's repository.**
 
-| 检查 | 结果 | 证据 |
+## Executed
+
+| Check | Result | Evidence |
 |---|---|---|
-| JSON 语法、JSON Schema 与合法计划/事件示例 | PASS | 资料包根目录 qa/document-validation.json |
-| 六个开发 Skill 的 YAML frontmatter | PASS | 资料包根目录 qa/document-validation.json |
-| Markdown 显式本地链接、任务依赖顺序及工时汇总 | PASS | 资料包根目录 qa/document-validation.json |
-| 品牌主色、HTML 无外部可执行资源 | PASS | 资料包根目录 qa/document-validation.json |
-| 安装器默认 dry-run 不写入 | PASS | 资料包根目录 qa/installer-results.json |
-| 安装器保留 AGENTS 原文并创建备份 | PASS | 资料包根目录 qa/installer-results.json |
-| 重复安装幂等，不重复追加 AGENTS | PASS | 资料包根目录 qa/installer-results.json |
-| 已有不同文件拒绝覆盖，目标符号链接拒绝写入 | PASS | 资料包根目录 qa/installer-results.json |
-| 任意 code 字段被计划 Schema 拒绝 | PASS | 资料包根目录 qa/installer-results.json |
-| 1440×900、1366×768、1024×768、390×844 原型布局 | PASS | 资料包根目录 qa/prototype-browser-results.json 与 ui/preview-*.png |
-| 原型页面无横向溢出、按钮均有文字或 aria-label、按钮均带 SVG | PASS | 资料包根目录 qa/prototype-browser-results.json |
-| 原型编辑弹窗与 Esc、任务/上下文 Tab、窄屏任务抽屉 | PASS | 资料包根目录 qa/prototype-browser-results.json |
-| 原型 JavaScript 无 pageerror、无外部 HTTP 请求 | PASS | 资料包根目录 qa/prototype-browser-results.json |
+| JSON syntax, JSON Schema, and valid plan/event examples | PASS | Package root directory qa/document-validation.json |
+| YAML frontmatter for six development Skills | PASS | Package root directory qa/document-validation.json |
+| Markdown explicit local links, task dependency order, and effort summary | PASS | Package root directory qa/document-validation.json |
+| Brand primary color; HTML with no external executable resources | PASS | Package root directory qa/document-validation.json |
+| Installer default dry-run does not write | PASS | Package root directory qa/installer-results.json |
+| Installer preserves original AGENTS and creates backups | PASS | Package root directory qa/installer-results.json |
+| Idempotent reinstallation; no duplicate appending of AGENTS | PASS | Package root directory qa/installer-results.json |
+| Existing different files rejected for overwrite; target symlinks reject write | PASS | Package root directory qa/installer-results.json |
+| Any `code` field value rejected by plan Schema | PASS | Package root directory qa/installer-results.json |
+| Prototype layouts: 1440×900, 1366×768, 1024×768, 390×844 | PASS | Package root directory qa/prototype-browser-results.json and ui/preview-*.png |
+| No horizontal overflow on prototype pages; buttons have text or aria-labels; all buttons include SVG | PASS | Package root directory qa/prototype-browser-results.json |
+| Prototype edit modals, Esc key handling, task/context tabs, narrow-screen task drawers | PASS | Package root directory qa/prototype-browser-results.json |
+| No page errors in prototype JavaScript; no external HTTP requests | PASS | Package root directory qa/prototype-browser-results.json |
 
-安装器测试只使用隔离的临时测试目录，没有修改用户 GitHub 仓库。
+Installer tests used only isolated temporary test directories without modifying the user's GitHub repository. The browser environment already has Chromium available. Since direct `file://` navigation is prohibited in this environment, Playwright's `page.set_content` was used to load the same self-contained HTML; this navigation restriction remains active. Both package-included and standalone HTML have inline theme CSS with no network dependency. This constitutes static page rendering/local interaction checks, not HTTP service or business end-to-end tests.
 
-浏览器使用环境已有 Chromium。由于本环境禁止直接 file:// 导航，测试通过 Playwright 的 page.set_content 加载同一份自包含 HTML；未关闭该导航限制。包内 HTML 与独立 HTML 均已内联主题 CSS，不依赖网络。此项是静态页面渲染/局部交互检查，不是 HTTP 服务或业务端到端检查。
+Browser checks are not a full WCAG audit, nor does button name checking equate to actual screen reader testing. Input methods, all keyboard paths, complete mobile touch interactions, and business states remain within the scope of subsequent acceptance activities.
 
-浏览器检查不是完整 WCAG 审计，按钮名称检查也不等于屏幕阅读器实测。输入法、所有键盘路径、完整移动触控和业务状态仍在后续验收范围。
+## Not Yet Executed
 
-## 尚未执行
-
-| 项目 | 状态 | 原因 |
+| Item | Status | Reason |
 |---|---|---|
-| 用户实际 Harness checkout 的版本/构建检查 | NOT_RUN | 用户仓库与当前提交尚未提供给本次文档任务 |
-| 实际 Host 插件、Remote、Slots 业务联调 | NOT_RUN | 本次交付是开发资料，不包含已实现的业务插件 |
-| 实际内网 LLM 工具调用与审批闭环 | NOT_RUN | 需要开发环境和批准的模型配置 |
-| 真实数据清洗、训练、防泄漏与指标验证 | NOT_RUN | 应按 T03/T11 在目标项目实现和测试 |
-| 容器/进程取消、崩溃恢复、权限与安全 E2E | NOT_RUN | 同上 |
-| 百万行 × 百列吞吐与峰值内存 | NOT_RUN | 需要目标机器、测试数据和实现 |
-| 第三方 Skill/插件安装 | NOT_RUN | 已提供核验说明，不擅自修改用户 Codex |
+| User's actual Harness checkout version/build check | NOT_RUN | The user repository and current commit have not been provided for this documentation task yet |
+| Actual Host plugin, Remote, Slots business integration debugging | NOT_RUN | This delivery is development material and does not include implemented business plugins |
+| Actual intranet LLM tool invocation and approval loop closure | NOT_RUN | Requires a development environment and approved model configuration |
+| Real data cleaning, training, leakage prevention, and metric validation | NOT_RUN | Should be implemented and tested in the target project per T03/T11 |
+| Container/process cancellation, crash recovery, permissions, and security E2E | NOT_RUN | Same as above |
+| Million-row × hundred-column throughput and peak memory usage | NOT_RUN | Requires target machine, test data, and implementation |
+| Third-party Skill/plugin installation | NOT_RUN | Verification instructions are provided; user Codex is not modified without authorization |
 
-页面所有样本数、文件大小、计划和对话均明确标记为布局示例。确认按钮只反馈这是静态原型，不训练、不模拟进度、不声称调用了模型。
-
-实施时请使用 docs/modeling-demo/06-tests-and-acceptance.md，逐项保存真实证据。不要把本报告改名成项目的真实业务验收报告。
+All sample counts, file sizes, plans, and conversations on the page are explicitly marked as layout examples. The confirmation button only indicates this is a static prototype: it does not train, simulate progress, or claim model invocation. When implementing, use `docs/modeling-demo/06-tests-and-acceptance.md` to save real evidence item by item. Do not rename this report into the project's actual business acceptance report.

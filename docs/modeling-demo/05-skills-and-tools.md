@@ -1,51 +1,53 @@
-# 05｜Codex Skills、前端工具与接入
+# 05 | Codex Skills, Frontend Tools, and Integration
 
-## 5.1 两套 Skill 不能混用
+English | [中文](05-skills-and-tools.zh.md)
 
-**开发期 Skill** 指导 Codex 如何读仓库、写页面、实现接口、测试。放在开发仓库 `.agents/skills/modelx-*/SKILL.md`。
+## 5.1 Keep the Two Skill Sets Separate
 
-**运行期 Skill** 指导数据建模 Agent 如何分析、清洗、特征和训练。模板放在本包 `runtime-skills/`，实施时发布到专用运行时目录 `.dsh/skills/` 或受控 SkillProvider。
+**Development Skills** tell Codex how to inspect the repository, build pages, implement APIs, and test. They live at `.agents/skills/modelx-*/SKILL.md` in the development repository.
 
-Harness 也可能扫描 `.agents/skills`；因此仅靠命名和目录区分不构成隔离。运行时必须不挂载开发 `.agents`，使用无开发仓库的专用 workspace/home，或替换为仅允许 4 个业务 Skill 的 Provider；测试可见 Skill 列表，确认开发 Skill 不可见。[S04]
+**Runtime Skills** tell the data-modeling Agent how to analyze, clean, engineer features, and train. Templates live under this kit's `runtime-skills/` directory and are published to a dedicated `.dsh/skills/` runtime directory or controlled SkillProvider during implementation.
 
-## 5.2 本包直接可用的 6 个项目 Skill
+Harness may also scan `.agents/skills`, so names and directories alone do not provide isolation. The runtime must not mount the development `.agents` tree. Use a dedicated workspace/home without the development repository, or replace the provider with one that allows only the four business Skills. Test the visible Skill list and confirm that development Skills are absent. [S04]
 
-| 名称 | 调用场景 | 工作产物 |
+## 5.2 Six Project Skills Included in This Kit
+
+| Name | Invocation | Work product |
 |---|---|---|
-| `$modelx-demo-orchestrator` | 启动开发、继续未完成阶段 | T00～T13 执行、progress 更新、Gate 检查 |
-| `$modelx-harness-extension` | 新增工具、Remote、卡片/Slots、上下文 | 不改内核的兼容扩展与测试 |
-| `$modelx-frontend-design` | 三栏页面、卡片、icon、主题与优化 | 符合 #0F4C9E 规范的页面与截图 |
-| `$modelx-data-pipeline` | CSV、清洗、特征、训练、状态 | 防泄漏 Pipeline、白名单计划与真实产物 |
-| `$modelx-skill-authoring` | 业务 Skill 修改/校验/发布 | 不可变版本、最小评测与边界检查 |
-| `$modelx-demo-qa` | E2E、异常、安全、视觉验收 | 命令/退出码/截图与真实交付清单 |
+| `$modelx-demo-orchestrator` | Start development or resume an unfinished stage | T00–T13 execution, progress updates, Gate checks |
+| `$modelx-harness-extension` | Add tools, Remotes, cards/Slots, or context | Compatible extensions and tests without kernel changes |
+| `$modelx-frontend-design` | Three-column pages, cards, icons, theme, and polish | Pages and screenshots that follow the #0F4C9E rules |
+| `$modelx-data-pipeline` | CSV, cleaning, features, training, and state | Leakage-resistant Pipeline, allowlisted plans, and real artifacts |
+| `$modelx-skill-authoring` | Modify, validate, or publish business Skills | Immutable versions, minimal evaluations, and boundary checks |
+| `$modelx-demo-qa` | E2E, failure, security, and visual acceptance | Commands, exit codes, screenshots, and real delivery inventory |
 
-这是针对本项目新编写的本地 Skill，不是声称 Codex 内置同名能力。执行 `install.py` 后，CLI/IDE 可用 `/skills` 检查、以 `$skill-name` 显式引用；未发现时重启 Codex。当前官方文档仍支持项目 `.agents/skills`。[S05]
+These are local Skills authored for this project, not claims about built-in Codex capabilities. After running `install.py`, use `/skills` in the CLI/IDE to check discovery and reference them explicitly with `$skill-name`; restart Codex if they do not appear. The current official documentation continues to support project `.agents/skills`. [S05]
 
-无需一次把六个全文塞入 Prompt；入口 Skill 决定当前阶段，按需加载专业 Skill 与对应章节。
+Do not place all six documents in one Prompt. The entry Skill selects the current stage and loads the relevant specialist Skill and section as needed.
 
-## 5.3 建议使用的外部工具：少而精
+## 5.3 Recommended External Tools: Small and Focused
 
-| 工具/Skill | 建议 | 用途及限制 |
+| Tool/Skill | Recommendation | Use and limits |
 |---|---|---|
-| Anthropic `frontend-design` | 可选设计辅助 | 设计 tokens、布局和审美复核；用户主题/企业界面规范优先 |
-| OpenAI `build-web-apps` 中的 `react-best-practices` | 可选代码复核 | 检查 React 组件与性能，不迁移成 Next.js |
-| OpenAI `frontend-testing-debugging` | 已安装且工具可用时调用 | 浏览器调试辅助；最终还要留可复验测试 |
-| Playwright CLI + Skills | 推荐浏览器方案 | 操作本地页面、截图、查看状态；自动化回归另写测试 |
-| Playwright MCP | 备选，已有则复用 | 适合持续浏览器上下文，不必与 CLI 同时安装 |
-| Vercel `web-design-guidelines` | 可选审阅 | 可访问性/交互检查；原文要求联网取规则，内网改用批准快照 |
-| `$skill-creator` | 创建新 Skill 时按实际可用性调用 | 不为两天 Demo 增设复杂 Skill 生成系统 |
+| Anthropic `frontend-design` | Optional design aid | Design tokens, layout, and visual review; user theme and enterprise UI rules take priority |
+| OpenAI `react-best-practices` from `build-web-apps` | Optional code review | Review React components and performance without migrating to Next.js |
+| OpenAI `frontend-testing-debugging` | Use when installed and callable | Browser-debugging aid; still preserve reproducible tests |
+| Playwright CLI + Skills | Preferred browser option | Operate the local page, capture screenshots, inspect state; write separate automated regression tests |
+| Playwright MCP | Alternative when already available | Useful for persistent browser context; no need to install it beside the CLI |
+| Vercel `web-design-guidelines` | Optional review | Accessibility/interaction review; its source requires network access, so use an approved snapshot offline |
+| `$skill-creator` | Invoke when a new Skill is actually required | Do not add a complex Skill-generation system for a two-day Demo |
 
-不为了“工具齐全”安装十几个 Skill。没有 Figma 稿，不需要先接 Figma；没有必须查询的第三方文档，不需要先接 Context7。整个产品不得依赖这些开发期外部服务在线运行。
+Do not install many Skills merely to appear fully equipped. A project without a Figma design does not need Figma first. A project without required third-party documentation does not need Context7 first. The product must not depend on these external development services during runtime.
 
-### 重要版本变化
+### Important Version Change
 
-查阅时 `openai/skills` README 已标记 deprecated，指向 `openai/plugins`。因此不把旧仓库中的 curated 路径写成永久有效安装方式；项目本地 Skill 仍可直接使用。[S06][S07]
+At the time of review, the `openai/skills` README marked the repository deprecated and pointed to `openai/plugins`. Do not treat the old curated path as a permanent installation mechanism. Local project Skills remain directly usable. [S06][S07]
 
-当前 `openai/plugins` 的 `build-web-apps` 包包含 frontend-app-builder、frontend-testing-debugging、react-best-practices 等。`frontend-app-builder` 侧重完整视觉概念，含图像生成/浏览器等前置要求；本项目默认已有截图和 tokens，优先本地专用 Skill，不让额外设计生成流程阻塞两天实施。[S08]
+The current `build-web-apps` package in `openai/plugins` includes frontend-app-builder, frontend-testing-debugging, and react-best-practices. `frontend-app-builder` focuses on a complete visual concept and requires image-generation/browser prerequisites. This project already has a screenshot and tokens, so its local specialist Skill takes priority and an additional design-generation flow must not block the two-day implementation. [S08]
 
-## 5.4 接入命令
+## 5.4 Integration Commands
 
-先在用户自己的开发终端检查，不在产品运行时执行：
+Check these commands in the user's development terminal, not in the product runtime:
 
 ```bash
 codex --version
@@ -54,11 +56,11 @@ codex plugin --help
 codex mcp --help
 ```
 
-`codex plugin` 在旧版本可能不存在；那就使用本包本地 Skill，不把升级 Codex 作为业务开发前置。禁止自动切换到危险权限或关闭审批。
+Older versions may not provide `codex plugin`. In that case, use the local Skills in this kit rather than making a Codex upgrade a prerequisite for business development. Do not automatically enable dangerous permissions or disable approvals.
 
-### 项目 Skill：无需外部下载
+### Project Skills: No External Download
 
-在解压目录运行：
+Run from the extracted directory:
 
 ```bash
 python3 install.py --repo /absolute/path/to/deepseek-harness
@@ -66,11 +68,11 @@ python3 install.py --repo /absolute/path/to/deepseek-harness
 python3 install.py --repo /absolute/path/to/deepseek-harness --apply --merge-agents
 ```
 
-安装器默认不覆盖已有不同内容，不更改网络/模型配置；`--merge-agents` 仅在根 AGENTS.md 尾部追加短索引并备份，不替换上游规范。存在 AGENTS.override.md 时以适用规则为准，入口 Prompt 显式要求阅读本包。
+By default, the installer does not overwrite different existing content or change network/model configuration. `--merge-agents` only appends a short index to the root AGENTS.md and creates a backup; it does not replace upstream rules. An applicable AGENTS.override.md takes priority, and the entry Prompt explicitly requires reading this kit.
 
-### Playwright CLI：开发机联网且批准后
+### Playwright CLI: After Network Access Is Approved on the Development Machine
 
-按 Microsoft 官方方式安装并检查帮助：[S09]
+Install and inspect help according to Microsoft's official procedure: [S09]
 
 ```bash
 npm install -g @playwright/cli@latest
@@ -78,9 +80,9 @@ playwright-cli --help
 playwright-cli install --skills
 ```
 
-这是首次联网准备示例，不是可重复部署锁定命令。确认可用后记录解析出的确切版本，预装浏览器及依赖，内网使用固定版本/缓存；不能让 runtime 再访问 npm。检查 install 生成的文件，不能覆盖已有 Skill。
+This is a first-time connected setup example, not a reproducible pinned deployment command. After confirming it works, record the resolved version, preinstall browsers and dependencies, and use a pinned version/cache on the private network. Runtime must not access npm. Inspect generated installation files and do not overwrite an existing Skill.
 
-Codex 指令示例：
+Example Codex instruction:
 
 ```text
 使用 playwright-cli 检查本地智模工作台。
@@ -89,18 +91,18 @@ Codex 指令示例：
 截图是视觉证据，测试结果需要实际动作与断言；不要只截图就宣布通过。
 ```
 
-### 已有 MCP 工作流时
+### Existing MCP Workflow
 
 ```bash
 codex mcp add playwright -- npx -y @playwright/mcp@latest
 codex mcp list
 ```
 
-命令结构依据 Codex MCP 文档，组件依据 Microsoft Playwright MCP。仍需固定测试版本、使用独立浏览器配置、限制访问本地批准地址。[S09][S10]
+The command structure follows Codex MCP documentation and the component follows Microsoft Playwright MCP. Pin the test version, use an isolated browser profile, and restrict access to approved local addresses. [S09][S10]
 
-### 可选外部 Skill
+### Optional External Skill
 
-在 Codex 输入，而不是在 shell 执行 `$skill-installer`：
+Enter this in Codex rather than executing `$skill-installer` in a shell:
 
 ```text
 $skill-installer
@@ -109,7 +111,7 @@ $skill-installer
 若无法访问网络，记录未安装，继续使用本项目 modelx-frontend-design。
 ```
 
-新版插件入口先发现再安装，不猜 marketplace 名：
+Discover the new plugin entry point before installation; do not guess the marketplace name:
 
 ```bash
 codex plugin marketplace list --json
@@ -121,16 +123,16 @@ codex plugin list --available --json
 # codex plugin add build-web-apps@<实际marketplaceName>
 ```
 
-上面的 `<实际marketplaceName>` 必须用发现结果替换，不是可原样运行的命令。安装会改变本机 Codex 能力，需用户审阅，不由产品服务执行。[S15]
+Replace `<实际marketplaceName>` with the discovered value; it is not a literal command argument. Installation changes the local Codex capability set and requires user review. A product service must not perform it. [S15]
 
-## 5.5 不同阶段的组合
+## 5.5 Combinations by Stage
 
-T00/T06：modelx-harness-extension + 上游仓库文档。
+T00/T06: modelx-harness-extension plus upstream repository documentation.
 
-T03/T05：modelx-data-pipeline + pytest。
+T03/T05: modelx-data-pipeline plus pytest.
 
-T07/T08：modelx-frontend-design；需要创意校准时再读 frontend-design；实现必须沿用 repo。
+T07/T08: modelx-frontend-design; consult frontend-design only when creative calibration is needed; the implementation must remain within the repository.
 
-T11/T12：modelx-demo-qa + Playwright；可选 React / web-design-guidelines 复核。无网络时按本文离线检查表，不伪称检查了线上最新规则。
+T11/T12: modelx-demo-qa plus Playwright, with optional React or web-design-guidelines review. When offline, use this document's checklist and do not claim to have checked the latest online rules.
 
-工具不可用的失败必须可见。没有截图工具时写 VISUAL_NOT_RUN，不生成一张概念图充当浏览器实测截图。
+Tool failures must remain visible. Record VISUAL_NOT_RUN when no screenshot tool exists; do not substitute a concept image for a measured browser screenshot.

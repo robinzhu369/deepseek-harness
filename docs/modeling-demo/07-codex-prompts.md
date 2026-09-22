@@ -1,8 +1,10 @@
-# 07｜可直接粘贴的 Codex 指令
+# 07 | Ready-to-Paste Codex Instructions
 
-以下是开发指令，不是声称系统已实现。复制前先运行安装器，确认本包位于目标 Harness 仓库中。
+English | [中文](07-codex-prompts.zh.md)
 
-## 7.1 一次启动，按阶段推进
+These are development instructions, not claims that the system is implemented. Run the installer first and confirm that this kit is inside the target Harness repository.
+
+## 7.1 Start Once and Progress by Stage
 
 ```text
 $modelx-demo-orchestrator
@@ -28,7 +30,7 @@ $modelx-demo-orchestrator
 现在先完成 T00，输出 REPO_DISCOVERY.md 和首个 smoke 结果，然后按 Gate 继续。
 ```
 
-## 7.2 只做仓库接手与协议
+## 7.2 Repository Handoff and Protocol Only
 
 ```text
 $modelx-harness-extension
@@ -38,7 +40,7 @@ $modelx-harness-extension
 不覆盖上游 AGENTS，不修改未涉及的包。结束给出命令证据及 T03 的可实施路径。
 ```
 
-## 7.3 第一天：完成真实后台
+## 7.3 Day One: Complete the Real Backend
 
 ```text
 $modelx-data-pipeline
@@ -49,7 +51,7 @@ $modelx-data-pipeline
 结束必须展示真实 metrics/manifest 的文件位置与测试证据，不能以示意 JSON 代替。
 ```
 
-## 7.4 页面设计与开发
+## 7.4 Page Design and Development
 
 ```text
 $modelx-frontend-design
@@ -64,7 +66,7 @@ $modelx-frontend-design
 外部 frontend-design 已安装则按需辅助，但不得覆盖用户视觉规范或重构底座。
 ```
 
-## 7.5 业务 Skill 与流程编辑
+## 7.5 Business Skills and Workflow Editing
 
 ```text
 $modelx-skill-authoring
@@ -75,7 +77,7 @@ $modelx-skill-authoring
 改动创建新 plan revision/run；检查缓存/下游失效；不要实现任意 DAG 平台。
 ```
 
-## 7.6 页面优化专用指令
+## 7.6 Page-Polish Instruction
 
 ```text
 $modelx-frontend-design
@@ -87,7 +89,7 @@ $modelx-frontend-design
 每次修改后重新打开页面与截图，不用概念图充当实测。不引入新 UI 框架或在线资源。
 ```
 
-## 7.7 验收与交付
+## 7.7 Acceptance and Delivery
 
 ```text
 $modelx-demo-qa
@@ -99,7 +101,7 @@ $modelx-demo-qa
 给出可复制启动命令与 5 分钟演示步骤，不自动提交或推送代码。
 ```
 
-## 7.8 中断后继续
+## 7.8 Resume After Interruption
 
 ```text
 $modelx-demo-orchestrator
@@ -108,6 +110,6 @@ $modelx-demo-orchestrator
 不要重新生成整个工程；没有证据的“已完成”必须重新验证。
 ```
 
-## 7.9 并行策略（可选）
+## 7.9 Parallel Strategy (Optional)
 
-只在 T02 契约冻结后并行。一个会话负责 Python/协议，一个负责 UI/组件；不同 worktree/分支，明确文件所有权，不能同时改 lockfile、共享 schema 和主题。协调会话负责合并与 E2E。两天单人任务不需要为了并行先搭多 Agent 调度系统。
+Parallelize only after the T02 contract is frozen. One Session owns Python/protocol work and another owns UI/components. Use separate worktrees/branches and explicit file ownership; do not edit the lockfile, shared schema, or theme concurrently. A coordinating Session owns integration and E2E. A two-day single-developer task does not need a Multi-Agent scheduler merely to parallelize work.

@@ -1,23 +1,25 @@
-# 01｜架构、模块与功能
+# 01 | Architecture, Modules & Functionality
 
-## 1.1 技术决策
+English | [中文](01-architecture-and-functions.zh.md)
 
-| 层 | 本次选择 | 理由与边界 |
+## 1.1 Technical Decisions
+
+| Layer | Selection This Time | Rationale & Boundaries |
 |---|---|---|
-| Agent / Web | DeepSeek Harness 固定提交 | 沿用会话、模型、工具、React Slots；禁止追踪 master 自动升级 |
-| 新增业务扩展 | TypeScript Cordis 插件 | 加入领域工具、业务 API 适配、聊天卡片、任务面板 |
-| 计算 API | FastAPI + Pydantic | 校验、元数据、队列调度、产物索引 |
-| 数据处理 | Polars | 惰性读取、基础统计、规则清洗、Parquet 中间数据 |
-| 建模 | scikit-learn Pipeline / ColumnTransformer | 只在训练集拟合预处理，逻辑回归基线 |
-| 计算隔离 | Python 子进程，单并发 | 不阻塞 Web / asyncio；超时能终止进程组 |
-| 持久化 | SQLite + 本地目录 | API 是业务状态唯一写入者；Worker 返回事件/文件 |
-| 前端状态 | Harness 既有客户端模型 + 单个 ModelingClientModel | 不另造多个状态源，不把全表装进浏览器 |
-| 视觉 | 既有 primitives + CSS tokens + 单一 SVG icon 体系 | 不为一个页面引入整套冲突组件库 |
-| 测试 | 既有 TS 测试 + pytest + Playwright | 遵守上游测试规则，并增加建模专属用例 |
+| Agent / Web | DeepSeek Harness Fixed Commit | Reuse sessions, models, tools, React Slots; prohibit tracking master auto-upgrades |
+| New Business Extensions | TypeScript Cordis Plugin | Add domain tools, business API adapters, chat cards, task panels |
+| Compute API | FastAPI + Pydantic | Validation, metadata, queue scheduling, artifact indexing |
+| Data Processing | Polars | Lazy reading, basic statistics, rule-based cleaning, Parquet intermediate data |
+| Modeling | scikit-learn Pipeline / ColumnTransformer | Fit preprocessing only on training set; logistic regression baseline |
+| Compute Isolation | Python subprocesses, single concurrency | Do not block Web/asyncio; terminate process group on timeout |
+| Persistence | SQLite + Local Directory | API is the sole writer of business state; Workers return events/files |
+| Frontend State | Harness existing client model + single ModelingClientModel | Avoid creating multiple state sources; do not load entire tables into browser memory |
+| Visuals | Existing primitives + CSS tokens + unified SVG icon system | Do not introduce conflicting component libraries for a single page |
+| Testing | Existing TS tests + pytest + Playwright | Adhere to upstream testing rules and add modeling-specific test cases |
 
-来源背景见 SOURCE_NOTES：[S01][S02]。查阅时根 package.json 为 `0.1.6-alpha.2`、pnpm `11.7.0`、Node `^22.19.0 || >=24.0.0`，仅说明查阅快照，不要求升级用户环境。T00 必须以实际 checkout 和锁文件为准。[S03]
+See SOURCE_NOTES: [S01][S02] for background. When consulting, the root `package.json` is `0.1.6-alpha.2`, pnpm `11.7.0`, Node `^22.19.0 || >=24.0.0`; this describes snapshot references only and does not require upgrading user environments. T00 must rely on actual checkout results and lock files. [S03]
 
-## 1.2 单向数据流
+## 1.2 Unidirectional Data Flow
 
 ```text
 React 展示组件（仅 props / hooks / callbacks）
@@ -33,14 +35,14 @@ FastAPI 的 SQLite / 产物清单
 聊天业务卡片与右侧任务面板同步更新
 ```
 
-聊天和模型流沿用 Harness。业务状态优先走同一 Host/Remote 边界，P0 用单一客户端服务每秒查询活动 run，页面隐藏时减速，终态停止；不要让 React 各组件独立轮询。
+Chatting and model flows continue to use Harness. Business state prioritizes the same Host/Remote boundary; P0 uses a single client service querying active runs per second, throttling when pages are hidden, and stopping at terminal states; do not let individual React components poll independently.
 
-内部 `/v1` HTTP 是本方案自定义 API，不是 Harness 自带接口。UI 到 Host 的实际 Remote 名称、上传/下载 exact Fetch route、类型生成命令由 T00 从所用提交确认，禁止凭文档示意编造 SDK 调用。
+The internal `/v1` HTTP API is custom for this solution, not an existing Harness interface. The actual Remote names from UI to Host, exact Fetch routes for upload/download, and type generation commands must be confirmed by T00 based on the used commit; fabricating SDK calls based solely on documentation examples is prohibited.
 
-## 1.3 建议新增模块（路径是提案，不是现有上游事实）
+## 1.3 Proposed New Modules (Paths are proposals, not upstream facts)
 
 ```text
-packages/modeling/
+packages/experimental/modeling/
   contracts/          # 浏览器安全的共享类型/协议
   host/               # Python API 适配、会话授权、工具、业务控制器
   client/             # ModelingClientModel / 单一轮询入口
@@ -53,74 +55,70 @@ services/modeling-api/
   tests/
 ```
 
-T00 阅读仓库 AGENTS.md、相关 packages/AGENTS.md、web-client/slots/tools 文档和现有相邻插件，再确定实际路径与包名。不得跨 feature 插件直接 import 对方的 React 组件；共享基础组件按上游静态 owner 约定复用。[S02]
+T00 should read the repository AGENTS.md, relevant packages/AGENTS.md, web-client/slots/tools documentation, and existing adjacent plugins to determine actual paths and package names. Do not directly import React components from other feature plugins; reuse shared base components according to upstream static owner conventions. [S02]
 
-## 1.4 功能清单
+## 1.4 Feature List
 
-### F01 会话与工作区
+### F01 Sessions & Workspaces
 
-复用 Harness 会话。新建任务、切换会话、编辑标题、保留消息；会话绑定 dataset_id、最新 plan revision、active run。切换会话取消旧页面订阅，不能把 A 会话状态写入 B 会话。
+Reuse Harness sessions. Create tasks, switch sessions, edit titles, retain messages; bind sessions with `dataset_id`, latest plan revision, and active run. Switching a session cancels old page subscriptions; do not write state from Session A into Session B.
 
-### F02 上传与数据中心
+### F02 Uploads & Data Center
 
-支持拖拽/文件选择；P0 接受 UTF-8/UTF-8-BOM CSV。限制通过服务配置下发，普通 Demo 默认 100 MiB，容量测试可显式调整，网关/API 限制保持一致。分块落盘、计算 SHA-256、校验空文件/无表头/重复列名；不信任文件名或 MIME。
+Support drag-and-drop/file selection; P0 accepts UTF-8/UTF-8-BOM CSV files. Limits are enforced via service configuration: default 100 MiB for standard demos, explicitly adjustable for capacity tests, with consistent gateway/API limits. Chunked disk writes, compute SHA-256, validate empty files/no headers/duplicate column names; do not trust filenames or MIME types.
 
-上传成功并不等于分析成功。返回 dataset_id 和 profile_run_id；概览完成前显示“数据分析中”。错误给出编码、分隔符、文件格式的具体原因，不吞错改为成功。
+Successful upload does not equal successful analysis. Return `dataset_id` and `profile_run_id`; display "Analyzing Data" until overview completion. Errors must specify encoding, delimiter, file format reasons explicitly without swallowing errors to report success.
 
-已有 RustFS 链路已验证时只写 StorageAdapter，不同时重建第二套上传机制；否则先走本地存储，不把对象存储端口改造带入关键路径。
+If the existing RustFS chain is verified, write only to StorageAdapter; do not simultaneously rebuild a second upload mechanism. Otherwise, proceed with local storage first and avoid bringing object storage ports into the critical path.
 
-### F03 数据分析
+### F03 Data Analysis
 
-计算：行数、总列数、选定目标列数、候选特征列数、类型、每列缺失率、数值范围、类别数、最多 20 行预览。全量/采样统计都必须有 `computation_scope`。大文件先基础分析，不默认输出成对相关矩阵或上万类别列表。
+Compute: row count, total column count, selected target columns, candidate feature columns, types, missing rate per column, numeric ranges, category counts, up to 20-row preview. Both full-sample and sampled statistics must include `computation_scope`. For large files, perform basic analysis first; do not default to output correlation matrices or lists of tens-of-thousands categories.
 
-总列数与特征数分别命名，例如“39 列 = 38 个候选特征 + 1 个目标”，避免两处口径冲突。统计只是工具结果；列名和样本中任何命令式文本都按数据处理。
+Name total columns and feature count separately (e.g., "39 columns = 38 candidate features + 1 target") to avoid conflicting metrics. Statistics are tool results only; imperative text in column names and samples must be treated as data processing instructions.
 
-### F04 Agent 计划
+### F04 Agent Plans
 
-模型接收白名单工具、业务 Skill、数据摘要、用户目标；不接收全文件。先确认目标列和预测时点。缺目标、存在重复实体/时间依赖但切分不受支持时返回待补充，不替用户猜。
+The model receives whitelisted tools, business Skills, data summaries, and user goals—not full files. Confirm target columns and prediction timestamps first. Return requests for supplementation if targets are missing or duplicate entities/time dependencies exist without supported splitting; do not guess on behalf of the user.
 
-可选模式：`prepare_dataset` 和 `binary_classification`。前者输出分割后的可训练数据与预处理器；后者再真实训练逻辑回归并评估。
+Optional modes: `prepare_dataset` (outputs split training data & preprocessor) and `binary_classification` (performs real logistic regression training & evaluation). Model output candidate plans undergo schema + semantic validation before saving as drafts. Allow one bounded correction attempt; if still invalid, display errors and switch to parameter forms without infinite retries.
 
-模型输出的候选计划经过 schema + 语义校验保存为草稿。允许一次有界纠错；仍不合法则显示错误并转参数表单，不无限重试。
+### F05 Manual Confirmation & Workflow Editing
 
-### F05 人工确认与流程编辑
+Plan cards allow editing target columns, excluded columns, imputation strategies, encoding limits, optional date features, model parameters, and resource budgets. Workflows show non-skippable steps: "Validation/Splitting/Fitting Preprocessing/Applying Preprocessing/Exporting," plus constrained training/evaluation steps.
 
-计划卡可编辑目标列、排除列、填充值策略、编码上限、可选日期特征、模型参数、资源预算。流程显示不可跳过的“校验/切分/拟合预处理/应用预处理/导出”，以及有约束的训练评估步骤。
+P0 supports editing parameters and enabling/disabling optional features but does not allow arbitrarily moving splitting after fitting. Clicking "Confirm & Execute" submits `plan_revision` + `plan_hash`; the backend confirms data version unchanged before creating a run. Double-clicks and duplicate requests are idempotent.
 
-P0 支持编辑参数和启停可选特征，不支持随意把切分移到拟合之后。点击“确认并执行”时提交 plan_revision + plan_hash，后端确认数据版本未变化，再创建 run。双击与重复请求幂等。
+### F06 Execution & Feature Engineering
 
-### F06 执行与特征工程
+Raw data is never overwritten. Type parsing and explicit constant mappings can execute first; any filling/scaling/categorical vocab/variance filtering requiring statistical fitting must learn only from the training set.
 
-原始数据永不覆盖。类型解析和明确常量映射可先执行；任何需要统计拟合的填充、缩放、类别词表、方差筛选只用训练集学习。
+Fixed logic: Structure validation → Splitting → Training-set preprocessing fit → Subset transformations → Optional train/val/test phases → Artifact registration. The UI's "Cleaning/Feature Engineering" stage requires technical details explaining its `fit` / `transform` boundaries. [S11]
 
-固定逻辑：结构校验 → 切分 → 训练集拟合预处理 → 各子集变换 → 可选训练/验证/最终测试 → 产物登记。UI 的“清洗/特征工程”阶段需要在技术详情说明其 fit / transform 边界。[S11]
+Numerics: Median or fixed-value filling, optional standardization; Categoricals: Fixed missing markers, restricted One-Hot encoding, explicit handling of unknown categories; Dates: Enable only whitelisted month/dayofweek features. Provide rules for high-cardinality/empty columns without unbounded expansion. Final output includes train/validation/test splits, field mappings, preprocessors, and execution manifests.
 
-数值：中位数或固定值填充、可选标准化；类别：固定缺失标记、受限 One-Hot、未知类别明确处理；日期：仅启用白名单 month/dayofweek 特征。高基数/全空列给出规则，不无界扩展。最终输出 train/validation/test、字段映射、预处理器与执行清单。
+### F07 Baseline Training & Interpretation
 
-### F07 基线训练与解释
+P0 uses logistic regression only. Stratified random splitting defaults to 60/20/20 with fixed seed; applicable only for user-confirmed independent binary classification samples. Block training if labels are missing, a single category exists, or minority class subsets are insufficient.
 
-P0 仅逻辑回归。分层随机切分默认 60/20/20，固定 seed，仅适用于用户确认样本独立的二分类。缺失标签、单一类别、子集少数类不足时阻止训练。
+Compute ROC-AUC, AP, F1, confusion matrices from real predictions; specify split, threshold, sample size, and `positive_label`. Default threshold is 0.5 without tuning on the test set. Feature importance may use validation-set permutation importance, labeled "Model-related interpretation, not causal"; skip with explanation if timeout occurs. Do not promise specific AUC values.
 
-ROC-AUC、AP、F1、混淆矩阵从真实预测计算；写明 split、阈值、样本量与 positive_label。阈值默认 0.5，不用测试集调阈值。特征重要性可用验证集置换重要性，标注“模型相关解释，非因果”；超时则跳过并说明。不要承诺特定 AUC。
+### F08 State & Reruns
 
-### F08 状态与重跑
+The right side displays real node states, durations, concise logs, errors, and artifacts. Progress uses "Completed n / Total steps m"; use indeterminate progress for non-granular tasks without faking percentages.
 
-右侧展示真实节点状态、耗时、简洁日志、错误、产物。进度使用“已完成 n / 总步骤 m”；无细粒度进度时用不定进度，不伪造百分比。
+Changing only model parameters: Reuse frozen splits and preprocessors to create a new run; changing inputs/targets/splits/cleaning/features invalidates relevant downstream nodes and generates a new run. P0 allows limited implementation of "Recalculate from selected node"; do not claim universal DAG caching. Old runs are permanently retained.
 
-只改模型参数：可复用已冻结切分和预处理器，创建新 run；改输入、目标、切分、清洗或特征：相关下游全部失效并生成新 run。P0 允许“从选定节点起重新计算”的有限实现；不宣称通用 DAG 缓存。旧 run 永久保留。
+### F09 Skill Center (Lightweight)
 
-### F09 Skill 中心（轻量）
+List 4 built-in business Skills, edit body text, save drafts, validate structure, preview test cases, publish new versions, and display current version. Validate allowed tools and schemas before publishing; do not execute import scripts. Publish records record version/hash to confirm loaded Skill snapshots for plan records. Confirmed plans use their own structured configurations; historical replays must not read later-edited body text. Publishing body text does not equal adding operators.
 
-4 个内置业务 Skill 列表、正文编辑、保存草稿、结构校验、测试用例预览、发布新版本、当前版本展示。发布前校验允许的工具与 schema，不执行导入脚本。
+### F10 Artifacts & Reports
 
-发布记录版本/hash，确认计划记录被加载的 Skill 快照。已确认计划使用自己的结构化配置，历史回放不得读取后来编辑的正文。正文发布不等于新增算子。
+Download via `artifact_id`; arbitrary paths are rejected. Outputs include prepared data, split manifest, feature manifest, preprocessor/pipeline, metrics, and execution reports. Model files load only system-generated artifacts with matching hashes; do not import user-uploaded joblib/pickle files.
 
-### F10 产物与报告
+Reports separate deterministic metric sections from LLM interpretation sections; LLM failures do not affect real artifact downloads. When model services are unavailable, run in explicitly marked "Manual Configuration Mode," but this does not count as Agent real-time closed-loop acceptance.
 
-以 artifact_id 下载，不接受任意 path。输出 prepared 数据、split_manifest、feature_manifest、preprocessor/pipeline、metrics、执行报告；模型文件仅加载本系统产生且 hash 匹配的文件，不导入用户上传的 joblib/pickle。
+## 1.5 Memory & Extension Boundaries
 
-报告分确定性指标区和 LLM 解读区；LLM 解读失败不影响真实产物下载。模型服务不可用时可在明确标记的“手动配置模式”运行，但不算 Agent 实时闭环验收。
-
-## 1.5 记忆与扩展边界
-
-会话消息使用 Harness 持久化；任务上下文从 dataset/plan/run 重新组装，包含目标、排除字段、计划 revision 和可读结果摘要。P0 无需向量库，不把所有日志无界塞回上下文。多 Agent、复杂聚合 DSL、模型在线部署后续再加。
+Session messages use Harness persistence; task contexts reassemble from dataset/plan/run including targets, excluded fields, plan revision, and readable result summaries. P0 requires no vector database and avoids unbounded log injection into context. Multi-Agent scenarios, complex aggregation DSLs, and online model deployments are added later.

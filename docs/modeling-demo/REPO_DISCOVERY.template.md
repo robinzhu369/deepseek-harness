@@ -1,25 +1,27 @@
-# 仓库与环境探测（由 T00 复制为 REPO_DISCOVERY.md 并填写）
+# Repository and Environment Discovery (Copy from T00 to REPO_DISCOVERY.md and fill in)
 
-状态：NOT_RUN，以下不是已探测结论。
+English | [中文](REPO_DISCOVERY.template.zh.md)
 
-| 项目 | 实测值/证据 |
+Status: NOT_RUN, the following are not discovery results.
+
+| Item | Measured Value/Evidence |
 |---|---|
-| 仓库路径 / Git remote | 待执行 |
-| commit SHA（非 blob SHA）/ dirty files | 待执行 |
-| 适用 AGENTS / override | 待执行 |
-| Node / pnpm / Python | 待执行 |
-| 实际构建/开发/测试命令 | 待执行 |
-| 相邻工具注册实现与上下文字段 | 待执行 |
-| 实际 Web Slot / Conversation 节点接口 | 待执行 |
-| Remote / 文件上传下载扩展接口 | 待执行 |
-| 图标和基础组件来源 | 待执行 |
-| 内网模型协议 / Tool Calling smoke | 待执行，不记录 secret |
-| Python 子进程 / 资源限制方式 | 待执行 |
-| 浏览器工具 / 截图能力 | 待执行 |
-| 反向代理 / Host / Origin 约束 | 待执行 |
-| 运行期 Skill 隔离方式 | 待执行 |
-| 最小扩展成功证据 | 待执行 |
+| Repository Path / Git remote | Pending execution |
+| commit SHA (non-blob SHA) / dirty files | Pending execution |
+| Applicable AGENTS / override | Pending execution |
+| Node / pnpm / Python | Pending execution |
+| Actual build/dev/test commands | Pending execution |
+| Adjacent tool registration implementation and context fields | Pending execution |
+| Actual Web Slot / Conversation node interface | Pending execution |
+| Remote / file upload/download extension interfaces | Pending execution |
+| Icons and base component sources | Pending execution |
+| Intranet model protocol / Tool Calling smoke test | Pending execution, do not record secrets |
+| Python subprocess / resource limit methods | Pending execution |
+| Browser tools / screenshot capabilities | Pending execution |
+| Reverse proxy / Host / Origin constraints | Pending execution |
+| Runtime Skill isolation method | Pending execution |
+| Minimum extension success evidence | Pending execution |
 
-阻塞项：填写真实情况。
+Blocking items: Fill in the actual situation.
 
-决策与改动范围：保持当前基座，新增领域插件，不创建新前端应用。
+Decision and scope of changes: Maintain the current base, add domain plugins, do not create new frontend applications.

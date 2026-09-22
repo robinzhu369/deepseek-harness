@@ -1,44 +1,46 @@
-# 智模工作台部署与启动
+# Modeling Demo Deployment and Startup
 
-本页是本地 Demo 的唯一启动入口。所有命令均从仓库根目录执行。
+English | [中文](DEPLOYMENT.zh.md)
 
-## 前置条件
+This page is the sole entry point for starting local demos. All commands must be executed from the repository root directory.
 
-- macOS 或 Linux；本次冻结环境为 macOS 26.6.2 arm64、10 核、24 GiB RAM。
-- Node.js 26.9.0、pnpm 11.7.0、Python 3.10.20。
-- 已执行 `pnpm install --frozen-lockfile`，Python 环境包含 FastAPI 0.128.8、Uvicorn 0.51.0、Polars 1.0.0、scikit-learn 1.4.0。
-- DeepSeek 官方 API credential。模型 Provider 为 `deepseek-official`，模型 ID 为 `deepseek-flash`（界面显示 DeepSeek-V41-Flash）。
+## Prerequisites
 
-## 配置
+- macOS or Linux; this frozen environment uses macOS 26.6.2 arm64, with 10 cores and 24 GiB RAM.
+- Node.js 26.9.0, pnpm 11.7.0, Python 3.10.20.
+- Executed `pnpm install --frozen-lockfile`; the Python environment includes FastAPI 0.128.8, Uvicorn 0.51.0, Polars 1.0.0, and scikit-learn 1.4.0.
+- DeepSeek official API credentials. The model provider is `deepseek-official`, with the model ID set to `deepseek-flash` (displayed as DeepSeek-V41-Flash in the interface).
 
-复制 `.env.example` 为 `.env`，在本机填写 `DEEPSEEK_API_KEY`；不要提交 `.env`。可选变量包括 `DEEPSEEK_BASE_URL`、`MODELING_DEMO_ROOT`、`MODELING_DEMO_HARNESS_HOME`、API/Web 端口、上传上限、分块大小、预览上限、Worker 超时与取消宽限期。命令行环境中显式传入的 Demo 目录和端口优先于 `.env`，可用于隔离启动或临时避开端口冲突。默认上传上限为 100 MiB；百万行容量测试使用独立的 2 GiB 测试配置，不改变 Demo 默认值。
+## Configuration
 
-## 启动与健康检查
+Copy `.env.example` to `.env` and fill in `DEEPSEEK_API_KEY` locally; do not commit `.env`. Optional variables include `DEEPSEEK_BASE_URL`, `MODELING_DEMO_ROOT`, `MODELING_DEMO_HARNESS_HOME`, API/Web ports, upload limits, chunk sizes, preview limits, worker timeouts, and cancellation grace periods. Demo directories and ports explicitly passed in the command-line environment take precedence over `.env` settings, enabling isolated startups or temporary avoidance of port conflicts. The default upload limit is 100 MiB; million-row capacity tests use a separate 2 GiB test configuration without altering demo defaults.
+
+## Startup and Health Checks
 
 ```bash
 scripts/modeling-demo-up.sh
 scripts/modeling-demo-health.sh
 ```
 
-脚本启动 Harness Web/Host、Modeling API 与 API 内的单并发后台 Worker。启动脚本最多等待 10 秒，直到 Harness 写出认证地址，再执行服务健康检查；任一步失败都会停止本次启动的进程。请打开启动脚本输出的 `Harness Web:` 完整地址，不要删除 `?token=...` 查询参数；API OpenAPI 地址默认为 `http://127.0.0.1:8000/openapi.json`。健康输出中 API 应为 200，未携带令牌的 Web 探测允许 401；两个 PID 都必须存活。日志位于 `${MODELING_DEMO_ROOT}/logs/`。
+The startup script launches the Harness Web/Host, Modeling API, and a single-concurrency background worker within the API. The script waits up to 10 seconds for Harness to write the authentication address before performing service health checks; any failure stops the current startup process immediately. Open the full `Harness Web:` URL printed by the startup script without removing the `?token=...` query parameter. The default API OpenAPI endpoint is `http://127.0.0.1:8000/openapi.json`. In health check output, the API must return 200; web probes not carrying a token may receive 401. Both PIDs must remain alive. Logs are located at `${MODELING_DEMO_ROOT}/logs/`.
 
-## 停止
+## Shutdown
 
 ```bash
 scripts/modeling-demo-down.sh
 ```
 
-## 数据目录与重置
+## Data Directory and Reset
 
-默认数据位于 `.artifacts/modeling-demo/runtime/`：`service/` 保存 SQLite、Dataset 与 Run 产物，`harness-home/` 保存本地 Harness Session，`logs/` 与 `pids/` 保存运行证据。先运行 down 脚本；确认无需保留历史证据后，人工移动整个 runtime 目录到备份位置即可得到空环境。启动脚本不会自动删除数据。
+Default data resides in `.artifacts/modeling-demo/runtime/`: `service/` stores SQLite, Dataset, and Run artifacts; `harness-home/` saves local Harness sessions; `logs/` and `pids/` store runtime evidence. Always run the down script first. Once you confirm no historical evidence needs retention, manually move the entire `runtime` directory to a backup location to achieve an empty environment. The startup script does not automatically delete data.
 
-## 常见错误
+## Common Errors
 
-- `MISSING_CREDENTIAL`：在根目录 `.env` 设置 `DEEPSEEK_API_KEY`，或通过 Harness credential 页面配置 DeepSeek 官方 Provider，然后重启。
-- PID 文件已存在：先运行 down；若进程已异常退出，核对 PID 与日志后再人工清理对应 PID 文件。
-- 端口已被占用：启动脚本会在创建进程前报告冲突端口及可识别的占用进程。`modeling-demo-down.sh` 会回收当前仓库中命令行与端口均匹配的遗留 Demo 监听进程，但不会终止其他目录或其他命令启动的服务；也可通过 `MODELING_API_PORT`、`MODELING_WEB_PORT` 选择其他端口。
-- 找不到认证地址：检查 `logs/harness-web.log`；这表示 Web 在输出认证地址前异常退出。启动脚本会停止本次创建的 API 与 Web 进程，不会把其他端口监听者视为本次启动成功。
-- `dsh web authentication required`：打开 `modeling-demo-up.sh` 输出的完整 `Harness Web:` 地址。直接打开不带 `?token=...` 的根地址会返回 401，这不是服务未就绪。
-- Dataset not found：Dataset 按完整 Harness Agent ID 隔离，上传时 `X-Session-Id` 必须与 Agent ID 完全一致，包括 `session-` 前缀。
-- 上传过大：调整本机 `.env` 中的 `MODELING_API_MAX_UPLOAD_BYTES` 后重启；不要绕过服务端限制。
-- Run 未启动：只有界面的“确认并执行/重新执行”可以审批；Agent 工具不含审批能力。
+- `MISSING_CREDENTIAL`: Set `DEEPSEEK_API_KEY` in the root `.env`, or configure the DeepSeek official provider via the Harness credential page, then restart.
+- PID file exists: Run down first; if a process exited abnormally, verify against PIDs and logs before manually cleaning up the corresponding PID files.
+- Port already in use: The startup script reports conflicting ports and identifiable occupying processes before creating new ones. `modeling-demo-down.sh` reclaims leftover demo listening processes matching both command-line arguments and ports within the current repository but does not terminate services started from other directories or via different commands; alternatively, select different ports using `MODELING_API_PORT` or `MODELING_WEB_PORT`.
+- Cannot find authentication address: Check `logs/harness-web.log`; this indicates an abnormal exit before Harness could output the authentication URL. The startup script stops the API and Web processes it created and does not consider other port listeners as part of a successful startup.
+- `dsh web authentication required`: Open the full `Harness Web:` URL printed by `modeling-demo-up.sh`. Accessing the root address without `?token=...` returns 401, which indicates an expected state rather than service unavailability.
+- Dataset not found: Datasets are isolated by their complete Harness Agent ID; during upload, `X-Session-Id` must match the Agent ID exactly, including the `session-` prefix.
+- Upload too large: Adjust `MODELING_API_MAX_UPLOAD_BYTES` in your local `.env` and restart; do not bypass server-side limits.
+- Run not started: Only "Confirm & Execute" or "Re-execute" buttons on the interface can approve runs; Agent tools lack approval capabilities.

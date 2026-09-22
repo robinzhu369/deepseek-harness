@@ -759,6 +759,26 @@ export interface InspectorOptions {
 
 Source: [`packages/experimental/inspector/src/index.ts:66`](../packages/experimental/inspector/src/index.ts)
 
+<a id="deepseek-aidsh-experimental-modeling"></a>
+
+## `@deepseek-ai/dsh-experimental-modeling`
+
+Requires: `connection`
+
+```ts config-catalog
+/** Deployment configuration for the private service connection and model-visible result cap. */
+export interface Config {
+  /** Absolute HTTP(S) origin of the private Modeling API. */
+  baseUrl: string
+  /** Positive timeout in milliseconds applied to each private API request. */
+  requestTimeoutMs: number
+  /** Minimum 256-byte cap for each model-visible modeling tool result. */
+  maxToolResultBytes: number
+}
+```
+
+Source: [`packages/experimental/modeling/src/index.ts:20`](../packages/experimental/modeling/src/index.ts)
+
 <a id="deepseek-aidsh-experimental-ptc-runtime-python"></a>
 
 ## `@deepseek-ai/dsh-experimental-ptc-runtime-python`

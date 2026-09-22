@@ -1,43 +1,45 @@
-# 02｜页面设计规范：点金 Model X 对标
+# 02 | Page Design Specification: Dianjin Model X Reference
 
-## 2.1 视觉定位与参考优先级
+English | [中文](02-ui-design.zh.md)
 
-定位：银行/企业研发使用的数据建模工作台。清晰、克制、可信、轻量，接近用户截图的三栏信息组织，但不是复制其商标或代码。
+## 2.1 Visual Direction and Reference Priority
 
-优先级：用户明确要求 → 本文 tokens 与交互规范 → 参考截图的结构 → 项目既有组件约定 → 外部前端 Skill 的通用建议。外部 Skill 不得把它改成紫色渐变官网、深色科技大屏或巨大 Hero 页面。
+Positioning: a data-modeling workbench for bank and enterprise development teams. It is clear, restrained, trustworthy, and lightweight. It follows the three-column information organization in the user-provided screenshot without copying its trademarks or code.
 
-参考文件：`reference/modelx-reference.png`。它是用户提供的静态参考，只验证可见布局，不证明 Model X 的内部实现。`ui/modeling-workspace-preview.html` 为本包附带的布局参考，全部示例状态明确标识，不是已实现的 Agent。
+Priority: explicit user requirements → the tokens and interaction rules in this document → the reference screenshot structure → existing project component conventions → general guidance from external frontend Skills. An external Skill must not turn the workbench into a purple-gradient marketing site, a dark technology dashboard, or a page dominated by a large hero section.
 
-## 2.2 色彩与基础 tokens
+Reference file: `reference/modelx-reference.png`. It is a static reference supplied by the user and validates only the visible layout; it does not establish how Model X is implemented. `ui/modeling-workspace-preview.html` is the layout reference included in this kit. Every example state is labeled and is not an implemented Agent.
 
-| Token | 数值 | 用途 |
+## 2.2 Colors and Base Tokens
+
+| Token | Value | Use |
 |---|---|---|
-| brand / primary | `#0F4C9E` | 主按钮、选中项、焦点、关键链接 |
-| brand-hover | `#0B3D80` | 主按钮悬停 |
-| brand-active | `#083269` | 按压 |
-| brand-soft | `#EAF1FB` | 选中导航、浅色消息背景 |
-| app-bg | `#F5F7FB` | 工作区背景 |
-| surface | `#FFFFFF` | 内容面板 |
-| sidebar-bg | `#F8FAFD` | 左侧导航 |
-| text | `#172B4D` | 正文 |
-| text-secondary | `#596B82` | 说明文字 |
-| text-muted | `#6B7C93` | 辅助信息；小字号须验对比度 |
-| border | `#E2E8F0` | 分隔线/卡片边界，不代替焦点样式 |
-| success | `#147D58` | 成功 icon + 文字 |
-| warning | `#9A6700` | 待确认/警告 icon + 文字 |
-| danger | `#B42318` | 失败/停止 icon + 文字 |
+| brand / primary | `#0F4C9E` | Primary buttons, selected items, focus, and important links |
+| brand-hover | `#0B3D80` | Primary button hover |
+| brand-active | `#083269` | Pressed state |
+| brand-soft | `#EAF1FB` | Selected navigation and light message backgrounds |
+| app-bg | `#F5F7FB` | Workspace background |
+| surface | `#FFFFFF` | Content panels |
+| sidebar-bg | `#F8FAFD` | Left navigation |
+| text | `#172B4D` | Body text |
+| text-secondary | `#596B82` | Explanatory text |
+| text-muted | `#6B7C93` | Auxiliary information; verify contrast at small sizes |
+| border | `#E2E8F0` | Dividers and card borders; not a replacement for focus styles |
+| success | `#147D58` | Success icon and text |
+| warning | `#9A6700` | Confirmation-needed or warning icon and text |
+| danger | `#B42318` | Failure or stop icon and text |
 
-tokens 源文件为 `ui/design-tokens.css`，实现时导入或映射到项目现有主题，不全局覆盖上游变量。正文普通文本对比度目标 ≥4.5:1，交互焦点和非文本状态按适用无障碍规范核验，不能因品牌色好看就省略检查。[S13][S14]
+The token source is `ui/design-tokens.css`. Import it or map it to the existing project theme; do not override upstream variables globally. Normal body text targets a contrast ratio of at least 4.5:1. Verify interactive focus and non-text states against the applicable accessibility standard rather than skipping checks because a brand color looks acceptable. [S13][S14]
 
-字体使用系统字体栈：`-apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif`。禁止远程字体和把字体文件打包进本资料。
+Use the system font stack: `-apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif`. Do not use remote fonts or bundle font files in this kit.
 
-字号：主标题 20/28，区域标题 16/24，正文/菜单 14/22，表格和辅助信息 12/18（关键错误与字段标签不缩成 10px）。数字可用 tabular-nums。
+Type sizes: page title 20/28, section title 16/24, body/menu 14/22, table and auxiliary information 12/18. Do not reduce important errors or field labels to 10px. Numbers may use tabular figures.
 
-间距：4/8/12/16/20/24/32px。圆角：按钮 8、卡片 12、输入框 14；不要所有层都套巨大圆角和阴影。卡片以细边框为主，阴影只用于浮层。
+Spacing: 4/8/12/16/20/24/32px. Corner radii: buttons 8, cards 12, inputs 14. Do not apply oversized radii and shadows to every layer. Cards primarily use thin borders; reserve shadows for overlays.
 
-## 2.3 三栏布局
+## 2.3 Three-Column Layout
 
-目标视口：1440×900，兼顾 1366×768 和 1920×1080。
+Target viewport: 1440×900, with support for 1366×768 and 1920×1080.
 
 ```text
 ┌────── 左侧 248 ──────┬────────── 中间 min 480，自适应 ────────┬── 右侧 320 ──┐
@@ -56,99 +58,99 @@ tokens 源文件为 `ui/design-tokens.css`，实现时导入或映射到项目�
 └─────────────────────┴───────────────────────────────────────┴───────────────┘
 ```
 
-整个应用使用 `height:100dvh; overflow:hidden`，三栏 `min-width:0; min-height:0`。会话列表、中间消息区、右侧任务内容各自滚动。中栏使用 `grid-template-rows:56px minmax(0,1fr) auto`；输入区是布局中的最后一行，不绝对覆盖消息。最后一条消息必须完整可见。
+The application uses `height:100dvh; overflow:hidden`; all three columns use `min-width:0; min-height:0`. The session list, middle message area, and right task area scroll independently. The middle column uses `grid-template-rows:56px minmax(0,1fr) auto`. The composer is the last layout row and must not absolutely cover messages. The final message must remain fully visible.
 
-≥1280：248 / minmax(480,1fr) / 320。1024～1279：左栏 216，右侧默认收起为抽屉。768～1023：左栏可折叠 72，但展开仍 icon+文字；移动端 <768：两侧抽屉、中间单栏，不把三栏挤成不可读的小字。
+At widths ≥1280: 248 / minmax(480,1fr) / 320. From 1024–1279: the left column is 216 and the right column defaults to a drawer. From 768–1023: the left column can collapse to 72, but its expanded state still uses icons and text. Below 768: both sidebars become drawers and the middle becomes one column; do not compress three columns into unreadably small text.
 
-中间对话内容宽度最多 920px，左右 padding 24px；小屏 16px。表格/代码块内部横向滚动，页面本身不得出现水平滚动。
+The middle conversation content has a maximum width of 920px with 24px horizontal padding, reduced to 16px on small screens. Tables and code blocks scroll horizontally within themselves; the page must not scroll horizontally.
 
-## 2.4 菜单和 icon 规范
+## 2.4 Menu and Icon Rules
 
-沿用仓库已有 SVG icon/primitives；不足时通过一个统一 Icon 适配层补齐。可以选 Lucide 作为新增来源，但必须先确认依赖与许可证，不假定已安装。禁止混用 emoji、文字 Unicode 图标和多个不同风格图标库。
+Use the repository's existing SVG icons and primitives. Fill gaps through one shared Icon adapter. Lucide is an acceptable new source only after confirming its dependency and license; do not assume it is installed. Do not mix emoji, Unicode text icons, and multiple icon libraries with different styles.
 
-| 导航 | 图标语义（实现名以实际库为准） | 行为 |
+| Navigation | Icon meaning (implementation name depends on the library) | Behavior |
 |---|---|---|
-| 新建任务 | Plus | 创建 Harness 会话，进入空状态 |
-| 建模工作区 | Panels / LayoutDashboard | 返回当前三栏工作区 |
-| 数据中心 | Database | 中栏或抽屉显示数据集列表 |
-| 技能中心 | Wrench / Wand | 打开 4 个业务 Skill 的轻量管理 |
-| 运行记录 | History / Clock | 查看真实 run，打开结果 |
-| 设置 | Settings | 复用现有设置，不暴露密钥正文 |
+| New task | Plus | Create a Harness Session and enter the empty state |
+| Modeling workbench | Panels / LayoutDashboard | Return to the current three-column workspace |
+| Data center | Database | Show the dataset list in the middle column or a drawer |
+| Skill center | Wrench / Wand | Open lightweight management for four business Skills |
+| Run history | History / Clock | View real runs and open results |
+| Settings | Settings | Reuse existing settings without exposing credential contents |
 
-菜单高度 40px，icon 18px、描边约 1.75～2px、icon 与文字间距 10px。选中项浅蓝背景、蓝色文字，可加左侧 3px 指示；hover 用轻灰，不能仅靠颜色区分选中。
+Menus are 40px high with 18px icons, approximately 1.75–2px strokes, and 10px between icon and text. A selected item uses a light-blue background and blue text and may add a 3px left indicator. Hover uses light gray. Selection must not rely on color alone.
 
-不实现的 Notebook/场景实验室默认不展示。确需展示时禁用并明确“后续提供”，不得空链接或点击无响应。
+Do not show unimplemented Notebook or scenario-lab entries by default. If they must appear, disable them and label them "Coming later"; do not leave empty links or controls with no response.
 
-## 2.5 按钮规范
+## 2.5 Button Rules
 
-全部业务按钮必须有 icon。主要按钮 `icon + 文字`；发送、附件、收起、更多、复制等紧凑操作使用 icon-only。
+Every business action button has an icon. Primary buttons use `icon + text`; compact actions such as send, attach, collapse, more, and copy may be icon-only.
 
-| 类型 | 样式 | 示例 |
+| Type | Style | Example |
 |---|---|---|
-| Primary | 蓝底白字，36px 高，8px 圆角 | Play + 确认并执行 |
-| Secondary | 白底细边框，深色文字 | Pencil + 修改计划 |
-| Tertiary | 透明底、悬停轻底色 | Eye + 查看数据 |
-| Danger | 浅红或红字，明确确认 | Square + 停止任务 |
-| Icon-only | 32×32 桌面点击区，icon 16～18；触屏适当放大 | Send / Download / More |
+| Primary | Blue background, white text, 36px height, 8px radius | Play + Confirm and run |
+| Secondary | White background, thin border, dark text | Pencil + Edit plan |
+| Tertiary | Transparent background with a light hover fill | Eye + View data |
+| Danger | Light red or red text with explicit confirmation | Square + Stop task |
+| Icon-only | 32×32 desktop hit area, 16–18px icon; enlarge appropriately for touch | Send / Download / More |
 
-禁止重要“发布 Skill”“确认执行”“删除数据”只剩无说明 icon。icon-only 必须 `aria-label` + Tooltip；原生 button 支持 Enter/Space。禁用按钮给出原因；loading 不改宽度、不重复触发。[S13]
+Important actions such as "Publish Skill," "Confirm execution," and "Delete data" must not be unexplained icons. Icon-only controls require an `aria-label` and Tooltip; native buttons support Enter and Space. Disabled buttons explain why. Loading must not change button width or trigger duplicate actions. [S13]
 
-交互反馈：hover/focus/pressed/disabled/loading 均定义。焦点使用可见蓝色 outline，不移除 outline。删除和停止不是红色“主要CTA”。
+Define hover, focus, pressed, disabled, and loading feedback. Focus uses a visible blue outline; do not remove the outline. Delete and stop actions are not red primary CTAs.
 
-## 2.6 关键组件
+## 2.6 Key Components
 
 ### A. DatasetOverviewCard
 
-文件 icon、文件名、状态、样本数、总列数、目标/特征数、大小/格式、预览按钮。数据来自服务端 Profile。未分析显示 skeleton；失败显示具体原因和重试。
+Show a file icon, filename, state, sample count, total columns, target/feature counts, size/format, and preview button. Data comes from the server-side Profile. Show a skeleton before analysis and a specific reason plus retry on failure.
 
-仅展示 4～6 个关键数字，不再堆一个“指标仪表盘”。高基数警告与目标待选择可用清晰提示行。
+Show only four to six important numbers instead of another metric dashboard. Use clear notice rows for high-cardinality warnings and an unselected target.
 
 ### B. AgentMessage / ToolExecutionBlock
 
-用户消息右对齐、浅蓝底；Agent 消息左对齐、无巨大边框。工具执行摘要默认折叠：工具名、开始/结束状态、耗时、可读结论；展开看参数摘要与脱敏日志。区域名使用“执行说明”，不展示模型隐藏推理。
+Align user messages to the right on a light-blue background. Align Agent messages to the left without oversized borders. Tool execution summaries are collapsed by default and show the tool name, start/end state, duration, and readable conclusion. Expansion shows a parameter summary and redacted logs. Name the section "Execution details" and do not expose hidden model reasoning.
 
-Markdown 关闭原始 HTML 或经过可靠清洗；代码按文本渲染，外链遵守运行时访问策略。不要让模型输出注入页面脚本或伪造按钮。
+Disable raw HTML in Markdown or sanitize it reliably. Render code as text and apply the runtime access policy to external links. Model output must not inject page scripts or counterfeit buttons.
 
 ### C. ModelingPlanCard
 
-标题“建模方案”，revision/待确认状态；目标列与任务类型；可折叠参数表；有限步骤列表。底部：Pencil 修改计划、Play 确认并执行。
+Show the title "Modeling plan," revision and confirmation-needed state, target column and task type, a collapsible parameter table, and a bounded step list. The footer contains Pencil + Edit plan and Play + Confirm and run.
 
-确认按钮在 profile 未就绪、目标未选、schema 错误、数据版本冲突、已有冲突运行时禁用并显示原因。执行后的计划卡只读；改动创建新 revision，不在原卡悄悄变更。
+Disable confirmation and show a reason when the Profile is not ready, the target is missing, the schema is invalid, the data version conflicts, or another conflicting run exists. A plan card becomes read-only after execution. Changes create a new revision instead of silently changing the original card.
 
 ### D. TaskMonitor / NodeRow
 
-右侧“任务 / 上下文”Tab。任务列表显示 status icon + 节点名 + 耗时，点击打开详情。当前步骤可用细蓝边，不需要高饱和整卡闪烁。
+The right side has "Tasks / Context" tabs. Each task row shows a status icon, node name, and duration and opens details when selected. A thin blue border can identify the current step; the entire card does not need a saturated flashing fill.
 
-状态文案：等待中 / 运行中 / 待确认 / 已完成 / 失败 / 已取消 / 已中断 / 已跳过。失败显示原因和有界重试；不把被跳过步骤算作真正完成。
+State labels: Pending / Running / Confirmation required / Completed / Failed / Canceled / Interrupted / Skipped. A failure shows its reason and a bounded retry. A skipped step does not count as completed work.
 
 ### E. ResultCard
 
-数据准备模式：输出样本/特征数、数据拆分、处理规则、下载。训练模式加真实评估指标、验证/测试区分、阈值和样本量。
+Data-preparation mode shows output sample/feature counts, the data split, processing rules, and downloads. Training mode adds real evaluation metrics, validation/test distinctions, the threshold, and sample counts.
 
-指标还未计算显示“— / 尚未计算”，不得放 0.92 占位。置信区间未实现不编造。报告、数据、模型各有 icon + 文字入口。过多产物折叠成列表。
+Show "— / Not calculated" before a metric exists; do not use 0.92 as a placeholder. Do not fabricate confidence intervals when they are not implemented. Reports, data, and models each have an icon-and-text entry. Collapse large artifact sets into a list.
 
 ### F. Composer
 
-支持多行文本；IME 输入时 Enter 不误发；Enter 发送、Shift+Enter 换行，支持手动切换习惯。文件 chip 包含移除按钮。执行中仍可阅读与询问状态，但禁止相同计划重复启动。
+Support multiline text. Enter must not submit during IME composition. Enter sends and Shift+Enter inserts a line break, with a user-selectable alternative. File chips include a remove button. Users may still read and ask for status during execution, but cannot start the same plan again.
 
-底部展示当前数据集与选定 Skill；发送按钮为蓝色圆角方形 icon-only，空输入禁用。附加文件、展开 Skill 使用统一 icon，不能成为无可访问名称的 div。
+Show the current dataset and selected Skill below the composer. The send button is a blue rounded-square icon-only control and is disabled for empty input. Attach-file and Skill controls use the shared icon system and must not be unnamed `div` elements.
 
 ### G. DatasetDrawer / SkillPanel
 
-数据抽屉：列信息、20 行预览，列多时内部滚动。Skill 面板：列表 → 正文编辑 → 校验结果 → 发布新版本；文本编辑器可先用 textarea，不强行引入 Monaco。
+The data drawer shows column information and a 20-row preview, with internal scrolling for many columns. The Skill panel follows list → instruction editing → validation results → publish new version. A textarea is sufficient initially; do not introduce Monaco without need.
 
-## 2.7 必须设计的状态
+## 2.7 Required States
 
-空工作区、上传中、数据分析失败、数据就绪、等待人工确认、执行中、任务失败、用户取消、断线重连、执行完成、无 LLM/手动模式。每个状态至少写清入口、页面反馈、可操作项、下一步。
+Design the empty workspace, uploading, analysis failure, data ready, awaiting confirmation, running, task failure, user cancellation, reconnecting, completed, and no-LLM/manual-mode states. For each state, define its entry condition, page feedback, available actions, and next step.
 
-空状态文案：“上传一份 CSV，开始分析与建模。”主操作“上传数据”，次操作“使用演示数据”。不加营销大标题或无关插画。
+Empty-state copy: "Upload a CSV to start analysis and modeling." Primary action: "Upload data." Secondary action: "Use demo data." Do not add a marketing headline or unrelated illustration.
 
-错误文案采用“问题 + 原因 + 下一步”，例如“无法训练：目标列只包含一种类别。请选择含正负样本的数据或只执行数据准备。”
+Error copy follows "problem + reason + next step." Example: "Training cannot start: the target column contains only one class. Select data with positive and negative samples, or run data preparation only."
 
-## 2.8 前端实现与复核循环
+## 2.8 Frontend Implementation and Review Loop
 
-调用项目 `$modelx-frontend-design`；外部 `frontend-design` 仅作为辅助。先完成 tokens 与三栏骨架，再补卡片和状态；不同时调用多套互相冲突的审美 Skill。
+Invoke the project `$modelx-frontend-design` Skill; use external `frontend-design` only as an aid. Complete the tokens and three-column skeleton before cards and states. Do not invoke several conflicting visual-design Skills at once.
 
-第一轮：1440×900，检查结构/留白/主色/控件。第二轮：1366×768，检查首屏密度、输入区和滚动。第三轮：1024×768 + 390×844，检查抽屉、按钮命名和溢出。
+First pass: 1440×900, checking structure, whitespace, primary color, and controls. Second pass: 1366×768, checking initial-screen density, composer, and scrolling. Third pass: 1024×768 + 390×844, checking drawers, button names, and overflow.
 
-用真实浏览器截图逐轮比较，保存 evidence 目录。不能只看 JSX 就宣称页面验收通过；没有浏览器能力就明确 `VISUAL_NOT_RUN`。前端 bug 修复必须再次截图，不以旧截图证明新代码。
+Compare real browser screenshots on each pass and save them under the evidence directory. JSX inspection alone does not establish visual acceptance; record `VISUAL_NOT_RUN` when no browser is available. Capture a new screenshot after a frontend bug fix; an old screenshot cannot verify new code.

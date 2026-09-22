@@ -1,7 +1,9 @@
-# 运行期业务 Skill 模板
+# Runtime Business Skill Templates
 
-四个目录为正文与本项目自定义 manifest 模板，需要 T06/T09 按固定版本接入受控 SkillProvider 或 runtime-only .dsh/skills。不是 Codex 开发 Skill。
+English | [中文](README.zh.md)
 
-manifest 的 version/allowed_tools 是本项目设计，需要业务加载器实现；不是声称 Harness 自动识别该 JSON 并强制权限。工具权限必须由实际 preset/注册和服务端执行校验保证。
+The four directories contain the main content and project-specific manifest templates. T06/T09 must integrate controlled `SkillProvider` or runtime-only `.dsh/skills` using fixed versions, not as Codex-developed Skills.
 
-不要把开发仓库全量挂载为业务 workspace。发布时固定正文、schema/算子版本和 hash；不要直接覆盖历史发布文件。正文可编辑不代表允许用户导入可执行脚本。
+The `version/allowed_tools` fields in the manifest are designed by this project and require implementation by business loaders; they do not imply that Harness automatically identifies this JSON and enforces permissions. Tool permissions must be validated by actual presets, registration, and server-side execution checks.
+
+Do not mount entire development repositories as business workspaces. During release, fix main content, schema/operator versions, and hashes; never overwrite historical release artifacts directly. Editable main content does not permit users to import executable scripts.
