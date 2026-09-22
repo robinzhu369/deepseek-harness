@@ -49,7 +49,7 @@ The Skill API manages exactly five runtime modeling Skills. Drafts belong to one
 
 Plan edits create a proposed revision and record the semantic downstream stages affected by the change. A plan may carry an optional `task_context` with the dataset identity, ordered enabled Skills, user preferences, reused profile evidence, and evidence-backed decisions; legacy plans without it remain readable. The API rejects duplicate or unsafe Skill orderings, unsupported algorithms, and date-derived features before a plan can be confirmed. The current worker does not reuse a stage cache, so every accepted rerun honestly recomputes the full pipeline. A rerun requires the exact revision, hash, source run, and idempotency key; it always creates a new run ID while preserving the prior run.
 
-`GET /v1/workspace` restores the latest dataset, plan, run, node events, result, warnings, and completed artifact metadata owned by one Session. It removes storage keys and worker process fields, and querying it never creates or resumes work.
+`GET /v1/workspace` restores the latest dataset, plan, run, node events, result, warnings, and completed artifact metadata owned by one Session. It replaces each storage key with the service-relative Run directory and filename needed for display, removes worker process fields, and never creates or resumes work.
 
 ## Known limitations
 

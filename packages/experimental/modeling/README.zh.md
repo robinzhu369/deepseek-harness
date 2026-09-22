@@ -63,7 +63,7 @@ Host 服务要求显式部署值：
 
 `ModelingGateway` 持有所配置的私有 HTTP 源。preset 内的工具插件从 `ctx.attachments` 把用户直接提交的 CSV 附件流式传入 `/v1/datasets`，等待 Profile 完成，再把返回的数据集 ID 作为持久模型上下文加入请求。工具调用从实时 `Agent` 派生 Session ID，而 `approveAndRun` 是 Typert Remote 方法，接收由应用调用方解析的 `Agent`；没有模型工具暴露审批。API 根据该 Session ID 校验 dataset 与 run 的归属。
 
-浏览器在现有对话时间线中，按已记录的工具调用位置展示建模方案卡。历史版本保持只读；匹配当前版本的卡片通过同一个 Session 模型提供编辑、确认、运行状态、指标和下载。“查看详情”在卡片内展开完整工作台。编辑器提供五个 Skill 的顺序和执行器支持的参数；提交修改后排队一个 Agent turn，复用匹配的数据画像证据并提出新 revision。确认绑定展示的 revision 和 hash，Host 将 API 返回的 run ID 注入 Agent 的下一次请求。刷新不会启动任务。已完成轮次的工具详情折叠后，方案卡仍然可见；只有当前版本展示实时执行详情。
+浏览器在现有对话时间线中，按已记录的工具调用位置展示建模方案卡。历史版本保持只读；匹配当前版本的卡片通过同一个 Session 模型提供编辑、确认、运行状态、指标和下载。“查看详情”在卡片内展开完整工作台。已完成产物显示服务内相对 Run 目录、实际文件名、用途和大小，下载继续使用不透明 artifact ID。编辑器提供五个 Skill 的顺序和执行器支持的参数；提交修改后排队一个 Agent turn，复用匹配的数据画像证据并提出新 revision。确认绑定展示的 revision 和 hash，Host 将 API 返回的 run ID 注入 Agent 的下一次请求。刷新不会启动任务。已完成轮次的工具详情折叠后，方案卡仍然可见；只有当前版本展示实时执行详情。
 
 Skill 中心列出五个固定运行时 Skill，编辑 Session 私有的 Markdown Draft，完成校验并发布不可变版本。Contract、Schema、Tools 和“技能自检”Tab 读取每个 `SKILL.md` 旁边的可选 JSON 文件；这些 Tab 展示 Modeling 扩展元数据与配置检查，不构成独立的 Skill 执行或评估运行时。model-evaluation Skill 通过 `modeling_get_run_result` 读取真实的已完成 run 结果；它不能重新训练、调参、审批执行或修改阈值。对话中的方案卡提供应用侧的“确认方案并执行”按钮；发送对话消息不能审批方案。宽版计划编辑器把 `/v1/capabilities` 提供的有界控件分区放入独立滚动区，同时保持标题和 revision 操作可见；它不接受任意 JSON 或 DAG 节点。编辑 approved 计划会创建 proposed revision，确认时选择之前的终态 run 作为来源，以幂等方式重跑并创建新的 run ID。
 

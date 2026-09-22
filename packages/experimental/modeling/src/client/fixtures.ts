@@ -1,6 +1,7 @@
 /** Centralized, visibly marked UI-only preview data for visual review. */
 import type { ModelingClientSnapshot } from './model.ts'
 
+/** Named, visibly marked client states used only for deterministic visual review. */
 export type ModelingFixtureName = 'empty' | 'proposed' | 'running' | 'succeeded' | 'failed'
 
 const BASE: ModelingClientSnapshot = {
@@ -43,7 +44,11 @@ const BASE: ModelingClientSnapshot = {
     },
     diagnostics: [{ code: 'class_imbalance' }, { code: 'low_recall' }, { code: 'low_precision' }],
     recommendations: [{ code: 'consider_lower_threshold' }, { code: 'consider_higher_threshold' }],
-    feature_summary: { output_feature_count: 12 }, artifacts: [],
+    feature_summary: { output_feature_count: 12 }, artifacts: [
+      { id: 'preview_metrics', run_id: 'preview_run', kind: 'metrics', file_name: 'metrics.json', directory: 'runs/preview_run', sha256: 'a'.repeat(64), size_bytes: 2048, media_type: 'application/json', completed: true },
+      { id: 'preview_train', run_id: 'preview_run', kind: 'prepared_data', file_name: 'train.parquet', directory: 'runs/preview_run', sha256: 'b'.repeat(64), size_bytes: 86_320, media_type: 'application/octet-stream', completed: true },
+      { id: 'preview_test', run_id: 'preview_run', kind: 'prepared_data', file_name: 'test.parquet', directory: 'runs/preview_run', sha256: 'c'.repeat(64), size_bytes: 28_640, media_type: 'application/octet-stream', completed: true },
+    ],
     warnings: ['UI preview / fixture：这些数值仅用于组件与响应式布局检查。'],
   },
   runs: [{
@@ -66,7 +71,11 @@ const BASE: ModelingClientSnapshot = {
   }, skills: [], skillDetail: null,
 }
 
-/** Return one coherent UI-only lifecycle state without starting backend work. */
+/**
+ * Return one coherent UI-only lifecycle state without starting backend work.
+ * @param name - Requested lifecycle state.
+ * @returns Isolated fixture snapshot that cannot serve as execution evidence.
+ */
 export function modelingFixture(name: ModelingFixtureName): ModelingClientSnapshot {
   if (name === 'empty') return { ...BASE, dataset: null, plan: null, run: null, result: null, runs: [] }
   if (name === 'proposed') return { ...BASE, plan: BASE.plan === null ? null : { ...BASE.plan, state: 'proposed' }, run: null, result: null, runs: [] }

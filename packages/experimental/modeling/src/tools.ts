@@ -119,7 +119,15 @@ function csvAttachments(messages: readonly UserMessage[]): FileAttachmentRef[] {
   return files
 }
 
-/** Register direct-user CSV attachments and render durable model context with their service-owned IDs. */
+/**
+ * Register direct-user CSV attachments and render durable model context with their service-owned IDs.
+ * @param gateway - Private Modeling API adapter.
+ * @param attachments - Durable attachment reader.
+ * @param sessionId - Trusted Session identity that owns the new Datasets.
+ * @param messages - Newly admitted messages inspected for direct-user CSV attachments.
+ * @param signal - Cancels attachment reads, uploads, and profile polling.
+ * @returns Injected Dataset context, or `undefined` when no eligible attachment exists.
+ */
 export async function createDatasetAttachmentContext(
   gateway: ModelingGateway,
   attachments: Pick<AttachmentStore, 'readFileStream'>,
@@ -165,7 +173,12 @@ const output = {
   render: (_args: unknown, value: ToolResult) => [{ type: 'text' as const, text: JSON.stringify(value) }],
 }
 
-/** Create the exact model-visible tool set; exported for permission and isolation tests. */
+/**
+ * Create the exact model-visible tool set; exported for permission and isolation tests.
+ * @param gateway - Private Modeling API adapter used by every tool.
+ * @param skillSnapshots - Fixed snapshots or a loader evaluated for each proposal.
+ * @returns Four bounded tool definitions with no approval capability.
+ */
 export function createModelingTools(
   gateway: ModelingGateway,
   skillSnapshots: readonly ModelingSkillSnapshot[] | (() => Promise<ModelingSkillSnapshot[]>),

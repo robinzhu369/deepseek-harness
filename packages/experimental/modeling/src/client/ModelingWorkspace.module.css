@@ -122,8 +122,15 @@
 .runHistory { display: grid; gap: 8px; }
 .runHistoryItem { padding: 9px 10px; border: 1px solid var(--dsw-alias-border-l2); border-radius: 8px; display: grid; grid-template-columns: 1fr auto; gap: 3px 8px; background: var(--dsw-alias-bg-layer-1); font-size: 11px; }
 .runHistoryItem small { grid-column: 1 / -1; overflow: hidden; color: var(--dsw-alias-label-secondary); text-overflow: ellipsis; white-space: nowrap; }
+.artifactDirectory { margin-bottom: 10px; padding: 9px 10px; border: 1px solid var(--dsw-alias-border-l2); border-radius: 8px; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 3px 8px; background: var(--dsw-alias-bg-layer-1); font-size: 11px; }
+.artifactDirectory > span { color: var(--dsw-alias-label-secondary); }
+.artifactDirectory code { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.artifactDirectory small { grid-column: 1 / -1; color: var(--dsw-alias-label-secondary); line-height: 16px; }
 .artifacts { display: flex; flex-direction: column; gap: 6px; }
-.artifact { min-height: 30px; padding: 5px 7px; border-radius: 6px; display: flex; align-items: center; gap: 8px; color: var(--modelx-brand); background: var(--dsw-alias-bg-layer-1); text-decoration: none; font-size: 12px; }
+.artifact { min-height: 38px; padding: 6px 8px; border-radius: 6px; display: flex; align-items: center; gap: 9px; color: var(--modelx-brand); background: var(--dsw-alias-bg-layer-1); text-decoration: none; font-size: 12px; }
+.artifact > span { min-width: 0; display: grid; gap: 2px; }
+.artifact strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.artifact small { color: var(--dsw-alias-label-secondary); font-size: 10px; }
 .artifact:hover { background: var(--dsw-alias-interactive-bg-hover); }
 .muted { color: var(--dsw-alias-label-secondary); font-size: 12px; }
 .centerState, .errorCard { margin: 24px; padding: 24px; display: flex; align-items: center; gap: 14px; }

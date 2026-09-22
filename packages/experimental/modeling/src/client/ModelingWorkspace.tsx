@@ -125,6 +125,11 @@ function statusLabel(status: string, t: (key: ModelingKey) => string): string {
   return ({ pending: t('run.pending'), blocked: t('run.blocked'), queued: t('run.pending'), running: t('run.running'), cancelling: t('run.running'), succeeded: t('run.succeeded'), failed: t('run.failed'), cancelled: t('run.cancelled'), interrupted: t('run.blocked') } as Record<string, string>)[status] ?? status
 }
 
+function artifactKindLabel(kind: string, t: (key: ModelingKey) => string): string {
+  const known = ['feature_manifest', 'manifest', 'metrics', 'model', 'run_metadata', 'preprocessor', 'report', 'split_manifest', 'prepared_data']
+  return known.includes(kind) ? t(`artifact.kind.${kind}` as ModelingKey) : kind
+}
+
 function evaluationMessage(item: Record<string, unknown>, kind: 'diagnostic' | 'recommendation', t: (key: ModelingKey) => string): string {
   const code = typeof item.code === 'string' ? item.code : ''
   const key = `result.${kind}.${code}` as ModelingKey
@@ -328,10 +333,20 @@ export function ModelingWorkspace(props: ModelingWorkspaceProps) {
             </section>
             <section className={css.processSection}>
               <h3>{t('artifact.title')}</h3>
+              {artifacts.length > 0 && <div className={css.artifactDirectory}>
+                <span>{t('artifact.directory')}</span>
+                <code>{artifacts[0]?.directory}/</code>
+                <small>{t('artifact.directoryHint')}</small>
+              </div>}
               <div className={css.artifacts}>{artifacts.map((item) => {
-                const id = typeof item.id === 'string' ? item.id : ''
-                const kind = value(item.kind)
-                return id === '' ? null : <a className={css.artifact} href={artifactUrl(id)} key={id} download><IconDownloadOutline16 /><span>{kind}</span></a>
+                return <a className={css.artifact} href={artifactUrl(item.id)} key={item.id}
+                  download={item.file_name} aria-label={`${t('artifact.download')} ${item.file_name}`}>
+                  <IconDownloadOutline16 />
+                  <span>
+                    <strong>{item.file_name}</strong>
+                    <small>{artifactKindLabel(item.kind, t)} · {fileSizeText(item.size_bytes)}</small>
+                  </span>
+                </a>
               })}{artifacts.length === 0 && <span className={css.muted}>{t('artifact.unavailable')}</span>}</div>
             </section>
           </div>

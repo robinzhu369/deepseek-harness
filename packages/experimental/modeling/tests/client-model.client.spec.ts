@@ -14,7 +14,10 @@ function workspace(revision: number, status: 'running' | 'succeeded' | 'interrup
     result: status === 'succeeded' ? {
       metrics: { test: { roc_auc: 0.7, precision: 0.6, recall: 0.5 } },
       diagnostics: [{ code: 'low_recall' }], recommendations: [{ code: 'consider_lower_threshold' }],
-      feature_summary: {}, artifacts: [], warnings: [],
+      feature_summary: {}, artifacts: [{
+        id: 'artifact-1', run_id: 'run-1', kind: 'metrics', file_name: 'metrics.json', directory: 'runs/run-1',
+        sha256: 'a'.repeat(64), size_bytes: 128, media_type: 'application/json', completed: true,
+      }], warnings: [],
     } : null,
     runs: [],
   })
@@ -116,6 +119,7 @@ describe('ModelingClientModel', () => {
     expect(parseWorkspace(workspace(3)).run?.revision).toBe(3)
     expect(parseWorkspace(workspace(3, 'succeeded')).result).toMatchObject({
       diagnostics: [{ code: 'low_recall' }], recommendations: [{ code: 'consider_lower_threshold' }],
+      artifacts: [{ file_name: 'metrics.json', directory: 'runs/run-1', size_bytes: 128 }],
     })
     expect(() => parseWorkspace(JSON.stringify({ run: { id: 'run-1', revision: 1, status: 'invented' } }))).toThrow('Unknown modeling run status')
   })

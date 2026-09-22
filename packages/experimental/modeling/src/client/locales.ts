@@ -1,6 +1,7 @@
 /** Typed product copy for the ModelX browser surface. */
 export const NS = 'modeling'
 
+/** Simplified Chinese product copy for the Modeling client. */
 export const zh = {
   'skills.guide': '技能使用说明',
   'skills.guideNotice': '以下为内置技能的中文功能说明，不是当前发布版本的逐字译文。实际运行以已发布的 SKILL.md 为准。',
@@ -58,14 +59,17 @@ export const zh = {
   'process.pipeline': '流程状态', 'process.title': '执行过程', 'process.history': '运行记录',
   'result.title': '模型结果', 'result.auc': 'ROC-AUC', 'result.ap': 'AP / PR-AUC', 'result.f1': 'F1', 'result.precision': '精确率', 'result.recall': '召回率', 'result.samples': '测试样本',
   'result.threshold': '阈值', 'result.matrix': '混淆矩阵', 'result.diagnostics': '模型诊断', 'result.recommendations': '调整建议', 'result.diagnostic.class_imbalance': '测试集类别分布不均衡。', 'result.diagnostic.validation_test_gap': '验证集与测试集指标差距明显，存在泛化风险。', 'result.diagnostic.low_recall': '召回率偏低，正样本漏判较多。', 'result.diagnostic.low_precision': '精确率偏低，正样本误报较多。', 'result.diagnostic.no_obvious_anomaly': '当前指标未发现明显异常。', 'result.recommendation.review_generalization': '检查数据漂移、泄漏风险和验证集代表性。', 'result.recommendation.consider_lower_threshold': '若更关注降低漏判，可在验证集测试更低阈值后重新评估。', 'result.recommendation.consider_higher_threshold': '若更关注减少误报，可在验证集测试更高阈值后重新评估。', 'result.recommendation.retain_and_monitor': '保留当前阈值，并持续监控新数据表现。', 'result.warning': '注意事项', 'result.noPositive': '默认阈值 0.5 下未识别出正例。模型仍具有一定排序能力，但当前分类阈值表现较差。', 'result.adjustRerun': '调整方案并重跑',
-  'artifact.title': '结果产物', 'artifact.download': '下载产物', 'artifact.unavailable': '文件尚未完成',
+  'artifact.title': '结果产物', 'artifact.download': '下载产物', 'artifact.unavailable': '文件尚未完成', 'artifact.directory': '本次运行目录', 'artifact.directoryHint': '服务内相对目录；点击下方文件下载到本地。',
+  'artifact.kind.feature_manifest': '特征清单', 'artifact.kind.manifest': '产物清单', 'artifact.kind.metrics': '评估指标', 'artifact.kind.model': '训练模型', 'artifact.kind.run_metadata': '运行元数据', 'artifact.kind.preprocessor': '预处理器', 'artifact.kind.report': '建模报告', 'artifact.kind.split_manifest': '数据切分清单', 'artifact.kind.prepared_data': '处理后数据',
   'error.title': '建模服务暂不可用', 'error.operation': '建模任务需要处理', 'error.next': '请查看错误原因；修正方案或服务后创建新 revision，再确认执行。', 'error.revisePlan': '修改并创建新 revision',
   'nav.workspace': '建模工作区', 'nav.data': '数据中心', 'nav.skills': '技能中心', 'nav.runs': '运行记录',
   'panel.data': '当前 Session 的数据由建模工作台统一管理。', 'panel.skills': '管理运行期 Skill 的草稿、校验和不可变发布版本。', 'panel.runs': '运行记录从当前 Session 的真实 Run 状态读取。', 'panel.noSession': '请选择一个 Session 后查看该工作区。',
   'close': '关闭', 'unknown': '—', 'task.binary': '二分类', 'format.csv': 'CSV',
 } as const
 
+/** Locale key shared by the Chinese and English Modeling dictionaries. */
 export type ModelingKey = keyof typeof zh
+/** English product copy for the Modeling client. */
 export const en: Record<ModelingKey, string> = {
   'skills.guide': 'Skill usage guide',
   'skills.guideNotice': 'This is a built-in capability guide, not a verbatim translation of the published revision. The published SKILL.md governs runtime behavior.',
@@ -123,7 +127,8 @@ export const en: Record<ModelingKey, string> = {
   'process.pipeline': 'Pipeline status', 'process.title': 'Execution details', 'process.history': 'Run history',
   'result.title': 'Model result', 'result.auc': 'ROC-AUC', 'result.ap': 'AP / PR-AUC', 'result.f1': 'F1', 'result.precision': 'Precision', 'result.recall': 'Recall', 'result.samples': 'Test samples',
   'result.threshold': 'Threshold', 'result.matrix': 'Confusion matrix', 'result.diagnostics': 'Model diagnostics', 'result.recommendations': 'Recommendations', 'result.diagnostic.class_imbalance': 'The test split is class-imbalanced.', 'result.diagnostic.validation_test_gap': 'Validation and test metrics differ materially, indicating generalization risk.', 'result.diagnostic.low_recall': 'Recall is low and positive cases are frequently missed.', 'result.diagnostic.low_precision': 'Precision is low and positive predictions include many false alarms.', 'result.diagnostic.no_obvious_anomaly': 'No obvious metric anomaly was detected.', 'result.recommendation.review_generalization': 'Review data drift, leakage risk, and validation representativeness.', 'result.recommendation.consider_lower_threshold': 'If missed positives cost more, test a lower threshold on validation data before reevaluation.', 'result.recommendation.consider_higher_threshold': 'If false alarms cost more, test a higher threshold on validation data before reevaluation.', 'result.recommendation.retain_and_monitor': 'Retain the current threshold and monitor performance on new data.', 'result.warning': 'Warnings', 'result.noPositive': 'No positive samples were identified at the default 0.5 threshold. The model retains ranking ability, but fixed-threshold classification is poor.', 'result.adjustRerun': 'Adjust plan and rerun',
-  'artifact.title': 'Artifacts', 'artifact.download': 'Download artifact', 'artifact.unavailable': 'File is not complete',
+  'artifact.title': 'Artifacts', 'artifact.download': 'Download artifact', 'artifact.unavailable': 'File is not complete', 'artifact.directory': 'Run output directory', 'artifact.directoryHint': 'Service-relative directory; select a file below to download it locally.',
+  'artifact.kind.feature_manifest': 'Feature manifest', 'artifact.kind.manifest': 'Artifact manifest', 'artifact.kind.metrics': 'Evaluation metrics', 'artifact.kind.model': 'Trained model', 'artifact.kind.run_metadata': 'Run metadata', 'artifact.kind.preprocessor': 'Preprocessor', 'artifact.kind.report': 'Modeling report', 'artifact.kind.split_manifest': 'Split manifest', 'artifact.kind.prepared_data': 'Prepared data',
   'error.title': 'Modeling service unavailable', 'error.operation': 'Modeling task needs attention', 'error.next': 'Review the error, fix the plan or service, create a new revision, and confirm it.', 'error.revisePlan': 'Edit and create revision',
   'nav.workspace': 'Modeling workspace', 'nav.data': 'Data center', 'nav.skills': 'Skill center', 'nav.runs': 'Run history',
   'panel.data': 'The modeling workspace owns data for the current Session.', 'panel.skills': 'Manage runtime Skill Drafts, validation, and immutable releases.', 'panel.runs': 'Run history reads the current Session’s real Run state.', 'panel.noSession': 'Select a Session to view this workspace.',

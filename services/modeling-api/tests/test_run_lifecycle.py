@@ -147,6 +147,9 @@ def test_plan_revision_idempotency_real_worker_and_artifact_authorization(tmp_pa
         assert restored["result"]["metrics"] == result.json()["metrics"]
         assert restored["result"]["diagnostics"] == result.json()["diagnostics"]
         assert restored["result"]["recommendations"] == result.json()["recommendations"]
+        restored_artifacts = restored["result"]["artifacts"]
+        assert {item["file_name"] for item in restored_artifacts} >= {"metrics.json", "train.parquet", "validation.parquet", "test.parquet"}
+        assert {item["directory"] for item in restored_artifacts} == {f"runs/{first['run_id']}"}
         assert "session_id" not in json.dumps(restored)
         assert "worker_pid" not in json.dumps(restored)
         assert "storage_key" not in json.dumps(restored)

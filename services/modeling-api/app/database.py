@@ -597,7 +597,7 @@ class ModelingStore:
                 for item in events
             ],
             "artifacts": [
-                {key: value for key, value in self._artifact(item).items() if key != "storage_key"}
+                self._public_artifact(item)
                 for item in artifacts
             ],
         }
@@ -756,6 +756,16 @@ class ModelingStore:
             "id": row["id"], "run_id": row["run_id"], "kind": row["kind"], "storage_key": row["storage_key"],
             "sha256": row["sha256"], "size_bytes": row["size_bytes"], "media_type": row["media_type"],
             "completed": bool(row["completed"]), "created_at": row["created_at"],
+        }
+
+    def _public_artifact(self, row: sqlite3.Row) -> dict[str, Any]:
+        """Return download metadata with a service-relative directory instead of its storage key."""
+        artifact = self._artifact(row)
+        relative_path = Path(str(artifact["storage_key"]))
+        return {
+            **{key: value for key, value in artifact.items() if key != "storage_key"},
+            "file_name": relative_path.name,
+            "directory": relative_path.parent.as_posix(),
         }
 
     def mark_orphaned_runs_interrupted(self) -> int:

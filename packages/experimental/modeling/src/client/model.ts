@@ -3,8 +3,10 @@ import type { SessionId } from '@deepseek-ai/dsh-session/types'
 import type { ObservableSnapshot } from '@deepseek-ai/dsh-client-store'
 import type { ApproveAndRunRequest, ApproveAndRunResult, ModelingJson, RegeneratePlanRequest, RerunRequest, SkillDraftRequest, UpdatePlanRequest } from '../types.ts'
 
+/** Run lifecycle states accepted by the browser projection. */
 export type ModelingRunStatus = 'queued' | 'running' | 'succeeded' | 'failed' | 'cancelling' | 'cancelled' | 'interrupted'
 
+/** Session-owned Dataset fields rendered by the modeling client. */
 export interface ModelingDatasetView {
   readonly dataset_id: string
   readonly original_name: string
@@ -14,6 +16,7 @@ export interface ModelingDatasetView {
   readonly error: Record<string, unknown> | null
 }
 
+/** Immutable Plan revision and its bounded executable document. */
 export interface ModelingPlanView {
   readonly id: string
   readonly revision: number
@@ -23,6 +26,7 @@ export interface ModelingPlanView {
   readonly invalidation: Record<string, unknown> | null
 }
 
+/** Current Run state, node projection, and structured failure. */
 export interface ModelingRunView {
   readonly id: string
   readonly status: ModelingRunStatus
@@ -34,6 +38,7 @@ export interface ModelingRunView {
   readonly error: Record<string, unknown> | null
 }
 
+/** Terminal or active Run summary retained in Session history. */
 export interface ModelingRunHistoryView {
   readonly id: string
   readonly plan_revision: number
@@ -44,6 +49,7 @@ export interface ModelingRunHistoryView {
   readonly metrics: Record<string, unknown> | null
 }
 
+/** Published runtime Skill summary plus Session-private Draft state. */
 export interface ModelingSkillView {
   readonly name: string
   readonly description: string
@@ -54,6 +60,7 @@ export interface ModelingSkillView {
   readonly updated_at: string
 }
 
+/** Runtime Skill source, validation, and extension metadata. */
 export interface ModelingSkillDetail extends ModelingSkillView {
   readonly published_content: string
   readonly draft_content: string | null
@@ -61,6 +68,7 @@ export interface ModelingSkillDetail extends ModelingSkillView {
   readonly extension: ModelingSkillExtension
 }
 
+/** Optional Modeling-specific metadata shown without granting execution authority. */
 export interface ModelingSkillExtension {
   readonly contract: Record<string, unknown> | null
   readonly inputSchema: Record<string, unknown> | null
@@ -71,6 +79,7 @@ export interface ModelingSkillExtension {
   readonly scope: 'governance_only'
 }
 
+/** Declared tool entry reconciled with the preset's live tool set. */
 export interface ModelingToolCatalogItem {
   readonly name: string
   readonly description: string
@@ -78,6 +87,7 @@ export interface ModelingToolCatalogItem {
   readonly declared: boolean
 }
 
+/** One deterministic runtime Skill configuration check. */
 export interface ModelingSkillCheck {
   readonly id: string
   readonly label: string
@@ -85,15 +95,30 @@ export interface ModelingSkillCheck {
   readonly message: string
 }
 
+/** One completed Run output with safe service-relative display coordinates. */
+export interface ModelingArtifactView {
+  readonly id: string
+  readonly run_id: string
+  readonly kind: string
+  readonly file_name: string
+  readonly directory: string
+  readonly sha256: string
+  readonly size_bytes: number
+  readonly media_type: string
+  readonly completed: boolean
+}
+
+/** Bounded succeeded-Run result exposed to the browser. */
 export interface ModelingResultView {
   readonly metrics: Record<string, unknown> | null
   readonly diagnostics: readonly Record<string, unknown>[]
   readonly recommendations: readonly Record<string, unknown>[]
   readonly feature_summary: Record<string, unknown> | null
-  readonly artifacts: readonly Record<string, unknown>[]
+  readonly artifacts: readonly ModelingArtifactView[]
   readonly warnings: readonly string[]
 }
 
+/** Complete restorable Modeling workspace for one Session. */
 export interface ModelingWorkspaceValue {
   readonly dataset: ModelingDatasetView | null
   readonly plan: ModelingPlanView | null
@@ -105,6 +130,7 @@ export interface ModelingWorkspaceValue {
   readonly skillDetail: ModelingSkillDetail | null
 }
 
+/** Observable client state around the latest Modeling workspace projection. */
 export interface ModelingClientSnapshot extends ModelingWorkspaceValue {
   readonly phase: 'loading' | 'ready' | 'error'
   readonly mode: 'live' | 'fixture'
@@ -122,6 +148,7 @@ function clientError(error: unknown): NonNullable<ModelingClientSnapshot['error'
   return { message, ...(code === undefined ? {} : { code }), ...(requestId === undefined ? {} : { requestId }) }
 }
 
+/** Remote operations required by one Session-scoped Modeling client model. */
 export interface ModelingRemote {
   workspace(sessionId: SessionId, signal: AbortSignal): Promise<string>
   capabilities(sessionId: SessionId, signal: AbortSignal): Promise<string>
@@ -161,7 +188,20 @@ function records(value: unknown): readonly Record<string, unknown>[] {
   return value.map(record).filter((item): item is Record<string, unknown> => item !== null)
 }
 
-/** Validate the bounded Host projection before it becomes browser state. */
+function artifacts(value: unknown): readonly ModelingArtifactView[] {
+  return records(value).map(item => ({
+    id: text(item.id, 'artifact id'), run_id: text(item.run_id, 'artifact run id'), kind: text(item.kind, 'artifact kind'),
+    file_name: text(item.file_name, 'artifact file name'), directory: text(item.directory, 'artifact directory'),
+    sha256: text(item.sha256, 'artifact sha256'), size_bytes: integer(item.size_bytes, 'artifact size'),
+    media_type: text(item.media_type, 'artifact media type'), completed: item.completed === true,
+  }))
+}
+
+/**
+ * Validate the bounded Host projection before it becomes browser state.
+ * @param source - Serialized workspace response from the Host Remote.
+ * @returns Parsed workspace containing only validated required fields.
+ */
 export function parseWorkspace(source: string): ModelingWorkspaceValue {
   const root = record(JSON.parse(source))
   if (root === null) throw new Error('Modeling workspace response must be an object.')
@@ -202,7 +242,7 @@ export function parseWorkspace(source: string): ModelingWorkspaceValue {
     diagnostics: records(resultValue.diagnostics),
     recommendations: records(resultValue.recommendations),
     feature_summary: record(resultValue.feature_summary),
-    artifacts: records(resultValue.artifacts),
+    artifacts: artifacts(resultValue.artifacts),
     warnings: Array.isArray(resultValue.warnings) ? resultValue.warnings.filter((item): item is string => typeof item === 'string') : [],
   }
   const runs = records(root.runs).map(item => ({
@@ -269,6 +309,7 @@ export class ModelingClientModel {
   private consumers = 0
   private hidden = typeof document !== 'undefined' && document.hidden
 
+  /** Observable state consumed by every mounted card for this Session. */
   readonly source: ObservableSnapshot<ModelingClientSnapshot> = {
     getSnapshot: () => this.snapshot,
     subscribe: (listener) => { this.listeners.add(listener); return () => { this.listeners.delete(listener) } },
@@ -326,7 +367,10 @@ export class ModelingClientModel {
     }
   }
 
-  /** Approve the exact visible revision once; repeated gestures reuse one idempotency key. */
+  /**
+   * Approve the exact visible revision once; repeated gestures reuse one idempotency key.
+   * @param expected - Optional card identity that suppresses approval after a newer revision replaces it.
+   */
   async approve(expected?: Pick<ModelingPlanView, 'id' | 'revision' | 'plan_hash'>): Promise<void> {
     const plan = this.snapshot.plan
     if (plan === null || plan.state !== 'proposed' || this.snapshot.confirming) return
@@ -354,7 +398,10 @@ export class ModelingClientModel {
     }
   }
 
-  /** Save an edited plan against the exact visible revision. */
+  /**
+   * Save an edited plan against the exact visible revision.
+   * @param plan - Complete replacement plan from the controlled editor.
+   */
   async updatePlan(plan: ModelingJson): Promise<void> {
     const current = this.snapshot.plan
     if (current === null || !['proposed', 'approved'].includes(current.state)) return
@@ -365,7 +412,10 @@ export class ModelingClientModel {
     await this.refresh()
   }
 
-  /** Ask the Agent to regenerate decisions and propose the next revision. */
+  /**
+   * Ask the Agent to regenerate decisions and propose the next revision.
+   * @param plan - Candidate plan carrying the user-edited Skill sequence and preferences.
+   */
   async regeneratePlan(plan: ModelingJson): Promise<void> {
     const current = this.snapshot.plan
     if (current === null || !['proposed', 'approved'].includes(current.state)) return
@@ -375,7 +425,10 @@ export class ModelingClientModel {
     }, request.signal)
   }
 
-  /** Open one Skill detail without exposing filesystem coordinates. */
+  /**
+   * Open one Skill detail without exposing filesystem coordinates.
+   * @param name - Runtime Skill name returned by the service.
+   */
   async selectSkill(name: string): Promise<void> {
     this.publish({ ...this.snapshot, skillBusy: true })
     try {
@@ -386,7 +439,11 @@ export class ModelingClientModel {
     }
   }
 
-  /** Save one Session-private Skill Draft. */
+  /**
+   * Save one Session-private Skill Draft.
+   * @param name - Runtime Skill name.
+   * @param content - Complete Markdown Draft content.
+   */
   async saveSkillDraft(name: string, content: string): Promise<void> {
     this.publish({ ...this.snapshot, skillBusy: true })
     try {
@@ -396,7 +453,10 @@ export class ModelingClientModel {
     } catch (error) { this.publish({ ...this.snapshot, skillBusy: false, phase: 'error', error: clientError(error) }) }
   }
 
-  /** Validate the selected Draft without publishing it. */
+  /**
+   * Validate the selected Draft without publishing it.
+   * @param name - Runtime Skill name.
+   */
   async validateSkill(name: string): Promise<void> {
     this.publish({ ...this.snapshot, skillBusy: true })
     try {
@@ -405,7 +465,10 @@ export class ModelingClientModel {
     } catch (error) { this.publish({ ...this.snapshot, skillBusy: false, phase: 'error', error: clientError(error) }) }
   }
 
-  /** Publish one validated immutable Skill version. */
+  /**
+   * Publish one validated immutable Skill version.
+   * @param name - Runtime Skill name.
+   */
   async publishSkill(name: string): Promise<void> {
     this.publish({ ...this.snapshot, skillBusy: true })
     try {

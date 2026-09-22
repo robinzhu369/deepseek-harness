@@ -18,8 +18,11 @@ declare module '@deepseek-ai/cordis' {
 
 /** Deployment configuration for the private service connection and model-visible result cap. */
 export interface Config {
+  /** Absolute HTTP(S) origin of the private Modeling API. */
   baseUrl: string
+  /** Positive timeout in milliseconds applied to each private API request. */
   requestTimeoutMs: number
+  /** Minimum 256-byte cap for each model-visible modeling tool result. */
   maxToolResultBytes: number
 }
 
@@ -46,6 +49,7 @@ export class ModelingGateway extends TypertRemoteService {
     maxToolResultBytes: z.number().required(),
   })
 
+  /** Maximum UTF-8 bytes returned by one model-facing modeling tool call. */
   readonly maxToolResultBytes: number
   private readonly baseUrl: URL
   private readonly requestTimeoutMs: number
@@ -64,31 +68,58 @@ export class ModelingGateway extends TypertRemoteService {
     })
   }
 
-  /** Restore the latest bounded Dataset, Plan, Run, and Result for the live Session. */
+  /**
+   * Restore the latest bounded Dataset, Plan, Run, and Result for the live Session.
+   * @param agent - Live Agent whose Session owns the workspace.
+   * @param signal - Cancels the private API request.
+   * @returns Serialized workspace state for the Remote client.
+   */
   @Remote('workspace')
   async workspace(agent: Agent, signal: AbortSignal): Promise<string> {
     return JSON.stringify(await this.request(String(agent.id), '/v1/workspace', { signal }))
   }
 
-  /** Read executor-owned choices used by the controlled plan form. */
+  /**
+   * Read executor-owned choices used by the controlled plan form.
+   * @param agent - Live Agent whose Session scopes the request.
+   * @param signal - Cancels the private API request.
+   * @returns Serialized executor capabilities for the Remote client.
+   */
   @Remote('capabilities')
   async capabilities(agent: Agent, signal: AbortSignal): Promise<string> {
     return JSON.stringify(await this.request(String(agent.id), '/v1/capabilities', { signal }))
   }
 
-  /** List the five runtime Skills with only this Session's Draft metadata. */
+  /**
+   * List the five runtime Skills with only this Session's Draft metadata.
+   * @param agent - Live Agent whose Session owns any Draft metadata.
+   * @param signal - Cancels the private API request.
+   * @returns Serialized runtime Skill summaries for the Remote client.
+   */
   @Remote('skills')
   async skills(agent: Agent, signal: AbortSignal): Promise<string> {
     return JSON.stringify(await this.request(String(agent.id), '/v1/skills', { signal }))
   }
 
-  /** Read one published runtime Skill and this Session's optional Draft. */
+  /**
+   * Read one published runtime Skill and this Session's optional Draft.
+   * @param agent - Live Agent whose Session owns the optional Draft.
+   * @param name - Runtime Skill name.
+   * @param signal - Cancels the private API request.
+   * @returns Serialized runtime Skill detail for the Remote client.
+   */
   @Remote('skill')
   async skill(agent: Agent, name: string, signal: AbortSignal): Promise<string> {
     return JSON.stringify(await this.request(String(agent.id), `/v1/skills/${encodeURIComponent(name)}`, { signal }))
   }
 
-  /** Save one Session-private runtime Skill Draft. */
+  /**
+   * Save one Session-private runtime Skill Draft.
+   * @param agent - Live Agent whose Session owns the Draft.
+   * @param request - Runtime Skill name and complete Draft content.
+   * @param signal - Cancels the private API request.
+   * @returns Serialized saved Draft metadata.
+   */
   @Remote('saveSkillDraft')
   async saveSkillDraft(agent: Agent, request: SkillDraftRequest, signal: AbortSignal): Promise<string> {
     return JSON.stringify(await this.request(String(agent.id), `/v1/skills/${encodeURIComponent(request.name)}/draft`, {
@@ -96,7 +127,13 @@ export class ModelingGateway extends TypertRemoteService {
     }))
   }
 
-  /** Validate one Session-private runtime Skill Draft. */
+  /**
+   * Validate one Session-private runtime Skill Draft.
+   * @param agent - Live Agent whose Session owns the Draft.
+   * @param name - Runtime Skill name.
+   * @param signal - Cancels the private API request.
+   * @returns Serialized validation result.
+   */
   @Remote('validateSkill')
   async validateSkill(agent: Agent, name: string, signal: AbortSignal): Promise<string> {
     return JSON.stringify(await this.request(String(agent.id), `/v1/skills/${encodeURIComponent(name)}/validate`, {
@@ -104,7 +141,13 @@ export class ModelingGateway extends TypertRemoteService {
     }))
   }
 
-  /** Publish one validated immutable runtime Skill version from the application path. */
+  /**
+   * Publish one validated immutable runtime Skill version from the application path.
+   * @param agent - Live Agent whose Session owns the validated Draft.
+   * @param name - Runtime Skill name.
+   * @param signal - Cancels the private API request.
+   * @returns Serialized immutable version metadata.
+   */
   @Remote('publishSkill')
   async publishSkill(agent: Agent, name: string, signal: AbortSignal): Promise<string> {
     return JSON.stringify(await this.request(String(agent.id), `/v1/skills/${encodeURIComponent(name)}/publish`, {
@@ -112,7 +155,13 @@ export class ModelingGateway extends TypertRemoteService {
     }))
   }
 
-  /** Update a proposed plan through optimistic revision control. */
+  /**
+   * Update a proposed plan through optimistic revision control.
+   * @param agent - Live Agent whose Session owns the plan.
+   * @param request - Exact base revision and replacement plan.
+   * @param signal - Cancels the private API request.
+   * @returns Serialized proposed revision.
+   */
   @Remote('updatePlan')
   async updatePlan(agent: Agent, request: UpdatePlanRequest, signal: AbortSignal): Promise<string> {
     return JSON.stringify(await this.request(String(agent.id), `/v1/plans/${encodeURIComponent(request.planId)}`, {
@@ -120,7 +169,13 @@ export class ModelingGateway extends TypertRemoteService {
     }))
   }
 
-  /** Queue an Agent turn that regenerates decisions and a new plan revision. */
+  /**
+   * Queue an Agent turn that regenerates decisions and a new plan revision.
+   * @param agent - Live Agent that receives the follow-up input.
+   * @param request - Exact base revision and user-edited Skill preferences.
+   * @param signal - Rejects an already-cancelled request before queueing input.
+   * @returns Serialized acknowledgement after the follow-up is queued.
+   */
   @Remote('regeneratePlan')
   regeneratePlan(agent: Agent, request: RegeneratePlanRequest, signal: AbortSignal): Promise<string> {
     if (signal.aborted) throw signal.reason
@@ -140,7 +195,13 @@ export class ModelingGateway extends TypertRemoteService {
     return Promise.resolve(JSON.stringify({ queued: true }))
   }
 
-  /** Cancel the active Session-owned run through the application path. */
+  /**
+   * Cancel the active Session-owned run through the application path.
+   * @param agent - Live Agent whose Session owns the Run.
+   * @param runId - Run identifier returned by the Modeling API.
+   * @param signal - Cancels the private API request.
+   * @returns Serialized cancellation state.
+   */
   @Remote('cancelRun')
   async cancelRun(agent: Agent, runId: string, signal: AbortSignal): Promise<string> {
     return JSON.stringify(await this.request(String(agent.id), `/v1/runs/${encodeURIComponent(runId)}/cancel`, {
@@ -148,12 +209,25 @@ export class ModelingGateway extends TypertRemoteService {
     }))
   }
 
-  /** Read one session-owned dataset profile. */
+  /**
+   * Read one Session-owned dataset profile.
+   * @param sessionId - Trusted Session identity.
+   * @param datasetId - Dataset identifier returned by registration.
+   * @param signal - Optional request cancellation signal.
+   * @returns Bounded aggregate profile from the Modeling API.
+   */
   getDatasetProfile(sessionId: string, datasetId: string, signal?: AbortSignal): Promise<ModelingJson> {
     return this.request(sessionId, `/v1/datasets/${encodeURIComponent(datasetId)}/profile`, { ...signal === undefined ? {} : { signal } })
   }
 
-  /** Stream one durable CSV attachment into the Session-owned dataset registry and wait for its profile. */
+  /**
+   * Stream one durable CSV attachment into the Session-owned dataset registry and wait for its profile.
+   * @param sessionId - Trusted Session identity.
+   * @param file - Durable attachment metadata, including the expected digest and byte count.
+   * @param data - Attachment byte stream consumed once by the upload.
+   * @param signal - Optional cancellation signal combined with the request timeout.
+   * @returns Ready dataset metadata after digest verification and profiling.
+   */
   async registerDataset(
     sessionId: string,
     file: FileAttachmentRef,
@@ -218,7 +292,14 @@ export class ModelingGateway extends TypertRemoteService {
     return uploaded
   }
 
-  /** Persist one validated proposal with exact runtime Skill snapshots. */
+  /**
+   * Persist one validated proposal with exact runtime Skill snapshots.
+   * @param sessionId - Trusted Session identity.
+   * @param plan - Candidate plan validated by the Modeling API.
+   * @param snapshots - Immutable runtime Skill identities attached to the proposal.
+   * @param signal - Optional request cancellation signal.
+   * @returns Persisted proposed plan.
+   */
   proposePlan(
     sessionId: string,
     plan: ModelingJson,
@@ -231,7 +312,16 @@ export class ModelingGateway extends TypertRemoteService {
     })
   }
 
-  /** Persist an Agent-regenerated proposal as the next optimistic revision. */
+  /**
+   * Persist an Agent-regenerated proposal as the next optimistic revision.
+   * @param sessionId - Trusted Session identity.
+   * @param planId - Existing plan identifier.
+   * @param baseRevision - Exact revision that the Agent regenerated.
+   * @param plan - Replacement candidate plan.
+   * @param snapshots - Immutable runtime Skill identities attached to the revision.
+   * @param signal - Optional request cancellation signal.
+   * @returns Persisted proposed revision.
+   */
   revisePlan(
     sessionId: string,
     planId: string,
@@ -246,17 +336,35 @@ export class ModelingGateway extends TypertRemoteService {
     })
   }
 
-  /** Read one session-owned run without changing it. */
+  /**
+   * Read one Session-owned Run without changing it.
+   * @param sessionId - Trusted Session identity.
+   * @param runId - Run identifier returned by approval.
+   * @param signal - Optional request cancellation signal.
+   * @returns Current Run state and bounded node events.
+   */
   getRunStatus(sessionId: string, runId: string, signal?: AbortSignal): Promise<ModelingJson> {
     return this.request(sessionId, `/v1/runs/${encodeURIComponent(runId)}`, { ...signal === undefined ? {} : { signal } })
   }
 
-  /** Read one completed session-owned run result. */
+  /**
+   * Read one completed Session-owned Run result.
+   * @param sessionId - Trusted Session identity.
+   * @param runId - Succeeded Run identifier.
+   * @param signal - Optional request cancellation signal.
+   * @returns Metrics, diagnostics, and completed artifact metadata.
+   */
   getRunResult(sessionId: string, runId: string, signal?: AbortSignal): Promise<ModelingJson> {
     return this.request(sessionId, `/v1/runs/${encodeURIComponent(runId)}/result`, { ...signal === undefined ? {} : { signal } })
   }
 
-  /** Approve an exact plan revision from the application Remote path; this is not a model tool. */
+  /**
+   * Approve an exact plan revision from the application Remote path; this is not a model tool.
+   * @param agent - Live Agent whose Session owns the plan and receives the new Run identity.
+   * @param request - Exact revision, hash, and idempotency key approved by the user.
+   * @param signal - Cancels the private API request.
+   * @returns Created or replayed Run identity.
+   */
   @Remote('approveAndRun')
   approveAndRun(agent: Agent, request: ApproveAndRunRequest, signal: AbortSignal): Promise<ApproveAndRunResult> {
     return this.request(String(agent.id), `/v1/plans/${encodeURIComponent(request.planId)}/approve-and-run`, {
@@ -277,7 +385,13 @@ export class ModelingGateway extends TypertRemoteService {
     })
   }
 
-  /** Approve a newer revision and create a distinct Run from a terminal source; this is not a model tool. */
+  /**
+   * Approve a newer revision and create a distinct Run from a terminal source; this is not a model tool.
+   * @param agent - Live Agent whose Session owns both Runs and receives the new Run identity.
+   * @param request - Source Run, exact revision, hash, and idempotency key approved by the user.
+   * @param signal - Cancels the private API request.
+   * @returns Created or replayed Run identity.
+   */
   @Remote('rerun')
   rerun(agent: Agent, request: RerunRequest, signal: AbortSignal): Promise<ApproveAndRunResult> {
     return this.request(String(agent.id), `/v1/runs/${encodeURIComponent(request.sourceRunId)}/rerun`, {

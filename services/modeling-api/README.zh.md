@@ -49,7 +49,7 @@ Skill API 只管理五个运行时建模 Skill。草稿归属于一个 Session�
 
 编辑计划会创建 proposed revision，并记录该变更在语义上影响的下游阶段。计划可以携带可选的 `task_context`，其中包含数据集标识、有序的已启用 Skills、用户偏好、复用的数据画像证据以及基于证据生成的 decisions；不含该字段的旧计划仍可读取。API 会在方案确认前拒绝重复或不安全的 Skill 顺序、不受支持的算法和日期派生特征。当前 Worker 不复用阶段缓存，因此每次接受的重跑都会如实重新计算完整 Pipeline。重跑要求精确的 revision、hash、来源 run 和幂等键；它总是创建新的 run ID，同时保留之前的 run。
 
-`GET /v1/workspace` 恢复一个 Session 所属的最新数据集、计划、run、节点事件、结果、警告和已完成产物元数据。它移除存储键与 Worker 进程字段，查询不会创建或恢复任务。
+`GET /v1/workspace` 恢复一个 Session 所属的最新数据集、计划、run、节点事件、结果、警告和已完成产物元数据。它把每个存储键替换为展示所需的服务内相对 Run 目录与文件名，并移除 Worker 进程字段；查询不会创建或恢复任务。
 
 ## 已知限制
 
