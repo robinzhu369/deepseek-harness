@@ -11,7 +11,7 @@
 
 ## 配置
 
-复制 `.env.example` 为 `.env`，在本机填写 `DEEPSEEK_API_KEY`；不要提交 `.env`。可选变量包括 `DEEPSEEK_BASE_URL`、`MODELING_DEMO_ROOT`、`MODELING_DEMO_HARNESS_HOME`、API/Web 端口、上传上限、分块大小、预览上限、Worker 超时与取消宽限期。默认上传上限为 100 MiB；百万行容量测试使用独立的 2 GiB 测试配置，不改变 Demo 默认值。
+复制 `.env.example` 为 `.env`，在本机填写 `DEEPSEEK_API_KEY`；不要提交 `.env`。可选变量包括 `DEEPSEEK_BASE_URL`、`MODELING_DEMO_ROOT`、`MODELING_DEMO_HARNESS_HOME`、API/Web 端口、上传上限、分块大小、预览上限、Worker 超时与取消宽限期。命令行环境中显式传入的 Demo 目录和端口优先于 `.env`，可用于隔离启动或临时避开端口冲突。默认上传上限为 100 MiB；百万行容量测试使用独立的 2 GiB 测试配置，不改变 Demo 默认值。
 
 ## 启动与健康检查
 
@@ -36,7 +36,8 @@ scripts/modeling-demo-down.sh
 
 - `MISSING_CREDENTIAL`：在根目录 `.env` 设置 `DEEPSEEK_API_KEY`，或通过 Harness credential 页面配置 DeepSeek 官方 Provider，然后重启。
 - PID 文件已存在：先运行 down；若进程已异常退出，核对 PID 与日志后再人工清理对应 PID 文件。
-- 找不到认证地址：检查 `logs/harness-web.log`；启动脚本会在等待超时或 Web 进程提前退出后停止 API 与 Web，不会把其他占用相同端口的服务视为本次启动成功。
+- 端口已被占用：启动脚本会在创建进程前报告冲突端口及可识别的占用进程。`modeling-demo-down.sh` 会回收当前仓库中命令行与端口均匹配的遗留 Demo 监听进程，但不会终止其他目录或其他命令启动的服务；也可通过 `MODELING_API_PORT`、`MODELING_WEB_PORT` 选择其他端口。
+- 找不到认证地址：检查 `logs/harness-web.log`；这表示 Web 在输出认证地址前异常退出。启动脚本会停止本次创建的 API 与 Web 进程，不会把其他端口监听者视为本次启动成功。
 - `dsh web authentication required`：打开 `modeling-demo-up.sh` 输出的完整 `Harness Web:` 地址。直接打开不带 `?token=...` 的根地址会返回 401，这不是服务未就绪。
 - Dataset not found：Dataset 按完整 Harness Agent ID 隔离，上传时 `X-Session-Id` 必须与 Agent ID 完全一致，包括 `session-` 前缀。
 - 上传过大：调整本机 `.env` 中的 `MODELING_API_MAX_UPLOAD_BYTES` 后重启；不要绕过服务端限制。
