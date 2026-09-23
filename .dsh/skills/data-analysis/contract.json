@@ -1,11 +1,17 @@
 {
   "name": "data-analysis",
   "displayName": "数据分析",
-  "version": "0.2.0-demo",
+  "version": "0.5.0-demo",
   "stage": "data-analysis",
-  "description": "分析受限数据概览，识别可解释的二分类目标与泄漏风险。",
+  "description": "依据受限画像分析数据质量，区分已知事实与未知项，并确认二分类规划所需的目标和切分条件。",
   "modelInvocable": true,
   "userInvocable": true,
-  "preconditions": ["dataset_uploaded", "dataset_profile_ready"],
-  "postconditions": ["target_reviewed", "plan_proposed"]
+  "preconditions": [
+    "dataset_uploaded",
+    "dataset_profile_ready"
+  ],
+  "postconditions": [
+    "quality_assessed",
+    "planning_readiness_reported"
+  ]
 }

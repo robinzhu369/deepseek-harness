@@ -1,10 +1,41 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
-  "required": ["datasetId"],
+  "required": [
+    "datasetId"
+  ],
   "properties": {
-    "datasetId": {"type": "string", "description": "Session-owned dataset identifier."},
-    "target": {"type": ["string", "null"], "description": "Optional target selected by the user."}
+    "datasetId": {
+      "type": "string",
+      "description": "Session-owned dataset identifier."
+    },
+    "target": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Optional target selected by the user."
+    },
+    "intent": {
+      "type": "string",
+      "enum": [
+        "quality_only",
+        "modeling"
+      ],
+      "description": "User-requested scope; quality review does not require a target."
+    },
+    "positiveLabel": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "null"
+      ]
+    },
+    "businessContext": {
+      "type": "string",
+      "description": "User-provided target meaning, prediction time, and entity/sampling context."
+    }
   },
   "additionalProperties": false
 }

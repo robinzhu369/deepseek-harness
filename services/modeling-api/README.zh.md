@@ -43,9 +43,13 @@ pnpm exec oxlint services/modeling-api/contracts --deny-warnings
 
 上传以有界分块读取，按 UTF-8 CSV 校验并计算 hash，且不信任文件名或 MIME 类型。Profile 响应标识数据集及其 SHA-256，使模型能提出绑定版本的计划；除此之外只含汇总统计和不超过配置上限的预览，不包含完整数据集。
 
+画像包含全量空白值与特殊标记计数、非空基数、二值频数、有限数值摘要、完整重复行和按字段存在条件执行的保险日期比较。特殊标记只是候选缺失值，不会自动转为空值；转换计数不代表业务类型。日期解析支持 YYYY/MM/DD 和 YYYY-MM-DD。预览单元格和频数值保留 CSV 字符串；推断类型仅供参考。画像逐列扫描，精确去重可能使用随数据量增长的内存；尚未验证大数据容量。已有缓存画像不会自动重新计算。
+
 审批要求幂等键、当前计划 revision 和 hash。提案计划保留由 Host 计算的运行时 Skill 版本与摘要快照。SQLite 负责 run 状态及有序事件，同一时间只运行一个建模进程；取消会先记录 `run.cancelling`，再终止所属进程组；服务仅在 Worker 发布并校验完整输出后登记产物。输入包含有效 `record_id` 时 Pipeline 使用该列，否则创建确定性的内部行 ID；两者均不会进入模型特征。节点失败时，其结构化错误会成为 Run 错误，不会被通用 Worker 退出消息覆盖。结果记录包含有界的切分与特征摘要，以及 ROC-AUC、平均精确率、F1、精确率、召回率、混淆矩阵、阈值和带证据的诊断与建议代码，不返回训练记录标识。
 
 Skill API 只管理五个运行时建模 Skill。草稿归属于一个 Session；校验限制 frontmatter、大小、工具名与请求的能力；发布先写入不可变版本，再将其设为活动版本。已有计划与 run 记录保留原 Skill 快照，新计划使用活动版本。
+
+[data-analysis Skill](../../.dsh/skills/data-analysis/SKILL.md) 报告有证据的数据质量发现，并区分仅质量检查、等待确认、请求受阻和可起草方案四种状态。`tests/test_data_analysis_skill.py` 使用人工编写的案例检查其[评估结果 Schema](../../.dsh/skills/data-analysis/output.schema.json)；这些检查不证明真实模型效果，也不为 API 安装决策校验器。[评测案例](tests/fixtures/data-analysis-evals.json) 包含业务背景、受限画像、预期评估结果和行为检查项，供后续真实模型对照使用。
 
 编辑计划会创建 proposed revision，并记录该变更在语义上影响的下游阶段。计划可以携带可选的 `task_context`，其中包含数据集标识、有序的已启用 Skills、用户偏好、复用的数据画像证据以及基于证据生成的 decisions；不含该字段的旧计划仍可读取。API 会在方案确认前拒绝重复或不安全的 Skill 顺序、不受支持的算法和日期派生特征。当前 Worker 不复用阶段缓存，因此每次接受的重跑都会如实重新计算完整 Pipeline。重跑要求精确的 revision、hash、来源 run 和幂等键；它总是创建新的 run ID，同时保留之前的 run。
 

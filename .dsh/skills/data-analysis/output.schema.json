@@ -1,11 +1,194 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
-  "required": ["datasetId", "taskType", "target"],
+  "required": [
+    "datasetId",
+    "taskType",
+    "target",
+    "status",
+    "targetConfirmed",
+    "positiveLabel",
+    "independenceConfirmed",
+    "findings",
+    "questions",
+    "limitations"
+  ],
   "properties": {
-    "datasetId": {"type": "string"},
-    "taskType": {"type": "string", "enum": ["binary_classification"]},
-    "target": {"type": "string"},
-    "warnings": {"type": "array", "items": {"type": "string"}}
-  }
+    "datasetId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "taskType": {
+      "enum": [
+        "binary_classification",
+        null
+      ]
+    },
+    "target": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "status": {
+      "enum": [
+        "quality_only",
+        "needs_confirmation",
+        "blocked",
+        "ready_for_planning"
+      ]
+    },
+    "targetConfirmed": {
+      "type": "boolean"
+    },
+    "positiveLabel": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "null"
+      ]
+    },
+    "independenceConfirmed": {
+      "type": "boolean"
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "code",
+          "severity",
+          "columns",
+          "evidence"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "minLength": 1
+          },
+          "severity": {
+            "enum": [
+              "info",
+              "warning",
+              "blocker"
+            ]
+          },
+          "columns": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          },
+          "evidence": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "questions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "ready_for_planning"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "taskType": {
+            "const": "binary_classification"
+          },
+          "target": {
+            "type": "string",
+            "minLength": 1
+          },
+          "targetConfirmed": {
+            "const": true
+          },
+          "positiveLabel": {
+            "not": {
+              "type": "null"
+            }
+          },
+          "independenceConfirmed": {
+            "const": true
+          },
+          "questions": {
+            "maxItems": 0
+          },
+          "findings": {
+            "items": {
+              "properties": {
+                "severity": {
+                  "enum": [
+                    "info",
+                    "warning"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "needs_confirmation"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "questions": {
+            "minItems": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "targetConfirmed": {
+            "const": true
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "target": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  ]
 }

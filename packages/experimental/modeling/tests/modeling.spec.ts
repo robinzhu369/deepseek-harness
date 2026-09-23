@@ -71,7 +71,7 @@ describe('ModelX bounded tools', () => {
     expect(entries).toEqual(['data-analysis', 'data-cleaning', 'feature-engineering', 'model-evaluation', 'model-training'])
     for (const name of entries) {
       const content = await readFile(new URL(`${name}/SKILL.md`, root), 'utf8')
-      expect(content).toMatch(/version: 0\.[1-4]\.0-demo/)
+      expect(content).toMatch(/version: 0\.\d+\.0-demo/)
       expect(content).not.toContain('modelx-demo-orchestrator')
     }
   })
@@ -158,6 +158,48 @@ describe('ModelX bounded tools', () => {
     expect(value.profile).toMatchObject({ dataset_id: 'dataset_1', dataset_sha256: 'a'.repeat(64) })
     expect(JSON.stringify(value)).not.toContain('secret-session')
     expect(JSON.stringify(value)).not.toContain('/private/data.csv')
+  })
+
+  it('pages full column evidence within the byte limit and retains quality counts', async () => {
+    const columns = Array.from({ length: 100 }, (_, index) => ({
+      name: `字段_${index}`, dtype: 'String', missing_ratio: 0.1,
+      special_strings: { '?': 10 }, numeric: { finite_count: 90, median: 3, parse_failure_count: 0 },
+    }))
+    const fake = gateway({
+      maxToolResultBytes: 2048,
+      getDatasetProfile: async () => ({ dataset_id: 'ds_quality', profile_version: 2,
+        row_count: 100, column_count: columns.length, columns,
+        quality: { duplicate_rows: 2, business_checks: [] }, preview: [{ secret: 'raw row' }] }),
+    })
+    const { ctx, agent } = await mount(createModelingTools(fake, snapshots))
+    let offset = 0
+    const received: unknown[] = []
+    while (true) {
+      const value = await call(ctx, agent, 'modeling_get_dataset_profile', { dataset_id: 'ds_quality', column_offset: offset })
+      expect(value.ok).toBe(true)
+      expect(Buffer.byteLength(JSON.stringify(value))).toBeLessThanOrEqual(2048)
+      const page = value.profile as { columns: unknown[]; next_column_offset: number | null; quality: unknown }
+      expect(page.quality).toEqual({ duplicate_rows: 2, business_checks: [] })
+      expect(JSON.stringify(value)).not.toContain('raw row')
+      received.push(...page.columns)
+      if (page.next_column_offset === null) break
+      expect(page.next_column_offset).toBeGreaterThan(offset)
+      offset = page.next_column_offset
+    }
+    expect(received).toEqual(columns)
+    for (const column_offset of [-1, 0.5, 100]) {
+      const value = await call(ctx, agent, 'modeling_get_dataset_profile', { dataset_id: 'ds_quality', column_offset })
+      expect(value).toMatchObject({ ok: false, error: { code: 'INVALID_COLUMN_OFFSET' } })
+    }
+  })
+
+  it('reports an oversized single column without returning incomplete evidence', async () => {
+    const { ctx, agent } = await mount(createModelingTools(gateway({
+      maxToolResultBytes: 1024,
+      getDatasetProfile: async () => ({ columns: [{ name: '大'.repeat(1000) }] }),
+    }), snapshots))
+    expect(await call(ctx, agent, 'modeling_get_dataset_profile', { dataset_id: 'ds_quality' }))
+      .toMatchObject({ ok: false, error: { code: 'RESULT_TOO_LARGE', retryable: false } })
   })
 
   it('proposes with five Skill snapshots and cannot create a run', async () => {

@@ -54,7 +54,7 @@ def test_skill_detail_projects_optional_demo_extensions_and_tool_availability(tm
         assert detail["extension"]["scope"] == "governance_only"
         assert detail["extension"]["contract"]["name"] == "data-analysis"
         assert detail["extension"]["input_schema"]["required"] == ["datasetId"]
-        assert detail["extension"]["output_schema"]["properties"]["taskType"]["enum"] == ["binary_classification"]
+        assert detail["extension"]["output_schema"]["properties"]["taskType"]["enum"] == ["binary_classification", None]
         required = {item["name"] for item in detail["extension"]["tools"]["required"]}
         assert required == {"modeling_get_dataset_profile", "modeling_propose_plan"}
         assert all(item["available"] for item in detail["extension"]["tool_catalog"])

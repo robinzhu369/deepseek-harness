@@ -39,9 +39,10 @@ function publicValue(value: ModelingJson): ModelingJson {
   return value
 }
 
-function profileSummary(value: ModelingJson): ToolResult {
+function profileSummary(value: ModelingJson, offset: number, limit: number): ToolResult {
   if (value === null || Array.isArray(value) || typeof value !== 'object') throw new Error('dataset profile must be an object')
-  const columns = Array.isArray(value.columns) ? value.columns : []
+  const allColumns = Array.isArray(value.columns) ? value.columns : []
+  const columns = allColumns.slice(offset, offset + limit)
   const targetCandidates = columns.flatMap((item) => {
     if (item === null || Array.isArray(item) || typeof item !== 'object' || typeof item.name !== 'string') return []
     const cardinality = item.categorical !== null && typeof item.categorical === 'object'
@@ -56,8 +57,12 @@ function profileSummary(value: ModelingJson): ToolResult {
   })
   const warnings = targetCandidates.length === 1
     ? []
-    : [targetCandidates.length === 0 ? 'No binary target candidate was identified.' : 'Multiple target candidates require confirmation.']
+    : [targetCandidates.length === 0 ? 'No binary target candidate was identified on this page.' : 'Multiple target candidates on this page require confirmation.']
   return {
+    profile_version: value.profile_version ?? null,
+    quality: value.quality ?? null,
+    column_offset: offset,
+    next_column_offset: offset + columns.length < allColumns.length ? offset + columns.length : null,
     dataset_id: value.dataset_id ?? null,
     dataset_sha256: value.dataset_sha256 ?? null,
     row_count: value.row_count ?? null,
@@ -186,12 +191,27 @@ export function createModelingTools(
   return [
     defineTool({
       name: 'modeling_get_dataset_profile',
-      description: 'Read a bounded aggregate profile for one dataset owned by this session.',
-      parameters: { dataset_id: { type: 'string', required: true } }, output,
+      description: 'Read a bounded aggregate quality profile for one session-owned dataset. Follow next_column_offset to read remaining columns.',
+      parameters: { dataset_id: { type: 'string', required: true }, column_offset: { type: 'number' } }, output,
       async execute(args, exec) {
         try {
           const profile = await gateway.getDatasetProfile(caller(exec.agent, 'modeling_get_dataset_profile'), args.dataset_id, exec.signal)
-          return result({ ok: true, profile: profileSummary(profile) }, gateway.maxToolResultBytes)
+          const offset = args.column_offset ?? 0
+          if (!Number.isSafeInteger(offset) || offset < 0) {
+            return failure(new ModelingGatewayError('INVALID_COLUMN_OFFSET', 'column_offset must be a nonnegative integer.', 422))
+          }
+          if (profile === null || Array.isArray(profile) || typeof profile !== 'object') throw new Error('dataset profile must be an object')
+          const count = Array.isArray(profile.columns) ? profile.columns.length : 0
+          if (offset > 0 && offset >= count) {
+            return failure(new ModelingGatewayError('INVALID_COLUMN_OFFSET', 'column_offset is outside the profile columns.', 422))
+          }
+          // Size the complete sanitized response; never split a column's evidence.
+          let limit = count - offset
+          while (true) {
+            const page = result({ ok: true, profile: profileSummary(profile, offset, limit) }, gateway.maxToolResultBytes)
+            if (page.ok === true || limit <= 1) return page
+            limit = Math.max(1, Math.floor(limit / 2))
+          }
         }
         catch (error) { return failure(error) }
       },

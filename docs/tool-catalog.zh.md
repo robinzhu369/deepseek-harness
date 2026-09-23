@@ -439,7 +439,7 @@
 
 ### `modeling_get_dataset_profile`
 
-读取当前 Session 所有的一个数据集的有界聚合 Profile。
+读取当前 Session 所属数据集的有界聚合质量画像。通过 next_column_offset 继续读取剩余列。
 
 ```json
 {
@@ -447,6 +447,9 @@
   "properties": {
     "dataset_id": {
       "type": "string"
+    },
+    "column_offset": {
+      "type": "number"
     }
   },
   "required": [

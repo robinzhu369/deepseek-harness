@@ -435,7 +435,7 @@ Source: [`packages/experimental/browser-use-stagehand-native/src/index.ts`](../p
 
 ### `modeling_get_dataset_profile`
 
-Read a bounded aggregate profile for one dataset owned by this session.
+Read a bounded aggregate quality profile for one session-owned dataset. Follow next_column_offset to read remaining columns.
 
 ```json
 {
@@ -443,6 +443,9 @@ Read a bounded aggregate profile for one dataset owned by this session.
   "properties": {
     "dataset_id": {
       "type": "string"
+    },
+    "column_offset": {
+      "type": "number"
     }
   },
   "required": [

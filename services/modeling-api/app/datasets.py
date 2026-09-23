@@ -18,6 +18,7 @@ import polars as pl
 from .config import ServiceConfig
 from .contracts import ModelingContractError
 from .database import ModelingStore
+from .quality import business_checks, column_quality, date_values
 
 
 class UploadStream(Protocol):
@@ -92,41 +93,50 @@ def _json_value(value: Any) -> Any:
 
 def build_profile(path: Path, preview_limit: int) -> dict[str, Any]:
     """Compute bounded summary statistics without materializing rows for a caller."""
-    lazy = pl.scan_csv(path, infer_schema_length=10_000, try_parse_dates=False)
-    schema = lazy.collect_schema()
-    row_count = int(lazy.select(pl.len().alias("count")).collect().item())
-    preview_frame = lazy.head(preview_limit).collect()
+    lazy = pl.scan_csv(path, infer_schema_length=0, try_parse_dates=False)
+    schema = pl.scan_csv(path, infer_schema_length=10_000).collect_schema()
+    names = list(schema)
+    row_count = int(lazy.select(pl.len()).collect().item())
     columns: list[dict[str, Any]] = []
-    numeric_types = {
-        pl.Int8, pl.Int16, pl.Int32, pl.Int64, pl.UInt8, pl.UInt16, pl.UInt32, pl.UInt64,
-        pl.Float32, pl.Float64,
-    }
+    policy_id = None
     for name, dtype in schema.items():
-        summary = lazy.select(
-            pl.col(name).null_count().alias("missing"),
-            pl.col(name).n_unique().alias("cardinality"),
-        ).collect().row(0, named=True)
-        item: dict[str, Any] = {
-            "name": name,
-            "dtype": str(dtype),
-            "missing_ratio": float(summary["missing"] / row_count) if row_count else 0.0,
-        }
-        if dtype in numeric_types:
-            bounds = lazy.select(pl.col(name).min().alias("min"), pl.col(name).max().alias("max")).collect().row(0, named=True)
-            item["numeric"] = {"min": _json_value(bounds["min"]), "max": _json_value(bounds["max"])}
-        else:
-            item["categorical"] = {"cardinality": int(summary["cardinality"])}
+        raw = lazy.select(name).collect().get_column(name)
+        item = {"name": name, "dtype": str(dtype), **column_quality(raw)}
+        if not dtype.is_numeric():
+            item["categorical"] = {"cardinality": item["unique_count"]}
+        if name.endswith("_date"):
+            parsed = date_values(raw)
+            item["date"] = {
+                "formats": ["YYYY/MM/DD", "YYYY-MM-DD"],
+                "valid_count": len(parsed) - parsed.null_count(),
+                "invalid_count": parsed.null_count() - item["missing_count"],
+                "min": _json_value(parsed.min()), "max": _json_value(parsed.max()),
+            }
+        if name == "policy_id":
+            observed = raw.drop_nulls().str.strip_chars()
+            observed = observed.filter(observed != "")
+            policy_id = {"nonblank_rows": len(observed), "duplicate_excess": len(observed) - observed.n_unique(),
+                         "rows_in_duplicate_groups": int(observed.is_duplicated().sum())}
         columns.append(item)
-    preview = [
-        {name: _json_value(value) for name, value in row.items()}
-        for row in preview_frame.to_dicts()
-    ]
+    global_counts = lazy.select(
+        pl.struct(names).n_unique().alias("unique_rows"),
+        pl.any_horizontal([pl.col(name).str.strip_chars() == "?" for name in names]).sum().alias("question_rows"),
+    ).collect().row(0, named=True)
+    preview = lazy.head(preview_limit).collect().to_dicts()
     return {
+        "profile_version": 2,
         "row_count": row_count,
         "column_count": len(schema),
         "schema": [{"name": name, "dtype": str(dtype)} for name, dtype in schema.items()],
         "columns": columns,
         "preview": preview,
+        "quality": {
+            "encoding": "utf-8-sig", "size_bytes": path.stat().st_size,
+            "duplicate_rows": row_count - int(global_counts["unique_rows"]),
+            "rows_with_question_mark": int(global_counts["question_rows"]),
+            "policy_id": policy_id,
+            "business_checks": business_checks(lazy, names, row_count),
+        },
         "computation_scope": {"kind": "full_dataset", "rows_scanned": row_count, "preview_rows": len(preview)},
     }
 
@@ -224,7 +234,7 @@ class DatasetService:
     def preview(self, dataset: dict[str, Any], limit: int) -> list[dict[str, Any]]:
         """Read no more than the configured preview row count."""
         path = self.config.root / str(dataset["storage_key"])
-        frame = pl.scan_csv(path, infer_schema_length=10_000).head(limit).collect()
+        frame = pl.scan_csv(path, infer_schema_length=0).head(limit).collect()
         return [{name: _json_value(value) for name, value in row.items()} for row in frame.to_dicts()]
 
     def shutdown(self) -> None:

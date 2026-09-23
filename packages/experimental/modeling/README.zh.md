@@ -101,7 +101,7 @@ Skill 中心列出五个固定运行时 Skill，编辑 Session 私有的 Markdow
 
 #### 模型看到什么
 
-模型看到 `modeling_get_dataset_profile`、`modeling_propose_plan`、`modeling_get_run_status`、`modeling_get_run_result` 和标准 `skill` 加载器；[生成工具目录](../../../docs/tool-catalog.zh.md#deepseek-aidsh-experimental-modeling)记录其精确 schema。`modeling_propose_plan` 既可接收首版提案，也可接收用于重新生成的乐观并发 `plan_id` 与 `base_revision` 组合，同时保持四工具界面不变。用户直接提交 CSV 附件时，同一请求会加入由应用产生且持久化的数据集 ID 与 SHA-256；文件名仍是不可信的用户标签。模型读取该 ID 后会收到聚合 Profile 和有界结果摘要。随附 preset 要求面向用户的回复使用简体中文，同时保留工具名、Skill 名、字段名、枚举值和代码标识。计划提案始终返回 `needs_confirmation: true`；审批、执行、shell、文件系统写入、SQL、Python 或任意网络工具均不可见。
+模型看到 `modeling_get_dataset_profile`、`modeling_propose_plan`、`modeling_get_run_status`、`modeling_get_run_result` 和标准 `skill` 加载器；[生成工具目录](../../../docs/tool-catalog.zh.md#deepseek-aidsh-experimental-modeling)记录其精确 schema。`modeling_propose_plan` 既可接收首版提案，也可接收用于重新生成的乐观并发 `plan_id` 与 `base_revision` 组合，同时保持四工具界面不变。用户直接提交 CSV 附件时，同一请求会加入由应用产生且持久化的数据集 ID 与 SHA-256；文件名仍是不可信的用户标签。模型读取该 ID 后会收到聚合 Profile 和有界结果摘要。随附 preset 要求面向用户的回复使用简体中文，同时保留工具名、Skill 名、字段名、枚举值和代码标识。计划提案始终返回 `needs_confirmation: true`；审批、执行、shell、文件系统写入、SQL、Python 或任意网络工具均不可见。 质量画像保留缺失、转换、重复和条件业务检查的汇总证据。画像工具接受 `column_offset`，当完整列摘要需要按 `maxToolResultBytes` 分页时返回 `next_column_offset`；调用方必须读取全部页面才能声称检查覆盖完整。单列无法放入限制内时返回 `RESULT_TOO_LARGE`，原始预览行仍不进入工具结果。
 
 #### Token 影响
 

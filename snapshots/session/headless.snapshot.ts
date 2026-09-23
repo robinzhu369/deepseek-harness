@@ -460,6 +460,11 @@ async function seedWorkspace(scenario: HeadlessScenario, cwd: string): Promise<v
 }
 
 const workspaceSetups: Record<string, (cwd: string) => Promise<void>> = {
+  async 'data-analysis-skill'(cwd) {
+    const target = join(cwd, '.dsh', 'skills', 'data-analysis', 'SKILL.md')
+    await mkdir(dirname(target), { recursive: true })
+    await copyFile(join(repoRoot, '.dsh/skills/data-analysis/SKILL.md'), target)
+  },
   async 'office-skills'(cwd) {
     await cp(join(repoRoot, 'packages/skill/skill-office/assets'), join(cwd, 'office-skills'), { recursive: true })
   },
