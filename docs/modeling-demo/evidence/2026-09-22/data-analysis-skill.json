@@ -1,0 +1,48 @@
+{
+  "scope": "data-analysis only",
+  "source_version": "0.4.0-demo",
+  "skill_sha256": "90e16444cb488b8c7f1486096f46e7dcbe61437b0af2f63d81a239f1d9ca6e32",
+  "mode": "authored fixtures and recorded-session replay",
+  "authored_evaluation_cases": 9,
+  "checks": [
+    {
+      "command": "python3 -m pytest services/modeling-api/tests/test_data_analysis_skill.py services/modeling-api/tests/test_skill_and_rerun.py -q",
+      "exit_code": 0,
+      "passed": 25
+    },
+    {
+      "command": "pnpm run test:snapshot:refresh snapshots/session/headless.snapshot.ts -t 'modeling-data-analysis-skill'",
+      "exit_code": 0,
+      "passed": 1
+    },
+    {
+      "command": "pnpm run test:snapshot snapshots/session/headless.snapshot.ts -t 'modeling-data-analysis-skill'",
+      "exit_code": 0,
+      "passed": 1
+    },
+    {
+      "command": "pnpm run test:snapshot scripts/session-snapshot-corpus.corpus.ts",
+      "exit_code": 0,
+      "passed": 3
+    },
+    {
+      "command": "pnpm run doc-sync",
+      "exit_code": 0,
+      "passed": 41
+    },
+    {
+      "command": "pnpm run lint",
+      "exit_code": 0
+    }
+  ],
+  "live_model_evaluation": {
+    "status": "NOT_RUN",
+    "note": "DEEPSEEK_API_KEY was absent from the process environment and root .env; no live model comparison was performed."
+  },
+  "runtime_publication": "NOT_RUN; no Skill API publish operation or stored historical revision was changed",
+  "limitations": [
+    "Assessment schema is governance/evaluation metadata, not an installed API validator.",
+    "Profile computation and its existing output-size limit are unchanged.",
+    "Authored cases and replay do not measure model decision quality."
+  ]
+}

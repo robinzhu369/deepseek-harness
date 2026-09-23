@@ -374,6 +374,30 @@ T13 — 最终冻结、部署与交付：PASS。统一 up/down/health 脚本从�
 下一任务：无
 ```
 
+```text
+日期/任务 ID：2026-09-22 / data-analysis 数据质量分析 Skill 优化
+修改文件：.dsh/skills/data-analysis/{SKILL.md,contract.json,input.schema.json,output.schema.json}、services/modeling-api/tests/{test_data_analysis_skill.py,test_skill_and_rerun.py,fixtures/data-analysis-evals.json}、snapshots/session/{headless.snapshot.ts,modeling-data-analysis-skill/}、services/modeling-api/README 双语与配对记录、progress 双语与配对记录
+实际命令：python3 -m pytest services/modeling-api/tests/test_data_analysis_skill.py services/modeling-api/tests/test_skill_and_rerun.py -q；pnpm run test:snapshot:refresh snapshots/session/headless.snapshot.ts -t modeling-data-analysis-skill；pnpm run test:snapshot snapshots/session/headless.snapshot.ts -t modeling-data-analysis-skill；pnpm run test:snapshot scripts/session-snapshot-corpus.corpus.ts；pnpm run doc-sync；pnpm run lint；git diff --check
+退出码/输出摘要：Python 25 PASS；定向会话刷新与回放各 1 PASS；会话语料检查 3 PASS；doc-sync 41 PASS；lint PASS；沙箱阻止 tsx IPC 的命令经宿主原命令重试通过。
+业务或界面模式：authored fixture / recorded-session replay
+截图/日志路径：docs/modeling-demo/evidence/2026-09-22/data-analysis-skill.json；snapshots/session/modeling-data-analysis-skill/session.v3.jsonl
+检查：源码版本 0.4.0-demo；9 个人工编写的评测案例；质量检查、等待确认、受阻和可规划状态的 Schema 校验；真实 dsh profile 加载 Skill 正文并回放。真实模型效果评测 NOT_RUN，不把人工预期和回放当成模型质量分数。
+阻塞与剩余问题：未调用运行时发布 API，未修改历史发布版本；画像计算与返回体限制未改变；输出 Schema 仅用于元数据和评测，不是运行时 API 校验器；当前进程与根 .env 未提供 DEEPSEEK_API_KEY。
+下一任务：等待用户指定下一个 Skill。
+```
+
+```text
+日期/任务 ID：2026-09-22 / data-analysis 质量计算能力接入
+修改文件：data-analysis Skill；Modeling API datasets.py、quality.py 与测试；modeling 工具、测试及双语 README；工具目录；技能加载回放
+实际命令：python3 -m pytest services/modeling-api/tests -q；pnpm exec vitest run packages/experimental/modeling/tests/modeling.spec.ts；pnpm exec tsc -p packages/experimental/modeling/tsconfig.host.json --noEmit；定向 Skill 快照刷新与回放
+退出码/输出摘要：Python 78 PASS；工具测试 11 PASS；Host 类型检查 PASS；技能加载刷新和回放各 1 PASS。
+业务或界面模式：deterministic synthetic-data tests / authored recorded-session replay
+截图/日志路径：snapshots/session/modeling-data-analysis-skill/session.v3.jsonl
+检查：源码版本 0.5.0-demo；空白与特殊标记分开统计、数值转换、二值频数、精确重复、日期合法性及保险字段条件比较；工具按字节预算分页保留完整列证据。
+阻塞与剩余问题：真实模型效果评测和规模压测 NOT_RUN；未发布运行时 Skill 或重启服务；旧缓存画像不自动补算；仅 UTF-8，业务比较需解释，不自动清洗或扩展训练算子。
+下一任务：部署后使用新 Session 上传数据生成新版画像。
+```
+
 ## 阶段记录模板
 
 ```text

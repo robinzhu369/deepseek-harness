@@ -1,0 +1,58 @@
+{
+  "scope": "data-analysis quality computation and bounded tool delivery",
+  "source_version": "0.5.0-demo",
+  "skill_sha256": "3687597f9691187cbda73e1d0c019d65622f774c4d4297b29495ee1aa6970b50",
+  "mode": "synthetic data executed by the real profiler; tool tests; authored session replay",
+  "checks": [
+    {
+      "command": "python3 -m pytest services/modeling-api/tests -q",
+      "passed": 78
+    },
+    {
+      "command": "python3 -m pytest services/modeling-api/tests/test_quality_profile.py -q",
+      "passed": 4,
+      "note": "After tightening accepted date separators."
+    },
+    {
+      "command": "pnpm exec vitest run packages/experimental/modeling/tests/modeling.spec.ts",
+      "passed": 11
+    },
+    {
+      "command": "pnpm exec tsc -p packages/experimental/modeling/tsconfig.host.json --noEmit",
+      "exit_code": 0
+    },
+    {
+      "command": "pnpm run test:snapshot snapshots/session/headless.snapshot.ts -t modeling-data-analysis-skill",
+      "passed": 1
+    },
+    {
+      "command": "pnpm run test:snapshot scripts/session-snapshot-corpus.corpus.ts",
+      "passed": 3
+    },
+    {
+      "command": "pnpm run test:docs",
+      "passed": 20
+    },
+    {
+      "command": "pnpm run doc-sync",
+      "passed": 41
+    },
+    {
+      "command": "pnpm run lint",
+      "exit_code": 0
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0
+    }
+  ],
+  "live_model_evaluation": "NOT_RUN",
+  "scale_test": "NOT_RUN",
+  "runtime_publication": "NOT_RUN",
+  "limitations": [
+    "Existing cached profiles are unchanged.",
+    "UTF-8 CSV only; no GB18030 fallback.",
+    "Exact uniqueness and median may require data-proportional memory.",
+    "Business comparisons require interpretation; no data cleaning is applied."
+  ]
+}
